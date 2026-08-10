@@ -3,6 +3,8 @@
 **Periodo:** 10 al 15 de agosto de 2026  
 **Actividad institucional:** 1.1 Explorando la gestión de APIs
 
+← [Volver al índice de semanas](../README.md)
+
 ## Objetivo de la semana
 
 Comprender el rol de la gestión de APIs dentro de una arquitectura cloud native y aplicar los conceptos iniciales mediante Amazon API Gateway: publicación de una API, versionamiento y configuración de CORS.
@@ -25,9 +27,10 @@ El material del repositorio consolida los contenidos institucionales y agrega la
 
 ## Material original de la asignatura
 
-Los archivos originales utilizados durante esta semana se mantienen disponibles en una carpeta común de solo lectura:
+Los archivos originales utilizados durante esta semana se mantienen disponibles en la biblioteca pública del curso:
 
-📁 [**Material público · Semana 01 · 10 al 15 de agosto**](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6)
+📚 [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing)  
+📁 [**Semana 01 · 10 al 15 de agosto**](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6?usp=sharing)
 
 La carpeta contiene:
 
