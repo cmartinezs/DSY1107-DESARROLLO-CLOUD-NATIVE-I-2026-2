@@ -6,12 +6,12 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 
 ## Acceso rápido
 
-- [`semanas/`](semanas/) — contenido consolidado de cada semana.
+- [`semanas/`](semanas/) — índice y contenido consolidado de cada semana.
 - [`docs/`](docs/) — conocimientos y guías transversales.
 - [`labs/`](labs/) — ejercicios y laboratorios prácticos.
 - [`examples/`](examples/) — ejemplos de código desarrollados en clases.
 - [`page/`](page/) — portal web del curso.
-- [Material original · Semana 1](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6) — archivos institucionales utilizados durante la semana.
+- [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing) — biblioteca de archivos originales organizada semana a semana.
 
 ## Cómo se organiza el material
 
@@ -29,9 +29,11 @@ El contenido consolidado incorpora:
 - aclaraciones cuando el material original presenta ambigüedades o terminología inconsistente;
 - ejercicios, laboratorios y evidencias cuando corresponda.
 
+El directorio [`semanas/`](semanas/) mantiene un **README general** que funciona como índice del semestre. Además, cada carpeta semanal mantiene su propio `README.md` como punto de entrada a esa semana.
+
 ### Material original
 
-Los archivos originales de la asignatura utilizados durante cada semana se mantienen en una carpeta de Google Drive de solo lectura y se enlazan desde el índice de la semana correspondiente.
+Los archivos originales de la asignatura utilizados durante cada semana se mantienen en la [biblioteca pública de Google Drive](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing), organizados en carpetas semanales de solo lectura.
 
 De esta manera, siempre puedes consultar tanto la fuente original como el material consolidado utilizado en clases.
 
@@ -63,7 +65,7 @@ Actividad institucional: **1.1 Explorando la gestión de APIs**.
 - 1.1.3 Versionando APIs
 - 1.1.4 Configurando CORS en nuestro API Gateway
 
-Consulta el contenido en [`semanas/semana-01/`](semanas/semana-01/) y los archivos originales en la [carpeta de material de la Semana 1](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6).
+Consulta el contenido en [`semanas/semana-01/`](semanas/semana-01/) y los archivos originales en la [carpeta pública de material de la Semana 1](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6?usp=sharing).
 
 ---
 
