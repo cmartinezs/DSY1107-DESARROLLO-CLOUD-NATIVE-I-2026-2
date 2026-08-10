@@ -1,77 +1,99 @@
 # Semana 1 · Explorando la gestión de APIs
 
 **Periodo:** 10 al 15 de agosto de 2026  
-**Actividad:** 1.1 Explorando la gestión de APIs
+**Actividad institucional:** 1.1 Explorando la gestión de APIs
 
 ## Objetivo de la semana
 
-Comprender el rol de un API Manager dentro de una arquitectura cloud native y realizar una primera aproximación práctica a la publicación y administración de una API mediante un API Gateway.
+Comprender el rol de la gestión de APIs dentro de una arquitectura cloud native y aplicar los conceptos iniciales mediante Amazon API Gateway: publicación de una API, versionamiento y configuración de CORS.
 
-## Avance esperado
+## Contenidos de la semana
 
-### 1.1.1 Conociendo un API Manager
+El material del repositorio consolida los contenidos institucionales y agrega las aclaraciones técnicas necesarias para estudiarlos de forma autónoma.
 
-Al finalizar esta parte deberías poder distinguir, al menos, los conceptos de:
+1. [**1.1.1 · Conociendo un API Manager**](01-api-manager.md)  
+   API, API Gateway, API Management, responsabilidades y flujo de una solicitud.
 
-- API y endpoint.
-- API Gateway.
-- API Manager.
-- consumidor y proveedor de una API.
-- políticas aplicadas sobre una API.
-- ciclo de vida básico de una API.
+2. [**1.1.2 · Creando nuestro primer API Manager**](02-primer-api-manager.md)  
+   Primera aproximación práctica a Amazon API Gateway, rutas, integraciones, publicación y prueba.
 
-### 1.1.2 Creando nuestro primer API Manager
+3. [**1.1.3 · Versionando APIs**](03-versionamiento-api.md)  
+   Contratos, compatibilidad, estrategias de versionamiento, deprecación y rol del gateway.
 
-La actividad práctica permitirá reconocer el flujo general:
+4. [**1.1.4 · Configurando CORS en nuestro API Gateway**](04-cors-api-gateway.md)  
+   Same-Origin Policy, CORS, preflight, headers y diagnóstico en navegador.
 
-```text
-Cliente → API Gateway → API / Backend
-```
+## Material original de la asignatura
 
-El objetivo inicial no es memorizar una interfaz de nube específica, sino comprender qué problema resuelve cada componente y qué ocurre con una petición desde que llega al gateway hasta que alcanza el servicio publicado.
+Los archivos originales utilizados durante esta semana se mantienen disponibles en una carpeta común de solo lectura:
 
-### 1.1.3 Versionando APIs
+📁 [**Material público · Semana 01 · 10 al 15 de agosto**](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6)
 
-Revisaremos por qué una API cambia con el tiempo y cómo evitar que una modificación rompa inmediatamente a sus consumidores.
+La carpeta contiene:
 
-Ejemplo conceptual:
+- `1.1.1 Conociendo un API Manager.pptx`
+- `1.1.2 Tutorial Creando Nuestro Primer API Manager.docx`
+- `1.1.3 Versionando APIs.pptx`
+- `1.1.4 Configurando CORS en nuestro API GATEWAY.docx`
+- `Manual AWS - Estudiante.pdf`
 
-```text
-/api/v1/products
-/api/v2/products
-```
+> Los archivos institucionales se conservan como referencia. Para estudiar la materia se recomienda revisar también el contenido consolidado del repositorio, ya que incorpora aclaraciones, contexto adicional y ajustes cuando la terminología o las instrucciones requieren precisión.
 
-La versión forma parte del contrato que existe entre quienes ofrecen y quienes consumen una API.
+## Aclaraciones incorporadas esta semana
 
-### 1.1.4 Configurando CORS en nuestro API Gateway
+### API Manager y API Gateway
 
-Revisaremos qué ocurre cuando una aplicación web intenta consumir una API desde un origen diferente y por qué el navegador puede bloquear la solicitud.
+En algunos materiales institucionales los términos **API Manager** y **API Gateway** aparecen utilizados de manera muy cercana. En este curso distinguiremos:
 
-Conceptos principales:
+- **API Gateway:** componente o servicio que recibe y enruta solicitudes, y puede aplicar políticas sobre ellas.
+- **API Management:** disciplina/capacidad más amplia que comprende publicación, seguridad, versionamiento, documentación, observabilidad y ciclo de vida de las APIs.
+- **Amazon API Gateway:** servicio concreto de AWS utilizado en los laboratorios.
 
-- origen (`scheme + host + port`),
-- Same-Origin Policy,
-- CORS,
-- encabezado `Origin`,
-- `Access-Control-Allow-Origin`,
-- solicitudes preflight con `OPTIONS`.
+### Seguridad
 
-## Antes de comenzar
+Crear un API Gateway no vuelve automáticamente segura una API. La seguridad depende de las configuraciones aplicadas: autenticación, autorización, políticas, TLS, validación, límites de tráfico y otras medidas según el caso.
 
-Comprueba que tienes disponibles las herramientas indicadas durante la clase. Dependiendo de la actividad podremos utilizar navegador, terminal, Git, Postman y la plataforma cloud definida para el laboratorio.
+### Versionamiento
+
+El versionamiento semántico (`MAJOR.MINOR.PATCH`) es útil como convención, pero no es equivalente a la estrategia mediante la cual un consumidor selecciona una API (`/v1`, `/v2`, headers, etc.).
+
+### CORS
+
+CORS es un mecanismo relacionado principalmente con navegadores y la Same-Origin Policy. **No reemplaza autenticación, autorización ni controles de acceso del backend.**
 
 ## Evidencia mínima de aprendizaje
 
-Al finalizar la semana deberías ser capaz de explicar con tus propias palabras:
+Al finalizar la semana deberías poder explicar con tus propias palabras:
 
-1. qué diferencia existe entre una API, un API Gateway y un API Manager;
+1. qué diferencia existe entre una API, un API Gateway y API Management;
 2. qué recorrido realiza una petición HTTP cuando existe un gateway;
-3. por qué puede ser necesario mantener más de una versión de una API;
-4. qué problema intenta resolver CORS;
-5. qué configuración realizaste durante el laboratorio y qué resultado obtuviste.
+3. cómo se publica y prueba una ruta mediante API Gateway;
+4. por qué puede ser necesario mantener más de una versión de una API;
+5. qué problema resuelve CORS y qué no resuelve;
+6. qué configuración realizaste durante el laboratorio y qué resultado obtuviste.
 
-> Conserva capturas, comandos relevantes, URLs de prueba y observaciones del laboratorio. Estas evidencias permiten reconstruir lo realizado y facilitan el diagnóstico cuando algo no funciona.
+Conserva evidencia reproducible del laboratorio:
 
-## Recursos
+- URL o endpoint probado;
+- método HTTP;
+- request relevante;
+- status code;
+- response;
+- headers importantes;
+- configuración realizada;
+- breve explicación del resultado.
 
-Los recursos institucionales de la actividad se encuentran disponibles en AVA. El material complementario y los ejemplos desarrollados durante las clases se incorporarán progresivamente a este repositorio.
+## Trabajar con el repositorio
+
+Para obtener todo el material y ejemplos de forma local:
+
+```bash
+git clone https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2.git
+cd DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2
+```
+
+Si ya tienes el repositorio:
+
+```bash
+git pull
+```
