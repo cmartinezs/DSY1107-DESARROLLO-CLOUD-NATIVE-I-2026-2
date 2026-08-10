@@ -2,15 +2,38 @@
 
 Repositorio de apoyo para la asignatura **DSY1107 Desarrollo Cloud Native I**.
 
-Este repositorio reúne material de clases, ejemplos, laboratorios, guías y recursos complementarios utilizados durante el semestre 2026-2 para las secciones diurnas del curso.
+Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y recursos complementarios utilizados durante el semestre 2026-2 para las secciones diurnas del curso.
 
 ## Acceso rápido
 
-- [`docs/`](docs/) — material de aprendizaje y guías.
-- [`semanas/`](semanas/) — contenido organizado por semana.
+- [`semanas/`](semanas/) — contenido consolidado de cada semana.
+- [`docs/`](docs/) — conocimientos y guías transversales.
 - [`labs/`](labs/) — ejercicios y laboratorios prácticos.
 - [`examples/`](examples/) — ejemplos de código desarrollados en clases.
 - [`page/`](page/) — portal web del curso.
+- [Material original · Semana 1](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6) — archivos institucionales utilizados durante la semana.
+
+## Cómo se organiza el material
+
+Cada semana mantiene dos fuentes complementarias:
+
+### Contenido consolidado
+
+Se publica en este repositorio dentro de `semanas/semana-XX/`.
+
+El contenido consolidado incorpora:
+
+- los contenidos definidos para la semana;
+- explicaciones y ejemplos;
+- contexto técnico adicional;
+- aclaraciones cuando el material original presenta ambigüedades o terminología inconsistente;
+- ejercicios, laboratorios y evidencias cuando corresponda.
+
+### Material original
+
+Los archivos originales de la asignatura utilizados durante cada semana se mantienen en una carpeta de Google Drive de solo lectura y se enlazan desde el índice de la semana correspondiente.
+
+De esta manera, siempre puedes consultar tanto la fuente original como el material consolidado utilizado en clases.
 
 ## Cómo obtener el repositorio
 
@@ -40,8 +63,8 @@ Actividad institucional: **1.1 Explorando la gestión de APIs**.
 - 1.1.3 Versionando APIs
 - 1.1.4 Configurando CORS en nuestro API Gateway
 
-Consulta el material en [`semanas/semana-01/`](semanas/semana-01/).
+Consulta el contenido en [`semanas/semana-01/`](semanas/semana-01/) y los archivos originales en la [carpeta de material de la Semana 1](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6).
 
 ---
 
-> El repositorio complementa los recursos oficiales disponibles en AVA y los materiales institucionales de la asignatura.
+> AVA continúa siendo la plataforma oficial para comunicaciones, actividades y recursos institucionales que deban gestionarse desde el entorno académico.
