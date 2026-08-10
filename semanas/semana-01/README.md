@@ -9,6 +9,23 @@
 
 Comprender el rol de la gestión de APIs dentro de una arquitectura cloud native y aplicar los conceptos iniciales mediante Amazon API Gateway: publicación de una API, versionamiento y configuración de CORS.
 
+## Actividad diagnóstica complementaria
+
+Antes de avanzar con los contenidos cloud native, la semana incorpora un **diagnóstico fullstack y Docker**, de carácter **formativo, obligatorio y sin calificación**, para verificar las competencias previas que la asignatura da por adquiridas.
+
+La actividad considera:
+
+- desarrollo grupal de una aplicación fullstack pequeña;
+- levantamiento de requerimientos;
+- decisiones arquitectónicas justificadas;
+- backend con **Java 21 + Spring Boot 4.x**;
+- frontend con **React + Vite** o **Next.js**;
+- persistencia con MySQL o PostgreSQL;
+- ejecución con Docker y Docker Compose;
+- cuestionario individual y privado de 10 preguntas.
+
+Consulta el desafío completo en [`diagnostico/`](diagnostico/README.md).
+
 ## Contenidos de la semana
 
 El material del repositorio consolida los contenidos institucionales y agrega las aclaraciones técnicas necesarias para estudiarlos de forma autónoma.
