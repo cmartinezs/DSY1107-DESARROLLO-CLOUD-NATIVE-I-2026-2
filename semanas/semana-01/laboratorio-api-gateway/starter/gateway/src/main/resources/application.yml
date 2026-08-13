@@ -7,25 +7,16 @@ spring:
   cloud:
     gateway:
       server:
-        webflux:
+        webmvc:
           routes:
-            # ETAPA INICIAL
-            # Esta ruta ya funciona para que el grupo pueda comprobar
-            # el concepto de route + integration antes de continuar.
             - id: posts-v1
               uri: https://jsonplaceholder.typicode.com
               predicates:
                 - Path=/api/v1/posts/**
               filters:
-                # El cliente invoca /api/v1/posts/1, pero el backend público
-                # recibe /posts/1.
                 - RewritePath=/api/v1/(?<segment>.*), /$\{segment}
 
-          # TODO ETAPA C:
-          # Agregar una ruta posts-v2 y un header X-API-Version.
-
-          # TODO ETAPA D:
-          # Agregar un header transversal X-Gateway-Lab.
-
-          # TODO ETAPA E:
-          # Configurar CORS para el cliente web que se ejecutará en puerto 5500.
+lab:
+  cors:
+    enabled: false
+    allowed-origin: http://localhost:5500
