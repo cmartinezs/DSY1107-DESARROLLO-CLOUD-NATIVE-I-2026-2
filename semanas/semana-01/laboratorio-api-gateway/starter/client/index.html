@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSY1107 · Cliente CORS</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 3rem auto; padding: 0 1rem; }
+    button { padding: .7rem 1rem; cursor: pointer; }
+    pre { background: #f4f4f4; padding: 1rem; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>Cliente web · Laboratorio API Gateway</h1>
+  <p>Este cliente se ejecuta desde <code>http://localhost:5500</code> y consulta al gateway en <code>http://localhost:8080</code>.</p>
+  <button id="load">Consultar /api/v1/posts/1</button>
+  <h2>Resultado</h2>
+  <pre id="result">Presiona el botón para comenzar.</pre>
+
+  <script>
+    const result = document.querySelector('#result');
+    const button = document.querySelector('#load');
+
+    button.addEventListener('click', async () => {
+      result.textContent = 'Consultando...';
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/posts/1');
+        const body = await response.text();
+        result.textContent = `HTTP ${response.status}\n\n${body}`;
+      } catch (error) {
+        result.textContent = `La petición desde el navegador falló.\n\n${error}\n\nRevisa DevTools > Console y Network. Si el gateway responde en Postman pero aquí falla, investiga CORS.`;
+      }
+    });
+  </script>
+</body>
+</html>
