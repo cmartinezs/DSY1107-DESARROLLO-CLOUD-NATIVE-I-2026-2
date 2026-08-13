@@ -2,18 +2,15 @@
 
 Este proyecto es el punto de partida del Laboratorio 1 de DSY1107.
 
-No es necesario programar lógica Java. La actividad se concentra en `src/main/resources/application.yml`.
+No es necesario programar lógica Java. La actividad se concentra en comprender y configurar routes, filtros, versionado y CORS.
 
 ## Ejecutar
 
-```bash
-./mvnw spring-boot:run
-```
-
-o con Maven instalado:
+Requiere JDK 21+ y Maven.
 
 ```bash
-mvn spring-boot:run
+cd gateway
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.config.name=application-lab"
 ```
 
 Gateway:
@@ -22,4 +19,11 @@ Gateway:
 http://localhost:8080
 ```
 
-Consulta la guía del laboratorio ubicada un nivel arriba.
+Prueba inicial:
+
+```bash
+curl -i http://localhost:8080/api/v1/posts/1
+curl -i http://localhost:8080/api/v2/posts/1
+```
+
+Consulta [`START-HERE.md`](START-HERE.md) y la guía ubicada un nivel arriba.
