@@ -1,12 +1,14 @@
 # START HERE · Laboratorio API Gateway
 
-El foco del laboratorio está en la **configuración y los conceptos**, no en programar Spring.
+El foco está en **configuración y conceptos**, no en programar Spring.
 
-## Ejecutar la configuración verificada
+El starter utiliza **Spring Cloud Gateway Server Web MVC**. No se requiere programación reactiva ni conocimientos de WebFlux, Reactor, `Mono` o `Flux`.
+
+## Ejecutar
 
 ```bash
 cd gateway
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.config.name=application-lab"
+mvn spring-boot:run
 ```
 
 Gateway:
@@ -15,13 +17,18 @@ Gateway:
 http://localhost:8080
 ```
 
-Pruebas iniciales:
+Prueba inicial:
 
 ```bash
 curl -i http://localhost:8080/api/v1/posts/1
-curl -i http://localhost:8080/api/v2/posts/1
 ```
 
-Deben observar el header `X-Gateway-Lab: DSY1107` y el header `X-API-Version` correspondiente.
+El starter solo trae `v1`. El grupo deberá construir `v2`, headers y habilitar CORS siguiendo la guía principal.
 
-Luego continúen con la guía principal del laboratorio y documenten la evidencia en el repositorio de su grupo.
+La configuración principal está en:
+
+```text
+gateway/src/main/resources/application.yml
+```
+
+No modifiquen `LabCorsConfiguration.java`; esa clase está preparada para que CORS se habilite desde `application.yml`.
