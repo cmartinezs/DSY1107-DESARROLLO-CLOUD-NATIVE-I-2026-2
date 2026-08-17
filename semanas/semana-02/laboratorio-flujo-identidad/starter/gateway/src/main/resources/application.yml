@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: reservapp-gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: reservapp-api
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/**
+              filters:
+                - StripPrefix=1
