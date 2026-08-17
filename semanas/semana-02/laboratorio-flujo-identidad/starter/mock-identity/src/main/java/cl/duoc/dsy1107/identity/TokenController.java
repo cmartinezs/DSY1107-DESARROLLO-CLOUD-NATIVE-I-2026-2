@@ -1,26 +1,62 @@
 package cl.duoc.dsy1107.identity;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @CrossOrigin(origins = "*")
 public class TokenController {
 
     private static final String ISSUER = "https://identity.reservapp.local";
+    private static final String CLIENT_ID = "reservapp-web";
+    private static final String REDIRECT_URI = "http://localhost:5500/index.html";
+    private final Map<String, AuthorizationRequest> codes = new ConcurrentHashMap<>();
 
-    @GetMapping("/token")
-    public Map<String, Object> token(
-            @RequestParam(defaultValue = "ana") String user,
+    @GetMapping("/authorize")
+    public Map<String, String> authorize(
+            @RequestParam String clientId,
+            @RequestParam String redirectUri,
+            @RequestParam String user,
             @RequestParam(defaultValue = "reservations.read") String scope,
-            @RequestParam(defaultValue = "reservapp-api") String audience) {
+            @RequestParam(defaultValue = "reservapp-api") String audience,
+            @RequestParam String codeChallenge) {
 
+        if (!CLIENT_ID.equals(clientId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "client_id no registrado");
+        }
+        if (!REDIRECT_URI.equals(redirectUri)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "redirect_uri no registrada");
+        }
+
+        String code = UUID.randomUUID().toString();
+        codes.put(code, new AuthorizationRequest(user, scope, audience, codeChallenge));
+        return Map.of("authorizationCode", code, "redirectUri", REDIRECT_URI);
+    }
+
+    @GetMapping("/exchange")
+    public Map<String, Object> exchange(@RequestParam String code, @RequestParam String codeVerifier) {
+        AuthorizationRequest request = codes.remove(code);
+        if (request == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "authorization_code inválido o ya utilizado");
+        }
+        if (!request.codeChallenge().equals(challenge(codeVerifier))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PKCE verifier inválido");
+        }
+        return issueTokens(request.user(), request.scope(), request.audience());
+    }
+
+    private Map<String, Object> issueTokens(String user, String scope, String audience) {
         String sub = switch (user) {
             case "operador" -> "user-9000";
             case "bruno" -> "user-2000";
@@ -42,8 +78,18 @@ public class TokenController {
         );
     }
 
-    private String encode(String value) {
-        return Base64.getUrlEncoder().withoutPadding()
-                .encodeToString(value.getBytes(StandardCharsets.UTF_8));
+    private String challenge(String verifier) {
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256").digest(verifier.getBytes(StandardCharsets.UTF_8));
+            return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
     }
+
+    private String encode(String value) {
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(value.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private record AuthorizationRequest(String user, String scope, String audience, String codeChallenge) {}
 }
