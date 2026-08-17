@@ -44,7 +44,43 @@ flowchart LR
 
 ---
 
-## 2. ¿Qué es IAM?
+## 2. Ejemplo cotidiano: una misma identidad para muchas aplicaciones
+
+Piensa en cuántas veces has visto botones como:
+
+```text
+Continuar con Google
+Continuar con Microsoft
+Continuar con Apple
+```
+
+La aplicación que utilizas puede decidir **no administrar directamente tus credenciales** y confiar en un proveedor de identidad externo.
+
+Por ejemplo, una aplicación de música podría permitir que el usuario utilice su identidad de Google para crear o reconocer una cuenta dentro de la propia aplicación.
+
+```mermaid
+flowchart LR
+    U[Usuario] --> APP[Aplicación de música]
+    APP -->|Redirección para login| G[Proveedor de identidad]
+    G -->|Identidad verificada| APP
+    APP --> PROFILE[(Perfil propio de la app)]
+```
+
+Hay dos datos que no debemos confundir:
+
+```text
+Identidad externa
+→ “Google conoce a este sujeto como X”
+
+Cuenta de negocio de la aplicación
+→ “En mi sistema este sujeto corresponde al cliente 827”
+```
+
+Por eso una app puede usar Google para login y mantener igualmente su propia base de datos con preferencias, plan contratado, historial, reservas o cualquier otra información del negocio.
+
+---
+
+## 3. ¿Qué es IAM?
 
 **IAM — Identity and Access Management** es el conjunto de procesos, políticas y tecnologías que permiten gestionar:
 
@@ -61,7 +97,7 @@ No significa necesariamente “producto cloud”.
 
 ---
 
-## 3. ¿Qué es un Identity Provider (IdP)?
+## 4. ¿Qué es un Identity Provider (IdP)?
 
 Un **Identity Provider** es un sistema que autentica identidades y entrega afirmaciones o artefactos que otros sistemas pueden confiar.
 
@@ -80,7 +116,7 @@ La contraseña queda entre usuario e IdP, no entre usuario y backend de ReservAp
 
 ---
 
-## 4. ¿Qué es IDaaS?
+## 5. ¿Qué es IDaaS?
 
 **Identity as a Service (IDaaS)** significa consumir capacidades de identidad como un servicio administrado.
 
@@ -121,7 +157,44 @@ ReservApp todavía debe decidir:
 
 ---
 
-## 5. Responsabilidad compartida
+## 6. Ejemplo cotidiano: identidad y acceso a Drive son responsabilidades distintas
+
+Supongamos una herramienta de diseño que permite:
+
+1. entrar usando una identidad de Google;
+2. importar una imagen desde Google Drive;
+3. eventualmente guardar o exportar un archivo hacia Drive.
+
+Aunque el usuario lo vea como una sola experiencia, técnicamente hay responsabilidades distintas.
+
+```mermaid
+flowchart TD
+    U[Usuario]
+    APP[Herramienta de diseño]
+    IDP[Proveedor de identidad]
+    DRIVE[API de almacenamiento / Drive]
+
+    U -->|Iniciar sesión| APP
+    APP -->|OIDC / identidad| IDP
+    IDP -->|Quién es el usuario| APP
+    APP -->|OAuth2 / permiso delegado| IDP
+    IDP -->|Access Token limitado| APP
+    APP -->|Leer o guardar recurso autorizado| DRIVE
+```
+
+La aplicación puede delegar al proveedor cuestiones de identidad y autorización, pero sigue siendo responsable de:
+
+- decidir cuándo solicitar acceso a Drive;
+- pedir solo los permisos necesarios;
+- manejar correctamente el token recibido;
+- no mostrar recursos a personas que no correspondan;
+- aplicar sus propias reglas de negocio.
+
+Este ejemplo es útil porque muestra que **IDaaS no es solo una pantalla de login**. Es una pieza de infraestructura que puede centralizar múltiples capacidades de identidad y acceso.
+
+---
+
+## 7. Responsabilidad compartida
 
 Una forma útil de comprender IDaaS es separar responsabilidades.
 
@@ -151,7 +224,7 @@ No todas las arquitecturas ubicarán exactamente las mismas comprobaciones en el
 
 ---
 
-## 6. ¿Qué es CIAM?
+## 8. ¿Qué es CIAM?
 
 **CIAM — Customer Identity and Access Management** es una especialización de IAM orientada a clientes, ciudadanos, consumidores o usuarios externos de una organización.
 
@@ -166,6 +239,21 @@ Sus preocupaciones suelen incluir:
 - perfiles;
 - escalabilidad;
 - seguridad sin requerir intervención administrativa por cada usuario.
+
+### Ejemplo cotidiano
+
+Cuando una aplicación orientada al público permite:
+
+```text
+Crear cuenta
+Continuar con Google
+Continuar con Apple
+Recuperar contraseña
+Activar MFA
+Administrar sesiones
+```
+
+estamos viendo capacidades típicas de un escenario CIAM.
 
 ### ReservApp como ejemplo
 
@@ -186,7 +274,7 @@ La diferencia no es solo semántica: usuarios externos e internos pueden requeri
 
 ---
 
-## 7. Usuario de identidad vs entidad de negocio
+## 9. Usuario de identidad vs entidad de negocio
 
 Este punto es importante.
 
@@ -216,11 +304,32 @@ flowchart LR
     API --> DB[(Cliente id=827\nidentitySubject=user-1024)]
 ```
 
+### Volviendo al ejemplo de una app de música
+
+El proveedor de identidad podría informar:
+
+```text
+sub = google-user-xyz
+email = usuario@example.com
+```
+
+Mientras la aplicación mantiene:
+
+```text
+UsuarioApp
+id = 9381
+plan = premium
+playlists = ...
+preferencias = ...
+```
+
+La identidad permite reconocer al usuario; **el dominio de negocio sigue perteneciendo a la aplicación**.
+
 Separar ambas ideas evita acoplar excesivamente el dominio a un proveedor específico.
 
 ---
 
-## 8. Tenant, aplicaciones y políticas
+## 10. Tenant, aplicaciones y políticas
 
 Un servicio de identidad necesita organizar sus recursos.
 
@@ -252,7 +361,7 @@ La interfaz concreta cambia entre proveedores; estas relaciones conceptuales per
 
 ---
 
-## 9. Scopes, roles y reglas de negocio en un entorno IDaaS
+## 11. Scopes, roles y reglas de negocio en un entorno IDaaS
 
 Supongamos un token con:
 
@@ -282,7 +391,7 @@ flowchart LR
 
 ---
 
-## 10. Qué puede validar cada componente
+## 12. Qué puede validar cada componente
 
 ### Identity Provider
 
@@ -338,7 +447,7 @@ sequenceDiagram
 
 ---
 
-## 11. Actividad guiada · mapa de responsabilidades
+## 13. Actividad guiada · mapa de responsabilidades
 
 En grupos, clasifiquen los siguientes casos entre:
 
@@ -361,6 +470,22 @@ Casos:
 9. mostrar nombre/avatar del usuario autenticado;
 10. revocar una sesión comprometida.
 
+### Mini caso cotidiano adicional
+
+Una aplicación permite iniciar sesión con Google y luego muestra el botón:
+
+```text
+Conectar Google Drive
+```
+
+Respondan:
+
+1. ¿Por qué el login no debería entregar automáticamente acceso a Drive?
+2. ¿Qué nueva autorización necesita la aplicación?
+3. ¿Quién es el resource server en esta segunda operación?
+4. ¿Qué debería ocurrir si el usuario niega el permiso?
+5. ¿La aplicación debería dejar de funcionar completamente o solo deshabilitar la integración con Drive?
+
 ### Pregunta adicional
 
 ¿Hay responsabilidades que podrían ubicarse en más de un componente?
@@ -369,10 +494,11 @@ Justifiquen según arquitectura, no por memorización.
 
 ---
 
-## 12. Errores conceptuales frecuentes
+## 14. Errores conceptuales frecuentes
 
 - confundir IDaaS con OAuth2;
 - pensar que IdP, IAM, IDaaS y CIAM son sinónimos exactos;
+- creer que “Continuar con Google” significa que la aplicación puede acceder automáticamente a Drive/Gmail/etc.;
 - asumir que el proveedor conoce las reglas de negocio de ReservApp;
 - usar email como identificador técnico eterno sin analizar estabilidad;
 - mezclar usuario de identidad con entidad `Cliente` del dominio;
@@ -390,6 +516,7 @@ Al terminar este tema debes poder explicar:
 - qué es un IdP;
 - qué aporta IDaaS;
 - qué distingue CIAM de un escenario de workforce IAM;
+- por qué login federado y permiso a otra API son operaciones distintas;
 - qué responsabilidades se delegan y cuáles siguen en ReservApp;
 - por qué usuario de identidad y entidad de negocio pueden ser distintos;
 - dónde encajan tenant, apps, APIs, scopes y políticas.
