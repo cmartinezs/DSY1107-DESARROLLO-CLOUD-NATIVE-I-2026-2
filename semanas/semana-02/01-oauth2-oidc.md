@@ -43,7 +43,49 @@ flowchart LR
 
 ---
 
-## 2. Autenticación y autorización
+## 2. Un ejemplo cotidiano: “Continuar con Google”
+
+Supongamos que una aplicación ofrece el botón:
+
+```text
+Continuar con Google
+```
+
+La aplicación **no necesita recibir tu contraseña de Google**.
+
+En términos conceptuales ocurre algo como esto:
+
+```mermaid
+sequenceDiagram
+    actor U as Usuario
+    participant APP as Aplicación
+    participant G as Google / IdP
+
+    U->>APP: Quiero ingresar
+    APP->>G: Redirige al proveedor de identidad
+    G->>U: Solicita autenticación
+    U->>G: Se autentica
+    G-->>APP: Resultado verificable de identidad
+    APP-->>U: Sesión iniciada
+```
+
+El punto importante es que la contraseña se entrega al proveedor de identidad, **no a la aplicación externa**.
+
+Por ejemplo, si una app de música permite registrarse o iniciar sesión usando Google, el objetivo principal es que Google confirme una identidad que la aplicación pueda reconocer. Ahí OIDC es especialmente relevante.
+
+La aplicación puede recibir información como:
+
+```text
+sub   → identificador estable del usuario
+name  → nombre
+email → correo, si fue solicitado y permitido
+```
+
+Eso no significa que la aplicación tenga acceso automático a Gmail, Drive, Fotos ni a todos los servicios de Google.
+
+---
+
+## 3. Autenticación y autorización
 
 ### Autenticación
 
@@ -56,6 +98,7 @@ Ejemplos:
 - usuario + contraseña;
 - contraseña + segundo factor;
 - biometría;
+- “Continuar con Google”;
 - autenticación mediante otra identidad confiable.
 
 El resultado no debería interpretarse como “puede hacer cualquier cosa”. Solo establece una identidad con determinado nivel de confianza.
@@ -72,6 +115,15 @@ Ejemplos en ReservApp:
 - crear una reserva;
 - cancelar una reserva;
 - administrar reservas de terceros.
+
+Ejemplo cotidiano distinto:
+
+> Una aplicación puede conocer quién eres mediante Google y, además, pedirte autorización para acceder a determinados archivos de Google Drive.
+
+Ahí aparecen **dos decisiones distintas**:
+
+1. Google confirma tu identidad.
+2. Tú autorizas a la aplicación a utilizar una capacidad concreta sobre otro recurso.
 
 ### No son equivalentes
 
@@ -90,7 +142,7 @@ Una persona puede estar perfectamente autenticada y aun así no estar autorizada
 
 ---
 
-## 3. OAuth2: autorización delegada
+## 4. OAuth2: autorización delegada
 
 OAuth2 es un **framework de autorización**.
 
@@ -106,27 +158,67 @@ Las credenciales prueban identidad ante quien autentica.
 
 El access token representa una autorización temporal para acceder a un recurso.
 
-### Ejemplo conceptual
+### Ejemplo: una herramienta de diseño quiere acceder a Google Drive
 
-ReservApp Web necesita consultar la API.
-
-No le entrega la contraseña del usuario a `reservapp-api`.
-
-En cambio:
+Imagina que estás usando una herramienta como Canva y eliges una función del tipo:
 
 ```text
-Usuario se autentica
-        ↓
-Authorization Server autoriza
-        ↓
-ReservApp Web obtiene access token
-        ↓
-ReservApp Web llama ReservApp API usando ese token
+Importar desde Google Drive
 ```
+
+o quieres guardar/exportar contenido hacia Drive.
+
+La aplicación no necesita pedirte:
+
+```text
+correo de Google
+contraseña de Google
+```
+
+En cambio, puede enviarte a Google para que tú autorices un acceso limitado.
+
+```mermaid
+sequenceDiagram
+    actor U as Usuario
+    participant C as App de diseño
+    participant G as Google Authorization Server
+    participant D as Google Drive API
+
+    U->>C: Importar imagen desde Drive
+    C->>G: Solicita autorización para Drive
+    G->>U: ¿Permites este acceso?
+    U->>G: Autoriza
+    G-->>C: Access Token con permisos concedidos
+    C->>D: Solicita recurso usando Access Token
+    D-->>C: Archivo permitido
+    C-->>U: Muestra/importa imagen
+```
+
+La idea clave es **autorización delegada**:
+
+> “Yo, usuario, autorizo a esta aplicación a realizar ciertas acciones en otro servicio sin entregarle mi contraseña.”
+
+### El permiso no debería ser ilimitado
+
+Una aplicación podría necesitar:
+
+```text
+leer determinados archivos
+```
+
+sin necesitar necesariamente:
+
+```text
+borrar todos mis archivos
+administrar mi cuenta completa
+leer otros servicios
+```
+
+Esto conecta con los **scopes** y con el principio de mínimo privilegio.
 
 ---
 
-## 4. OIDC: identidad sobre OAuth2
+## 5. OIDC: identidad sobre OAuth2
 
 OAuth2 por sí solo no fue diseñado como protocolo de login.
 
@@ -150,15 +242,26 @@ flowchart LR
     OIDC --> OAUTH
 ```
 
+### Comparación rápida de situaciones cotidianas
+
+| Situación | Concepto predominante |
+|---|---|
+| “Continuar con Google” para saber quién soy | OIDC / autenticación federada |
+| Una app pide leer archivos de mi Drive | OAuth2 / autorización delegada |
+| La misma app hace ambas cosas | OIDC + OAuth2 |
+| Tener sesión iniciada pero no permiso para modificar un recurso | Autenticado, pero no autorizado |
+
 ---
 
-## 5. Actores principales
+## 6. Actores principales
 
 ### Resource Owner
 
 Es quien puede autorizar acceso al recurso.
 
 En ReservApp normalmente será el usuario.
+
+En el ejemplo de Drive, eres tú: los archivos pertenecen a tu contexto y tú decides si la aplicación puede acceder.
 
 ### Client
 
@@ -169,6 +272,8 @@ Ejemplo:
 ```text
 reservapp-web
 ```
+
+En el ejemplo anterior sería la herramienta de diseño.
 
 Importante: **client** no significa necesariamente “persona”. Es software.
 
@@ -186,10 +291,16 @@ Componente que:
 
 Es el sistema que expone el recurso protegido.
 
-Ejemplo:
+Ejemplo en nuestra aplicación:
 
 ```text
 reservapp-api
+```
+
+Ejemplo cotidiano:
+
+```text
+Google Drive API
 ```
 
 ### API Gateway
@@ -218,7 +329,7 @@ flowchart TB
 
 ---
 
-## 6. Access token e ID token
+## 7. Access token e ID token
 
 ### Access token
 
@@ -246,6 +357,18 @@ Pertenece a OIDC y está dirigido principalmente al **cliente**.
 
 Su propósito es informar al cliente acerca de la autenticación realizada y la identidad asociada.
 
+### Llevándolo al ejemplo cotidiano
+
+```text
+ID Token
+→ “Google me informó quién se autenticó”.
+
+Access Token
+→ “Google autorizó a esta aplicación a usar determinada API con determinados permisos”.
+```
+
+Por eso iniciar sesión con Google y acceder a Google Drive **no son exactamente la misma operación**, aunque para el usuario ambas puedan aparecer dentro de una experiencia continua.
+
 ### Error frecuente
 
 > “Tengo un JWT, entonces puedo usarlo para llamar a cualquier API.”
@@ -272,7 +395,7 @@ flowchart LR
 
 ---
 
-## 7. Claims, scopes y roles
+## 8. Claims, scopes y roles
 
 ### Claim
 
@@ -300,6 +423,16 @@ reservations.read
 reservations.write
 ```
 
+En un ejemplo con almacenamiento de archivos, conceptualmente podríamos tener capacidades como:
+
+```text
+leer archivos autorizados
+crear archivos
+modificar archivos
+```
+
+Los nombres reales dependen de la API/proveedor; lo importante aquí es la idea de **limitar el permiso**.
+
 Un scope debería expresar una capacidad razonablemente estable del recurso, no simplemente copiar botones de una interfaz.
 
 ### Role
@@ -316,7 +449,7 @@ admin
 
 ```mermaid
 flowchart LR
-    R[Role\nQuién/fución] --> P[Política]
+    R[Role\nQuién/función] --> P[Política]
     S[Scope\nQué capacidad delegada] --> P
     C[Claims\nDatos/contexto] --> P
     P --> D[Decisión de autorización]
@@ -326,7 +459,7 @@ No existe una regla universal que diga “todo se resuelve con roles” o “tod
 
 ---
 
-## 8. Authorization Code + PKCE
+## 9. Authorization Code + PKCE
 
 Para clientes públicos modernos, como una SPA o aplicación móvil, estudiaremos conceptualmente **Authorization Code + PKCE**.
 
@@ -373,7 +506,7 @@ Sí deben comprender que:
 
 ---
 
-## 9. ¿Qué debería validar una API?
+## 10. ¿Qué debería validar una API?
 
 Recibir un token no basta.
 
@@ -404,7 +537,7 @@ flowchart TD
 
 ---
 
-## 10. 401 vs 403
+## 11. 401 vs 403
 
 ### 401 Unauthorized
 
@@ -429,7 +562,7 @@ Ejemplos:
 
 ---
 
-## 11. Autorización técnica vs autorización de negocio
+## 12. Autorización técnica vs autorización de negocio
 
 Supongamos que un usuario posee:
 
@@ -466,7 +599,54 @@ Por esto **tener gateway e IDaaS no elimina la seguridad del backend**.
 
 ---
 
-## 12. Micropráctica
+## 13. Tres situaciones para no confundir conceptos
+
+### Caso A · Solo identidad
+
+```text
+“Quiero entrar a una aplicación usando mi cuenta Google.”
+```
+
+Pregunta central:
+
+> ¿Quién es este usuario?
+
+Concepto predominante: **OIDC**.
+
+### Caso B · Solo autorización a un recurso externo
+
+```text
+“Esta aplicación necesita permiso para acceder a determinados recursos de mi Drive.”
+```
+
+Pregunta central:
+
+> ¿Qué le permito hacer a esta aplicación?
+
+Concepto predominante: **OAuth2**.
+
+### Caso C · Identidad + autorización
+
+```text
+“Entro usando Google y después autorizo a la aplicación para trabajar con archivos de Drive.”
+```
+
+Aquí aparecen ambos:
+
+```mermaid
+flowchart LR
+    U[Usuario] -->|Login| G[Google / IdP]
+    G -->|Identidad OIDC| APP[Aplicación]
+    U -->|Consentimiento| G
+    G -->|Access Token OAuth2| APP
+    APP -->|Acceso autorizado| DRIVE[Drive API]
+```
+
+Esta es una buena forma de entender por qué **login social y acceso a APIs relacionadas no son sinónimos**.
+
+---
+
+## 14. Micropráctica
 
 Para cada situación indiquen:
 
@@ -482,6 +662,8 @@ Casos:
 4. El token no contiene `reservations.write`.
 5. El token fue emitido para otra API.
 6. Un usuario con `reservations.write` intenta cancelar la reserva de otra persona.
+7. Una aplicación sabe quién eres mediante Google, pero nunca recibió permiso para acceder a Drive.
+8. El usuario revoca posteriormente el acceso de una aplicación a sus archivos.
 
 ---
 
@@ -489,6 +671,8 @@ Casos:
 
 - creer que OAuth2 es simplemente “login”;
 - creer que OIDC reemplaza OAuth2;
+- pensar que “Continuar con Google” entrega acceso automático a todos los servicios de Google;
+- confundir iniciar sesión con conceder acceso a Drive u otra API;
 - usar ID token para invocar una API;
 - asumir que todo JWT es confiable;
 - confundir scopes con roles;
@@ -514,6 +698,7 @@ Y responder correctamente:
 
 - autenticación vs autorización;
 - OAuth2 vs OIDC;
+- “Continuar con Google” vs autorizar acceso a una API como Drive;
 - access token vs ID token;
 - quién es client, authorization server y resource server;
 - qué son scopes y claims;
