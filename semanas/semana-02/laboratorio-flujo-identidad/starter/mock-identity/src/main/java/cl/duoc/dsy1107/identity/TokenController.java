@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 public class TokenController {
 
+    private static final String ISSUER = "https://identity.reservapp.local";
+
     @GetMapping("/token")
     public Map<String, Object> token(
             @RequestParam(defaultValue = "ana") String user,
@@ -27,11 +29,12 @@ public class TokenController {
         String role = user.equals("operador") ? "operator" : "customer";
         long exp = Instant.now().plusSeconds(3600).getEpochSecond();
 
-        String accessPayload = String.join("|", "access", sub, audience, scope, role, String.valueOf(exp));
-        String idPayload = String.join("|", "id", sub, user, user + "@example.edu", String.valueOf(exp));
+        String accessPayload = String.join("|", "access", sub, ISSUER, audience, scope, role, String.valueOf(exp));
+        String idPayload = String.join("|", "id", sub, ISSUER, user, user + "@example.edu", String.valueOf(exp));
 
         return Map.of(
                 "tokenType", "Bearer",
+                "issuer", ISSUER,
                 "expiresIn", 3600,
                 "accessToken", encode(accessPayload),
                 "idToken", encode(idPayload),
