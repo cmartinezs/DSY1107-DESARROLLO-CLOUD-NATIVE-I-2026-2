@@ -5,31 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ReservApp · Laboratorio identidad</title>
   <style>
-    body{font-family:Arial,sans-serif;max-width:980px;margin:32px auto;padding:0 16px;line-height:1.45}fieldset{margin:18px 0;padding:16px}label{display:block;margin:8px 0}button{margin:6px 6px 6px 0;padding:8px 12px}pre{background:#111;color:#eee;padding:12px;overflow:auto;white-space:pre-wrap}.warn{background:#fff4cc;padding:10px;border-left:4px solid #d69e00}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:700px){.grid{grid-template-columns:1fr}}</style>
+    body{font-family:Arial,sans-serif;max-width:980px;margin:32px auto;padding:0 16px;line-height:1.45}fieldset{margin:18px 0;padding:16px}label{display:block;margin:8px 0}button{margin:6px 6px 6px 0;padding:8px 12px}input,select{padding:6px}pre{background:#111;color:#eee;padding:12px;overflow:auto;white-space:pre-wrap}.warn{background:#fff4cc;padding:10px;border-left:4px solid #d69e00}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:700px){.grid{grid-template-columns:1fr}}</style>
 </head>
 <body>
 <h1>ReservApp · Laboratorio de identidad</h1>
-<p class="warn"><strong>Simulador didáctico.</strong> Los tokens de esta app NO son JWT reales y este flujo NO implementa OAuth2/OIDC real. Sirve para observar actores, tokens, issuer, audience, scopes y decisiones 401/403 antes de usar un proveedor real.</p>
+<p class="warn"><strong>Simulador didáctico.</strong> Los tokens de esta app NO son JWT reales y el IdP local NO es un proveedor OAuth2/OIDC real. El objetivo es observar el flujo y provocar casos controlados antes de utilizar un proveedor real.</p>
 
 <fieldset>
-  <legend>1. Obtener identidad y tokens</legend>
+  <legend>1. Authorization Code + PKCE</legend>
   <label>Usuario
     <select id="user"><option value="ana">Ana · customer</option><option value="bruno">Bruno · customer</option><option value="operador">Operador · operator</option></select>
   </label>
   <label><input type="checkbox" id="read" checked> reservations.read</label>
   <label><input type="checkbox" id="write"> reservations.write</label>
+  <label>Client ID <input id="clientId" value="reservapp-web"></label>
+  <label>Redirect URI <input id="redirectUri" size="45" value="http://localhost:5500/index.html"></label>
   <label>Audience <input id="audience" value="reservapp-api"></label>
-  <button onclick="login()">Simular login / obtener tokens</button>
+  <button onclick="login()">Ejecutar flujo PKCE y obtener tokens</button>
   <button onclick="useIdAsAccess()">Usar ID token como access token</button>
 </fieldset>
 
 <div class="grid">
-  <section><h2>Token response</h2><pre id="tokens">Aún no hay tokens.</pre></section>
-  <section><h2>Payload didáctico decodificado</h2><pre id="decoded">Aún no hay token.</pre></section>
+  <section><h2>Traza del flujo</h2><pre id="trace">Aún no se ejecuta el flujo.</pre></section>
+  <section><h2>Tokens decodificados</h2><pre id="decoded">Aún no hay tokens.</pre></section>
 </div>
 
 <fieldset>
-  <legend>2. Llamar a ReservApp a través del Gateway</legend>
+  <legend>2. ReservApp a través del Gateway</legend>
   <button onclick="listReservations()">GET /api/reservations</button>
   <label>Reserva a cancelar <input id="reservationId" value="R-202"></label>
   <button onclick="cancelReservation()">DELETE /api/reservations/{id}</button>
@@ -40,35 +42,36 @@
 <pre id="result">Ejecuta una operación.</pre>
 
 <script>
-let accessToken = '';
-let idToken = '';
-
-function scopes(){const s=[];if(document.getElementById('read').checked)s.push('reservations.read');if(document.getElementById('write').checked)s.push('reservations.write');return s.join(' ')}
+let accessToken='', idToken='';
+const enc = new TextEncoder();
+function scopes(){const s=[];if(read.checked)s.push('reservations.read');if(write.checked)s.push('reservations.write');return s.join(' ')}
 function decode(token){try{return atob(token.replace(/-/g,'+').replace(/_/g,'/'))}catch(e){return 'No se pudo decodificar'}}
+function randomVerifier(){const a=new Uint8Array(32);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('')}
+async function challenge(v){const d=await crypto.subtle.digest('SHA-256',enc.encode(v));return btoa(String.fromCharCode(...new Uint8Array(d))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+async function readJson(r){const t=await r.text();let data;try{data=JSON.parse(t)}catch{data={raw:t}}if(!r.ok)throw new Error(`HTTP ${r.status}: ${JSON.stringify(data)}`);return data}
 
 async function login(){
-  const user=document.getElementById('user').value;
-  const audience=document.getElementById('audience').value;
-  const url=`http://localhost:9000/token?user=${encodeURIComponent(user)}&scope=${encodeURIComponent(scopes())}&audience=${encodeURIComponent(audience)}`;
-  const r=await fetch(url);const data=await r.json();
-  accessToken=data.accessToken;idToken=data.idToken;
-  document.getElementById('tokens').textContent=JSON.stringify(data,null,2);
-  document.getElementById('decoded').textContent=`ACCESS:\n${decode(accessToken)}\n\nID:\n${decode(idToken)}`;
-}
-
-function useIdAsAccess(){accessToken=idToken;document.getElementById('result').textContent='Ahora el cliente enviará deliberadamente el ID token como Bearer token. Ejecuta una llamada y observa qué ocurre.'}
-function clearToken(){accessToken='';document.getElementById('result').textContent='Token eliminado. Ejecuta una llamada y observa el 401.'}
-
-async function callApi(method,path){
+  trace.textContent='1. El cliente genera code_verifier y code_challenge...';
   try{
-    const headers={};if(accessToken)headers.Authorization=`Bearer ${accessToken}`;
-    const r=await fetch(`http://localhost:8080${path}`,{method,headers});
-    const text=await r.text();
-    document.getElementById('result').textContent=`HTTP ${r.status}\n${text}`;
-  }catch(e){document.getElementById('result').textContent=`Error de conexión: ${e.message}`}
+    const verifier=randomVerifier();const codeChallenge=await challenge(verifier);
+    const authorize=`http://localhost:9000/authorize?clientId=${encodeURIComponent(clientId.value)}&redirectUri=${encodeURIComponent(redirectUri.value)}&user=${encodeURIComponent(user.value)}&scope=${encodeURIComponent(scopes())}&audience=${encodeURIComponent(audience.value)}&codeChallenge=${encodeURIComponent(codeChallenge)}`;
+    trace.textContent+=`\n2. Authorization Request\n   client_id=${clientId.value}\n   redirect_uri=${redirectUri.value}\n   scope=${scopes()}\n   audience=${audience.value}\n   code_challenge=${codeChallenge}`;
+    const auth=await readJson(await fetch(authorize));
+    trace.textContent+=`\n3. IdP devuelve Authorization Code\n   ${auth.authorizationCode}`;
+    const exchange=`http://localhost:9000/exchange?code=${encodeURIComponent(auth.authorizationCode)}&codeVerifier=${encodeURIComponent(verifier)}`;
+    trace.textContent+=`\n4. Cliente intercambia Code + code_verifier`;
+    const data=await readJson(await fetch(exchange));
+    accessToken=data.accessToken;idToken=data.idToken;
+    trace.textContent+=`\n5. IdP emite ID Token + Access Token\n   issuer=${data.issuer}\n   expiresIn=${data.expiresIn}s`;
+    decoded.textContent=`ACCESS TOKEN:\n${decode(accessToken)}\n\nID TOKEN:\n${decode(idToken)}`;
+  }catch(e){trace.textContent+=`\n\nFLUJO RECHAZADO: ${e.message}`}
 }
+
+function useIdAsAccess(){accessToken=idToken;result.textContent='Se reemplazó deliberadamente el access token por el ID token. Ejecuta una llamada y observa quién lo rechaza.'}
+function clearToken(){accessToken='';result.textContent='Token eliminado. Ejecuta una llamada y observa el 401.'}
+async function callApi(method,path){try{const headers={};if(accessToken)headers.Authorization=`Bearer ${accessToken}`;const r=await fetch(`http://localhost:8080${path}`,{method,headers});result.textContent=`HTTP ${r.status}\n${await r.text()}`}catch(e){result.textContent=`Error de conexión: ${e.message}`}}
 function listReservations(){return callApi('GET','/api/reservations')}
-function cancelReservation(){const id=document.getElementById('reservationId').value;return callApi('DELETE',`/api/reservations/${encodeURIComponent(id)}`)}
+function cancelReservation(){return callApi('DELETE',`/api/reservations/${encodeURIComponent(reservationId.value)}`)}
 </script>
 </body>
 </html>
