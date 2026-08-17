@@ -19,21 +19,32 @@ ReservApp es exclusivamente formativo y se mantiene separado de los dominios y s
 
 Cerrar los pendientes de gestión de APIs y avanzar hacia autenticación/autorización moderna mediante OAuth2, OpenID Connect e Identity as a Service, **sin depender todavía de Azure ni de otro proveedor específico**.
 
-## Contenidos oficiales
+## Contenidos oficiales y material por tema
+
+La Semana 02 mantiene la misma convención documental de la Semana 01: **un archivo Markdown por tema institucional**.
 
 ### Finalizar 1.1
+
+Los contenidos pendientes de Semana 01 se cierran utilizando el material existente:
 
 - 1.1.1 Conociendo un API Manager.
 - 1.1.2 Tutorial Creando Nuestro Primer API Manager.
 - 1.1.3 Versionando APIs.
 - 1.1.4 Configurando CORS en nuestro API Gateway.
 
-### Iniciar 1.2
+### 1.2 Implementando autenticación con Identity as a Service
 
-- 1.2.1 OAuth2 y OIDC.
-- 1.2.2 Identity as a Service y CIAM.
-- 1.2.3 Configurando un Tenant.
-- 1.2.4 Configurando apps en un IDaaS.
+1. **[1.2.1 · OAuth2 y OIDC](./01-oauth2-oidc.md)**  
+   Autenticación vs autorización, actores, Authorization Code + PKCE, access token vs ID token, scopes, claims, 401/403 y responsabilidades gateway/backend.
+
+2. **[1.2.2 · Identity as a Service y CIAM](./02-idaas-ciam.md)**  
+   IdP, IDaaS, IAM vs CIAM, usuarios, aplicaciones, issuer, scopes, claims y separación de responsabilidades.
+
+3. **[1.2.3 · Configurando un Tenant](./03-configurando-tenant.md)**  
+   Diseño del espacio de identidad de ReservApp: usuarios, aplicaciones, permisos, claims y relación de confianza. Esta semana se trabaja a nivel conceptual y de diseño.
+
+4. **[1.2.4 · Configurando aplicaciones en un IDaaS](./04-configurando-apps-idaas.md)**  
+   Client ID, redirect URI, cliente público/confidencial, API/resource server, audience, scopes y diseño de app registration.
 
 > Los puntos 1.2.3 y 1.2.4 se trabajan esta semana **a nivel conceptual y de diseño**. La configuración real en Azure queda para cuando exista el entorno correspondiente.
 
@@ -60,6 +71,9 @@ Se incorpora el modelo de identidad y autorización:
 - scopes `reservations.read` / `reservations.write`;
 - claims;
 - 401 vs 403;
+- IDaaS/CIAM;
+- diseño de tenant;
+- diseño de las aplicaciones/clientes;
 - responsabilidades gateway/backend.
 
 ### Salida / checkpoint
@@ -70,7 +84,7 @@ Debe quedar un diagrama de arquitectura de ReservApp donde pueda explicarse:
 usuario → identidad → cliente con token → gateway → reservapp-api
 ```
 
-junto con scopes, casos 401/403 y decisiones de autorización.
+junto con scopes, casos 401/403, tenant conceptual, aplicaciones y decisiones de autorización.
 
 Este checkpoint se reutilizará en las experiencias siguientes cuando se incorporen proveedor real, JWT, seguridad del gateway y solución full stack.
 
@@ -83,12 +97,16 @@ Este checkpoint se reutilizará en las experiencias siguientes cuando se incorpo
 5. defensa técnica;
 6. checkpoint para la próxima clase.
 
-## Material creado
+## Práctica / laboratorio
 
-- [Guía · OAuth2 y OIDC sin depender de Azure](./01-oauth2-oidc-sin-proveedor.md)
 - [Laboratorio · ReservApp: diseñando un flujo OAuth2/OIDC](./laboratorio-flujo-identidad/README.md)
-- [Plan específico DSY1107-002D](./DSY1107-002D.md)
-- [Plan específico DSY1107-003D](./DSY1107-003D.md)
+
+El laboratorio toma contenidos de los cuatro temas y obliga a aplicarlos sobre el mismo dominio formativo.
+
+## Planificación por sección
+
+- [DSY1107-002D](./DSY1107-002D.md)
+- [DSY1107-003D](./DSY1107-003D.md)
 
 ## Qué deben aprender haciendo
 
@@ -98,6 +116,9 @@ Cada grupo debe terminar siendo capaz de:
 - dibujar actores OAuth2/OIDC correctamente;
 - distinguir autenticación de autorización;
 - diferenciar ID token y access token;
+- explicar IDaaS y CIAM;
+- diseñar un tenant coherente;
+- identificar cliente, API, Client ID y redirect URI;
 - proponer scopes para ReservApp;
 - interpretar claims;
 - resolver casos 401/403;
