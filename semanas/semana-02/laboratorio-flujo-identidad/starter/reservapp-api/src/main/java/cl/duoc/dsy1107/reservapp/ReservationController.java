@@ -58,12 +58,12 @@ public class ReservationController {
         try {
             String raw = new String(Base64.getUrlDecoder().decode(authorization.substring(7)), StandardCharsets.UTF_8);
             String[] p = raw.split("\\|", -1);
-            if (p.length != 6 || !p[0].equals("access")) throw new IllegalArgumentException();
-            return new Token(p[1], p[2], p[3], p[4], Long.parseLong(p[5]));
+            if (p.length != 7 || !p[0].equals("access")) throw new IllegalArgumentException();
+            return new Token(p[1], p[2], p[3], p[4], p[5], Long.parseLong(p[6]));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token didáctico inválido");
         }
     }
 
-    private record Token(String sub, String aud, String scope, String role, long exp) {}
+    private record Token(String sub, String iss, String aud, String scope, String role, long exp) {}
 }
