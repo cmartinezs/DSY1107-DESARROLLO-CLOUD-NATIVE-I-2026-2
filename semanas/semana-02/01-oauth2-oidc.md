@@ -390,7 +390,7 @@ flowchart LR
     IDP[Identity Provider] -->|ID Token| CLIENT[ReservApp Web]
     IDP -->|Access Token| CLIENT
     CLIENT -->|Access Token| API[ReservApp API]
-    CLIENT -. no corresponde .->|ID Token| API
+    CLIENT -.->|ID Token no corresponde| API
 ```
 
 ---
