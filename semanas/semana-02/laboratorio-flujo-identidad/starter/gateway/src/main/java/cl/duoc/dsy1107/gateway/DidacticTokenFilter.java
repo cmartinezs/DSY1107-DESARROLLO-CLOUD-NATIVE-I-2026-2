@@ -61,6 +61,7 @@ public class DidacticTokenFilter extends OncePerRequestFilter {
 
     private void reject(HttpServletResponse response, int status, String message) throws IOException {
         response.setStatus(status);
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/json");
         response.getWriter().write("{\"status\":" + status + ",\"message\":\"" + message + "\"}");
     }
