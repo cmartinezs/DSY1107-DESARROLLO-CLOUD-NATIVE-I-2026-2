@@ -5,6 +5,16 @@
 
 ← [Volver al índice de semanas](../README.md)
 
+## Dominio formativo transversal
+
+Desde esta semana se formaliza **ReservApp** como dominio longitudinal de DSY1107.
+
+Los ejemplos, ejercicios y laboratorios realizados en clase reutilizarán este mismo sistema siempre que el contenido lo permita. Cada experiencia de aprendizaje debe recibir un checkpoint anterior, agregar una capacidad y dejar una nueva versión reutilizable.
+
+→ [Ver estrategia transversal ReservApp](../../docs/DOMINIO-FORMATIVO-TRANSVERSAL.md)
+
+ReservApp es exclusivamente formativo y se mantiene separado de los dominios y soluciones de evaluaciones sumativas.
+
 ## Objetivo semanal
 
 Cerrar los pendientes de gestión de APIs y avanzar hacia autenticación/autorización moderna mediante OAuth2, OpenID Connect e Identity as a Service, **sin depender todavía de Azure ni de otro proveedor específico**.
@@ -27,18 +37,56 @@ Cerrar los pendientes de gestión de APIs y avanzar hacia autenticación/autoriz
 
 > Los puntos 1.2.3 y 1.2.4 se trabajan esta semana **a nivel conceptual y de diseño**. La configuración real en Azure queda para cuando exista el entorno correspondiente.
 
+## Evolución de ReservApp esta semana
+
+### Entrada
+
+ReservApp recibe lo trabajado con API Gateway:
+
+- API de reservas;
+- rutas a través del gateway;
+- versionado `/v1` y `/v2`;
+- CORS;
+- comprensión de cliente → gateway → backend.
+
+### Incremento
+
+Se incorpora el modelo de identidad y autorización:
+
+- usuario;
+- autenticación vs autorización;
+- OAuth2/OIDC;
+- access token vs ID token;
+- scopes `reservations.read` / `reservations.write`;
+- claims;
+- 401 vs 403;
+- responsabilidades gateway/backend.
+
+### Salida / checkpoint
+
+Debe quedar un diagrama de arquitectura de ReservApp donde pueda explicarse:
+
+```text
+usuario → identidad → cliente con token → gateway → reservapp-api
+```
+
+junto con scopes, casos 401/403 y decisiones de autorización.
+
+Este checkpoint se reutilizará en las experiencias siguientes cuando se incorporen proveedor real, JWT, seguridad del gateway y solución full stack.
+
 ## Patrón de trabajo
 
 1. explicación conceptual breve;
-2. ejemplo/diagrama acompañado;
-3. práctica o laboratorio;
+2. demostración sobre ReservApp;
+3. práctica/laboratorio incremental;
 4. evidencia reproducible;
-5. defensa técnica.
+5. defensa técnica;
+6. checkpoint para la próxima clase.
 
 ## Material creado
 
 - [Guía · OAuth2 y OIDC sin depender de Azure](./01-oauth2-oidc-sin-proveedor.md)
-- [Laboratorio · Diseñando un flujo OAuth2/OIDC](./laboratorio-flujo-identidad/README.md)
+- [Laboratorio · ReservApp: diseñando un flujo OAuth2/OIDC](./laboratorio-flujo-identidad/README.md)
 - [Plan específico DSY1107-002D](./DSY1107-002D.md)
 - [Plan específico DSY1107-003D](./DSY1107-003D.md)
 
@@ -50,7 +98,7 @@ Cada grupo debe terminar siendo capaz de:
 - dibujar actores OAuth2/OIDC correctamente;
 - distinguir autenticación de autorización;
 - diferenciar ID token y access token;
-- proponer scopes;
+- proponer scopes para ReservApp;
 - interpretar claims;
 - resolver casos 401/403;
 - separar autorización técnica de autorización de negocio;
