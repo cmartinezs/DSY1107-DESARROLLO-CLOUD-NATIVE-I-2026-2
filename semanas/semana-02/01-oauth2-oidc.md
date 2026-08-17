@@ -2,98 +2,296 @@
 
 ## Objetivo
 
-Comprender la diferencia entre autenticación y autorización, reconocer el rol de OAuth2 y OIDC y aplicar estos conceptos al dominio formativo **ReservApp** sin depender todavía de Azure ni de otro proveedor específico.
+Comprender la diferencia entre **autenticación** y **autorización**, reconocer qué problema resuelven OAuth2 y OpenID Connect, identificar sus actores principales y aplicar el flujo conceptualmente sobre **ReservApp** sin depender todavía de un proveedor específico.
 
-## 1. ¿Qué problema estamos resolviendo?
+> Esta semana interesa comprender **qué ocurre y por qué ocurre**. Los nombres de botones, pantallas y productos cloud vendrán después.
 
-ReservApp necesita responder dos preguntas distintas:
+---
 
-- **¿Quién es el usuario?** → autenticación.
-- **¿Qué puede hacer?** → autorización.
+## 1. El problema: una aplicación no debería hacerlo todo
 
-No conviene que cada aplicación implemente por sí sola login, contraseñas, recuperación de cuentas, MFA, emisión de tokens y políticas de acceso.
+ReservApp necesita responder preguntas distintas:
 
-## 2. OAuth2 y OIDC no son lo mismo
+1. **¿Quién es la persona que está usando el sistema?**
+2. **¿Cómo demostramos que realmente es esa persona?**
+3. **¿Qué operaciones puede ejecutar?**
+4. **¿Sobre qué recursos puede ejecutar esas operaciones?**
+5. **¿Durante cuánto tiempo debe considerarse válida esa autorización?**
 
-### OAuth2
+Si ReservApp implementara todo por sí misma tendría que hacerse responsable de:
 
-Es un framework de **autorización**. Permite que una aplicación obtenga autorización para acceder a recursos protegidos en nombre de un usuario o de otro actor.
+- almacenamiento y protección de contraseñas;
+- recuperación de cuentas;
+- MFA;
+- sesiones;
+- emisión y renovación de credenciales;
+- revocación;
+- políticas de acceso;
+- integración con otros sistemas.
 
-### OpenID Connect (OIDC)
+Separar identidad y autorización permite que un componente especializado resuelva una parte importante de estas responsabilidades.
 
-Es una capa de identidad construida sobre OAuth2. Añade mecanismos para que el cliente conozca la identidad autenticada del usuario.
-
-En términos simples:
-
-```text
-OAuth2 → qué se permite hacer
-OIDC   → quién se autenticó
+```mermaid
+flowchart LR
+    U[Usuario] --> C[ReservApp Web]
+    C -->|Necesita autenticar| IDP[Identity Provider]
+    IDP -->|Identidad + autorización| C
+    C -->|Access Token| G[API Gateway]
+    G --> API[ReservApp API]
+    API --> DB[(Datos de reservas)]
 ```
 
-Esta simplificación ayuda a comenzar, aunque en una implementación real ambos participan dentro del mismo flujo.
+---
 
-## 3. Actores principales
+## 2. Autenticación y autorización
+
+### Autenticación
+
+La autenticación intenta responder:
+
+> **¿Quién eres?**
+
+Ejemplos:
+
+- usuario + contraseña;
+- contraseña + segundo factor;
+- biometría;
+- autenticación mediante otra identidad confiable.
+
+El resultado no debería interpretarse como “puede hacer cualquier cosa”. Solo establece una identidad con determinado nivel de confianza.
+
+### Autorización
+
+La autorización responde:
+
+> **¿Qué puedes hacer?**
+
+Ejemplos en ReservApp:
+
+- consultar reservas;
+- crear una reserva;
+- cancelar una reserva;
+- administrar reservas de terceros.
+
+### No son equivalentes
+
+```mermaid
+flowchart TD
+    A[Petición] --> B{¿Identidad válida?}
+    B -- No --> C[401 Unauthorized]
+    B -- Sí --> D{¿Permiso suficiente?}
+    D -- No --> E[403 Forbidden]
+    D -- Sí --> F{¿Regla de negocio permite?}
+    F -- No --> E
+    F -- Sí --> G[Ejecutar operación]
+```
+
+Una persona puede estar perfectamente autenticada y aun así no estar autorizada para una operación.
+
+---
+
+## 3. OAuth2: autorización delegada
+
+OAuth2 es un **framework de autorización**.
+
+La idea central es evitar que una aplicación tenga que recibir las credenciales del usuario para acceder a otro recurso. En vez de entregar la contraseña, se obtiene una autorización limitada representada normalmente mediante un **access token**.
+
+Para comenzar, piensa así:
+
+```text
+credenciales del usuario ≠ access token
+```
+
+Las credenciales prueban identidad ante quien autentica.
+
+El access token representa una autorización temporal para acceder a un recurso.
+
+### Ejemplo conceptual
+
+ReservApp Web necesita consultar la API.
+
+No le entrega la contraseña del usuario a `reservapp-api`.
+
+En cambio:
+
+```text
+Usuario se autentica
+        ↓
+Authorization Server autoriza
+        ↓
+ReservApp Web obtiene access token
+        ↓
+ReservApp Web llama ReservApp API usando ese token
+```
+
+---
+
+## 4. OIDC: identidad sobre OAuth2
+
+OAuth2 por sí solo no fue diseñado como protocolo de login.
+
+**OpenID Connect (OIDC)** agrega una capa de identidad sobre OAuth2.
+
+OIDC permite que el cliente obtenga información verificable sobre la autenticación realizada y sobre el sujeto autenticado.
+
+Una simplificación útil para comenzar es:
+
+```text
+OAuth2 → autorización
+OIDC   → identidad/autenticación sobre OAuth2
+```
+
+Pero ambos pueden aparecer dentro del mismo flujo.
+
+```mermaid
+flowchart LR
+    OAUTH[OAuth2] -->|autoriza acceso| AT[Access Token]
+    OIDC[OpenID Connect] -->|informa identidad| IDT[ID Token]
+    OIDC --> OAUTH
+```
+
+---
+
+## 5. Actores principales
 
 ### Resource Owner
 
-Persona o entidad propietaria del acceso delegado. En nuestro caso: un usuario de ReservApp.
+Es quien puede autorizar acceso al recurso.
+
+En ReservApp normalmente será el usuario.
 
 ### Client
 
-Aplicación que necesita acceder a un recurso. En ReservApp podría ser `reservapp-web`.
+Es la aplicación que solicita autorización.
+
+Ejemplo:
+
+```text
+reservapp-web
+```
+
+Importante: **client** no significa necesariamente “persona”. Es software.
 
 ### Authorization Server / Identity Provider
 
-Autentica al usuario, gestiona el consentimiento/políticas y emite tokens.
+Componente que:
+
+- autentica al usuario;
+- conoce clientes registrados;
+- aplica políticas;
+- gestiona consentimiento cuando corresponde;
+- emite tokens.
 
 ### Resource Server
 
-API que protege recursos. En nuestro caso: `reservapp-api`.
+Es el sistema que expone el recurso protegido.
+
+Ejemplo:
+
+```text
+reservapp-api
+```
 
 ### API Gateway
 
-No es un actor obligatorio de OAuth2, pero en nuestra arquitectura puede aplicar políticas transversales antes de que la petición llegue al backend.
+No es un actor obligatorio de OAuth2, pero nuestra arquitectura puede usarlo como punto transversal para:
 
-## 4. Access token vs ID token
+- verificar que exista token;
+- validar características técnicas del token;
+- aplicar políticas generales;
+- bloquear peticiones inválidas antes del backend.
+
+```mermaid
+flowchart TB
+    U[Resource Owner\nUsuario]
+    C[Client\nReservApp Web]
+    AS[Authorization Server / IdP]
+    G[API Gateway]
+    RS[Resource Server\nReservApp API]
+
+    U --> C
+    C --> AS
+    AS --> C
+    C --> G
+    G --> RS
+```
+
+---
+
+## 6. Access token e ID token
 
 ### Access token
 
-Se utiliza para acceder a una API.
+Se utiliza para acceder a un recurso protegido.
 
-Puede expresar información como:
+El destinatario lógico es la API/resource server.
+
+Puede permitir razonar sobre datos como:
 
 ```text
-aud = reservapp-api
+aud   = reservapp-api
 scope = reservations.read reservations.write
-exp = ...
+exp   = ...
+```
+
+Conceptualmente:
+
+```http
+Authorization: Bearer <access_token>
 ```
 
 ### ID token
 
-Está dirigido al **cliente** y entrega información sobre la identidad autenticada.
+Pertenece a OIDC y está dirigido principalmente al **cliente**.
 
-No debe utilizarse como reemplazo del access token para llamar a la API.
+Su propósito es informar al cliente acerca de la autenticación realizada y la identidad asociada.
 
-## 5. Claims, scopes y roles
+### Error frecuente
+
+> “Tengo un JWT, entonces puedo usarlo para llamar a cualquier API.”
+
+Incorrecto.
+
+La forma del token no determina su propósito.
+
+Debemos preguntar:
+
+- ¿quién lo emitió?;
+- ¿para quién fue emitido?;
+- ¿qué tipo de token es?;
+- ¿qué permisos representa?;
+- ¿sigue vigente?
+
+```mermaid
+flowchart LR
+    IDP[Identity Provider] -->|ID Token| CLIENT[ReservApp Web]
+    IDP -->|Access Token| CLIENT
+    CLIENT -->|Access Token| API[ReservApp API]
+    CLIENT -. no corresponde .->|ID Token| API
+```
+
+---
+
+## 7. Claims, scopes y roles
 
 ### Claim
 
-Dato declarado dentro de un token.
+Un **claim** es una afirmación contenida en un token.
 
-Ejemplos:
+Ejemplos habituales:
 
 ```text
-sub
-iss
-aud
-exp
-email
-role
+sub  → sujeto
+iss  → emisor
+aud  → audiencia
+exp  → expiración
 ```
+
+También pueden existir claims asociados a contexto, identidad o roles.
 
 ### Scope
 
-Capacidad que una aplicación solicita y que puede concederse.
+Un **scope** representa una capacidad solicitada/concedida sobre un recurso.
 
 Para ReservApp:
 
@@ -102,108 +300,227 @@ reservations.read
 reservations.write
 ```
 
+Un scope debería expresar una capacidad razonablemente estable del recurso, no simplemente copiar botones de una interfaz.
+
 ### Role
 
-Representación de una función o agrupación de capacidades, por ejemplo `customer` u `operator`.
+Un rol suele representar una función dentro del sistema:
 
-No confundir roles con scopes: pueden relacionarse, pero representan ideas distintas.
+```text
+customer
+operator
+admin
+```
 
-## 6. Authorization Code + PKCE
-
-Para clientes públicos modernos, como una SPA o aplicación móvil, se trabaja conceptualmente con **Authorization Code + PKCE**.
-
-Flujo simplificado:
-
-1. ReservApp redirige al usuario al proveedor de identidad.
-2. El usuario se autentica allí.
-3. El proveedor devuelve un código al cliente mediante una redirect URI autorizada.
-4. El cliente intercambia ese código usando la prueba PKCE.
-5. Obtiene los tokens correspondientes.
-6. Usa el access token para llamar a `reservapp-api`.
-
-El objetivo por ahora no es memorizar parámetros del protocolo, sino entender por qué el cliente no debería manejar directamente la contraseña del usuario.
-
-## 7. Flujo en ReservApp
+### Diferencia conceptual
 
 ```mermaid
 flowchart LR
-    U[Usuario] --> C[ReservApp Web]
-    C --> I[Identity Provider]
-    I --> C
-    C -->|Access Token| G[API Gateway]
-    G --> A[ReservApp API]
+    R[Role\nQuién/fución] --> P[Política]
+    S[Scope\nQué capacidad delegada] --> P
+    C[Claims\nDatos/contexto] --> P
+    P --> D[Decisión de autorización]
 ```
 
-Preguntas clave:
+No existe una regla universal que diga “todo se resuelve con roles” o “todo se resuelve con scopes”. La arquitectura define cómo se combinan.
 
-- ¿Dónde ocurre la autenticación?
-- ¿Quién emite el token?
-- ¿Quién consume el access token?
-- ¿Qué debería validar el gateway?
-- ¿Qué reglas todavía debe validar el backend?
+---
 
-## 8. 401 vs 403
+## 8. Authorization Code + PKCE
+
+Para clientes públicos modernos, como una SPA o aplicación móvil, estudiaremos conceptualmente **Authorization Code + PKCE**.
+
+PKCE agrega una prueba que vincula el inicio del flujo con quien posteriormente intenta intercambiar el código.
+
+La idea importante es evitar tratar el código de autorización como si por sí solo fuera suficiente.
+
+### Flujo simplificado
+
+```mermaid
+sequenceDiagram
+    actor U as Usuario
+    participant C as ReservApp Web
+    participant I as Identity Provider
+    participant G as API Gateway
+    participant A as ReservApp API
+
+    U->>C: Quiero iniciar sesión
+    C->>I: Authorization Request + PKCE challenge
+    I->>U: Solicita autenticación
+    U->>I: Se autentica
+    I-->>C: Authorization Code
+    C->>I: Code + PKCE verifier
+    I-->>C: Access Token + ID Token
+    C->>G: GET /reservas + Bearer access_token
+    G->>G: Valida token/política transversal
+    G->>A: Petición autorizable
+    A->>A: Aplica reglas de negocio
+    A-->>C: Respuesta
+```
+
+### Qué deben comprender
+
+No hace falta memorizar todavía todos los parámetros.
+
+Sí deben comprender que:
+
+- la contraseña no viaja hacia ReservApp API;
+- el usuario se autentica ante el IdP;
+- el cliente recibe un código primero;
+- luego obtiene tokens;
+- el access token se presenta ante la API;
+- PKCE protege el intercambio del código en clientes donde no podemos confiar en un secreto almacenado.
+
+---
+
+## 9. ¿Qué debería validar una API?
+
+Recibir un token no basta.
+
+Conceptualmente, una API debe poder confiar al menos en:
+
+- **firma:** no fue modificado y proviene de una autoridad confiable;
+- **issuer (`iss`):** fue emitido por el emisor esperado;
+- **audience (`aud`):** fue emitido para esta API/recurso;
+- **expiración (`exp`):** sigue vigente;
+- **permisos:** posee scope/rol apropiado.
+
+Después viene la autorización de negocio.
+
+```mermaid
+flowchart TD
+    T[Access Token] --> S{Firma válida}
+    S -- No --> X[Rechazar]
+    S -- Sí --> I{Issuer esperado}
+    I -- No --> X
+    I -- Sí --> A{Audience correcta}
+    A -- No --> X
+    A -- Sí --> E{No expirado}
+    E -- No --> X
+    E -- Sí --> P{Scope/política suficiente}
+    P -- No --> F[403]
+    P -- Sí --> B[Evaluar regla de negocio]
+```
+
+---
+
+## 10. 401 vs 403
 
 ### 401 Unauthorized
 
-La petición no posee credenciales válidas para ser autenticada.
+La petición no posee credenciales de autenticación válidas o aceptables.
 
 Ejemplos:
 
-- no hay token;
+- falta token;
 - token inválido;
 - token expirado.
 
 ### 403 Forbidden
 
-La identidad está reconocida, pero no tiene autorización suficiente para la operación.
+La identidad ya fue reconocida, pero la operación no está permitida.
 
-Ejemplo:
+Ejemplos:
 
-- token válido sin `reservations.write` intentando modificar una reserva.
+- token válido sin `reservations.write`;
+- usuario autenticado intentando administrar un recurso que no le corresponde.
 
-## 9. Autorización técnica vs autorización de negocio
+> El nombre HTTP `Unauthorized` puede confundir: en la práctica, 401 está asociado a falta/fallo de autenticación, mientras que 403 expresa acceso prohibido aun existiendo identidad válida.
 
-Tener:
+---
+
+## 11. Autorización técnica vs autorización de negocio
+
+Supongamos que un usuario posee:
 
 ```text
 reservations.write
 ```
 
-no implica automáticamente:
+Eso podría autorizar la operación general de escritura.
 
-> “puedo modificar cualquier reserva”.
+Pero ReservApp mantiene esta regla:
 
-ReservApp puede tener una regla adicional:
+> Un cliente solo puede cancelar sus propias reservas.
 
-> Un cliente solo puede modificar sus propias reservas.
+El scope no contiene necesariamente toda la información necesaria para resolver esa regla.
 
-Esa regla depende del dominio y debe validarse con información del negocio, normalmente en el backend.
+La API podría necesitar comparar:
 
-## 10. Micropráctica
+```text
+sub del usuario autenticado
+        vs
+ownerId de la reserva
+```
 
-Para cada caso indiquen si corresponde principalmente a autenticación, autorización, validación técnica o regla de negocio:
+```mermaid
+flowchart LR
+    TOKEN[Token\nsub=user-123\nscope=reservations.write] --> API[ReservApp API]
+    DB[(Reserva\nownerId=user-456)] --> API
+    API --> CHECK{¿sub == ownerId?}
+    CHECK -- No --> DENY[403 Forbidden]
+    CHECK -- Sí --> OK[Cancelar reserva]
+```
 
-1. El usuario ingresa sus credenciales.
-2. La API verifica que el token no esté expirado.
-3. La petición no contiene token.
-4. El token no posee `reservations.write`.
-5. El usuario intenta cancelar una reserva que pertenece a otra persona.
+Por esto **tener gateway e IDaaS no elimina la seguridad del backend**.
 
-Justifiquen cada respuesta.
+---
+
+## 12. Micropráctica
+
+Para cada situación indiquen:
+
+1. componente que debería detectarla;
+2. si corresponde a autenticación, validación técnica, autorización o regla de negocio;
+3. resultado esperado.
+
+Casos:
+
+1. El usuario ingresa credenciales incorrectas.
+2. La API recibe un token expirado.
+3. La petición llega sin token.
+4. El token no contiene `reservations.write`.
+5. El token fue emitido para otra API.
+6. Un usuario con `reservations.write` intenta cancelar la reserva de otra persona.
+
+---
+
+## Errores conceptuales frecuentes
+
+- creer que OAuth2 es simplemente “login”;
+- creer que OIDC reemplaza OAuth2;
+- usar ID token para invocar una API;
+- asumir que todo JWT es confiable;
+- confundir scopes con roles;
+- creer que el gateway elimina la autorización del backend;
+- asumir que un scope de escritura autoriza modificar cualquier registro.
+
+---
 
 ## Checkpoint
 
-Al terminar este tema debes poder explicar:
+Al terminar este tema debes poder dibujar y explicar:
+
+```text
+Usuario
+  → Client
+  → Identity Provider
+  → Client con tokens
+  → API Gateway
+  → Resource Server
+```
+
+Y responder correctamente:
 
 - autenticación vs autorización;
 - OAuth2 vs OIDC;
 - access token vs ID token;
-- actor cliente, authorization server y resource server;
-- scopes y claims;
+- quién es client, authorization server y resource server;
+- qué son scopes y claims;
 - diferencia entre 401 y 403;
-- por qué el backend sigue teniendo responsabilidades aunque exista un API Gateway.
+- qué valida técnicamente un token;
+- por qué el backend mantiene reglas de autorización de negocio.
 
 ## Continuidad
 
-El siguiente tema introduce **IDaaS y CIAM** para entender dónde viven usuarios, aplicaciones, políticas y configuración de identidad antes de diseñar el tenant de ReservApp.
+El siguiente tema introduce **IDaaS y CIAM**: pasaremos de comprender el protocolo a comprender **quién opera la infraestructura de identidad, dónde viven usuarios/aplicaciones/políticas y qué responsabilidades delegamos**.
