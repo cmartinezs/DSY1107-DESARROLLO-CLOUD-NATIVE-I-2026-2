@@ -8,9 +8,8 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 
 - [`semanas/`](semanas/) — índice y contenido consolidado de cada semana.
 - [`docs/`](docs/) — conocimientos y guías transversales.
-- [`labs/`](labs/) — ejercicios y laboratorios prácticos.
-- [`examples/`](examples/) — ejemplos de código desarrollados en clases.
 - [`page/`](page/) — portal web del curso.
+- [**Estrategia de laboratorios: concepto → cloud**](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md) — primero patrón local/neutral; después implementación real en cloud.
 - [**Estándar de repositorio del estudiante**](docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — nombre, estructura, packages, Markdown, labs Cloud Native y entregas colaborativas.
 - [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing) — biblioteca pública organizada semana a semana.
 
@@ -35,6 +34,33 @@ El directorio [`semanas/`](semanas/) mantiene un **README general** que funciona
 ### Material original
 
 Los archivos originales de la asignatura utilizados durante cada semana se mantienen en la [biblioteca pública de Google Drive](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing), organizados en carpetas semanales de solo lectura.
+
+## Filosofía de laboratorios
+
+En DSY1107, cuando un contenido dependa de infraestructura cloud, se buscará primero una experiencia **local, neutral o con un servicio alternativo sencillo** que permita observar el patrón sin quedar amarrado al proveedor.
+
+La progresión esperada es:
+
+```text
+comprender el concepto
+        ↓
+levantarlo localmente o con una alternativa neutral
+        ↓
+observar flujos, errores y responsabilidades
+        ↓
+repetir el objetivo usando el servicio cloud real de la asignatura
+        ↓
+mapear concepto ↔ servicio
+```
+
+Los dos laboratorios iniciales fijan este modelo:
+
+- **API Gateway local**: routing, integración, versionado, HTTP nivel 2, políticas transversales y CORS.
+- **ReservApp + mock-identity**: OAuth2/OIDC, PKCE, tokens, scopes, roles, 401/403, tenant y app registration.
+
+El objetivo es que el estudiante pueda reconocer el mismo patrón aunque cambie la tecnología o el proveedor.
+
+→ [Ver estrategia completa](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md)
 
 ## Repositorio personal del estudiante
 
