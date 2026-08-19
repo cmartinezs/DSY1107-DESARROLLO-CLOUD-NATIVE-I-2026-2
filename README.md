@@ -2,7 +2,7 @@
 
 Repositorio de apoyo para la asignatura **DSY1107 Desarrollo Cloud Native I**.
 
-Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y recursos complementarios utilizados durante el semestre 2026-2 para las secciones diurnas del curso.
+Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y recursos complementarios utilizados durante el semestre 2026-2 para las secciones **DSY1107-002D** y **DSY1107-003D**.
 
 ## Acceso rápido
 
@@ -11,7 +11,8 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 - [`labs/`](labs/) — ejercicios y laboratorios prácticos.
 - [`examples/`](examples/) — ejemplos de código desarrollados en clases.
 - [`page/`](page/) — portal web del curso.
-- [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing) — biblioteca de archivos originales organizada semana a semana.
+- [**Estándar de repositorio del estudiante**](docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — nombre, estructura, packages, Markdown, labs Cloud Native y entregas colaborativas.
+- [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing) — biblioteca pública organizada semana a semana.
 
 ## Cómo se organiza el material
 
@@ -35,7 +36,26 @@ El directorio [`semanas/`](semanas/) mantiene un **README general** que funciona
 
 Los archivos originales de la asignatura utilizados durante cada semana se mantienen en la [biblioteca pública de Google Drive](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing), organizados en carpetas semanales de solo lectura.
 
-De esta manera, siempre puedes consultar tanto la fuente original como el material consolidado utilizado en clases.
+## Repositorio personal del estudiante
+
+La estructura usada por el docente para publicar material no se copia en el repositorio del alumno.
+
+Cada estudiante mantiene un único repo personal:
+
+```text
+DSY1107-002D-nombre-apellido
+```
+
+o
+
+```text
+DSY1107-003D-nombre-apellido
+```
+
+según su sección. Para código Java/Kotlin se usa `cl.duoc.<usuario-duoc-sin-puntos>` como raíz de package. Las entregas se documentan con Markdown y cada lab/proyecto debe poder reproducirse desde otra máquina sin depender del IDE del autor.
+
+→ [Ver estándar completo](docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md)  
+→ [Versión web](page/repositorio-estudiante.html)
 
 ## Cómo obtener el repositorio
 
@@ -52,20 +72,21 @@ git pull
 
 ## Organización del semestre
 
-El material se publica progresivamente de acuerdo con el avance de la asignatura. Ambas secciones utilizan el mismo repositorio y alcanzan los mismos objetivos semanales, aunque la distribución de cada sesión puede variar según el horario.
+Ambas secciones utilizan el mismo repositorio y alcanzan los mismos objetivos semanales, aunque la distribución y avance de cada sesión puede variar.
 
 ## Semana actual
 
-**Semana 1 · 10 al 15 de agosto de 2026**
+**Semana 2 · 17 al 22 de agosto de 2026**
 
-Actividad institucional: **1.1 Explorando la gestión de APIs**.
+**Gestión de APIs + fundamentos de identidad**.
 
-- 1.1.1 Conociendo un API Manager
-- 1.1.2 Tutorial: creando nuestro primer API Manager
-- 1.1.3 Versionando APIs
-- 1.1.4 Configurando CORS en nuestro API Gateway
+- cierre de API Manager, versionado y CORS;
+- OAuth2 y OpenID Connect;
+- Identity as a Service / CIAM;
+- diseño conceptual de tenant y aplicaciones;
+- ReservApp como dominio formativo transversal.
 
-Consulta el contenido en [`semanas/semana-01/`](semanas/semana-01/) y los archivos originales en la [carpeta pública de material de la Semana 1](https://drive.google.com/drive/folders/1G_Fi_4wk4BO2JTBw49Jcfi11hX1ApJO6?usp=sharing).
+Consulta [`semanas/semana-02/`](semanas/semana-02/) y la planificación específica de cada sección.
 
 ---
 
