@@ -103,6 +103,52 @@ scripts/
 
 Se versionan cuando son parte real de la solución y **no contienen secretos**.
 
+### Regla pedagógica de los labs: primero concepto, después cloud
+
+En esta asignatura muchos laboratorios tendrán dos etapas relacionadas:
+
+```text
+laboratorio local/neutral → laboratorio real en cloud
+```
+
+La primera etapa busca comprender el patrón sin depender de AWS, Azure u otro proveedor específico. Puede utilizar infraestructura local, contenedores, software open source, simuladores didácticos o servicios alternativos sencillos.
+
+La segunda etapa utiliza el servicio cloud correspondiente a la asignatura.
+
+El objetivo es que el estudiante pueda reconocer que, aunque cambien nombres, pantallas o productos, permanecen conceptos como:
+
+- cliente;
+- gateway;
+- route;
+- integración/destino;
+- políticas transversales;
+- IdP/Authorization Server;
+- client registration;
+- scopes;
+- claims;
+- permisos;
+- observabilidad y errores.
+
+Cuando exista un par local → cloud, el README del laboratorio cloud debe incluir como mínimo:
+
+```markdown
+## Del laboratorio conceptual al laboratorio cloud
+
+| Concepto | En local/neutral | En cloud |
+|---|---|---|
+| ... | ... | ... |
+
+### Qué cambió
+...
+
+### Qué se mantuvo
+...
+```
+
+No basta con documentar una secuencia de clics. Debe explicarse qué representa cada elemento.
+
+→ Ver la estrategia completa en `docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md` del repositorio del curso.
+
 ## 6. Entregas colaborativas
 
 Algunas actividades pueden ser grupales. Cuando el docente indique explícitamente que una entrega se realiza en un repositorio de equipo, se informará el formato de nombre de ese repositorio y sus integrantes deberán colaborar mediante Git/GitHub.
@@ -258,6 +304,8 @@ Debe existir un solo `.git` en la raíz del repositorio personal, salvo que el d
 - [ ] Nombre del repo con sección correcta: `DSY1107-002D-...` o `DSY1107-003D-...`.
 - [ ] Package raíz `cl.duoc.<usuario-sin-puntos>` cuando hay código Java/Kotlin.
 - [ ] Labs/proyectos contienen todos los archivos necesarios para reproducirlos.
+- [ ] Si existe par local → cloud, puedo explicar qué concepto corresponde a cada elemento del proveedor.
+- [ ] El README cloud incluye qué cambió y qué se mantuvo respecto del laboratorio conceptual.
 - [ ] Configuración sensible está fuera del repositorio.
 - [ ] README raíz y README de cada carpeta/entrega relevante.
 - [ ] README explica ejecución y configuración sin asumir el computador del autor.
