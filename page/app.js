@@ -14,7 +14,7 @@ button?.addEventListener('click', async () => {
 const currentWeek = document.querySelector('.current-week');
 if (currentWeek) {
   const lab = document.createElement('p');
-  lab.innerHTML = '<strong>Laboratorio puente:</strong> API Gateway local con Spring Cloud Gateway · routing, HTTP nivel 2, versionado, CORS y colaboración GitHub. <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-01/laboratorio-api-gateway">Abrir guía y starter →</a>';
+  lab.innerHTML = '<strong>Laboratorio puente:</strong> API Gateway local con Spring Cloud Gateway · routing, HTTP nivel 2, versionado, CORS y colaboración GitHub. <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/api-gateway-local">Abrir guía y starter →</a>';
   currentWeek.appendChild(lab);
 
   const params = new URLSearchParams(window.location.search);
@@ -41,20 +41,20 @@ if (currentWeek) {
       <p class="eyebrow">DSY1107-002D</p>
       <h2>Resumen de la sección</h2>
       <p>Consulta únicamente los registros de avance de la sección 002D.</p>
-      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-01/secciones/002D/resumen-2026-08-11.md">Abrir resumen del 11 de agosto →</a>
+      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-02/DSY1107-002D.md">Abrir planificación/avance de Semana 2 →</a>
     `;
   }
 
   if (selectedSection === '003D') {
     detail.innerHTML = `
       <hr />
-      <p class="eyebrow">DSY1107-003D · 14 de agosto</p>
-      <h2>API REST, HTTP, Gateway y versionamiento</h2>
-      <p>Se revisaron recursos y paths, métodos GET/POST/PUT/PATCH/DELETE, query parameters, diferencia PUT/PATCH, API vs API Gateway vs API Management, funciones transversales del gateway y versionamiento SemVer frente a versiones de contrato como /v1 y /v2.</p>
-      <p><strong>Estado actual:</strong> laboratorio de API Gateway con Spring Cloud Gateway en curso. El diagnóstico técnico continúa pendiente.</p>
+      <p class="eyebrow">DSY1107-003D</p>
+      <h2>API Gateway + OAuth2/OIDC</h2>
+      <p>La sección mantiene su propio checkpoint real. Consulta el registro de Semana 2 para distinguir lo ya trabajado de lo planificado.</p>
       <p>
-        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-01/secciones/003D/resumen-2026-08-14.md">Abrir resumen de la clase →</a><br />
-        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-01/laboratorio-api-gateway">Continuar laboratorio API Gateway →</a>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-02/DSY1107-003D.md">Abrir avance de Semana 2 →</a><br />
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/api-gateway-local">Continuar laboratorio API Gateway →</a><br />
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/identidad-local">Abrir laboratorio de identidad →</a>
       </p>
     `;
   }
