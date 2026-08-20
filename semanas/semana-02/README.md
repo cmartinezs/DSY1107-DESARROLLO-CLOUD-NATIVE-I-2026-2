@@ -23,6 +23,8 @@ Cerrar los pendientes de gestión de APIs y avanzar hacia autenticación/autoriz
 
 Cada contenido mantiene un **Markdown base suficiente para los aprendizajes esperados de la asignatura**. Cuando un tema dispone de material extendido, se ofrece además una carpeta de profundización opcional.
 
+> **Regla de lectura:** estudia primero el `.md` base. Los enlaces “Si quieres profundizar” amplían detalles, ejemplos y decisiones técnicas; no contienen prerrequisitos ocultos para comprender la materia base.
+
 ### Finalizar 1.1
 
 Los contenidos pendientes de Semana 01 se cierran utilizando el material existente:
@@ -39,13 +41,16 @@ Los contenidos pendientes de Semana 01 se cierran utilizando el material existen
    → **[Si quieres profundizar: OAuth2/OIDC y Authorization Code + PKCE](./01-oauth2-oidc/README.md)**
 
 2. **[1.2.2 · Identity as a Service y CIAM](./02-idaas-ciam.md)**  
-   IdP, IDaaS, IAM vs CIAM, usuarios, aplicaciones, issuer, scopes, claims y separación de responsabilidades.
+   IdP, IDaaS, IAM vs CIAM, usuarios, aplicaciones, issuer, scopes, claims y separación de responsabilidades.  
+   → **[Si quieres profundizar: IdP, IAM, IDaaS, CIAM y fronteras de responsabilidad](./02-idaas-ciam/README.md)**
 
 3. **[1.2.3 · Configurando un Tenant](./03-configurando-tenant.md)**  
-   Diseño del espacio de identidad de ReservApp: usuarios, aplicaciones, permisos, claims y relación de confianza. Esta semana se trabaja a nivel conceptual y de diseño.
+   Diseño del espacio de identidad de ReservApp: usuarios, aplicaciones, permisos, claims y relación de confianza. Esta semana se trabaja a nivel conceptual y de diseño.  
+   → **[Si quieres profundizar: tenant como frontera de confianza y diseño de ReservApp](./03-configurando-tenant/README.md)**
 
 4. **[1.2.4 · Configurando aplicaciones en un IDaaS](./04-configurando-apps-idaas.md)**  
-   Client ID, redirect URI, cliente público/confidencial, API/resource server, audience, scopes y diseño de app registration.
+   Client ID, redirect URI, cliente público/confidencial, API/resource server, audience, scopes y diseño de app registration.  
+   → **[Si quieres profundizar: Client ID, Redirect URI, tipos de cliente, audience y scopes](./04-configurando-apps-idaas/README.md)**
 
 > Los puntos 1.2.3 y 1.2.4 se trabajan esta semana **a nivel conceptual y de diseño**. La configuración real en Azure queda para cuando exista el entorno correspondiente.
 
