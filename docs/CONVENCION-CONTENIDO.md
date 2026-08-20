@@ -164,6 +164,18 @@ Agregarla cuando una o más de estas condiciones lo justifiquen:
 
 El tamaño del `.md` por sí solo no obliga a crear una carpeta.
 
+## Aplicación retroactiva
+
+Esta convención es **retroactiva**. Todo material conceptual ya publicado debe revisarse bajo el mismo criterio:
+
+- el `.md` existente se conserva como base suficiente;
+- no se mueve contenido esencial desde el `.md` hacia la carpeta;
+- cuando exista profundidad útil, se agrega una carpeta homónima;
+- los índices semanales deben distinguir claramente contenido base y profundización;
+- el material histórico se adapta sin romper enlaces existentes siempre que sea posible.
+
+Laboratorios, diagnósticos, resúmenes por sección, planificación y documentos operativos no requieren una carpeta homónima por el solo hecho de ser Markdown: esta convención se aplica a **temas didácticos/conceptuales**, no mecánicamente a cualquier archivo del repositorio.
+
 ## Principio editorial
 
 El repositorio debe funcionar como **documentación técnica educativa de profundidad progresiva**:
@@ -174,4 +186,4 @@ base obligatoria → profundización voluntaria → observación → aplicación
 
 La profundidad puede crecer tanto como resulte útil, pero nunca a costa de vaciar el archivo principal.
 
-Esta convención aplica al material nuevo y se adoptará progresivamente en el contenido existente.
+La convención rige tanto para material nuevo como para todo contenido didáctico existente.
