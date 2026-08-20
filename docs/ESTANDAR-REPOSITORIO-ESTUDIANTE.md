@@ -1,37 +1,40 @@
 # Estándar de repositorio del estudiante · DSY1107
 
-Este documento define **cómo entrega y organiza su trabajo el estudiante**. No copia la estructura interna del repositorio docente.
+Este documento define cómo organiza y entrega su trabajo el estudiante. **No copia la estructura del repositorio docente.**
 
-Aplica a las secciones:
+Aplica a las secciones `002D` y `003D`.
 
-```text
-DSY1107-002D
-DSY1107-003D
-```
-
-## 1. Nombre obligatorio
+## 1. Repositorio único y público
 
 Formato:
 
 ```text
-<SIGLA>-<SECCION>-nombre-apellido
+DSY1107-002D-nombre-apellido
+DSY1107-003D-nombre-apellido
 ```
 
-Ejemplos:
+Cada estudiante usa únicamente su sección.
 
-```text
-DSY1107-002D-carlos-martinez
-DSY1107-003D-carlos-martinez
-```
+Reglas:
 
-Cada estudiante usa únicamente la sección que le corresponde. Nombre y apellido en minúsculas, separados por guion y sin espacios, tildes ni caracteres especiales.
+- un solo repositorio personal para todo el semestre;
+- repositorio **público**, salvo instrucción excepcional del docente;
+- nombre y apellido en minúsculas, separados por `-`;
+- sin espacios, tildes ni caracteres especiales.
 
-## 2. Un repositorio para todo el semestre
+## 2. Estructura oficial
 
 ```text
 DSY1107-00XD-nombre-apellido/
 ├── README.md
 ├── .gitignore
+├── docs/
+│   ├── README.md
+│   └── devlog/
+│       ├── README.md
+│       ├── semana-02.md
+│       ├── semana-03.md
+│       └── ...
 ├── practica/
 ├── labs/
 ├── proyecto-formativo/
@@ -43,25 +46,56 @@ DSY1107-00XD-nombre-apellido/
     └── eft/
 ```
 
-Las semanas pertenecen a la planificación/publicación docente; **no es obligatorio replicarlas en la estructura técnica del estudiante**.
+`docs/` contiene documentación transversal del estudiante y `docs/devlog/` conserva la evolución semanal personal.
 
-## 3. Package raíz personal
+Las semanas no organizan técnicamente el código o los labs; **solo el DevLog utiliza semanas porque registra el proceso en el tiempo**.
 
-Para código Java/Kotlin usa tu usuario Duoc normalizado:
+## 3. DevLog transversal
+
+El DevLog real vive en:
+
+```text
+docs/devlog/semana-XX.md
+```
+
+Formato mínimo:
+
+```markdown
+# DevLog · Semana XX
+
+## Objetivo
+...
+
+## Avance
+...
+
+## Bloqueo
+...
+
+## Aprendizaje
+...
+
+## Siguiente
+...
+```
+
+En trabajo grupal, el repo de equipo documenta la solución compartida; el **DevLog personal** registra qué hiciste, qué comprendiste, dónde te bloqueaste y cuál es tu siguiente paso.
+
+Manual:
+
+➡️ [`docs/DEVLOG-ESTUDIANTE.md`](./DEVLOG-ESTUDIANTE.md)
+
+## 4. Package raíz personal
+
+Para Java/Kotlin:
 
 ```text
 c.martinez → cmartinez → cl.duoc.cmartinez
 ```
 
-Patrón:
+## 5. Práctica corta
 
-```text
-cl.duoc.<usuario-duoc-sin-puntos>
-```
-
-## 4. Práctica corta
-
-Cuando una práctica consiste en ejercicios pequeños o ejemplos técnicos, puede mantenerse en un proyecto común y organizarse por bloque conceptual:
+Cuando corresponda, la práctica pequeña puede vivir en un proyecto común organizado por bloques conceptuales:
 
 ```text
 practica/
@@ -75,9 +109,9 @@ practica/
 
 La semana no forma parte del package.
 
-## 5. Laboratorios Cloud Native
+## 6. Laboratorios Cloud Native
 
-Cada laboratorio de mayor alcance tiene su propia subcarpeta/proyecto:
+Cada laboratorio de mayor alcance tiene su propia carpeta/proyecto:
 
 ```text
 labs/
@@ -89,47 +123,11 @@ labs/
     └── .gitignore
 ```
 
-Según el laboratorio, también pueden ser necesarios:
+Según el caso también pueden existir `Dockerfile`, `compose.yaml`, `application.yml`, `openapi.yaml` o scripts.
 
-```text
-Dockerfile
-docker-compose.yml
-compose.yaml
-application.yml
-application.properties
-openapi.yaml
-scripts/
-```
+### Concepto → local/neutral → cloud real
 
-Se versionan cuando son parte real de la solución y **no contienen secretos**.
-
-### Regla pedagógica de los labs: primero concepto, después cloud
-
-En esta asignatura muchos laboratorios tendrán dos etapas relacionadas:
-
-```text
-laboratorio local/neutral → laboratorio real en cloud
-```
-
-La primera etapa busca comprender el patrón sin depender de AWS, Azure u otro proveedor específico. Puede utilizar infraestructura local, contenedores, software open source, simuladores didácticos o servicios alternativos sencillos.
-
-La segunda etapa utiliza el servicio cloud correspondiente a la asignatura.
-
-El objetivo es que el estudiante pueda reconocer que, aunque cambien nombres, pantallas o productos, permanecen conceptos como:
-
-- cliente;
-- gateway;
-- route;
-- integración/destino;
-- políticas transversales;
-- IdP/Authorization Server;
-- client registration;
-- scopes;
-- claims;
-- permisos;
-- observabilidad y errores.
-
-Cuando exista un par local → cloud, el README del laboratorio cloud debe incluir como mínimo:
+Cuando exista un par de laboratorios, el estudiante debe poder explicar la transferencia conceptual:
 
 ```markdown
 ## Del laboratorio conceptual al laboratorio cloud
@@ -145,21 +143,19 @@ Cuando exista un par local → cloud, el README del laboratorio cloud debe inclu
 ...
 ```
 
-No basta con documentar una secuencia de clics. Debe explicarse qué representa cada elemento.
+No basta con documentar clics en una consola.
 
-→ Ver la estrategia completa en `docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md` del repositorio del curso.
+## 7. Trabajo colaborativo
 
-## 6. Entregas colaborativas
+El repositorio personal sigue existiendo durante todo el semestre.
 
-Algunas actividades pueden ser grupales. Cuando el docente indique explícitamente que una entrega se realiza en un repositorio de equipo, se informará el formato de nombre de ese repositorio y sus integrantes deberán colaborar mediante Git/GitHub.
+Si una actividad exige un repo de equipo, el docente indicará su formato. Allí se espera evidencia de colaboración real: commits identificables, responsabilidades documentadas y branches/PR cuando corresponda.
 
-El repositorio personal del estudiante sigue existiendo para su trabajo individual y evidencias personales. No se debe inventar un repo grupal si la actividad no lo solicita.
+El DevLog individual no desaparece por trabajar en grupo.
 
-En una entrega grupal se espera evidencia de colaboración real: commits identificables, ramas/PR cuando corresponda y README con integrantes y responsabilidades.
+## 8. Proyecto formativo
 
-## 7. Proyecto formativo
-
-Cuando exista un proyecto transversal de la asignatura, se mantiene en:
+Cuando exista un proyecto transversal:
 
 ```text
 proyecto-formativo/
@@ -168,7 +164,7 @@ proyecto-formativo/
 
 Debe evolucionar en la misma carpeta y conservar todo lo necesario para reproducir su ejecución.
 
-## 8. Evaluaciones
+## 9. Evaluaciones
 
 ```text
 evaluaciones/
@@ -180,19 +176,48 @@ evaluaciones/
 
 Cada evaluación contiene exactamente lo necesario para construir, configurar y revisar la entrega.
 
-## 9. Qué subir / qué no subir
+## 10. Markdown obligatorio
 
-### Sí subir cuando corresponda
+README mínimo obligatorio en:
 
-- `src/` y código fuente;
-- `pom.xml` / `build.gradle` / `build.gradle.kts`;
-- `Dockerfile` y archivos Compose necesarios;
-- configuración YAML/properties sin secretos;
-- contratos OpenAPI u otra documentación técnica requerida;
+```text
+/README.md
+/docs/README.md
+/docs/devlog/README.md
+/practica/README.md
+/labs/README.md
+/proyecto-formativo/README.md
+/desafios/README.md
+/evaluaciones/README.md
+```
+
+Además, cada lab/proyecto/desafío/evaluación con identidad propia debe incluir README.
+
+El README raíz debe enlazar el DevLog:
+
+```markdown
+## Seguimiento
+- [DevLog](docs/devlog/)
+```
+
+Para labs Cloud Native, el README debe explicar objetivo, arquitectura/componentes, requisitos, ejecución, endpoints/uso, configuración sin secretos, evidencia y decisiones.
+
+Los README sobresalientes por claridad, reproducibilidad y decisiones propias pueden recibir bonificación definida por el docente; cumplir el mínimo no genera bonificación automática.
+
+## 11. Qué versionar
+
+Sí:
+
+- código fuente;
+- Maven/Gradle necesarios;
+- Docker/Compose cuando correspondan;
+- configuración sin secretos;
+- contratos API;
 - scripts necesarios;
-- README y carpeta `docs/` cuando la entrega lo requiera.
+- README y documentación;
+- DevLog.
 
-### No subir
+No:
 
 ```text
 .idea/
@@ -210,79 +235,11 @@ out/
 *.pem
 ```
 
-Nunca subir contraseñas, tokens, access keys, secret keys, credenciales cloud ni archivos de credenciales.
+Nunca subir contraseñas, tokens, access keys, secret keys o credenciales cloud.
 
-Si una aplicación necesita variables sensibles, documenta los **nombres** requeridos en el README usando valores de ejemplo, no valores reales.
+## 12. Flujo Git mínimo
 
-## 10. Markdown obligatorio
-
-Aprenderemos y utilizaremos Markdown como documentación técnica.
-
-README mínimo obligatorio en:
-
-```text
-/README.md
-/practica/README.md
-/labs/README.md
-/proyecto-formativo/README.md
-/desafios/README.md
-/evaluaciones/README.md
-```
-
-Además, cada laboratorio, proyecto, desafío o evaluación con identidad propia debe incluir su propio `README.md`.
-
-### README mínimo de proyecto/laboratorio
-
-```markdown
-# Nombre de la actividad
-
-## Objetivo
-Qué problema se resuelve o qué concepto se aplica.
-
-## Arquitectura / componentes
-Qué servicios, aplicaciones o piezas participan.
-
-## Requisitos
-Java, Maven/Gradle, Docker u otros requisitos.
-
-## Ejecución
-Pasos concretos para ejecutar la solución.
-
-## Endpoints / uso
-Cómo probarla, si corresponde.
-
-## Configuración
-Variables o archivos requeridos, sin secretos reales.
-
-## Evidencia / decisiones
-Qué se implementó y decisiones técnicas relevantes.
-```
-
-### README mínimo raíz
-
-```markdown
-# DSY1107-002D · Desarrollo Cloud Native I
-
-**Estudiante:** Nombre Apellido  
-**Usuario Duoc:** c.martinez  
-**Package raíz:** cl.duoc.cmartinez  
-**Semestre:** 2026-2
-
-## Contenido
-- [Práctica](practica/)
-- [Laboratorios](labs/)
-- [Proyecto formativo](proyecto-formativo/)
-- [Desafíos](desafios/)
-- [Evaluaciones](evaluaciones/)
-```
-
-Para 003D se reemplaza `002D` por `003D`.
-
-Los README que superen claramente el mínimo por **claridad, estructura, utilidad, diagramas cuando aporten valor, reproducibilidad y explicación de decisiones propias** podrán recibir una compensación o bonificación definida por el docente. No es automática.
-
-## 11. Git
-
-Al comenzar en cualquier computador:
+Al comenzar:
 
 ```bash
 git pull
@@ -297,19 +254,30 @@ git commit -m "mensaje claro"
 git push
 ```
 
-Debe existir un solo `.git` en la raíz del repositorio personal, salvo que el docente indique expresamente una entrega en repositorio independiente de equipo.
+Debe existir un solo `.git` en la raíz del repositorio personal, salvo repo de equipo solicitado explícitamente.
 
-## 12. Checklist
+## 13. Relación entre evidencias
 
-- [ ] Nombre del repo con sección correcta: `DSY1107-002D-...` o `DSY1107-003D-...`.
-- [ ] Package raíz `cl.duoc.<usuario-sin-puntos>` cuando hay código Java/Kotlin.
-- [ ] Labs/proyectos contienen todos los archivos necesarios para reproducirlos.
-- [ ] Si existe par local → cloud, puedo explicar qué concepto corresponde a cada elemento del proveedor.
-- [ ] El README cloud incluye qué cambió y qué se mantuvo respecto del laboratorio conceptual.
-- [ ] Configuración sensible está fuera del repositorio.
-- [ ] README raíz y README de cada carpeta/entrega relevante.
-- [ ] README explica ejecución y configuración sin asumir el computador del autor.
-- [ ] Código/servicios ejecutan correctamente.
+```text
+Código/config → qué construiste
+Commits       → cómo fue cambiando
+README        → cómo se reproduce
+DevLog        → qué ocurrió y qué aprendiste
+Issues        → qué trabajo quieres abordar, cuando los incorporemos
+```
+
+## 14. Checklist
+
+- [ ] Repo público con sección correcta.
+- [ ] `docs/devlog/` existe y contiene la entrada semanal.
+- [ ] DevLog tiene objetivo, avance, bloqueo, aprendizaje y siguiente.
+- [ ] DevLog no expone secretos ni datos sensibles.
+- [ ] Labs/proyectos contienen lo necesario para reproducirse.
+- [ ] Puedo explicar el concepto detrás del servicio cloud.
+- [ ] Si existe local → cloud, documenté qué cambió y qué se mantuvo.
+- [ ] README raíz y carpetas relevantes documentados.
+- [ ] Configuración sensible fuera del repo.
+- [ ] Código/servicios ejecutan correctamente según corresponda.
 - [ ] Commit y push realizados y verificados en GitHub.
 
-> La organización docente y la estructura de entrega del estudiante son conceptos distintos.
+> El repositorio del curso enseña y publica. El repositorio personal conserva tu trabajo, evolución, DevLog y evidencia técnica del semestre.
