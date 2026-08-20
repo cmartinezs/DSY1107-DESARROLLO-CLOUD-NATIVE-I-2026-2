@@ -99,9 +99,17 @@ Este checkpoint se reutilizará en las experiencias siguientes cuando se incorpo
 
 ## Práctica / laboratorio
 
-- [Laboratorio · ReservApp: diseñando un flujo OAuth2/OIDC](./laboratorio-flujo-identidad/README.md)
+- [Laboratorio local · ReservApp identidad](../../labs/identidad-local/)
 
-El laboratorio toma contenidos de los cuatro temas y obliga a aplicarlos sobre el mismo dominio formativo.
+El laboratorio toma contenidos de los cuatro temas y obliga a aplicarlos sobre el mismo dominio formativo antes de trasladarlos al proveedor cloud real.
+
+## Dinámica viva de la semana
+
+Esta semana queda preparada **Concepto sin marca**.
+
+➡️ [Abrir dinámica](./dinamica-viva-concepto-sin-marca.md)
+
+Durante la primera parte está prohibido responder con nombres de servicios comerciales: primero se diseñan capacidades y responsabilidades; luego se realiza el mapeo al proveedor cloud.
 
 ## Planificación por sección
 
