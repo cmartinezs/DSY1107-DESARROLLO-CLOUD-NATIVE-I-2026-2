@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tu progreso · DSY1107</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{background:#f6f8fc;color:#172033}.wrap{max-width:900px}.hero{background:linear-gradient(135deg,#111827,#0f766e);color:#fff;border-radius:1.2rem}.item{border:1px solid #e5e7eb;border-radius:.9rem;background:#fff}.done{opacity:.7}.done label{text-decoration:line-through}.progress{height:1.1rem}
+  </style>
+</head>
+<body>
+<main class="container wrap py-4">
+  <a href="index.html" class="btn btn-sm btn-outline-secondary mb-3">← Volver al inicio</a>
+  <section class="hero p-4 mb-4">
+    <div class="small text-white-50 fw-bold">DSY1107 · Semana 2</div>
+    <h1 class="h2 fw-bold">Tu progreso</h1>
+    <p class="mb-0 text-white-50">Marca lo que ya realizaste o puedes explicar. Se guarda solo en este navegador y no corresponde a una calificación.</p>
+  </section>
+  <section class="bg-white border rounded-4 p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center gap-3 mb-2"><strong id="counter">0 de 8</strong><button id="reset" class="btn btn-sm btn-outline-danger">Reiniciar</button></div>
+    <div class="progress"><div id="bar" class="progress-bar" style="width:0%"></div></div>
+  </section>
+  <section id="items" class="d-grid gap-2">
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p1"><label for="p1">Puedo explicar API, API Gateway y API Management como conceptos distintos.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p2"><label for="p2">Cerré o avancé el laboratorio local de API Gateway con evidencia reproducible.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p3"><label for="p3">Puedo distinguir autenticación, autorización, OAuth2 y OpenID Connect.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p4"><label for="p4">Puedo identificar usuario, cliente, IdP/Authorization Server y API protegida en un caso real.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p5"><label for="p5">Puedo explicar Access Token vs ID Token y el sentido de scopes/claims al nivel trabajado.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p6"><label for="p6">Trabajé o revisé el laboratorio local de identidad cuando correspondió al avance de mi sección.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p7"><label for="p7">Puedo explicar qué se mantiene conceptualmente al pasar de local/neutral a un servicio cloud real.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p8"><label for="p8">Mi repositorio/entrega documenta arquitectura, ejecución, evidencia y configuración sin exponer secretos.</label></div>
+  </section>
+  <section class="alert alert-primary mt-4"><strong>Importante:</strong> 002D y 003D pueden llevar ritmos distintos. No marques una actividad solo porque aparece aquí; úsala como mapa de lo que corresponde aprender durante esta etapa.</section>
+</main>
+<script>
+const KEY='dsy1107-progreso-semana-02';
+const boxes=[...document.querySelectorAll('input[type=checkbox]')];
+function load(){const saved=JSON.parse(localStorage.getItem(KEY)||'{}');boxes.forEach(b=>b.checked=Boolean(saved[b.id]));render();}
+function save(){const state={};boxes.forEach(b=>state[b.id]=b.checked);localStorage.setItem(KEY,JSON.stringify(state));render();}
+function render(){const done=boxes.filter(b=>b.checked).length;document.getElementById('counter').textContent=`${done} de ${boxes.length}`;document.getElementById('bar').style.width=`${done/boxes.length*100}%`;boxes.forEach(b=>b.closest('.item').classList.toggle('done',b.checked));}
+boxes.forEach(b=>b.addEventListener('change',save));
+document.getElementById('reset').addEventListener('click',()=>{if(confirm('¿Reiniciar tu progreso local de esta semana?')){localStorage.removeItem(KEY);load();}});
+load();
+</script>
+</body>
+</html>
