@@ -5,6 +5,7 @@ Esta carpeta reúne documentación transversal y guías de consulta que deben se
 ## Canon y estándares
 
 - [**Canon transversal de repositorios docentes**](./CANON-REPOSITORIO-DOCENTE.md) — estructura común, hogares canónicos y reconciliación semanal.
+- [**Checklist operativo semanal**](./CHECKLIST-OPERACION-SEMANAL.md) — ciclo mínimo para preparar, ejecutar y cerrar cada semana manteniendo separado el avance real de 002D/003D.
 - [**Estándar de repositorio del estudiante**](./ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — estructura de entregas, Markdown, Git y particularidades Cloud Native.
 
 ## Estrategias propias de Cloud Native
