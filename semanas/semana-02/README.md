@@ -21,9 +21,7 @@ Cerrar los pendientes de gestión de APIs y avanzar hacia autenticación/autoriz
 
 ## Contenidos oficiales y material por tema
 
-Desde esta semana el material adopta la convención de **lectura por capas**: un tema pequeño puede continuar como un único `.md`, mientras que un tema de mayor complejidad se organiza como carpeta con un `README.md` autosuficiente y documentos opcionales de profundización.
-
-→ [Ver convención de contenido](../../docs/CONVENCION-CONTENIDO.md)
+Cada contenido mantiene un **Markdown base suficiente para los aprendizajes esperados de la asignatura**. Cuando un tema dispone de material extendido, se ofrece además una carpeta de profundización opcional.
 
 ### Finalizar 1.1
 
@@ -36,8 +34,9 @@ Los contenidos pendientes de Semana 01 se cierran utilizando el material existen
 
 ### 1.2 Implementando autenticación con Identity as a Service
 
-1. **[1.2.1 · OAuth2 y OIDC](./01-oauth2-oidc/README.md)**  
-   Autenticación vs autorización, actores, Authorization Code + PKCE, access token vs ID token, scopes, claims, 401/403 y responsabilidades gateway/backend. El README entrega el recorrido completo; PKCE dispone además de una profundización paso a paso.
+1. **[1.2.1 · OAuth2 y OIDC](./01-oauth2-oidc.md)**  
+   Autenticación vs autorización, actores, Authorization Code + PKCE, access token vs ID token, scopes, claims, 401/403 y responsabilidades gateway/backend.  
+   → **[Si quieres profundizar: OAuth2/OIDC y Authorization Code + PKCE](./01-oauth2-oidc/README.md)**
 
 2. **[1.2.2 · Identity as a Service y CIAM](./02-idaas-ciam.md)**  
    IdP, IDaaS, IAM vs CIAM, usuarios, aplicaciones, issuer, scopes, claims y separación de responsabilidades.
