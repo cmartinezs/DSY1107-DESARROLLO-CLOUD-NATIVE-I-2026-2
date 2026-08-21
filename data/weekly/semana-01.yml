@@ -1,0 +1,84 @@
+schema_version: 1
+course: DSY1107
+term: 2026-2
+week: 1
+period:
+  start: 2026-08-10
+  end: 2026-08-15
+
+sections:
+  - id: 002D
+    sessions:
+      planned: null
+      completed: null
+    blocks:
+      planned: null
+      completed: null
+    curricular_progress:
+      planned_topics:
+        - gestion de APIs
+        - API Gateway
+        - versionamiento
+        - CORS
+      covered_topics:
+        - introduccion al curso y tecnologias
+        - diagnostico inicial
+        - conceptos de gestion de APIs
+        - API Gateway local
+      pending_topics: []
+    evidence:
+      class_practice_available: true
+      labs_available: true
+      weekly_challenge_available: null
+    devlog:
+      expected: null
+      submitted: null
+      reviewed: null
+    formative_project:
+      name: ReservApp
+      status: introduced
+      checkpoint: null
+    blockers: []
+    next_week_focus:
+      - consolidar API Gateway
+      - OAuth2 y OIDC
+
+  - id: 003D
+    sessions:
+      planned: null
+      completed: null
+    blocks:
+      planned: null
+      completed: null
+    curricular_progress:
+      planned_topics:
+        - gestion de APIs
+        - API Gateway
+        - versionamiento
+        - CORS
+      covered_topics:
+        - introduccion al curso y tecnologias
+        - diagnostico inicial
+        - conceptos de gestion de APIs
+        - API Gateway local
+      pending_topics: []
+    evidence:
+      class_practice_available: true
+      labs_available: true
+      weekly_challenge_available: null
+    devlog:
+      expected: null
+      submitted: null
+      reviewed: null
+    formative_project:
+      name: ReservApp
+      status: introduced
+      checkpoint: null
+    blockers: []
+    next_week_focus:
+      - consolidar API Gateway
+      - OAuth2 y OIDC
+
+course_specific:
+  strategy: "concepto -> local/neutral -> cloud real"
+  sections_must_remain_independent: true
