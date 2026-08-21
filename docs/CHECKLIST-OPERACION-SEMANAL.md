@@ -49,8 +49,26 @@ La página principal debe responder:
 - [ ] Comprobar que no existan secretos o credenciales versionadas.
 - [ ] Revisar enlaces públicos y documentación reproducible.
 - [ ] Registrar deuda pedagógica/técnica para la semana siguiente.
+- [ ] Actualizar `data/weekly/semana-XX.yml` por sección con plan vs avance real, evidencias, DevLog agregado, ReservApp, bloqueos y foco siguiente.
+- [ ] Mantener en `null` cualquier métrica sin evidencia confiable; no estimar ni completar datos personales.
 
-## 5. Criterio de calidad
+## 5. Estadísticas semanales
+
+El dataset se rige por [`ESTANDAR-ESTADISTICAS-SEMANALES.md`](./ESTANDAR-ESTADISTICAS-SEMANALES.md).
+
+Al cerrar la semana, verificar que el YAML permita derivar al menos:
+
+- cobertura curricular por sección;
+- sesiones/bloques planificados vs realizados;
+- participación agregada en DevLog cuando ya exista medición;
+- evidencia formativa disponible;
+- estado de ReservApp;
+- diferencias de avance entre 002D y 003D;
+- bloqueos y deuda para la semana siguiente.
+
+El archivo estadístico es agregado y operacional: no contiene nombres ni notas individuales.
+
+## 6. Criterio de calidad
 
 Una semana está lista cuando un estudiante puede entrar al portal y responder:
 
@@ -61,4 +79,6 @@ Una semana está lista cuando un estudiante puede entrar al portal y responder:
 - dónde está el lab;
 - qué debería ser capaz de defender técnicamente al finalizar.
 
-El objetivo es aprender capacidades cloud transferibles, no memorizar consolas o nombres de servicios.
+Y el docente puede responder, desde `data/weekly/`, qué se planificó, qué ocurrió realmente por sección y qué arrastre queda para la semana siguiente.
+
+El objetivo es aprender capacidades cloud transferibles y mantener una operación medible, no memorizar consolas o nombres de servicios.

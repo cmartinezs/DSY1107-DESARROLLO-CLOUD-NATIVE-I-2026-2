@@ -6,9 +6,11 @@ Esta carpeta reúne documentación transversal y guías de consulta que deben se
 
 - [**Canon transversal de repositorios docentes**](./CANON-REPOSITORIO-DOCENTE.md) — estructura común, hogares canónicos y reconciliación semanal.
 - [**Checklist operativo semanal**](./CHECKLIST-OPERACION-SEMANAL.md) — ciclo mínimo para preparar, ejecutar y cerrar cada semana manteniendo separado el avance real de 002D/003D.
+- [**Estándar de estadísticas semanales**](./ESTANDAR-ESTADISTICAS-SEMANALES.md) — contrato común de datos agregados para análisis y dashboards entre cursos.
 - [**Banco de dinámicas vivas**](./BANCO-DINAMICAS-VIVAS.md) — actividades reutilizables para reforzar conceptos, responsabilidades y transferencia.
 - [**Estándar de repositorio del estudiante**](./ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — estructura de entregas, Markdown, Git y particularidades Cloud Native.
 - [**DevLog del estudiante**](./DEVLOG-ESTUDIANTE.md) — manual, propósito, formato, ejemplos y reglas de la bitácora técnica semanal.
+- [**Datos semanales**](../data/weekly/) — archivos YAML agregados y procesables por semana y sección.
 
 > El repo docente contiene el **manual**. El DevLog real vive en `docs/devlog/` dentro del repositorio público de cada estudiante, incluso cuando una actividad técnica se resuelve en equipo.
 
