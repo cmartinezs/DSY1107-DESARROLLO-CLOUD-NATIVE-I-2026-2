@@ -1,0 +1,81 @@
+schema_version: 1
+course: DSY1107
+term: 2026-2
+week: 2
+period:
+  start: 2026-08-17
+  end: 2026-08-22
+
+sections:
+  - id: 002D
+    sessions:
+      planned: null
+      completed: null
+    blocks:
+      planned: null
+      completed: null
+    curricular_progress:
+      planned_topics:
+        - gestion de APIs
+        - OAuth2 y OIDC
+        - IDaaS y CIAM
+        - tenant y registro de aplicaciones
+      covered_topics: []
+      pending_topics: []
+    evidence:
+      class_practice_available: true
+      labs_available: true
+      weekly_challenge_available: null
+    devlog:
+      expected: null
+      submitted: null
+      reviewed: null
+    formative_project:
+      name: ReservApp
+      status: in_progress
+      checkpoint: null
+    blockers: []
+    next_week_focus: []
+
+  - id: 003D
+    sessions:
+      planned: null
+      completed: null
+    blocks:
+      planned: null
+      completed: null
+    curricular_progress:
+      planned_topics:
+        - gestion de APIs
+        - OAuth2 y OIDC
+        - IDaaS y CIAM
+        - tenant y registro de aplicaciones
+      covered_topics:
+        - avance laboratorio API Gateway
+        - OAuth2
+        - OIDC
+        - actores y responsabilidades
+        - investigacion de servicio real y actores
+      pending_topics:
+        - consolidacion OAuth2 y OIDC
+        - IDaaS y CIAM
+        - tenant
+        - registro de aplicaciones
+    evidence:
+      class_practice_available: true
+      labs_available: true
+      weekly_challenge_available: null
+    devlog:
+      expected: null
+      submitted: null
+      reviewed: null
+    formative_project:
+      name: ReservApp
+      status: in_progress
+      checkpoint: null
+    blockers: []
+    next_week_focus: []
+
+course_specific:
+  strategy: "concepto -> local/neutral -> cloud real"
+  sections_must_remain_independent: true
