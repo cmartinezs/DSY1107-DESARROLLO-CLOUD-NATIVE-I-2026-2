@@ -13,6 +13,7 @@ Este documento define la **estructura y reglas comunes** de los repositorios doc
 5. **La web prioriza navegación y experiencia del estudiante, no duplica innecesariamente el contenido.**
 6. **Todo recurso que evoluciona durante el semestre debe tener un punto de entrada README o página equivalente.**
 7. **La estructura debe seguir siendo comprensible en Semana 18.** Si una decisión funciona solo porque el docente recuerda dónde dejó algo, debe corregirse.
+8. **El estado semanal debe ser medible con un contrato común.** Los agregados operacionales viven en `data/weekly/` y separan siempre plan de avance real.
 
 ## 2. Estructura base
 
@@ -23,6 +24,10 @@ Este documento define la **estructura y reglas comunes** de los repositorios doc
 │   └── workflows/
 ├── docs/
 │   └── README.md
+├── data/
+│   └── weekly/
+│       ├── README.md
+│       └── semana-XX.yml
 ├── semanas/
 │   ├── README.md
 │   ├── semana-01/
@@ -99,11 +104,27 @@ proyecto-formativo/
 └── guias/                    # instrucciones históricas por semana, si son necesarias
 ```
 
-No usar simultáneamente nombres ambiguos como `semana-02/` y `checkpoint-semana-02/` para representar cosas distintas sin explicitar su función.
+No usar simultáneamente nombres ambiguos como `semana-02/` y `checkpoint-semana-02/` para representar cosas distintas sin explicitar su función. Las rutas históricas pueden mantenerse solo como **compatibilidad de navegación**, nunca con una segunda copia activa del código o guía canónica.
 
 ### `docs/`
 
 Documentación transversal: estándares, decisiones pedagógicas/técnicas, estrategias, glosarios y conocimiento que no pertenece a una única semana.
+
+### `data/weekly/`
+
+Contiene el **estado agregado y procesable de cada semana**, bajo el contrato definido en `docs/ESTANDAR-ESTADISTICAS-SEMANALES.md`.
+
+Reglas:
+
+- mismo esquema en DSY1102, DSY1105 y DSY1107;
+- un `semana-XX.yml` por semana curricular;
+- múltiples secciones se registran dentro del mismo archivo;
+- plan y avance real se mantienen separados;
+- valores desconocidos se registran como `null`;
+- no se guardan nombres, notas individuales ni datos personales;
+- las particularidades viven en `course_specific`.
+
+Esta carpeta es la fuente para estadísticas, dashboards y análisis longitudinales. No reemplaza la bitácora docente ni los DevLogs individuales.
 
 ### `page/`
 
@@ -179,7 +200,8 @@ Antes de abrir una nueva semana se revisa, como mínimo:
 - [ ] portal web actualizado;
 - [ ] Material Público/Drive actualizado cuando corresponda;
 - [ ] enlaces internos sin apuntar a ubicaciones obsoletas;
-- [ ] material liberado hasta la semana curricular vigente.
+- [ ] material liberado hasta la semana curricular vigente;
+- [ ] `data/weekly/semana-XX.yml` reconciliado con planificación, avance real, evidencias, DevLog agregado, proyecto formativo y deuda siguiente.
 
 ## 9. Regla de no duplicación
 
@@ -189,7 +211,21 @@ Antes de crear un archivo nuevo, responder:
 
 Si es acceso, se crea un enlace/índice. Si es fuente, se define explícitamente su hogar canónico.
 
-## 10. Extensiones por asignatura
+## 10. Estadísticas y trazabilidad
+
+El contrato estadístico común permite comparar cursos sin borrar sus diferencias pedagógicas.
+
+```text
+planificación + avance real + evidencias + DevLog agregado + proyecto formativo
+                                      ↓
+                         data/weekly/semana-XX.yml
+                                      ↓
+                         dashboard / tendencias / alertas
+```
+
+Las estadísticas nunca sustituyen la interpretación docente: sirven para detectar diferencias de avance, deuda acumulada, participación y bloqueos que merecen revisión.
+
+## 11. Extensiones por asignatura
 
 Este canon admite especializaciones:
 
