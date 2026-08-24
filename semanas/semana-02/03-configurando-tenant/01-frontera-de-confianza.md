@@ -4,6 +4,8 @@
 
 Un tenant define un contexto dentro del cual una plataforma de identidad administra configuraciones y relaciones de confianza.
 
+Este ejemplo es deliberadamente independiente del desafío transversal.
+
 ## ¿Por qué importa?
 
 Una API no debe aceptar un token únicamente porque tenga formato JWT. Debe verificar, entre otras cosas, quién lo emitió.
@@ -22,13 +24,13 @@ El `issuer` ayuda a identificar la autoridad que emitió el token. Esa autoridad
 
 ```mermaid
 flowchart LR
-    T[Tenant ReservApp] -->|emite| TOKEN[Access Token]
-    TOKEN --> API[ReservApp API]
-    API --> I{issuer esperado?}
-    I -- No --> X[rechazar]
-    I -- Sí --> A{audience correcta?}
-    A -- No --> X
-    A -- Sí --> P[continuar validaciones]
+    T["Tenant de ejemplo"] -->|"emite"| TOKEN["Access token"]
+    TOKEN --> API["products-api"]
+    API --> I{"¿Issuer esperado?"}
+    I -->|"No"| X["Rechazar"]
+    I -->|"Sí"| A{"¿Audience correcta?"}
+    A -->|"No"| X
+    A -->|"Sí"| P["Continuar validaciones"]
 ```
 
 ## Lo que no significa
@@ -44,6 +46,6 @@ Su función pertenece al dominio de identidad y confianza.
 
 ## Pregunta de comprobación
 
-Si una API recibe un JWT correctamente firmado por otro tenant que no pertenece al contexto de ReservApp, ¿debería aceptarlo?
+Si una API recibe un JWT correctamente firmado por otro tenant que no pertenece a su contexto de confianza, ¿debería aceptarlo?
 
 No. La firma puede ser técnicamente válida y aun así provenir de un emisor en el que la API no confía.
