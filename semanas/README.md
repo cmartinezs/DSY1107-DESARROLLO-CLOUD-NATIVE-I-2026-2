@@ -1,6 +1,6 @@
 # Semanas · DSY1107 Desarrollo Cloud Native I
 
-Este directorio organiza contenido consolidado y mantiene separado el avance real de cada sección.
+Este directorio organiza el contenido consolidado del curso y mantiene separado el avance real de cada sección.
 
 ## Índice
 
@@ -14,4 +14,27 @@ Este directorio organiza contenido consolidado y mantiene separado el avance rea
 
 El README común define el horizonte curricular. Cuando 002D y 003D tengan avances distintos, cada semana mantiene documentos separados por sección y parte desde el último checkpoint demostrable. La disponibilidad de un tema no constituye evidencia de que haya sido ejecutado en aula.
 
-En DSY1107 se conserva el patrón **concepto → local/neutral → evidencia → cloud**, utilizando ReservApp como dominio formativo transversal cuando corresponda.
+## Dos verticales
+
+### Contenido
+
+```text
+concepto
+→ ejemplo independiente
+→ mini práctica/lab independiente
+→ evidencia
+→ cloud cuando corresponda
+```
+
+### Desafío transversal · RegistrApp
+
+```text
+contenido comprendido
+→ transferencia a RegistrApp
+→ incremento
+→ checkpoint
+```
+
+RegistrApp **no se utiliza como dominio obligatorio para explicar, demostrar o practicar el contenido**.
+
+→ [Ver regla canónica](../docs/DESAFIO-TRANSVERSAL-REGISTRAPP.md)
