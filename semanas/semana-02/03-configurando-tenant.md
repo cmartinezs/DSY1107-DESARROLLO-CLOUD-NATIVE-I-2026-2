@@ -2,450 +2,185 @@
 
 ## Objetivo
 
-Comprender qué representa un **tenant** en una plataforma de identidad, qué elementos contiene, qué decisiones arquitectónicas deben tomarse antes de crearlo y cómo modelar conceptualmente el tenant de **ReservApp** sin depender todavía de una consola real.
+Comprender el tenant como una **frontera de organización y confianza** para identidades, aplicaciones y recursos antes de configurarlo en un proveedor real.
 
-> Esta semana el verbo “configurar” significa **diseñar correctamente lo que más adelante configuraremos**.
+Este contenido se trabaja con un escenario ficticio independiente de RegistrApp.
 
 ---
 
-## 1. ¿Qué es realmente un tenant?
+## 1. Qué representa un tenant
 
-Un tenant es un **espacio lógico de administración y confianza** dentro de una plataforma de identidad.
+Un tenant, realm u organización agrupa elementos de identidad bajo una frontera administrativa y de confianza.
 
-Dentro de ese espacio se agrupan normalmente:
+Puede contener:
 
-- identidades;
+- usuarios;
 - aplicaciones/clientes;
-- APIs o recursos protegidos;
+- APIs/resources;
 - métodos de autenticación;
-- políticas;
 - roles;
 - scopes;
-- configuración de emisión de tokens;
-- endpoints de identidad.
-
-Distintos productos pueden utilizar nombres como:
-
-```text
-tenant
-realm
-organization
-directory
-```
-
-El nombre comercial cambia; la función conceptual es similar.
+- claims;
+- políticas.
 
 ```mermaid
 flowchart TD
-    T[Tenant / Realm]
-    T --> U[Usuarios / Identidades]
-    T --> C[Clientes / Apps]
-    T --> A[APIs / Resources]
-    T --> P[Políticas]
-    T --> M[Métodos de autenticación]
-    A --> S[Scopes]
-    U --> R[Roles / grupos]
+    T["Tenant"] --> U["Usuarios"]
+    T --> C["Clientes / Apps"]
+    T --> R["APIs / Resources"]
+    T --> P["Políticas"]
+    T --> A["Métodos de autenticación"]
+    R --> S["Scopes"]
 ```
 
 ---
 
-## 2. El tenant establece una frontera de confianza
+## 2. Caso independiente
 
-Cuando ReservApp recibe un token, no debería aceptarlo porque:
+Supongamos una empresa ficticia con:
 
-> “parece un JWT”.
+- `portal-web`;
+- `mobile-app`;
+- `products-api`;
+- clientes externos;
+- operadores internos.
 
-Debe confiar en una autoridad concreta.
-
-Por eso conceptos como **issuer** y tenant están relacionados.
-
-La API necesita poder responder:
-
-- ¿Quién emitió este token?
-- ¿Confío en ese emisor?
-- ¿Fue emitido para mí?
-- ¿Sigue vigente?
-- ¿Representa permisos suficientes?
+Antes de tocar una consola cloud debemos poder explicar cómo se relacionan esas piezas.
 
 ```mermaid
 flowchart LR
-    T[Tenant de identidad] -->|emite token| TOKEN[Access Token]
-    TOKEN --> API[ReservApp API]
-    API --> CHECK{¿Emisor confiable?}
-    CHECK -- No --> DENY[Rechazar]
-    CHECK -- Sí --> NEXT[Validar audience, exp y permisos]
+    EXT["Clientes externos"] --> WEB["portal-web"]
+    INT["Operadores internos"] --> WEB
+    WEB --> IDP["Identity Platform"]
+    MOB["mobile-app"] --> IDP
+    WEB --> API["products-api"]
+    MOB --> API
 ```
 
 ---
 
-## 3. ¿Un tenant equivale a una aplicación?
+## 3. Poblaciones de usuarios
 
-No.
-
-Un tenant puede contener **múltiples aplicaciones y recursos**.
-
-Para ReservApp distinguimos conceptualmente:
-
-```text
-Tenant ReservApp
-├── reservapp-web
-├── reservapp-api
-├── usuarios
-├── políticas
-└── permisos
-```
+No todos los usuarios tienen necesariamente el mismo ciclo de vida o las mismas políticas.
 
 ```mermaid
 flowchart TB
-    T[ReservApp Identity Tenant]
-    T --> WEB[reservapp-web\nClient]
-    T --> API[reservapp-api\nResource Server]
-    T --> USERS[Usuarios]
-    T --> POLICY[Políticas]
-    API --> SCOPES[reservations.read\nreservations.write]
+    T["Tenant"] --> EXT["Usuarios externos"]
+    T --> INT["Usuarios internos"]
+    EXT --> E1["Autoregistro"]
+    EXT --> E2["Recuperación de cuenta"]
+    INT --> I1["Alta administrativa"]
+    INT --> I2["Políticas corporativas"]
 ```
 
-El tenant es el contenedor lógico; las aplicaciones son elementos registrados dentro de él.
+El objetivo no es memorizar una pantalla, sino reconocer que poblaciones distintas pueden necesitar configuraciones distintas.
 
 ---
 
-## 4. ¿Quiénes viven dentro del tenant?
+## 4. Aplicaciones y recursos
 
-Antes de crear usuarios debemos identificar **poblaciones de identidad**.
-
-En ReservApp podríamos tener:
+Dentro del tenant debemos distinguir:
 
 ### Cliente
 
-Usuario externo que administra sus propias reservas.
+Software que inicia un flujo y solicita tokens.
 
-### Operador
+### Recurso / API
 
-Usuario con funciones operativas sobre reservas de terceros.
-
-### Administrador
-
-Usuario con capacidades administrativas especiales.
-
-Eso no significa que debamos crear tres roles porque sí. Primero debemos identificar diferencias reales de negocio.
-
-```mermaid
-flowchart TD
-    USERS[Usuarios del tenant]
-    USERS --> CUSTOMER[Cliente]
-    USERS --> OPERATOR[Operador]
-    USERS --> ADMIN[Administrador]
-
-    CUSTOMER --> C1[Gestiona sus reservas]
-    OPERATOR --> O1[Opera reservas según políticas]
-    ADMIN --> A1[Administra capacidades especiales]
-```
-
----
-
-## 5. Tenant y multitenancy no son exactamente lo mismo
-
-La palabra **tenant** también aparece en arquitecturas SaaS multitenant.
-
-Es importante no asumir que ambos usos son idénticos.
-
-### Tenant de identidad
-
-Agrupa configuración e identidades dentro del sistema de identidad.
-
-### Tenant de negocio
-
-Puede representar una organización, cliente o comunidad aislada dentro del dominio de una aplicación SaaS.
-
-ReservApp podría tener en el futuro múltiples organizaciones de negocio usando un mismo proveedor de identidad.
+Sistema que recibe y valida access tokens destinados a él.
 
 ```mermaid
 flowchart LR
-    IT[Identity Tenant] --> U1[Usuario A]
-    IT --> U2[Usuario B]
-    U1 --> BT1[Organización negocio X]
-    U2 --> BT2[Organización negocio Y]
+    C["Cliente"] -->|"solicita autorización"| I["Identity Platform"]
+    I -->|"access token"| C
+    C -->|"Bearer token"| API["API protegida"]
 ```
-
-Para esta semana trabajamos **tenant de identidad**, no diseño SaaS multitenant.
 
 ---
 
-## 6. Aplicaciones que debemos modelar
+## 5. Scopes
 
-ReservApp necesita al menos dos elementos conceptuales:
+Los scopes expresan capacidades sobre un recurso.
 
-### `reservapp-web`
+Ejemplo independiente:
 
-Actúa como **cliente**.
+```text
+products.read
+products.write
+```
 
-Responsabilidades principales:
-
-- iniciar flujo de autenticación;
-- solicitar autorización;
-- recibir respuesta mediante redirect URI;
-- usar access token para invocar la API.
-
-### `reservapp-api`
-
-Actúa como **resource server**.
-
-Responsabilidades principales:
-
-- aceptar tokens emitidos por un issuer confiable;
-- validar audience;
-- validar vigencia;
-- verificar permisos;
-- aplicar reglas de negocio.
+No deben copiar ciegamente botones de una interfaz ni convertirse en una lista infinita de casos de negocio.
 
 ```mermaid
 flowchart LR
-    U[Usuario] --> WEB[reservapp-web]
-    WEB --> IDP[Tenant / IdP]
-    IDP --> WEB
-    WEB -->|Access Token| GW[API Gateway]
-    GW --> API[reservapp-api]
+    API["products-api"] --> READ["products.read"]
+    API --> WRITE["products.write"]
 ```
 
 ---
 
-## 7. Issuer, audience y scopes
+## 6. Claims
 
-Tres conceptos deben quedar relacionados.
+Los claims aportan información sobre el token y su contexto.
 
-### Issuer (`iss`)
-
-Responde:
-
-> ¿Quién emitió el token?
-
-### Audience (`aud`)
-
-Responde:
-
-> ¿Para qué recurso fue emitido?
-
-### Scope
-
-Responde:
-
-> ¿Qué capacidad fue concedida?
-
-Ejemplo conceptual:
+Ejemplos frecuentes:
 
 ```text
-iss   = https://identity.example/reservapp
-aud   = reservapp-api
-scope = reservations.read reservations.write
+iss
+aud
+sub
+exp
+scope
 ```
 
-```mermaid
-flowchart TD
-    TOKEN[Access Token]
-    TOKEN --> ISS[iss\n¿Quién lo emitió?]
-    TOKEN --> AUD[aud\n¿Para quién?]
-    TOKEN --> SCOPE[scope\n¿Qué permite?]
-    TOKEN --> EXP[exp\n¿Hasta cuándo?]
-```
+El hecho de que un claim exista no significa que toda decisión de negocio deba codificarse dentro del token.
 
 ---
 
-## 8. Claims de identidad y datos de negocio
+## 7. Frontera de confianza
 
-No todo dato de ReservApp debería vivir en el token.
+La pregunta importante es:
 
-Un token puede incluir datos necesarios para identidad/autorización, pero no conviene convertirlo en una copia completa del perfil del usuario.
-
-Por ejemplo:
-
-```text
-sub = user-123
-role = customer
-```
-
-La API puede utilizar `sub` para buscar información actual del negocio.
+> ¿Qué componentes confían en qué emisor, para qué audiencia y bajo qué reglas?
 
 ```mermaid
 flowchart LR
-    TOKEN[Token\nsub=user-123] --> API[ReservApp API]
-    API --> DB[(Cliente\nReservas\nReglas actuales)]
+    IDP["Issuer confiable"] -->|"emite access token"| C["Cliente"]
+    C -->|"presenta token"| G["Gateway"]
+    G -->|"request validada"| API["API"]
 ```
 
-Esto evita depender de información potencialmente desactualizada dentro del token para cada decisión de negocio.
+Una API no debería aceptar cualquier token solo porque tenga formato JWT.
 
 ---
 
-## 9. Métodos de autenticación y políticas
+## 8. Mini actividad de diseño
 
-Un tenant también puede definir cómo se autentican sus usuarios.
+Diseña conceptualmente un tenant para el caso ficticio.
 
-Ejemplos conceptuales:
+Debes identificar:
 
-- contraseña;
-- MFA;
-- autenticación federada;
-- passwordless;
-- políticas distintas según riesgo o población.
+1. poblaciones de usuarios;
+2. clientes;
+3. APIs/resources;
+4. scopes;
+5. claims relevantes;
+6. políticas generales;
+7. relación de confianza entre emisor y API.
 
-Esta semana no configuraremos ninguna, pero debemos comprender que la autenticación no es solo “crear usuario + contraseña”.
+No uses nombres de servicios cloud en la primera versión.
 
-```mermaid
-flowchart TD
-    LOGIN[Intento de autenticación] --> POLICY{Política}
-    POLICY --> PASS[Contraseña]
-    POLICY --> MFA[MFA]
-    POLICY --> FED[Federación]
-    POLICY --> PWLESS[Passwordless]
-```
+## 9. Preguntas de defensa
 
----
+- ¿Por qué `portal-web` es un cliente y `products-api` es un resource server?
+- ¿Qué cambia si aparece una app móvil?
+- ¿Qué población puede autoregistrarse?
+- ¿Qué audience esperaría `products-api`?
+- ¿Qué scope usarías para lectura?
+- ¿Qué parte de la autorización seguiría en el backend?
 
-## 10. Diseño conceptual del tenant de ReservApp
+## Cierre
 
-Nuestro modelo inicial puede verse así:
+El estudiante debe poder diseñar la estructura conceptual antes de mapearla a Azure, AWS, Auth0, Keycloak u otro proveedor.
 
-```mermaid
-flowchart TB
-    TENANT[ReservApp Identity Tenant]
-
-    subgraph PEOPLE[Identidades]
-      CU[Clientes]
-      OP[Operadores]
-    end
-
-    subgraph APPS[Aplicaciones]
-      WEB[reservapp-web]
-      API[reservapp-api]
-    end
-
-    subgraph ACCESS[Acceso]
-      SR[reservations.read]
-      SW[reservations.write]
-    end
-
-    TENANT --> PEOPLE
-    TENANT --> APPS
-    TENANT --> ACCESS
-    WEB -->|solicita| SR
-    WEB -->|solicita| SW
-    API -->|protege recursos mediante| ACCESS
-```
-
-Este diagrama no representa una consola concreta. Representa **decisiones que luego debemos traducir** al proveedor elegido.
-
----
-
-## 11. Actividad práctica · `tenant-design.md`
-
-En grupos creen un archivo:
-
-```text
-tenant-design.md
-```
-
-Debe incluir:
-
-### A. Poblaciones de usuario
-
-Definan al menos:
-
-- cliente;
-- operador.
-
-Para cada uno indiquen qué diferencia real de negocio justifica distinguirlos.
-
-### B. Aplicaciones
-
-Identifiquen:
-
-```text
-reservapp-web
-reservapp-api
-```
-
-Y expliquen:
-
-- cuál es client;
-- cuál es resource server;
-- quién solicita tokens;
-- quién consume access tokens.
-
-### C. Scopes
-
-Partan con:
-
-```text
-reservations.read
-reservations.write
-```
-
-Luego respondan:
-
-- ¿necesitamos otro scope?
-- ¿estamos creando permisos porque existe una necesidad real o solo por completar una lista?
-
-### D. Claims
-
-Propongan los claims mínimos necesarios para reconocer al usuario y aplicar autorización.
-
-Justifiquen cada uno.
-
-### E. Confianza
-
-Describan qué debería validar `reservapp-api` antes de aceptar un token.
-
-### F. Diagrama Mermaid
-
-Dibujen el tenant incluyendo:
-
-- usuarios;
-- cliente;
-- API;
-- scopes;
-- flujo hacia gateway/backend.
-
----
-
-## 12. Preguntas de razonamiento
-
-1. ¿Por qué un tenant puede contener más de una aplicación?
-2. ¿Por qué `client_id` no identifica a un usuario?
-3. ¿Qué problema existiría si `reservapp-api` aceptara tokens de cualquier issuer?
-4. ¿Qué ocurriría si el token tiene audience para otra API?
-5. ¿Conviene poner en el token el historial completo de reservas del usuario? ¿Por qué?
-6. ¿Tenant de identidad y tenant de negocio significan siempre lo mismo?
-
----
-
-## 13. Qué NO hacer todavía
-
-No necesitamos:
-
-- crear cuenta cloud;
-- crear tenant real;
-- copiar capturas de consola;
-- generar secretos;
-- almacenar credenciales;
-- pegar JWT reales;
-- decidir un proveedor definitivo.
-
-El resultado correcto de esta etapa es **un diseño que pueda implementarse posteriormente**.
-
----
-
-## Checkpoint
-
-Al terminar debes poder explicar:
-
-- qué es un tenant;
-- qué contiene;
-- cómo establece una frontera de confianza;
-- diferencia entre tenant y aplicación;
-- relación entre issuer, audience y scopes;
-- por qué token e información de negocio no son equivalentes;
-- diferencia entre tenant de identidad y tenant de negocio;
-- cómo sería conceptualmente el tenant de ReservApp.
-
-## Continuidad
-
-El siguiente tema baja un nivel: dentro del tenant diseñaremos **cómo se registran `reservapp-web` y `reservapp-api`**, qué representa un Client ID, por qué existen redirect URIs, qué diferencia hay entre cliente público/confidencial y cómo se relacionan cliente, API, audience y scopes.
+→ [Profundización opcional](./03-configurando-tenant/README.md)
