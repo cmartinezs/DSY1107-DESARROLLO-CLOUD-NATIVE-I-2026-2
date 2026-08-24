@@ -5,15 +5,33 @@
 
 ← [Volver al índice de semanas](../README.md)
 
-## Dominio formativo transversal
+## Regla pedagógica de la asignatura
 
-Desde esta semana se formaliza **ReservApp** como dominio longitudinal de DSY1107.
+DSY1107 trabaja con **dos verticales separadas**.
 
-Los ejemplos, ejercicios y laboratorios realizados en clase reutilizarán este mismo sistema siempre que el contenido lo permita. Cada experiencia de aprendizaje debe recibir un checkpoint anterior, agregar una capacidad y dejar una nueva versión reutilizable.
+### 1. Contenido semanal
 
-→ [Ver estrategia transversal ReservApp](../../docs/DOMINIO-FORMATIVO-TRANSVERSAL.md)
+El contenido se enseña y practica por sí mismo:
 
-ReservApp es exclusivamente formativo y se mantiene separado de los dominios y soluciones de evaluaciones sumativas.
+```text
+concepto
+→ explicación
+→ ejemplo pequeño y autocontenido
+→ mini ejercicio/laboratorio independiente
+→ evidencia de comprensión
+```
+
+Los ejemplos no necesitan usar RegistrApp. Se elige el dominio mínimo que permita comprender mejor cada concepto.
+
+### 2. Desafío transversal · RegistrApp
+
+RegistrApp evoluciona durante el semestre, pero **no es el ejemplo conductor del contenido**.
+
+Después de aprender y practicar una competencia, el estudiante la transfiere a RegistrApp y deja un checkpoint reutilizable para la semana siguiente.
+
+→ [Ver definición canónica del desafío transversal](../../docs/DESAFIO-TRANSVERSAL-REGISTRAPP.md)
+
+> **Primero se aprende fuera de RegistrApp. Después se transfiere a RegistrApp.**
 
 ## Objetivo semanal
 
@@ -27,8 +45,6 @@ Cada contenido mantiene un **Markdown base suficiente para los aprendizajes espe
 
 ### Finalizar 1.1
 
-Los contenidos pendientes de Semana 01 se cierran utilizando el material existente:
-
 - 1.1.1 Conociendo un API Manager.
 - 1.1.2 Tutorial Creando Nuestro Primer API Manager.
 - 1.1.3 Versionando APIs.
@@ -38,76 +54,61 @@ Los contenidos pendientes de Semana 01 se cierran utilizando el material existen
 
 1. **[1.2.1 · OAuth2 y OIDC](./01-oauth2-oidc.md)**  
    Autenticación vs autorización, actores, Authorization Code + PKCE, access token vs ID token, scopes, claims, 401/403 y responsabilidades gateway/backend.  
-   → **[Si quieres profundizar: OAuth2/OIDC y Authorization Code + PKCE](./01-oauth2-oidc/README.md)**
+   → **[Si quieres profundizar](./01-oauth2-oidc/README.md)**
 
 2. **[1.2.2 · Identity as a Service y CIAM](./02-idaas-ciam.md)**  
    IdP, IDaaS, IAM vs CIAM, usuarios, aplicaciones, issuer, scopes, claims y separación de responsabilidades.  
-   → **[Si quieres profundizar: IdP, IAM, IDaaS, CIAM y fronteras de responsabilidad](./02-idaas-ciam/README.md)**
+   → **[Si quieres profundizar](./02-idaas-ciam/README.md)**
 
 3. **[1.2.3 · Configurando un Tenant](./03-configurando-tenant.md)**  
-   Diseño del espacio de identidad de ReservApp: usuarios, aplicaciones, permisos, claims y relación de confianza. Esta semana se trabaja a nivel conceptual y de diseño.  
-   → **[Si quieres profundizar: tenant como frontera de confianza y diseño de ReservApp](./03-configurando-tenant/README.md)**
+   Tenant como frontera de confianza: usuarios, aplicaciones, permisos, claims y relaciones de confianza.  
+   → **[Si quieres profundizar](./03-configurando-tenant/README.md)**
 
 4. **[1.2.4 · Configurando aplicaciones en un IDaaS](./04-configurando-apps-idaas.md)**  
    Client ID, redirect URI, cliente público/confidencial, API/resource server, audience, scopes y diseño de app registration.  
-   → **[Si quieres profundizar: Client ID, Redirect URI, tipos de cliente, audience y scopes](./04-configurando-apps-idaas/README.md)**
+   → **[Si quieres profundizar](./04-configurando-apps-idaas/README.md)**
 
 > Los puntos 1.2.3 y 1.2.4 se trabajan esta semana **a nivel conceptual y de diseño**. La configuración real en Azure queda para cuando exista el entorno correspondiente.
 
-## Evolución de ReservApp esta semana
+## Ejemplificación del contenido
 
-### Entrada
+Los ejemplos de clase deben permanecer pequeños y autocontenidos. Algunas posibilidades:
 
-ReservApp recibe lo trabajado con API Gateway:
+- una app de fotos que pide acceso a almacenamiento para explicar OAuth2;
+- una app que usa “Continuar con Google” para explicar OIDC;
+- una API mínima de productos para explicar scopes y 401/403;
+- un cliente SPA ficticio para explicar Authorization Code + PKCE;
+- un tenant ficticio sin relación con el desafío para discutir usuarios, clientes y recursos.
 
-- API de reservas;
-- rutas a través del gateway;
-- versionado `/v1` y `/v2`;
-- CORS;
-- comprensión de cliente → gateway → backend.
+No se exige que estos ejemplos compartan dominio entre sí.
 
-### Incremento
+## Mini práctica / laboratorio de contenido
 
-Se incorpora el modelo de identidad y autorización:
+La práctica debe permitir comprobar la competencia **antes** de transferirla a RegistrApp.
 
-- usuario;
-- autenticación vs autorización;
-- OAuth2/OIDC;
-- access token vs ID token;
-- scopes `reservations.read` / `reservations.write`;
-- claims;
-- 401 vs 403;
-- IDaaS/CIAM;
-- diseño de tenant;
-- diseño de las aplicaciones/clientes;
-- responsabilidades gateway/backend.
+Por ejemplo:
 
-### Salida / checkpoint
+1. identificar actores de un flujo OAuth2/OIDC independiente;
+2. distinguir access token e ID token;
+3. resolver casos 401/403;
+4. diseñar scopes para una API mínima;
+5. justificar cliente público/confidencial y redirect URI.
 
-Debe quedar un diagrama de arquitectura de ReservApp donde pueda explicarse:
+## Desafío transversal · checkpoint Semana 2
 
-```text
-usuario → identidad → cliente con token → gateway → reservapp-api
-```
+Una vez trabajados los contenidos, cada estudiante/equipo debe transferirlos a RegistrApp.
 
-junto con scopes, casos 401/403, tenant conceptual, aplicaciones y decisiones de autorización.
+El checkpoint puede incluir:
 
-Este checkpoint se reutilizará en las experiencias siguientes cuando se incorporen proveedor real, JWT, seguridad del gateway y solución full stack.
+- actores OAuth2/OIDC aplicados al desafío;
+- decisión sobre cliente, IdP y resource server;
+- propuesta de scopes;
+- ubicación de controles 401/403;
+- diseño conceptual de tenant/aplicaciones cuando corresponda;
+- diagrama actualizado;
+- breve registro de decisiones y dudas pendientes.
 
-## Patrón de trabajo
-
-1. explicación conceptual breve;
-2. demostración sobre ReservApp;
-3. práctica/laboratorio incremental;
-4. evidencia reproducible;
-5. defensa técnica;
-6. checkpoint para la próxima clase.
-
-## Práctica / laboratorio
-
-- [Laboratorio local · ReservApp identidad](../../labs/identidad-local/)
-
-El laboratorio toma contenidos de los cuatro temas y obliga a aplicarlos sobre el mismo dominio formativo antes de trasladarlos al proveedor cloud real.
+Esto **no reemplaza** los ejemplos ni el laboratorio de contenido: es la aplicación transversal posterior.
 
 ## Dinámica viva de la semana
 
@@ -121,24 +122,6 @@ Durante la primera parte está prohibido responder con nombres de servicios come
 
 - [DSY1107-002D](./DSY1107-002D.md)
 - [DSY1107-003D](./DSY1107-003D.md)
-
-## Qué deben aprender haciendo
-
-Cada grupo debe terminar siendo capaz de:
-
-- cerrar/demostrar v1/v2 + CORS del gateway;
-- dibujar actores OAuth2/OIDC correctamente;
-- distinguir autenticación de autorización;
-- diferenciar ID token y access token;
-- explicar IDaaS y CIAM;
-- diseñar un tenant coherente;
-- identificar cliente, API, Client ID y redirect URI;
-- proponer scopes para ReservApp;
-- interpretar claims;
-- resolver casos 401/403;
-- separar autorización técnica de autorización de negocio;
-- integrar conceptualmente identidad → gateway → backend;
-- defender su solución sin PPT.
 
 ## Criterio técnico
 
