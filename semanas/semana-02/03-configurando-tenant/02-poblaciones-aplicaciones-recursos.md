@@ -4,13 +4,15 @@
 
 Diseñar un tenant requiere identificar quiénes participan y qué elementos deben quedar representados.
 
+Este ejemplo es independiente de RegistrApp.
+
 ## Poblaciones de identidad
 
-En ReservApp pueden existir, por ejemplo:
+En un sistema ficticio pueden existir, por ejemplo:
 
-- clientes que gestionan sus reservas;
-- operadores que atienden reservas;
-- administradores con capacidades de gestión.
+- clientes externos;
+- operadores internos;
+- administradores.
 
 No todas las poblaciones tienen necesariamente las mismas políticas de acceso, recuperación de cuenta o MFA.
 
@@ -21,7 +23,7 @@ Una aplicación cliente inicia flujos de autenticación/autorización.
 Ejemplo:
 
 ```text
-reservapp-web
+portal-web
 ```
 
 El tenant mantiene información como su `client_id`, redirect URIs permitidas y flujos habilitados.
@@ -33,27 +35,27 @@ Una API representa un recurso que debe protegerse.
 Ejemplo:
 
 ```text
-reservapp-api
+products-api
 ```
 
 Puede exponer capacidades como:
 
 ```text
-reservations.read
-reservations.write
+products.read
+products.write
 ```
 
 ## Relación conceptual
 
 ```mermaid
 flowchart TD
-    T[Tenant ReservApp]
-    T --> USERS[Identidades]
-    T --> WEB[reservapp-web]
-    T --> API[reservapp-api]
-    API --> S1[reservations.read]
-    API --> S2[reservations.write]
-    USERS --> R[roles / grupos / atributos]
+    T["Tenant de ejemplo"]
+    T --> USERS["Identidades"]
+    T --> WEB["portal-web"]
+    T --> API["products-api"]
+    API --> S1["products.read"]
+    API --> S2["products.write"]
+    USERS --> R["Roles / grupos / atributos"]
 ```
 
-El tenant organiza relaciones de identidad. Los datos propios del negocio —por ejemplo una reserva concreta— siguen perteneciendo a ReservApp y no al proveedor de identidad.
+El tenant organiza relaciones de identidad. Los datos propios del negocio siguen perteneciendo a la aplicación y no al proveedor de identidad.
