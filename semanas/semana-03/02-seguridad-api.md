@@ -96,3 +96,5 @@ Antes de transferir este contenido a RegistrApp, debes poder defender la separac
 gateway → controles técnicos y políticas transversales
 backend → reglas de negocio y decisiones de dominio
 ```
+
+> **Si quieres profundizar:** revisa [Profundización · Seguridad de API y gateway](./02-seguridad-api/README.md) para estudiar frontera gateway/backend, pipeline 401/403, scopes/roles/claims y CIAM con APIs protegidas.
