@@ -71,17 +71,43 @@ No se enseña configuración cloud como una secuencia de clics sin modelo mental
 
 ## Material de contenido
 
-1. [JWT y claims](./01-jwt-claims.md)
-2. [Seguridad de API y gateway](./02-seguridad-api.md)
-3. [Laboratorio JWT forense](./03-laboratorio-jwt-forense.md)
+### 1. JWT y claims
 
-Estos tres recursos deben poder trabajarse **sin RegistrApp**.
+- **Base obligatoria:** [JWT y claims](./01-jwt-claims.md)
+- **Profundización opcional:** [Estructura, firma, claims, `kid` y JWKS](./01-jwt-claims/README.md)
+
+La profundización incluye:
+
+1. [Estructura, codificación y firma](./01-jwt-claims/01-estructura-codificacion-y-firma.md)
+2. [Validación contextual de claims](./01-jwt-claims/02-validacion-contextual-de-claims.md)
+3. [Claves públicas, `kid` y JWKS](./01-jwt-claims/03-claves-kid-y-jwks.md)
+4. [Errores frecuentes al trabajar con JWT](./01-jwt-claims/04-errores-frecuentes.md)
+
+### 2. Seguridad de API y gateway
+
+- **Base obligatoria:** [Seguridad de API y gateway](./02-seguridad-api.md)
+- **Profundización opcional:** [Gateway/backend, 401/403, permisos y CIAM](./02-seguridad-api/README.md)
+
+La profundización incluye:
+
+1. [Gateway vs backend: frontera de responsabilidad](./02-seguridad-api/01-gateway-vs-backend.md)
+2. [Pipeline de acceso y 401 vs 403](./02-seguridad-api/02-pipeline-401-403.md)
+3. [Scopes, roles y claims en autorización](./02-seguridad-api/03-scopes-roles-y-claims.md)
+4. [Usuarios externos, CIAM y API protegida](./02-seguridad-api/04-ciam-y-api-protegida.md)
+
+### 3. Aplicación práctica
+
+- [Laboratorio JWT forense](./03-laboratorio-jwt-forense.md)
+
+El laboratorio no tiene carpeta de profundización propia porque **no es un contenido conceptual base**, sino la instancia de aplicación de los conceptos anteriores.
+
+Todos estos recursos deben poder trabajarse **sin RegistrApp**.
 
 ## Desafío transversal
 
 4. [RegistrApp · checkpoint Semana 3](./04-desafio-registrapp.md)
 
-Este recurso toma las competencias aprendidas en los tres materiales anteriores y pide transferirlas al desafío transversal.
+Este recurso toma las competencias aprendidas en los materiales anteriores y pide transferirlas al desafío transversal.
 
 ## Planificación por sección
 
