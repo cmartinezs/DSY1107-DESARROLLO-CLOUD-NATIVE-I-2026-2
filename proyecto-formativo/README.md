@@ -10,30 +10,73 @@ examples/ + labs/         → ejemplos y experiencias del contenido
 proyecto-formativo/       → qué aplica el estudiante en RegistrApp
 ```
 
-RegistrApp **no se usa como ejemplo para enseñar contenido nuevo**. El contenido se explica y practica con casos autocontenidos. Después, cuando existe comprensión suficiente, el estudiante transfiere esa competencia a RegistrApp.
+RegistrApp **no se usa como ejemplo para enseñar contenido nuevo**. Primero se aprende y practica con casos independientes; después se transfiere esa competencia al proyecto.
 
-## Forma de avance
+## Continuidad obligatoria
 
-RegistrApp no avanza porque “cambió la semana”, sino porque una clase dejó una competencia utilizable.
+RegistrApp es **un único proyecto vivo** durante las 18 semanas.
 
 ```text
-contenido aprendido
-→ transferencia autónoma
-→ decisión técnica
-→ incremento RegistrApp
-→ evidencia
-→ checkpoint
+Semana 1
+→ Semana 2 recibe ese estado
+→ Semana 3 recibe el estado acumulado
+→ ...
+→ Semana 18 recibe todo el histórico anterior
 ```
 
-Una misma semana puede producir cero, uno o varios avances pequeños según el progreso real de la sección. Los checkpoints semanales sirven para ordenar el histórico, no para convertir RegistrApp en material de `semanas/`.
+Cada checkpoint debe evidenciar:
 
-## Estructura
+1. estado de entrada;
+2. contenido nuevo transferible;
+3. incremento realizado;
+4. evidencia antes/después;
+5. estado de salida;
+6. deuda pendiente;
+7. trazabilidad mediante DevLog y commits/archivos cuando corresponda.
 
-- [Roadmap de evolución](./ROADMAP-SEMANAL.md)
-- [Checkpoint Semana 3](./semana-03/README.md)
+→ [Contrato de arquitectura y continuidad](./ARQUITECTURA-Y-CONTINUIDAD.md)
+
+## Progreso del semestre
+
+| Semana | Checkpoint |
+|---|---|
+| 01 | [Inicio y arquitectura/API mínima](./semana-01/) |
+| 02 | [Gateway, gestión de API e identidad según avance](./semana-02/) |
+| 03 | [JWT, claims y seguridad según avance](./semana-03/) |
+| 04 | [Checkpoint reservado](./semana-04/) |
+| 05 | [Checkpoint reservado](./semana-05/) |
+| 06 | [Checkpoint reservado](./semana-06/) |
+| 07 | [Checkpoint reservado](./semana-07/) |
+| 08 | [Checkpoint reservado](./semana-08/) |
+| 09 | [Checkpoint reservado](./semana-09/) |
+| 10 | [Checkpoint reservado](./semana-10/) |
+| 11 | [Checkpoint reservado](./semana-11/) |
+| 12 | [Checkpoint reservado](./semana-12/) |
+| 13 | [Checkpoint reservado](./semana-13/) |
+| 14 | [Checkpoint reservado](./semana-14/) |
+| 15 | [Checkpoint reservado](./semana-15/) |
+| 16 | [Checkpoint reservado](./semana-16/) |
+| 17 | [Checkpoint reservado](./semana-17/) |
+| 18 | [Cierre acumulativo del semestre](./semana-18/) |
+
+→ [Ver roadmap detallado](./ROADMAP-SEMANAL.md)
+
+## Avance clase a clase
+
+Una semana no representa necesariamente un único incremento. Puede acumular varios avances pequeños:
+
+```text
+contenido clase 1 → incremento A
+contenido clase 2 → incremento B
+contenido clase 3 → incremento C
+
+checkpoint semanal = estado acumulado A+B+C
+```
+
+Si una clase o semana no habilita un incremento, también se registra. El histórico no debe tener huecos silenciosos.
 
 ## Regla de autonomía
 
 El profesor puede orientar, revisar y tensionar decisiones, pero no debe construir previamente la misma solución de RegistrApp que luego se espera que el estudiante reproduzca.
 
-La evidencia debe demostrar **transferencia del aprendizaje**, no copia de la ejemplificación de clase.
+La evidencia debe demostrar **transferencia del aprendizaje y progreso incremental**, no copia de la ejemplificación de clase.
