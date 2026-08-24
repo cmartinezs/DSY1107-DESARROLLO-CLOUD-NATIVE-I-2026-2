@@ -94,3 +94,5 @@ No uses tokens reales.
 ## Cierre
 
 Antes de pasar al desafío transversal, debes poder explicar con tus propias palabras por qué un JWT que “se ve bien” al decodificarlo todavía puede ser inválido o no estar destinado a esa API.
+
+> **Si quieres profundizar:** revisa [Profundización · JWT y claims](./01-jwt-claims/README.md) para estudiar estructura y firma, validación contextual, `kid`/JWKS y errores frecuentes.
