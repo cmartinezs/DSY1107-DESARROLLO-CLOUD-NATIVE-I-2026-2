@@ -7,37 +7,27 @@
 
 ## Regla de trabajo de Semana 3
 
-Esta semana se mantiene explícitamente la separación entre **contenido** y **desafío transversal**.
+`semanas/semana-03/` contiene **solo el contenido curricular, práctica y planificación de esta semana**.
 
-### Vertical A · contenido de la semana
-
-El contenido se aprende fuera de RegistrApp:
+RegistrApp no vive aquí. Es una vertical independiente en [`proyecto-formativo/`](../../proyecto-formativo/).
 
 ```text
+SEMANAS
 concepto
 → explicación
-→ ejemplo mínimo y autocontenido
-→ mini práctica/laboratorio independiente
+→ ejemplo mínimo
+→ práctica/lab independiente
 → evidencia de comprensión
-```
 
-Los ejemplos pueden usar APIs, clientes y tokens ficticios distintos entre sí. No tienen que compartir dominio ni construir una aplicación longitudinal.
-
-### Vertical B · desafío transversal RegistrApp
-
-Solo después de comprender y practicar el contenido se transfiere lo aprendido a RegistrApp:
-
-```text
-contenido comprendido
-→ decisión de diseño en RegistrApp
+PROYECTO FORMATIVO
+contenido ya comprendido
+→ transferencia a RegistrApp
+→ decisión
 → incremento
-→ evidencia
 → checkpoint
 ```
 
-→ [Definición canónica del desafío transversal](../../docs/DESAFIO-TRANSVERSAL-REGISTRAPP.md)
-
-> **RegistrApp no es la ejemplificación del contenido. Es el desafío donde el estudiante aplica el contenido.**
+> **RegistrApp no es la ejemplificación del contenido ni un archivo de Semana 3.** La semana únicamente puede enlazar al checkpoint transversal correspondiente.
 
 ## Propósito
 
@@ -54,8 +44,6 @@ OAuth2/OIDC
 → política de gateway/API
 → mapeo a cloud
 ```
-
-No se enseña configuración cloud como una secuencia de clics sin modelo mental previo.
 
 ## Contenidos de la semana
 
@@ -76,7 +64,7 @@ No se enseña configuración cloud como una secuencia de clics sin modelo mental
 - **Base obligatoria:** [JWT y claims](./01-jwt-claims.md)
 - **Profundización opcional:** [Estructura, firma, claims, `kid` y JWKS](./01-jwt-claims/README.md)
 
-La profundización incluye:
+Profundización:
 
 1. [Estructura, codificación y firma](./01-jwt-claims/01-estructura-codificacion-y-firma.md)
 2. [Validación contextual de claims](./01-jwt-claims/02-validacion-contextual-de-claims.md)
@@ -88,7 +76,7 @@ La profundización incluye:
 - **Base obligatoria:** [Seguridad de API y gateway](./02-seguridad-api.md)
 - **Profundización opcional:** [Gateway/backend, 401/403, permisos y CIAM](./02-seguridad-api/README.md)
 
-La profundización incluye:
+Profundización:
 
 1. [Gateway vs backend: frontera de responsabilidad](./02-seguridad-api/01-gateway-vs-backend.md)
 2. [Pipeline de acceso y 401 vs 403](./02-seguridad-api/02-pipeline-401-403.md)
@@ -99,34 +87,34 @@ La profundización incluye:
 
 - [Laboratorio JWT forense](./03-laboratorio-jwt-forense.md)
 
-El laboratorio no tiene carpeta de profundización propia porque **no es un contenido conceptual base**, sino la instancia de aplicación de los conceptos anteriores.
+El laboratorio no tiene carpeta de profundización propia porque es una instancia de aplicación, no un contenido conceptual base.
 
-Todos estos recursos deben poder trabajarse **sin RegistrApp**.
+## Transferencia al proyecto formativo
 
-## Desafío transversal
+Cuando exista comprensión suficiente, el estudiante puede continuar en la vertical independiente:
 
-4. [RegistrApp · checkpoint Semana 3](./04-desafio-registrapp.md)
+→ [RegistrApp · Checkpoint Semana 3](../../proyecto-formativo/semana-03/README.md)
 
-Este recurso toma las competencias aprendidas en los materiales anteriores y pide transferirlas al desafío transversal.
+Ese checkpoint puede reforzarse después de cada clase. **No pertenece físicamente a esta carpeta semanal.**
 
 ## Planificación por sección
 
-5. [DSY1107-002D · plan y checkpoint](./DSY1107-002D.md)
-6. [DSY1107-003D · plan y checkpoint](./DSY1107-003D.md)
+- [DSY1107-002D · plan y checkpoint](./DSY1107-002D.md)
+- [DSY1107-003D · plan y checkpoint](./DSY1107-003D.md)
 
-002D y 003D **no se sincronizan artificialmente**. Cada documento de sección declara desde qué checkpoint demostrable comienza y hasta dónde alcanzó realmente.
+002D y 003D no se sincronizan artificialmente. Cada documento declara desde qué evidencia real comienza y hasta dónde llegó.
 
 ## Resultado técnico esperado del contenido
 
 El estudiante debe poder:
 
-- mirar un token y distinguir header, payload y signature;
+- distinguir header, payload y signature;
 - interpretar claims comunes;
 - explicar por qué decodificar no equivale a confiar;
 - relacionar `iss`, `aud`, `exp` y scopes con decisiones de acceso;
 - provocar y explicar 401/403;
 - ubicar responsabilidades entre proveedor de identidad, gateway y API;
-- mapear después esos conceptos a una solución cloud.
+- mapear esos conceptos a una solución cloud.
 
 ## Evidencia mínima del contenido
 
@@ -137,9 +125,7 @@ El estudiante debe poder:
 - diagrama técnico de un caso mínimo independiente;
 - defensa breve de las decisiones.
 
-## Evidencia separada de RegistrApp
-
-El checkpoint del desafío puede incorporar arquitectura actualizada, scopes/claims propuestos, decisiones de validación y un incremento implementado cuando corresponda, pero **no reemplaza la evidencia del contenido semanal**.
+La evidencia de RegistrApp se registra en `proyecto-formativo/`, no aquí.
 
 ## Seguridad
 
@@ -149,7 +135,6 @@ Nunca versionar client secrets, contraseñas, tokens reales reutilizables ni cre
 
 Por sección registrar:
 
-- último checkpoint demostrado;
 - contenido efectivamente alcanzado;
 - evidencia;
 - bloqueos;
