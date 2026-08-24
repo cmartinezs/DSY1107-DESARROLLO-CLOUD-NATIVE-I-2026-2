@@ -6,6 +6,7 @@ Esta carpeta reúne documentación transversal y guías de consulta que deben se
 
 - [**Canon transversal de repositorios docentes**](./CANON-REPOSITORIO-DOCENTE.md) — estructura común, hogares canónicos y reconciliación semanal.
 - [**Checklist operativo semanal**](./CHECKLIST-OPERACION-SEMANAL.md) — ciclo mínimo para preparar, ejecutar y cerrar cada semana manteniendo separado el avance real de 002D/003D.
+- [**Desafío transversal RegistrApp**](./DESAFIO-TRANSVERSAL-REGISTRAPP.md) — regla canónica para transferir lo aprendido semana a semana sin convertir el desafío en el ejemplo conductor del contenido.
 - [**Estándar de estadísticas semanales**](./ESTANDAR-ESTADISTICAS-SEMANALES.md) — contrato común de datos agregados para análisis y dashboards entre cursos.
 - [**Banco de dinámicas vivas**](./BANCO-DINAMICAS-VIVAS.md) — actividades reutilizables para reforzar conceptos, responsabilidades y transferencia.
 - [**Estándar de repositorio del estudiante**](./ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — estructura de entregas, Markdown, Git y particularidades Cloud Native.
@@ -17,7 +18,19 @@ Esta carpeta reúne documentación transversal y guías de consulta que deben se
 ## Estrategias propias de Cloud Native
 
 - [**Laboratorios · concepto → local/neutral → cloud real**](./ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md)
-- [**Dominio formativo transversal · ReservApp**](./DOMINIO-FORMATIVO-TRANSVERSAL.md)
+- [**RegistrApp · desafío transversal**](./DESAFIO-TRANSVERSAL-REGISTRAPP.md)
+
+El archivo [`DOMINIO-FORMATIVO-TRANSVERSAL.md`](./DOMINIO-FORMATIVO-TRANSVERSAL.md) se conserva únicamente como compatibilidad histórica y redirige a la definición vigente.
+
+## Regla pedagógica
+
+```text
+CONTENIDO
+concepto → ejemplo independiente → práctica independiente → evidencia
+
+REGISTRAPP
+contenido comprendido → transferencia → incremento → checkpoint
+```
 
 ## Recursos canónicos
 
