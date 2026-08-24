@@ -5,17 +5,53 @@
 
 ← [Volver al índice](../README.md)
 
-## Propósito
+## Regla de trabajo de Semana 3
 
-Evolucionar desde los fundamentos OAuth2/OIDC e identidad local hacia la **protección verificable de una API**, interpretación de JWT/claims y posterior mapeo a capacidades de API Manager e Identity as a Service.
+Esta semana se mantiene explícitamente la separación entre **contenido** y **desafío transversal**.
 
-La estrategia se mantiene:
+### Vertical A · contenido de la semana
+
+El contenido se aprende fuera de RegistrApp:
 
 ```text
 concepto
-→ implementación local/neutral
-→ evidencia HTTP
-→ comprensión del token
+→ explicación
+→ ejemplo mínimo y autocontenido
+→ mini práctica/laboratorio independiente
+→ evidencia de comprensión
+```
+
+Los ejemplos pueden usar APIs, clientes y tokens ficticios distintos entre sí. No tienen que compartir dominio ni construir una aplicación longitudinal.
+
+### Vertical B · desafío transversal RegistrApp
+
+Solo después de comprender y practicar el contenido se transfiere lo aprendido a RegistrApp:
+
+```text
+contenido comprendido
+→ decisión de diseño en RegistrApp
+→ incremento
+→ evidencia
+→ checkpoint
+```
+
+→ [Definición canónica del desafío transversal](../../docs/DESAFIO-TRANSVERSAL-REGISTRAPP.md)
+
+> **RegistrApp no es la ejemplificación del contenido. Es el desafío donde el estudiante aplica el contenido.**
+
+## Propósito
+
+Evolucionar desde los fundamentos OAuth2/OIDC e identidad hacia la **protección verificable de una API**, interpretación de JWT/claims y posterior mapeo a capacidades de API Manager e Identity as a Service.
+
+La progresión conceptual es:
+
+```text
+OAuth2/OIDC
+→ access token
+→ JWT y claims
+→ verificación
+→ 401/403
+→ política de gateway/API
 → mapeo a cloud
 ```
 
@@ -23,49 +59,61 @@ No se enseña configuración cloud como una secuencia de clics sin modelo mental
 
 ## Contenidos de la semana
 
-- aplicación orientada a usuarios externos / CIAM;
-- seguridad aplicada al API Manager/gateway;
 - JWT: estructura, claims y propósito;
 - access token y su uso sobre APIs;
 - decodificación vs validación/verificación;
 - `issuer`, `audience`, expiración y scopes;
 - decisiones 401 vs 403;
-- responsabilidades de identidad, gateway y backend.
+- responsabilidades de identidad, gateway y backend;
+- seguridad aplicada al API Manager/gateway;
+- aplicación orientada a usuarios externos / CIAM;
+- mapeo de los conceptos al proveedor cloud disponible.
 
-## Material
+## Material de contenido
 
 1. [JWT y claims](./01-jwt-claims.md)
 2. [Seguridad de API y gateway](./02-seguridad-api.md)
 3. [Laboratorio JWT forense](./03-laboratorio-jwt-forense.md)
-4. [DSY1107-002D · plan y checkpoint](./DSY1107-002D.md)
-5. [DSY1107-003D · plan y checkpoint](./DSY1107-003D.md)
 
-## ReservApp
+Estos tres recursos deben poder trabajarse **sin RegistrApp**.
 
-ReservApp continúa como dominio formativo transversal. El checkpoint esperado, **si los prerrequisitos reales de cada sección lo permiten**, evoluciona hacia:
+## Desafío transversal
 
-```text
-usuario externo
-→ IdP/CIAM
-→ Authorization Code + PKCE
-→ access token JWT
-→ gateway
-→ validación técnica
-→ autorización por scope/claim
-→ reservapp-api
-```
+4. [RegistrApp · checkpoint Semana 3](./04-desafio-registrapp.md)
 
-## Resultado técnico esperado
+Este recurso toma las competencias aprendidas en los tres materiales anteriores y pide transferirlas al desafío transversal.
 
-El estudiante debe poder mirar un token y distinguir header/payload/signature; interpretar claims comunes; explicar por qué decodificar no equivale a confiar; relacionar `iss`, `aud`, `exp` y scopes con decisiones de acceso; provocar y explicar 401/403; y ubicar responsabilidades entre proveedor de identidad, gateway y API.
+## Planificación por sección
 
-## Regla de sección
+5. [DSY1107-002D · plan y checkpoint](./DSY1107-002D.md)
+6. [DSY1107-003D · plan y checkpoint](./DSY1107-003D.md)
 
-002D y 003D **no se sincronizan artificialmente**. Cada documento de sección declara desde qué checkpoint demostrable comienza. El contenido común representa el horizonte de Semana 3; el cierre real se registra por sección.
+002D y 003D **no se sincronizan artificialmente**. Cada documento de sección declara desde qué checkpoint demostrable comienza y hasta dónde alcanzó realmente.
 
-## Evidencia mínima
+## Resultado técnico esperado del contenido
 
-Diagrama actualizado de ReservApp, requests/responses reproducibles, ejemplos de 401 y 403 cuando se alcance autorización, token de laboratorio sin secretos reales, interpretación de claims y defensa técnica breve.
+El estudiante debe poder:
+
+- mirar un token y distinguir header, payload y signature;
+- interpretar claims comunes;
+- explicar por qué decodificar no equivale a confiar;
+- relacionar `iss`, `aud`, `exp` y scopes con decisiones de acceso;
+- provocar y explicar 401/403;
+- ubicar responsabilidades entre proveedor de identidad, gateway y API;
+- mapear después esos conceptos a una solución cloud.
+
+## Evidencia mínima del contenido
+
+- análisis de JWT sintéticos;
+- tabla de casos de aceptación/rechazo;
+- requests/responses reproducibles cuando exista starter local;
+- explicación de 401 vs 403;
+- diagrama técnico de un caso mínimo independiente;
+- defensa breve de las decisiones.
+
+## Evidencia separada de RegistrApp
+
+El checkpoint del desafío puede incorporar arquitectura actualizada, scopes/claims propuestos, decisiones de validación y un incremento implementado cuando corresponda, pero **no reemplaza la evidencia del contenido semanal**.
 
 ## Seguridad
 
@@ -73,4 +121,12 @@ Nunca versionar client secrets, contraseñas, tokens reales reutilizables ni cre
 
 ## Cierre obligatorio
 
-Por sección registrar: último checkpoint demostrado, contenido efectivamente alcanzado, evidencia, bloqueos, deuda curricular y punto exacto de arranque siguiente.
+Por sección registrar:
+
+- último checkpoint demostrado;
+- contenido efectivamente alcanzado;
+- evidencia;
+- bloqueos;
+- deuda curricular;
+- avance real de RegistrApp, si se trabajó;
+- punto exacto de arranque de la siguiente clase.
