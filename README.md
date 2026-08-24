@@ -6,19 +6,21 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 
 ## Acceso rápido
 
-- [`semanas/`](semanas/) — índice y contenido consolidado de cada semana.
+- [`semanas/`](semanas/) — índice y contenido curricular consolidado de cada semana.
+- [`examples/`](examples/) — ejemplos demostrativos independientes del proyecto transversal.
+- [`labs/`](labs/) — laboratorios de aprendizaje y aplicación del contenido.
+- [`proyecto-formativo/`](proyecto-formativo/) — **RegistrApp**, vertical transversal independiente que evoluciona clase a clase.
 - [`docs/`](docs/) — conocimientos y guías transversales.
 - [`page/`](page/) — portal web del curso.
-- [**Desafío transversal RegistrApp**](docs/DESAFIO-TRANSVERSAL-REGISTRAPP.md) — aplicación progresiva de lo aprendido durante el semestre.
 - [**Estrategia de laboratorios: concepto → cloud**](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md) — primero patrón local/neutral; después implementación real en cloud.
 - [**Estándar de repositorio del estudiante**](docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — nombre, estructura, packages, Markdown, labs Cloud Native y entregas colaborativas.
 - [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing) — biblioteca pública organizada semana a semana.
 
 ## Regla pedagógica canónica
 
-DSY1107 mantiene **dos verticales distintas**.
+DSY1107 mantiene **dos verticales distintas, con raíces distintas**.
 
-### Vertical de contenido
+### Vertical de contenido · `semanas/`, `examples/`, `labs/`
 
 ```text
 concepto
@@ -30,7 +32,7 @@ concepto
 
 El contenido no depende de RegistrApp. Los ejemplos pueden cambiar de dominio si eso permite explicar mejor una competencia.
 
-### Vertical transversal · RegistrApp
+### Vertical transversal · `proyecto-formativo/`
 
 ```text
 contenido comprendido
@@ -42,18 +44,20 @@ contenido comprendido
 
 > **Primero se aprende fuera de RegistrApp. Después se transfiere a RegistrApp.**
 
-RegistrApp es el desafío transversal del semestre; **no es el ejemplo conductor del material de clases**.
+RegistrApp es el desafío transversal del semestre; **no es el ejemplo conductor ni forma parte física de una carpeta `semana-XX`**.
 
 ## Cómo se organiza el material
 
-Cada semana mantiene:
+La semana curricular dice **qué corresponde aprender ahora**. Las raíces transversales dicen **dónde vive cada tipo de artefacto**.
 
-1. contenido común de la semana;
-2. ejemplos y prácticas independientes;
-3. cuando corresponde, un checkpoint separado de RegistrApp;
-4. planificación y cierre real por sección.
+```text
+semanas/            → qué se aprende y cuándo
+examples/           → ejemplos
+labs/               → laboratorios
+proyecto-formativo/ → RegistrApp y sus checkpoints
+```
 
-El directorio [`semanas/`](semanas/) mantiene un README general como índice del semestre. Cada carpeta semanal mantiene su propio `README.md` como punto de entrada.
+Una semana puede enlazar al checkpoint vigente de RegistrApp, pero no mantiene una segunda copia dentro de `semanas/`.
 
 ## Material original
 
@@ -71,7 +75,7 @@ comprender el concepto
 → mapear concepto ↔ servicio
 ```
 
-El laboratorio de contenido debe ser entendible por sí mismo. Si después la misma competencia se aplica a RegistrApp, esa aplicación pertenece al desafío transversal y se documenta por separado.
+El laboratorio de contenido debe ser entendible por sí mismo. Si después la misma competencia se aplica a RegistrApp, esa aplicación pertenece al proyecto formativo y se documenta por separado.
 
 → [Ver estrategia completa](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md)
 
@@ -134,11 +138,9 @@ Contenido:
 - seguridad de API/gateway;
 - CIAM y mapeo posterior a cloud.
 
-Desafío transversal:
+Después de cada clase, si existe una nueva competencia suficientemente comprendida, RegistrApp puede recibir un refuerzo en [`proyecto-formativo/`](proyecto-formativo/). No es necesario esperar al cierre de la semana ni forzar un incremento si todavía faltan prerrequisitos.
 
-- RegistrApp recibe un checkpoint separado **solo después** de trabajar los contenidos correspondientes.
-
-Consulta [`semanas/semana-03/`](semanas/semana-03/) y la planificación específica de cada sección.
+Consulta [`semanas/semana-03/`](semanas/semana-03/) para contenido y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
 
 ---
 
