@@ -2,519 +2,228 @@
 
 ## Objetivo
 
-Comprender qué significa **registrar una aplicación** en un sistema de identidad, diferenciar cliente y recurso protegido, entender Client ID, redirect URI, audience, scopes y tipo de cliente, y diseñar la configuración conceptual de **ReservApp** antes de utilizar una consola real.
+Comprender cómo se representan **clientes y APIs** dentro de una plataforma de identidad y qué significan Client ID, redirect URI, tipo de cliente, audience y scopes.
+
+Este contenido se trabaja con ejemplos independientes de RegistrApp.
 
 ---
 
-## 1. Registrar una aplicación no es simplemente “crear un nombre”
+## 1. Registrar una aplicación no es “crear un usuario”
 
-El proveedor de identidad necesita conocer a los participantes del flujo.
-
-Debe poder responder:
-
-- ¿qué aplicación solicita autenticación/autorización?;
-- ¿a qué URLs puede volver después del login?;
-- ¿qué permisos puede solicitar?;
-- ¿para qué API se emitirán tokens?;
-- ¿qué tipo de cliente es?;
-- ¿puede mantener un secreto?;
-
-Por eso una aplicación se **registra**.
-
-```mermaid
-flowchart TD
-    IDP[Identity Provider]
-    IDP --> WEB[reservapp-web\nClient]
-    IDP --> API[reservapp-api\nResource]
-    WEB --> URI[Redirect URIs]
-    WEB --> CID[Client ID]
-    WEB --> REQ[Scopes solicitados]
-    API --> AUD[Audience]
-    API --> EXP[Scopes expuestos/esperados]
-```
-
----
-
-## 2. Cliente y API cumplen funciones distintas
-
-### `reservapp-web`
-
-Es el **client**.
-
-Participa iniciando el flujo de autorización y utilizando el resultado para invocar la API.
-
-### `reservapp-api`
-
-Es el **resource server**.
-
-Expone recursos protegidos y acepta access tokens válidos destinados a ella.
-
-```mermaid
-flowchart LR
-    U[Usuario] --> WEB[reservapp-web\nClient]
-    WEB --> IDP[Identity Provider]
-    IDP --> WEB
-    WEB -->|Access Token| API[reservapp-api\nResource Server]
-```
-
-Esta distinción es fundamental: **el cliente pide acceso; la API protege el recurso**.
-
----
-
-## 3. Client ID
-
-El **Client ID** identifica a una aplicación cliente ante el proveedor de identidad.
+Una plataforma de identidad necesita conocer las aplicaciones que participarán en los flujos.
 
 Ejemplo conceptual:
 
 ```text
-client_id = reservapp-web-123
+portal-web
+mobile-app
+products-api
 ```
 
-### Importante
-
-El Client ID:
-
-- identifica software, no una persona;
-- no es una contraseña;
-- normalmente no se considera secreto;
-- permite al proveedor recuperar la configuración asociada al cliente.
+Cada una cumple un rol distinto.
 
 ```mermaid
 flowchart LR
-    WEB[ReservApp Web] -->|client_id| IDP[Identity Provider]
-    IDP --> CFG[Configuración del cliente\nredirect URIs\nflows\nscopes]
+    WEB["portal-web<br/>cliente"] --> IDP["Identity Platform"]
+    MOB["mobile-app<br/>cliente"] --> IDP
+    IDP --> WEB
+    IDP --> MOB
+    WEB --> API["products-api<br/>resource server"]
+    MOB --> API
 ```
 
 ---
 
-## 4. Redirect URI
+## 2. Client ID
 
-Después de autenticar/autorizAR, el proveedor debe devolver el control al cliente.
-
-Ese destino no puede ser arbitrario.
-
-Debe existir una **redirect URI registrada previamente**.
-
-Ejemplo local:
-
-```text
-http://localhost:3000/callback
-```
-
-### ¿Por qué se valida?
-
-Si el proveedor aceptara cualquier URL enviada por el cliente, un atacante podría intentar desviar el resultado de autenticación hacia un sitio controlado por él.
-
-```mermaid
-flowchart TD
-    LOGIN[Login completado] --> URI{¿Redirect URI registrada?}
-    URI -- No --> DENY[Rechazar flujo]
-    URI -- Sí --> CLIENT[Volver a ReservApp]
-```
-
-La comparación de redirect URI debe entenderse como una **medida de seguridad**, no como un trámite burocrático de configuración.
-
----
-
-## 5. Cliente público vs cliente confidencial
-
-Esta distinción responde a una pregunta:
-
-> ¿La aplicación puede guardar una credencial secreta de manera confiable?
-
-### Cliente público
-
-No puede mantener un secreto con garantías suficientes.
-
-Ejemplos:
-
-- SPA ejecutándose en navegador;
-- aplicación móvil;
-- aplicación instalada en equipo del usuario.
-
-Aunque el código contenga una cadena llamada `client_secret`, el usuario puede inspeccionarla o extraerla.
-
-Por eso no tiene sentido tratar ese valor como secreto real.
-
-### Cliente confidencial
-
-Se ejecuta en un entorno controlado donde puede proteger credenciales.
-
-Ejemplos:
-
-- backend server-side;
-- servicio ejecutado en infraestructura controlada.
-
-```mermaid
-flowchart TD
-    C[Aplicación cliente] --> Q{¿Puede proteger un secreto?}
-    Q -- No --> PUB[Cliente público\nPKCE]
-    Q -- Sí --> CONF[Cliente confidencial\npuede usar credencial de cliente]
-```
-
----
-
-## 6. ¿Por qué PKCE importa para ReservApp Web?
-
-En un cliente público no podemos basar la seguridad en un secreto embebido.
-
-PKCE crea una prueba por cada intento de autorización.
-
-El cliente genera conceptualmente:
-
-```text
-code_verifier → valor secreto temporal del intento
-code_challenge → derivado del verifier
-```
-
-Al inicio envía el challenge.
-
-Al intercambiar el código demuestra que conoce el verifier original.
-
-```mermaid
-sequenceDiagram
-    participant C as ReservApp Web
-    participant I as Identity Provider
-
-    C->>C: Genera code_verifier
-    C->>C: Deriva code_challenge
-    C->>I: Authorization Request + challenge
-    I-->>C: Authorization Code
-    C->>I: Code + verifier
-    I->>I: Comprueba verifier contra challenge
-    I-->>C: Tokens
-```
-
-No necesitamos programarlo todavía; necesitamos entender **qué riesgo intenta reducir**.
-
----
-
-## 7. API, audience y recurso protegido
-
-`reservapp-api` necesita poder reconocer tokens que fueron emitidos **para ella**.
-
-Ahí aparece la **audience (`aud`)**.
+El **Client ID** identifica a una aplicación cliente ante el Authorization Server.
 
 Ejemplo conceptual:
 
 ```text
-aud = reservapp-api
+client_id = portal-web
 ```
 
-Si un token fue emitido para:
+No es una contraseña.
 
-```text
-aud = another-api
-```
-
-ReservApp API no debería aceptarlo aunque:
-
-- tenga firma válida;
-- no esté expirado;
-- provenga del mismo proveedor.
-
-```mermaid
-flowchart TD
-    T[Token] --> A{aud == reservapp-api?}
-    A -- No --> DENY[Rechazar]
-    A -- Sí --> NEXT[Continuar validación]
-```
+Puede aparecer públicamente en aplicaciones donde su visibilidad sea esperable.
 
 ---
 
-## 8. Scopes: lo que el cliente solicita y la API entiende
+## 3. Redirect URI
 
-ReservApp utiliza inicialmente:
-
-```text
-reservations.read
-reservations.write
-```
-
-Podemos pensar la relación así:
-
-```mermaid
-flowchart LR
-    WEB[reservapp-web] -->|solicita| READ[reservations.read]
-    WEB -->|solicita| WRITE[reservations.write]
-    READ --> API[reservapp-api]
-    WRITE --> API
-```
-
-El cliente no debería pedir permisos innecesarios “por si acaso”.
-
-Eso se relaciona con el principio de **mínimo privilegio**.
-
-### Ejemplo
-
-Si una pantalla solo consulta reservas:
-
-```text
-reservations.read
-```
-
-puede ser suficiente.
-
-No existe razón automática para solicitar también escritura.
-
----
-
-## 9. Issuer + audience + scopes trabajan juntos
-
-Cuando la API recibe un access token debe comprobar más de una dimensión.
-
-```mermaid
-flowchart TD
-    T[Access Token]
-    T --> ISS{Issuer confiable?}
-    ISS -- No --> X[Rechazar]
-    ISS -- Sí --> AUD{Audience correcta?}
-    AUD -- No --> X
-    AUD -- Sí --> EXP{Vigente?}
-    EXP -- No --> X
-    EXP -- Sí --> SCP{Scope suficiente?}
-    SCP -- No --> F[403 Forbidden]
-    SCP -- Sí --> B[Evaluar regla de negocio]
-```
-
-Que una comprobación sea correcta no reemplaza a las demás.
-
----
-
-## 10. ¿Dónde entra el API Gateway?
-
-Nuestra arquitectura incluye un gateway entre cliente y backend.
-
-```mermaid
-flowchart LR
-    U[Usuario] --> WEB[ReservApp Web]
-    WEB --> IDP[Identity Provider]
-    IDP --> WEB
-    WEB -->|Bearer token| G[API Gateway]
-    G --> API[ReservApp API]
-    API --> DB[(Reservas)]
-```
-
-El gateway puede aplicar validaciones transversales, pero el backend sigue teniendo información que el gateway probablemente no posee.
+La redirect URI indica a qué ubicación autorizada puede devolver el Authorization Server al usuario después de una etapa del flujo.
 
 Ejemplo:
 
 ```text
-scope válido: reservations.write
+https://app.example.com/callback
 ```
 
-pero la operación es:
-
-```text
-DELETE /reservas/982
-```
-
-Para saber si esa reserva pertenece al usuario, ReservApp API puede necesitar consultar los datos del dominio.
-
----
-
-## 11. Client secret: cuándo existe y cuándo NO corresponde
-
-Un **client secret** es una credencial utilizada por ciertos clientes confidenciales.
-
-No debe confundirse con:
-
-- Client ID;
-- contraseña del usuario;
-- access token.
-
-### Regla práctica
-
-Nunca debemos subir secretos a:
-
-- repositorios;
-- JavaScript frontend;
-- documentación pública;
-- capturas de pantalla compartidas.
-
-```mermaid
-flowchart TD
-    SECRET[Client Secret] --> SAFE{¿Entorno servidor controlado?}
-    SAFE -- No --> BAD[No utilizar como secreto]
-    SAFE -- Sí --> STORE[Secret manager / configuración segura]
-```
-
----
-
-## 12. Configuración conceptual de ReservApp
-
-### Cliente
-
-```text
-Nombre: reservapp-web
-Tipo: cliente público
-Client ID: asignado por proveedor
-Redirect URI local: http://localhost:3000/callback
-Scopes: reservations.read reservations.write
-Client Secret: no
-Flujo: Authorization Code + PKCE
-```
-
-### API
-
-```text
-Nombre: reservapp-api
-Tipo: recurso protegido
-Audience: reservapp-api
-Issuer esperado: tenant de ReservApp
-Scopes: reservations.read reservations.write
-```
-
-```mermaid
-flowchart TB
-    T[Tenant ReservApp]
-    T --> WEB[reservapp-web\nPublic Client]
-    T --> API[reservapp-api\nProtected Resource]
-    WEB --> URI[Redirect URI]
-    WEB --> PKCE[Authorization Code + PKCE]
-    API --> AUD[aud = reservapp-api]
-    API --> SC[Scopes]
-```
-
----
-
-## 13. Flujo completo de la semana
+No debería aceptarse cualquier URL arbitraria.
 
 ```mermaid
 sequenceDiagram
     actor U as Usuario
-    participant W as reservapp-web
-    participant I as Identity Provider
-    participant G as API Gateway
-    participant A as reservapp-api
-    participant D as DB
+    participant C as Cliente
+    participant I as Identity Platform
 
-    U->>W: Iniciar sesión
-    W->>I: Authorization Request + client_id + redirect_uri + PKCE
+    U->>C: Iniciar sesión
+    C->>I: Authorization request + redirect URI
+    I->>U: Autenticación
+    U->>I: Se autentica
+    I-->>C: Authorization code hacia redirect permitida
+```
+
+---
+
+## 4. Cliente público vs confidencial
+
+### Cliente público
+
+No puede proteger de forma confiable un secreto embebido.
+
+Ejemplos típicos:
+
+- SPA;
+- aplicación móvil;
+- aplicación instalada en dispositivo del usuario.
+
+### Cliente confidencial
+
+Puede mantener credenciales del cliente en un entorno controlado del servidor.
+
+Ejemplos:
+
+- backend server-side;
+- servicio interno con almacenamiento seguro de secretos.
+
+```mermaid
+flowchart TD
+    C{"Tipo de cliente"}
+    C --> PUB["Público<br/>no confía en secreto embebido"]
+    C --> CONF["Confidencial<br/>puede proteger credencial"]
+    PUB --> PKCE["Authorization Code + PKCE"]
+```
+
+---
+
+## 5. API / Resource Server
+
+La API protegida debe estar representada conceptualmente como un recurso diferente del cliente.
+
+```mermaid
+flowchart LR
+    C["Cliente"] -->|"solicita token"| I["Identity Platform"]
+    I -->|"access token para products-api"| C
+    C -->|"Bearer access token"| API["products-api"]
+```
+
+La API debe comprobar que el token fue emitido para la audience que espera.
+
+---
+
+## 6. Audience
+
+La audience responde conceptualmente:
+
+> ¿Para qué recurso fue emitido este token?
+
+Ejemplo:
+
+```text
+aud = products-api
+```
+
+Un token emitido para otra API no debería aceptarse automáticamente.
+
+---
+
+## 7. Scopes
+
+Scopes de ejemplo:
+
+```text
+products.read
+products.write
+```
+
+```mermaid
+flowchart LR
+    API["products-api"] --> READ["products.read"]
+    API --> WRITE["products.write"]
+    CLIENT["portal-web"] -->|"solicita"| READ
+```
+
+El Authorization Server puede conceder solo una parte de lo solicitado según políticas y consentimiento.
+
+---
+
+## 8. Authorization Code + PKCE aplicado al cliente público
+
+```mermaid
+sequenceDiagram
+    actor U as Usuario
+    participant C as portal-web
+    participant I as Identity Platform
+    participant A as products-api
+
+    U->>C: Login
+    C->>I: Authorization request + code challenge
     I->>U: Autenticación
     U->>I: Credenciales / MFA
-    I-->>W: Authorization Code
-    W->>I: Code + PKCE verifier
-    I-->>W: ID Token + Access Token
-    W->>G: GET /reservas + Bearer token
-    G->>G: Valida issuer/audience/exp/política
-    G->>A: Petición
-    A->>D: Consulta reservas del sujeto
-    D-->>A: Datos
-    A->>A: Autoriza según negocio
-    A-->>W: 200 / 403 según resultado
+    I-->>C: Authorization code
+    C->>I: Code + code verifier
+    I-->>C: Access token
+    C->>A: GET /products + Bearer token
+    A-->>C: Respuesta
 ```
 
-Este diagrama reúne los cuatro temas de Semana 02.
+No es necesario memorizar todos los parámetros todavía. Sí hay que comprender el rol de cada pieza.
 
 ---
 
-## 14. Actividad práctica · `app-registration-design.md`
+## 9. Mini actividad independiente
 
-En el repositorio grupal creen:
-
-```text
-app-registration-design.md
-```
-
-### A. Cliente
-
-Completen:
+Tienes este escenario:
 
 ```text
-Nombre: reservapp-web
-Tipo de cliente: __________________
-Client ID: lo asignará el proveedor
-Redirect URI local: __________________
-Scopes solicitados: __________________
-¿Utiliza client secret?: sí/no
-Justificación: __________________
+portal-web     → SPA
+mobile-app     → aplicación móvil
+products-api   → API protegida
 ```
 
-### B. API
+Responde:
+
+1. ¿qué elementos son clientes?;
+2. ¿qué elemento es resource server?;
+3. ¿qué Client ID necesita cada cliente?;
+4. ¿qué redirect URI debería registrarse para cada uno?;
+5. ¿qué clientes son públicos?;
+6. ¿qué audience debería esperar la API?;
+7. ¿qué scopes propondrías para leer y modificar productos?;
+8. ¿por qué no guardarías un client secret dentro de la SPA?
+
+## 10. Mapeo posterior a cloud
+
+Solo después de defender el modelo conceptual se realiza el mapeo a la consola del proveedor real:
 
 ```text
-Nombre: reservapp-api
-Audience esperada: __________________
-Issuer esperado: __________________
-Scopes aceptados: __________________
+cliente conceptual
+→ app registration / client
+
+resource server
+→ API / resource registration
+
+scope conceptual
+→ scope configurado
+
+redirect URI conceptual
+→ redirect URI registrada
 ```
 
-### C. Matriz de errores
+## Cierre
 
-Analicen:
+El estudiante debe ser capaz de explicar qué representa cada configuración antes de crearla en una consola cloud.
 
-1. redirect URI no registrada;
-2. token emitido por issuer desconocido;
-3. token con audience de otra API;
-4. token expirado;
-5. falta `reservations.write`;
-6. scope correcto pero reserva perteneciente a otro usuario.
-
-Para cada caso indiquen:
-
-- componente que detecta;
-- respuesta esperada;
-- motivo.
-
-### D. Diagrama Mermaid
-
-Dibujen el flujo completo y etiqueten:
-
-- `client_id`;
-- redirect URI;
-- Authorization Code;
-- PKCE;
-- access token;
-- API Gateway;
-- audience;
-- scopes;
-- autorización de negocio.
-
----
-
-## 15. Errores frecuentes
-
-- creer que Client ID es secreto;
-- poner un client secret en una SPA;
-- aceptar cualquier redirect URI;
-- confundir audience con scope;
-- creer que tener token implica acceso universal;
-- aceptar tokens emitidos para otra API;
-- utilizar ID token como access token;
-- pedir todos los scopes disponibles aunque no sean necesarios;
-- suponer que el gateway conoce automáticamente las reglas del dominio.
-
----
-
-## Checkpoint de Semana 02
-
-ReservApp debe terminar con un diseño donde pueda explicarse:
-
-```text
-Usuario
-  → reservapp-web
-  → Identity Provider
-  → Authorization Code + PKCE
-  → tokens
-  → API Gateway
-  → reservapp-api
-  → reglas de negocio
-```
-
-Y además:
-
-- Client ID;
-- redirect URI;
-- cliente público vs confidencial;
-- issuer;
-- audience;
-- scopes;
-- access token vs ID token;
-- 401 vs 403;
-- responsabilidades gateway/backend.
-
-## Continuidad
-
-Cuando se incorpore un proveedor real, esta etapa no debería rediseñarse desde cero: habrá que **mapear estas decisiones conceptuales a la terminología y configuración concreta del proveedor**, obtener tokens reales y validar efectivamente la integración.
+→ [Profundización opcional](./04-configurando-apps-idaas/README.md)
