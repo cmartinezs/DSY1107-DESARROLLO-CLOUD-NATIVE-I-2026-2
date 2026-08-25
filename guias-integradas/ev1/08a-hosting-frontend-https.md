@@ -1,6 +1,6 @@
 # 08A · Hosting frontend, HTTPS y mixed content
 
-**REQUERIDO EV1** · La pauta exige frontend desplegado, activo e integrado. El material revisado no fija S3/CloudFront como tecnología obligatoria; por eso se usa como **opción de referencia**, no como requisito institucional.
+Este anexo usa **S3 + CloudFront** como opción de referencia para publicar una SPA Angular con una URL HTTPS estable. Si el laboratorio define otro hosting cloud, puede utilizarse siempre que produzca el mismo estado funcional.
 
 ## Decisión de referencia
 
@@ -9,8 +9,6 @@ Angular build
 → S3 (archivos estáticos)
 → CloudFront (HTTPS/CDN)
 ```
-
-Si el laboratorio define otro hosting AWS, puede utilizarse siempre que produzca una URL estable y permita demostrar la misma arquitectura.
 
 ## 1. Build limpio
 
@@ -40,7 +38,7 @@ Crear/configurar hosting estático autorizado. Obtener:
 FRONTEND_CLOUD_URL=https://...
 ```
 
-Preferir HTTPS para la SPA real.
+Preferir HTTPS para la SPA.
 
 ## 4. Mixed content
 
@@ -106,14 +104,15 @@ No modificar Entra/CORS si el problema real es un bundle antiguo.
 - [ ] CORS permite origin cloud exacto.
 - [ ] refresh de la SPA no rompe navegación relevante.
 
-## Estado institucional
+## Decisión tecnológica
 
-Confirmado por material EV1:
+S3 + CloudFront es una referencia apropiada para esta práctica, no una dependencia conceptual de Angular, OAuth2/OIDC, JWT o CORS. Si se utiliza otra alternativa autorizada, debe conservarse:
 
 ```text
-frontend desplegado y activo = requerido
-backend EC2 = requerido
-API Gateway = requerido
+SPA desplegada
++ URL estable
++ HTTPS
++ redirect URI coherente
++ CORS coherente
++ consumo del API Gateway
 ```
-
-No se encontró en el material revisado una obligación explícita de **S3 + CloudFront** para el frontend. Por eso la guía no penaliza una alternativa AWS autorizada que cumpla el mismo resultado.
