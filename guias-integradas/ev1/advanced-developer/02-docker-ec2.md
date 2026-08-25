@@ -2,9 +2,9 @@
 
 ## Objetivo
 
-Cumplir el mismo requisito institucional de despliegue en **EC2**, pero ejecutando el backend como contenedor Docker en vez de instalar Java y ejecutar el JAR directamente en el host.
+Ejecutar el mismo backend CloudTasks como contenedor Docker sobre **EC2**, en vez de instalar Java y ejecutar el JAR directamente en el host.
 
-> Para EV1, **EC2 sigue siendo obligatorio según la pauta**. ECS se deja fuera de esta ruta porque no aparece como requisito institucional de esta evaluación.
+Esta variante conserva EC2 + API Gateway para poder comparar únicamente el cambio de empaquetado/runtime. ECS queda fuera de esta práctica para no agregar todavía una capa de orquestación.
 
 ## Arquitectura
 
@@ -50,7 +50,7 @@ Si el usuario de administración todavía requiere `sudo docker`, corregir/confi
 
 ## 3. Llevar la imagen al servidor
 
-Para EV1 se permiten dos estrategias didácticas.
+Se pueden utilizar dos estrategias didácticas.
 
 ### Estrategia A · construir en EC2
 
@@ -58,7 +58,7 @@ Transferir/clonar el repositorio y ejecutar:
 
 ```bash
 cd backend
-docker build -t cloudtasks-api:ev1 .
+docker build -t cloudtasks-api:guia .
 ```
 
 Ventaja:
@@ -86,7 +86,7 @@ build local
 → run
 ```
 
-No introducir ECR como requisito si el entorno académico no lo ha habilitado. El objetivo evaluado sigue siendo EC2 + API Gateway, no administrar un registry.
+No introducir ECR por defecto si el entorno académico no lo ha habilitado. El foco aquí es comprender imagen → contenedor → EC2 → API Gateway, no administrar un registry.
 
 ## 4. Variables de entorno
 
@@ -100,7 +100,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8080:8080 \
   -e SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI='<OIDC_ISSUER>' \
-  cloudtasks-api:ev1
+  cloudtasks-api:guia
 ```
 
 Comprobar:
@@ -210,7 +210,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8080:8080 \
   -e SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI='<OIDC_ISSUER>' \
-  cloudtasks-api:ev1
+  cloudtasks-api:guia
 ```
 
 ## 10. Convergencia con la ruta base
@@ -219,7 +219,7 @@ Cuando esto funcione, volver a:
 
 → [06 · AWS API Gateway + JWT Authorizer](../06-api-gateway-jwt.md)
 
-Desde allí **no existe una EV1 Docker diferente**.
+Desde allí no existe una segunda práctica Docker: ambas variantes convergen.
 
 API Gateway recibe:
 
@@ -252,13 +252,11 @@ Docker image
 → API Gateway
 ```
 
-Pero eso agrega conceptos que **no aparecen como requisito de EV1** y pueden distraer de API Manager, IDaaS, OAuth/OIDC, JWT y CORS.
-
-Por eso ECS no forma parte de esta implementación evaluativa mientras no exista una instrucción institucional explícita.
+Eso agrega registry, task definitions, services, capacity y networking. Conviene estudiarlo después de comprender y validar primero Docker sobre una EC2 simple.
 
 ## Puerta de validación ★02
 
-- [ ] EC2 creado según la pauta.
+- [ ] EC2 creada y accesible.
 - [ ] Docker Engine funciona en EC2.
 - [ ] CloudTasks corre como contenedor.
 - [ ] health local EC2 = 200.
@@ -269,9 +267,7 @@ Por eso ECS no forma parte de esta implementación evaluativa mientras no exista
 - [ ] `BACKEND_CLOUD_URL` queda listo para API Gateway.
 - [ ] el alumno puede explicar diferencia entre EC2, Docker Engine, imagen y contenedor.
 
-## Defensa avanzada sugerida
-
-Pregunta:
+## Pregunta de comprobación avanzada
 
 > ¿Qué cambió para API Gateway al pasar de JAR directo a Docker?
 
