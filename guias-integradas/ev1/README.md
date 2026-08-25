@@ -30,7 +30,7 @@ flowchart LR
 | GET | `/api/tasks` | autorización por `tasks.read` |
 | POST | `/api/tasks` | autorización por `tasks.write` |
 | DELETE | `/api/tasks/{id}` | combinar scope + ownership |
-| GET | `/api/admin/stats` | diferenciar role y scope, si el sandbox lo permite |
+| GET | `/api/admin/stats` | ★ diferenciar role y scope, si el sandbox lo permite |
 
 ## Principio: mínimo código, máxima comprensión
 
@@ -63,10 +63,11 @@ Si un fragmento de código no aporta directamente al aprendizaje de esta vertica
 ### Identidad y seguridad
 
 8. [02 · Microsoft Entra External ID](./02-entra-external-id.md)
-9. [03 · Angular + MSAL + PKCE](./03-angular-msal.md)
-   - [03A · Starter mínimo Angular/MSAL](./03a-starter-angular-msal.md)
-10. [04 · JWT, scopes, roles y Spring Security](./04-jwt-y-backend.md)
-   - [04A · Starter mínimo Spring Security](./04a-starter-spring-security.md)
+9. [03 · Angular + MSAL Angular + PKCE](./03-angular-msal.md)
+   - [03A · Starter reproducible Angular/MSAL](./03a-starter-angular-msal.md)
+10. [04 · JWT, scopes, ownership y Spring Security](./04-jwt-y-backend.md)
+   - [04A · Starter reproducible Spring Security](./04a-starter-spring-security.md)
+   - [★ 04B · Roles Entra + Spring Security](./04b-opcional-roles-entra-spring.md)
 
 ### AWS
 
@@ -85,6 +86,11 @@ Si un fragmento de código no aporta directamente al aprendizaje de esta vertica
     - [10A · Mapa de cobertura de conocimientos](./10a-mapa-cobertura-conocimientos.md)
     - [10B · Simulación de presentación técnica](./10b-simulacion-presentacion-tecnica.md)
 17. [11 · Costos y cleanup](./11-costos-y-cleanup.md)
+
+### Referencia docente/técnica
+
+- [Protocolo de validación y fuentes canónicas](./reference/README.md)
+- validador local: `python scripts/validate_integrated_guides.py` desde la raíz del repositorio docente.
 
 ## Estructura sugerida dentro del repositorio personal
 
