@@ -19,8 +19,12 @@ Los snippets completos de las etapas son la fuente canónica:
 | health Spring Boot | `01a-crear-backend-intellij.md` |
 | HttpClient + CORS local | `01-cloudtasks-local.md` |
 | Angular + MSAL Angular | `03a-starter-angular-msal.md` |
-| Spring Security/JWT | `04a-starter-spring-security.md` |
+| Spring Security/JWT/scopes/ownership | `04a-starter-spring-security.md` |
+| ★ roles Entra → Spring | `04b-opcional-roles-entra-spring.md` |
 | JAR en EC2 | `05-aws-backend.md` + `05a-ec2-paso-a-paso.md` |
+| API Gateway/JWT scopes | `06-api-gateway-jwt.md` |
+| CORS cloud | `07-cors.md` |
+| frontend cloud | `08-frontend-cloud-e2e.md` + `08a-hosting-frontend-https.md` |
 | ★ Docker local/EC2 | `advanced-developer/` |
 
 ## Qué significa “starter conocido”
@@ -38,6 +42,24 @@ Angular CLI genera frontend
 ```
 
 No significa copiar un repositorio terminado sin comprenderlo.
+
+## Configuración runtime canónica
+
+Para evitar divergencia entre local, JAR y Docker, la referencia utiliza siempre:
+
+```text
+OIDC_ISSUER
+API_AUDIENCE
+```
+
+correspondientes a:
+
+```properties
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${OIDC_ISSUER}
+cloudtasks.security.audience=${API_AUDIENCE}
+```
+
+El mismo par debe llegar al proceso Spring ejecutado mediante IntelliJ/Maven Wrapper, `java -jar`, `systemd` o Docker.
 
 ---
 
@@ -104,6 +126,13 @@ DELETE propia + write scope      → 204
 DELETE ajena + write scope       → 403
 ```
 
+★04B agrega, sin alterar la ruta base:
+
+```text
+GET /api/admin/stats sin ROLE_Admin → 403
+GET /api/admin/stats con ROLE_Admin → 200
+```
+
 ## Frontend
 
 Desde `guia/ev1/frontend/`:
@@ -130,6 +159,19 @@ GET /api/tasks solicita read scope
 POST/DELETE solicitan write scope
 health público no necesita token
 ```
+
+## API Gateway
+
+Comprobar explícitamente la traducción conceptual:
+
+```text
+scope solicitado por MSAL: api://.../tasks.read
+claim real:                 tasks.read
+authorization scope AWS:    tasks.read
+authority Spring:           SCOPE_tasks.read
+```
+
+No intercambiar esos cuatro valores.
 
 ## Navegador
 
@@ -171,7 +213,7 @@ Orden:
 02 Entra
 03/03A MSAL Angular
 04/04A Spring Security
-★ 04B roles si se desea
+★04B roles si se elige
 05 EC2
 06 Gateway
 07 CORS cloud
@@ -185,7 +227,7 @@ En cada etapa registrar el primer checkpoint que no puede reproducirse. No compe
 
 ---
 
-# Restricción de validación funcional automatizada
+# Restricción de validación automatizada
 
 Los builds y pruebas integradas dependen de servicios externos:
 
@@ -198,7 +240,7 @@ AWS
 
 No declarar un `PASS` funcional si esos comandos/servicios no se ejecutaron realmente.
 
-La validación estática puede ejecutarse offline. La funcional requiere un entorno con red y sandbox/credenciales apropiados.
+La validación estática puede ejecutarse offline **si el repositorio ya está disponible localmente**. Un entorno sin workspace local y sin conectividad para clonar GitHub no puede fingir la ejecución del script; debe registrar esa limitación y ejecutar la validación cuando exista una copia local.
 
 ---
 
