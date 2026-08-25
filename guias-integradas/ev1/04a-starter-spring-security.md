@@ -1,6 +1,6 @@
 # 04A · Starter mínimo Spring Security Resource Server
 
-**REQUERIDO EV1** · El objetivo es configurar seguridad, no programar un framework de autenticación.
+El objetivo es configurar y comprender seguridad, no programar un framework de autenticación.
 
 ## Dependencias
 
@@ -57,7 +57,7 @@ jwt.getAudience().contains(<API_AUDIENCE>)
 
 y combinarlo con los validadores por issuer provistos por Spring Security.
 
-Esto sí aporta a EV1 porque permite demostrar:
+Esto permite observar directamente:
 
 ```text
 firma/issuer válidos
