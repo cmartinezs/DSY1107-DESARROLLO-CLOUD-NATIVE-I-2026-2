@@ -2,13 +2,27 @@
 
 ## Objetivo
 
-Convertir el backend ya creado en un **Resource Server** real que acepte Access Tokens válidos del tenant y aplique autorización.
+Convertir el backend en un **Resource Server** real que acepte Access Tokens válidos y aplique autorización.
 
-> El alumno no implementará criptografía JWT, parsers de tokens ni un sistema de autenticación propio. Spring Security realizará esa tarea. El trabajo EV1 consiste en **configurar correctamente issuer/audience/scopes, aplicar políticas y demostrar los resultados**.
+**REQUERIDO EV1** · El alumno configura issuer, audience y scopes; no implementa criptografía JWT, parsers ni login propio.
 
-## 1. Agregar solo las dependencias de seguridad necesarias
+## Starter operativo
 
-En `pom.xml` agregar:
+Usar:
+
+→ [04A · Starter mínimo Spring Security](./04a-starter-spring-security.md)
+
+El starter reduce el código a:
+
+```text
+SecurityFilterChain
+validación explícita audience
+/api/me
+Task en memoria
+ownership
+```
+
+## Dependencias
 
 ```xml
 <dependency>
@@ -21,89 +35,62 @@ En `pom.xml` agregar:
 </dependency>
 ```
 
-Después recargar Maven en IntelliJ.
-
-Validar con el wrapper, no con Maven global.
-
-Windows:
-
-```powershell
-.\mvnw.cmd test
-```
-
-Linux/macOS:
+Validar con wrapper:
 
 ```bash
 ./mvnw test
 ```
 
-No agregar librerías JWT manuales mientras Spring Security Resource Server cubra el requisito.
-
-## 2. Configurar por issuer
-
-Preferir `issuer-uri` cuando el issuer real ya fue verificado en la etapa Entra:
+## Issuer
 
 ```properties
-spring.security.oauth2.resourceserver.jwt.issuer-uri=<OIDC_ISSUER>
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${OIDC_ISSUER}
 ```
 
-Spring utilizará metadata OIDC/JWKS para verificar firma y claims estándar.
+Spring usa metadata/JWKS para validación. No copiar public keys manualmente si discovery funciona.
 
-No copiar claves públicas manualmente si discovery funciona.
+## Audience
 
-## 3. Política mínima de rutas
+Además del issuer, CloudTasks debe rechazar tokens dirigidos a otro recurso.
 
-Mantener público:
+Validar explícitamente:
 
 ```text
-GET /api/public/health
+jwt.aud contiene API_AUDIENCE
 ```
 
-Requerir autenticación para:
+Esto permite demostrar el caso institucional:
 
 ```text
-GET /api/me
+firma válida + issuer válido + audience incorrecta
+→ rechazo / 401
 ```
 
-Y autorización específica para tareas:
+## Política mínima
 
 ```text
-GET    /api/tasks       → tasks.read
-POST   /api/tasks       → tasks.write
-DELETE /api/tasks/{id}  → tasks.write + ownership
-GET    /api/admin/stats → Admin, solo si el entorno permite trabajar roles
+GET    /api/public/health → público
+GET    /api/me            → authenticated
+GET    /api/tasks         → tasks.read
+POST   /api/tasks         → tasks.write
+DELETE /api/tasks/{id}    → tasks.write + ownership
+GET    /api/admin/stats   → Admin, solo si sandbox permite roles
 ```
 
-La política se implementa con Spring Security, no con `if` manuales que intenten validar el JWT.
+## Scopes
 
-## 4. Inspeccionar el claim de scopes antes de mapearlo
+Observar primero el Access Token real. Confirmar si Entra emite `scp`/scope y cómo Spring lo traduce a authorities.
 
-No asumir ciegamente si el token utiliza:
+No escribir converter custom si el mapping estándar ya produce:
 
 ```text
-scp
-scope
+SCOPE_tasks.read
+SCOPE_tasks.write
 ```
 
-Primero inspeccionar un Access Token real emitido por el tenant.
+## `/api/me`
 
-Luego configurar Spring para traducir esos scopes a authorities de forma consistente.
-
-El alumno debe poder explicar:
-
-```text
-claim del token
-→ authority de Spring
-→ regla de autorización
-```
-
-Ese mapeo sí aporta directamente a EV1.
-
-## 5. `/api/me`: endpoint didáctico mínimo
-
-Crear un endpoint pequeño que permita demostrar qué identidad recibió realmente el backend.
-
-Debe devolver solo información útil/sanitizada, por ejemplo:
+Debe devolver únicamente claims sanitizados:
 
 ```json
 {
@@ -115,35 +102,11 @@ Debe devolver solo información útil/sanitizada, por ejemplo:
 }
 ```
 
-No retornar el token completo.
+No devolver el token completo.
 
-La finalidad del endpoint es observar:
+## Datos
 
-```text
-JWT aceptado
-→ claims disponibles
-→ backend conoce la identidad
-```
-
-No construir un perfil de usuario ni persistencia asociada.
-
-## 6. Datos de tareas: mantenerlos en memoria
-
-Para EV1 la persistencia no es el foco.
-
-No agregar:
-
-- PostgreSQL;
-- MySQL;
-- H2 como requisito;
-- JPA;
-- repositories;
-- migraciones;
-- Docker Compose.
-
-Una colección en memoria es suficiente para demostrar autorización.
-
-Modelo mínimo conceptual:
+Modelo mínimo:
 
 ```text
 Task
@@ -152,138 +115,75 @@ Task
 - ownerId
 ```
 
-No agregar más campos si no aportan a una prueba EV1.
+Persistencia en memoria. Sin JPA, DB, migrations o repositories porque no agregan evidencia EV1.
 
-## 7. Regla de ownership
-
-Para eliminar una tarea:
+## Ownership
 
 ```text
-scope tasks.write válido
-        +
-sub del token == ownerId de la tarea
-        ↓
-permitir
+tasks.write
++
+JWT.sub == task.ownerId
+→ DELETE permitido
 ```
 
-Si el usuario posee `tasks.write` pero intenta eliminar una tarea de otro usuario:
+Si scope correcto pero recurso ajeno:
 
 ```text
-403 Forbidden
+403
 ```
 
-Esta pequeña regla existe porque permite distinguir:
+Esto distingue autorización técnica por scope de autorización de negocio.
+
+## Checkpoint 04-1 · seguridad básica
 
 ```text
-autorización técnica por scope
-vs
-regla de autorización de negocio
+health sin token → 200
+tasks sin token  → 401
 ```
 
-No se necesita un dominio más complejo.
+## Checkpoint 04-2 · JWT
 
-## 8. Pruebas locales
+| Caso | Esperado |
+|---|---|
+| token alterado | 401 |
+| token expirado | 401 |
+| issuer incorrecto | 401 |
+| audience incorrecta | 401 |
+| Access Token correcto | autenticación válida |
 
-Con backend en `localhost:8080`:
+## Checkpoint 04-3 · autorización
 
-### Health público
+| Caso | Esperado |
+|---|---|
+| sin `tasks.read` | 403/rechazo |
+| con `tasks.read` | GET 200 |
+| sin `tasks.write` | 403/rechazo |
+| con `tasks.write` | POST permitido |
+| recurso ajeno | 403 |
 
-```bash
-curl -i http://localhost:8080/api/public/health
-```
-
-Esperado:
+## Qué NO programa el alumno
 
 ```text
-200
+generación/firma JWT
+RSA
+JWKS rotation
+Authorization Code
+PKCE
+refresh flow
+password database
 ```
 
-### Ruta protegida sin token
-
-```bash
-curl -i http://localhost:8080/api/tasks
-```
-
-Esperado:
-
-```text
-401
-```
-
-### Access Token real
-
-```bash
-curl -i \
-  -H "Authorization: Bearer <ACCESS_TOKEN>" \
-  http://localhost:8080/api/tasks
-```
-
-Esperado:
-
-```text
-200
-```
-
-solo cuando token y scope sean correctos.
-
-> El token utilizado para pruebas no se guarda en Git, capturas públicas ni archivos versionados.
-
-## 9. Qué NO programa el alumno
-
-No implementar manualmente:
-
-- generación de JWT;
-- firma de JWT;
-- descarga/rotación de JWKS;
-- validación RSA;
-- parsing criptográfico del token;
-- Authorization Code;
-- PKCE;
-- pantalla de login;
-- base de usuarios;
-- refresh token flow propio.
-
-Todo eso ya corresponde a responsabilidades de Entra, MSAL o Spring Security.
-
-El alumno sí debe saber explicar **qué servicio realiza cada responsabilidad**.
+Debe explicar qué componente realiza cada responsabilidad.
 
 ## Puerta de validación 04
 
-Probar y explicar:
+No desplegar a EC2 hasta que todos los checkpoints locales sean PASS.
 
-| Caso | Resultado esperado |
-|---|---|
-| health sin token | 200 |
-| tasks sin token | 401 |
-| token alterado | 401 |
-| audience incorrecta | 401 |
-| token válido sin scope | 403 |
-| token válido + scope | 200 |
-| write sobre recurso ajeno | 403 |
-
-## Regla importante
-
-`401` significa que la petición no logra establecer una autenticación válida para continuar.
-
-`403` significa que existe identidad/token suficientemente válido, pero falta autorización para la operación solicitada.
-
-## Criterio de código mínimo
-
-El backend de referencia solo debe contener el código necesario para demostrar:
-
-```text
-endpoint
-+ token válido
-+ scope
-+ claim
-+ 401/403
-+ ownership
-```
-
-Si una clase o dependencia no ayuda a demostrar alguno de esos elementos, probablemente no pertenece a la solución mínima de EV1.
+**SI FALLA** · revisar en orden: Access Token real → iss → aud → exp → scope/authority → ownership. No agregar librerías JWT externas como primera reacción.
 
 ## Contenido relacionado
 
+- [04A · Starter Spring Security](./04a-starter-spring-security.md)
+- [Matriz de valores](./00c-matriz-valores-y-checkpoints.md)
 - [JWT y claims](../../semanas/semana-03/01-jwt-claims.md)
-- [Seguridad API](../../semanas/semana-03/02-seguridad-api.md)
 - [Gateway vs backend](../../semanas/semana-03/02-seguridad-api/01-gateway-vs-backend.md)
