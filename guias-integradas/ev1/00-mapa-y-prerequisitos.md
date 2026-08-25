@@ -4,16 +4,22 @@
 
 Comenzar desde un estado conocido y detectar bloqueos **antes** de entrar a AWS o Microsoft Entra.
 
+> Antes de esta etapa debe completarse [00A · Preparar herramientas y entorno](./00a-preparar-entorno.md).
+
 ## Qué se necesita
 
 ### Local
 
+- cuenta GitHub funcional;
 - Git;
+- GitHub Desktop, recomendado;
+- GitHub CLI (`gh`), recomendado;
 - **IntelliJ IDEA**;
 - **JDK 21**;
 - Node.js LTS compatible con la versión de Angular utilizada;
 - npm;
 - Angular CLI;
+- **VS Code o WebStorm** para trabajar el frontend;
 - navegador moderno con DevTools;
 - Postman o `curl` como herramienta auxiliar.
 
@@ -55,19 +61,16 @@ npm --version
 ng version
 ```
 
+Si se instaló GitHub CLI:
+
+```bash
+gh --version
+gh auth status
+```
+
 `java -version` debe mostrar Java 21.
 
-Si `ng` no existe:
-
-```bash
-npm install -g @angular/cli
-```
-
-Luego:
-
-```bash
-ng version
-```
+La instalación y diagnóstico de estas herramientas se realiza en la etapa 00A; esta etapa solo verifica que el entorno ya está operativo.
 
 ## IDE esperado para backend
 
@@ -87,9 +90,17 @@ IntelliJ
 
 No se pedirá construir manualmente la estructura Maven ni escribir un `pom.xml` desde cero.
 
-## Frontend esperado
+## Editor esperado para frontend
 
-El frontend será creado con **Angular CLI**.
+El frontend será creado con **Angular CLI** y puede editarse con una de estas alternativas:
+
+```text
+VS Code
+   o
+WebStorm
+```
+
+No existe diferencia funcional en la solución EV1 por escoger uno u otro.
 
 No se entregará una aplicación visual compleja ni se evaluará diseño frontend avanzado. Angular se utilizará como SPA mínima para demostrar:
 
@@ -135,8 +146,10 @@ Capacidad para crear, como mínimo:
 
 ```mermaid
 flowchart TD
-    BI[Crear backend en IntelliJ] --> BV[Validar backend local]
-    FA[Crear frontend Angular] --> FV[Validar frontend local]
+    E[Entorno local verificado] --> BI[Crear backend en IntelliJ]
+    E --> FA[Crear frontend Angular]
+    BI --> BV[Validar backend local]
+    FA --> FV[Validar frontend local]
     BV --> L[Integración local]
     FV --> L
     L --> C0[CORS local comprendido]
@@ -194,11 +207,15 @@ No guardar secretos aquí.
 
 Antes de continuar:
 
+- [ ] se completó la etapa 00A;
 - [ ] Git responde;
+- [ ] existe acceso a GitHub;
 - [ ] IntelliJ IDEA está disponible;
 - [ ] Java 21 funciona;
 - [ ] Node y npm funcionan;
 - [ ] Angular CLI funciona;
+- [ ] existe VS Code o WebStorm para el frontend;
+- [ ] el navegador abre DevTools;
 - [ ] se sabe qué cuenta Microsoft se utilizará;
 - [ ] se sabe qué cuenta/sandbox AWS se utilizará;
 - [ ] se entiende que Maven global no es necesario porque se usará Maven Wrapper;
@@ -207,5 +224,6 @@ Antes de continuar:
 
 ## Contenido relacionado
 
+- [00A · Preparar herramientas y entorno](./00a-preparar-entorno.md)
 - [Semana 1 · API Manager](../../semanas/semana-01/01-api-manager.md)
 - [Semana 2 · IDaaS/CIAM](../../semanas/semana-02/02-idaas-ciam.md)
