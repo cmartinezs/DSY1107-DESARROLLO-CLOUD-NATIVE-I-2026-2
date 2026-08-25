@@ -1,10 +1,10 @@
 # 00C · Matriz de valores, origen y validación
 
-**REQUERIDO EV1** · Ningún ID, URL, issuer, audience o scope se copia “porque se parece”. Cada valor debe tener origen, destino y prueba.
+Ningún ID, URL, issuer, audience o scope se copia “porque se parece”. Cada valor debe tener origen, destino y prueba.
 
 ## Archivo de trabajo local
 
-Crear `ev1-local-values.txt` y mantenerlo fuera de Git.
+Crear `ev1-local-values.txt` dentro del contexto de la guía y mantenerlo fuera de Git.
 
 ```text
 TENANT_ID=
@@ -57,7 +57,7 @@ FRONTEND_CLOUD_URL cambia
 redirect URI Entra
 CORS API Gateway
 config del propio frontend si aplica
-README/evidencia
+README de la práctica
 ```
 
 ## Checkpoint por valor
