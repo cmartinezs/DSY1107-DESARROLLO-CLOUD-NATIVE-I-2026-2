@@ -1,6 +1,6 @@
 # 05A · EC2 paso a paso y estado conocido
 
-**REQUERIDO EV1** · La pauta exige backend desplegado en EC2. Este anexo evita que una falla de instancia/red se confunda con Spring Security.
+Este anexo separa los problemas de instancia/red de los problemas de Spring Security para que el despliegue pueda diagnosticarse por capas.
 
 ## Antes de AWS
 
@@ -16,7 +16,7 @@ Si cualquiera falla, no crear EC2 todavía.
 En EC2 → Launch instance:
 
 ```text
-Name: cloudtasks-api-ev1
+Name: cloudtasks-api-guia
 AMI: Linux autorizada por laboratorio
 Architecture: compatible con tooling elegido
 Instance type: el permitido por cuenta/lab
