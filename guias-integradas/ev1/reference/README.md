@@ -56,10 +56,9 @@ archivos canónicos presentes
 enlaces Markdown relativos existentes
 fences Markdown balanceados
 bloques Mermaid con cabecera reconocible
-no reintroducir evaluaciones/ep1/
-no reintroducir nombres antiguos
-una sola aclaración guía ≠ evaluación
-no reintroducir REQUERIDO EV1
+no reintroducir rutas/nombres antiguos
+mantener una única aclaración canónica guía ≠ evaluación
+no reintroducir framing evaluativo dentro de episodios
 no usar comandos Maven globales en code blocks
 ```
 
@@ -172,6 +171,7 @@ Orden:
 02 Entra
 03/03A MSAL Angular
 04/04A Spring Security
+★ 04B roles si se desea
 05 EC2
 06 Gateway
 07 CORS cloud
