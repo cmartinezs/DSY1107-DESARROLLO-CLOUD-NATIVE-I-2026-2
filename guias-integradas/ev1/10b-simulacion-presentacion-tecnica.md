@@ -2,11 +2,21 @@
 
 ## Objetivo
 
-Practicar una explicación breve y ordenada de la arquitectura construida en la guía, de modo que el estudiante pueda demostrar comprensión técnica sin improvisar ni memorizar definiciones aisladas.
+Practicar una explicación breve y ordenada de la arquitectura construida en la guía, demostrando comprensión técnica sin memorizar definiciones aisladas.
 
-## Preparación 15–30 minutos antes de la simulación
+## Preparación 15–30 minutos antes
 
-### 1. GitHub
+### 1. Validación documental docente
+
+Si se está trabajando desde el repositorio docente:
+
+```bash
+python scripts/validate_integrated_guides.py
+```
+
+Debe quedar `PASS` antes de usar la guía como referencia.
+
+### 2. GitHub del estudiante
 
 ```bash
 git status
@@ -14,9 +24,9 @@ git log -5 --oneline
 git push
 ```
 
-Comprobar que el trabajo de `guia/ev1/` está disponible remotamente.
+Comprobar que `guia/ev1/` está disponible remotamente.
 
-### 2. Backend EC2
+### 3. Backend EC2
 
 Ruta base:
 
@@ -32,14 +42,14 @@ docker ps
 docker logs --tail 30 cloudtasks-api
 ```
 
-### 3. API Gateway
+### 4. API Gateway
 
 ```text
 GET health → 200
 GET tasks sin token → 401
 ```
 
-### 4. Frontend cloud
+### 5. Frontend cloud
 
 Abrir:
 
@@ -47,45 +57,70 @@ Abrir:
 FRONTEND_CLOUD_URL
 ```
 
-Confirmar HTTPS y revisar en Network que no se esté llamando `localhost` ni EC2 directo.
+Confirmar HTTPS y revisar en Network que la API sea `API_GATEWAY_URL`, no `localhost` ni EC2 directo.
 
-### 5. Entra
+### 6. Entra/MSAL
 
-Realizar login real y comprobar que el frontend obtiene un Access Token válido.
+Realizar login y comprobar:
 
-### 6. Camino feliz
+```text
+active account
+Access Token
+iss correcto
+aud correcto
+scp esperado
+```
+
+### 7. Camino feliz
 
 ```text
 login
 → /api/me
 → listar tareas
-→ crear
-→ eliminar propia
+→ crear tarea
+→ eliminar tarea propia
 ```
 
-### 7. Prueba negativa segura
+### 8. Pruebas negativas seguras
+
+Mínima:
 
 ```text
 request protegida sin token → 401
 ```
 
-Si está preparado:
+Luego una de autorización:
 
 ```text
-scope/ownership inválido → rechazo
+scope faltante → 403/rechazo
 ```
+
+o:
+
+```text
+write scope + recurso ajeno → 403
+```
+
+★ Roles:
+
+```text
+sin Admin → 403
+con Admin → 200
+```
+
+No romper deliberadamente configuración cloud si la misma idea puede demostrarse con una request controlada.
 
 ## Orden sugerido de 5–10 minutos
 
 ```text
-0:00 arquitectura
-0:45 Entra + SPA/API/user flow
-2:00 login + PKCE
-3:00 Access Token/claims
-4:00 API Gateway/JWT Authorizer
+0:00 arquitectura y responsabilidades
+0:45 External tenant + SPA/API/user flow
+2:00 login + Authorization Code + PKCE
+3:00 Access Token: iss/aud/scp
+4:00 API Gateway + JWT Authorizer
 5:15 CORS/preflight
-6:00 frontend → Gateway → EC2
-7:00 prueba negativa
+6:00 frontend → Gateway → EC2 → JSON
+7:00 401/403/ownership
 8:00 decisiones y cierre
 ```
 
@@ -100,22 +135,30 @@ scope/ownership inválido → rechazo
 6. GitHub
 ```
 
-No dejar tokens, passwords o secretos visibles.
+No dejar tokens, passwords, cookies o secretos visibles.
 
 ## Si algo falla durante la simulación
 
-Usar el último checkpoint conocido:
+No improvisar cambios. Volver a [09A](./09a-runbook-checkpoints-estado-conocido.md):
 
 ```text
-frontend abre?
+CP-00 entorno
 ↓
-login funciona?
+CP-01 repo
 ↓
-token correcto?
+CP-02/03 local
 ↓
-Gateway health?
+CP-04 identidad
 ↓
-backend health?
+CP-05 Spring Security
+↓
+CP-06 EC2
+↓
+CP-07 Gateway
+↓
+CP-08 CORS
+↓
+CP-09 frontend cloud
 ```
 
 ## Preguntas rápidas de comprobación
@@ -125,8 +168,10 @@ OAuth2 vs OIDC
 ID Token vs Access Token
 por qué PKCE
 por qué SPA sin secret
+scope completo solicitado vs scp
 iss vs aud
 scope vs role
+scope vs ownership
 401 vs 403
 Gateway vs backend security
 qué hace CORS
@@ -139,20 +184,25 @@ qué corre en EC2
 ★ Advanced Developer:
 
 ```text
+Git Bash vs WSL2
 WSL2 vs container
 image vs container
 host port vs container port
 qué cambia y qué no al usar Docker
+por qué se mantiene EC2
 ```
 
 ## Checkpoint PRESENTACION-TECNICA
 
-- [ ] CP-00…CP-09 PASS.
+- [ ] CP-00…CP-10 PASS.
 - [ ] COV-01…COV-08 PASS.
+- [ ] COV-X1 y COV-X3 comprendidos.
+- [ ] COV-X2 PASS u omitido conscientemente por sandbox.
 - [ ] trabajo remoto actualizado.
 - [ ] recursos cloud disponibles.
 - [ ] URLs verificadas.
 - [ ] login probado.
-- [ ] prueba negativa preparada.
+- [ ] prueba 401 preparada.
+- [ ] prueba 403 preparada.
 - [ ] secretos fuera de pantalla.
-- [ ] cada integrante puede explicar la arquitectura.
+- [ ] cada integrante puede explicar la arquitectura de extremo a extremo.
