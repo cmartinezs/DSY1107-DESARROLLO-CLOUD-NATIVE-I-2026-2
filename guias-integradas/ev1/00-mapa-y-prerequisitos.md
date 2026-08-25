@@ -4,28 +4,31 @@
 
 Comenzar desde un estado conocido y detectar bloqueos **antes** de entrar a AWS o Microsoft Entra.
 
-> Antes de esta etapa debe completarse [00A · Preparar herramientas y entorno](./00a-preparar-entorno.md).
+Antes de esta etapa deben haberse completado:
 
-## Qué se necesita
+- [00A · Preparar herramientas y entorno](./00a-preparar-entorno.md)
+- [00B · Git/GitHub aplicado a la guía](./00b-git-github-flujo-guia.md)
+- [00C · Matriz de valores](./00c-matriz-valores-y-checkpoints.md)
+- [00D · Scaffolding vs código del estudiante](./00d-scaffolding-vs-codigo-estudiante.md)
 
-### Local
+## Qué se necesita localmente
 
 - cuenta GitHub funcional;
 - Git;
 - GitHub Desktop, recomendado;
 - GitHub CLI (`gh`), recomendado;
-- **IntelliJ IDEA**;
-- **JDK 21**;
-- Node.js LTS compatible con la versión de Angular utilizada;
+- IntelliJ IDEA;
+- JDK 21;
+- Node.js LTS compatible con Angular;
 - npm;
 - Angular CLI;
-- **VS Code o WebStorm** para trabajar el frontend;
-- navegador moderno con DevTools;
+- VS Code o WebStorm;
+- navegador con DevTools;
 - Postman o `curl` como herramienta auxiliar.
 
-### Maven global no es requisito
+## Maven global no es requisito
 
-El backend se creará con IntelliJ + Spring Initializr y utilizará el **Maven Wrapper generado por el proyecto**:
+El backend se crea con IntelliJ + Spring Initializr y utiliza:
 
 ```text
 mvnw
@@ -33,25 +36,21 @@ mvnw.cmd
 .mvn/
 ```
 
-Por lo tanto, no se exige instalar Maven globalmente.
+Después de crear el backend:
 
-Una vez creado el backend se validará Maven con:
-
-Windows:
+PowerShell:
 
 ```powershell
 .\mvnw.cmd --version
 ```
 
-Linux/macOS:
+Git Bash/Linux/macOS:
 
 ```bash
 ./mvnw --version
 ```
 
-### Validaciones iniciales
-
-Antes de crear los proyectos:
+## Validaciones iniciales
 
 ```bash
 git --version
@@ -68,15 +67,11 @@ gh --version
 gh auth status
 ```
 
-`java -version` debe mostrar Java 21.
+`java -version` debe indicar Java 21.
 
-La instalación y diagnóstico de estas herramientas se realiza en la etapa 00A; esta etapa solo verifica que el entorno ya está operativo.
+## IDE/editor esperado
 
-## IDE esperado para backend
-
-La guía asume que el backend Spring Boot será creado y trabajado desde **IntelliJ IDEA**.
-
-Esto permite mantener una ruta única y reproducible para los alumnos:
+Backend:
 
 ```text
 IntelliJ
@@ -85,145 +80,148 @@ IntelliJ
 → Java 21
 → Maven
 → dependencias mínimas
-→ proyecto con Maven Wrapper
+→ Maven Wrapper
 ```
 
-No se pedirá construir manualmente la estructura Maven ni escribir un `pom.xml` desde cero.
-
-## Editor esperado para frontend
-
-El frontend será creado con **Angular CLI** y puede editarse con una de estas alternativas:
+Frontend:
 
 ```text
-VS Code
-   o
-WebStorm
+Angular CLI
+→ SPA sin SSR
+→ VS Code o WebStorm
 ```
 
-No existe diferencia funcional en la práctica por escoger uno u otro.
-
-No se necesita una aplicación visual compleja. Angular se utilizará como SPA mínima para practicar:
-
-- redirect URI;
-- OAuth2/OIDC;
-- MSAL;
-- Access Token;
-- llamada HTTP protegida;
-- CORS;
-- integración con API Gateway.
+No se construye manualmente la estructura Maven ni se escribe `pom.xml` desde cero. Tampoco se crea una estructura Angular manual.
 
 ## Cuentas cloud
 
-Se necesitan dos capacidades independientes:
-
 ### Microsoft
 
-Capacidad para trabajar con **Microsoft Entra External ID** y registrar aplicaciones. Se usará para:
+Capacidad para trabajar con Microsoft Entra External ID:
 
-- tenant de identidad;
-- usuarios externos;
-- sign-up/sign-in;
-- aplicación SPA;
-- API protegida;
-- scopes;
-- roles;
-- emisión de tokens.
+```text
+External tenant
+user flow
+SPA app registration
+API app registration
+scopes
+opcionalmente roles
+emisión de tokens
+```
 
 ### AWS
 
 Capacidad para crear, como mínimo:
 
-- una instancia EC2 o equivalente autorizado por el laboratorio;
-- un API Gateway HTTP API;
-- rutas e integraciones;
-- JWT Authorizer;
-- configuración CORS;
-- hosting para frontend según la alternativa disponible.
+```text
+EC2
+API Gateway HTTP API
+rutas/integraciones
+JWT Authorizer
+CORS
+hosting frontend autorizado
+```
 
-> Si el entorno académico restringe algún servicio, registrar la restricción antes de continuar. No improvisar una arquitectura diferente sin dejar constancia.
+Si el sandbox restringe un servicio, registrar la restricción antes de improvisar una sustitución.
 
 ## Dependencias entre pasos
 
 ```mermaid
 flowchart TD
-    E[Entorno local verificado] --> BI[Crear backend en IntelliJ]
-    E --> FA[Crear frontend Angular]
-    BI --> BV[Validar backend local]
-    FA --> FV[Validar frontend local]
+    E[Entorno y repo verificados] --> BI[Crear backend]
+    E --> FA[Crear frontend]
+    BI --> BV[Backend local PASS]
+    FA --> FV[Frontend local PASS]
     BV --> L[Integración local]
     FV --> L
-    L --> C0[CORS local comprendido]
-    C0 --> T[Tenant Entra]
-    T --> SPA[Registro SPA]
-    T --> API[Registro API]
-    API --> S[Scopes y roles]
-    SPA --> M[MSAL en Angular]
-    S --> M
-    M --> J[Token JWT real]
-    J --> B[Backend valida JWT]
-    B --> EC2[Backend desplegado]
+    L --> C0[CORS local PASS]
+    C0 --> T[External tenant + user flow]
+    T --> API[Registrar API + scopes]
+    T --> SPA[Registrar SPA]
+    API --> P[Permisos SPA → API]
+    SPA --> P
+    P --> M[MSAL Angular]
+    M --> J[Access Token real]
+    J --> V[Confirmar aud / iss / scp]
+    V --> B[Spring Resource Server]
+    B --> EC2[Backend en EC2]
     EC2 --> GW[API Gateway]
-    J --> GW
+    V --> GW
     GW --> C[CORS cloud]
-    C --> FD[Frontend desplegado]
-    FD --> E2E[Prueba extremo a extremo]
+    C --> FD[Frontend cloud]
+    FD --> E2E[Verificación integrada]
 ```
 
-Esta secuencia es intencional.
-
-Por ejemplo:
-
-- no se configura CORS para una URL de frontend que todavía no existe;
-- no se integra MSAL antes de que Angular funcione;
-- no se protege Spring Boot antes de comprobar que responde sin seguridad;
-- no se diagnostica API Gateway mientras el backend local todavía falla.
-
-## Valores que se irán obteniendo
-
-Crear localmente un archivo de notas **no versionado**, por ejemplo `ev1-local-values.txt`, y agregarlo a `.gitignore` si se guarda dentro de un repo.
-
-Se completará con:
+## Dependencias que NO deben invertirse
 
 ```text
-TENANT_ID=
-TENANT_DOMAIN=
-SPA_CLIENT_ID=
-API_CLIENT_ID=
-API_AUDIENCE=
-SCOPE_READ=
-SCOPE_WRITE=
-OIDC_ISSUER=
-OIDC_JWKS_URI=
-BACKEND_LOCAL_URL=http://localhost:8080
-FRONTEND_LOCAL_URL=http://localhost:4200
-BACKEND_CLOUD_URL=
-API_GATEWAY_URL=
-FRONTEND_CLOUD_URL=
+NO configurar CORS cloud sin FRONTEND_CLOUD_URL
+NO cerrar API_AUDIENCE sin Access Token real
+NO proteger backend antes de validar health público
+NO integrar MSAL antes de que Angular compile
+NO depurar Gateway mientras EC2/backend directo falla
+NO depurar CORS con curl/Postman
+NO agregar Docker a la ruta base
 ```
 
-No guardar secretos aquí.
+## Valores por etapa
+
+La lista detallada está en [00C](./00c-matriz-valores-y-checkpoints.md). El orden resumido es:
+
+```text
+01 local
+BACKEND_LOCAL_URL
+FRONTEND_LOCAL_URL
+
+02 Entra
+TENANT_ID
+TENANT_DOMAIN
+TENANT_SUBDOMAIN
+SPA_CLIENT_ID
+API_CLIENT_ID
+SCOPE_READ
+SCOPE_WRITE
+MSAL_AUTHORITY
+OIDC_ISSUER
+OIDC_JWKS_URI
+
+03 token real
+API_AUDIENCE
+SCOPE_READ_CLAIM
+SCOPE_WRITE_CLAIM
+
+05 EC2
+BACKEND_CLOUD_URL
+
+06 Gateway
+API_GATEWAY_URL
+
+08 frontend cloud
+FRONTEND_CLOUD_URL
+```
+
+No guardar secretos en `ev1-local-values.txt`.
 
 ## Puerta de validación 00
 
-Antes de continuar:
+Antes de 01A/01B:
 
-- [ ] se completó la etapa 00A;
-- [ ] Git responde;
-- [ ] existe acceso a GitHub;
-- [ ] IntelliJ IDEA está disponible;
-- [ ] Java 21 funciona;
-- [ ] Node y npm funcionan;
-- [ ] Angular CLI funciona;
-- [ ] existe VS Code o WebStorm para el frontend;
-- [ ] el navegador abre DevTools;
-- [ ] se sabe qué cuenta Microsoft se utilizará;
-- [ ] se sabe qué cuenta/sandbox AWS se utilizará;
-- [ ] se entiende que Maven global no es necesario porque se usará Maven Wrapper;
-- [ ] el estudiante puede explicar por qué Entra y AWS cumplen responsabilidades distintas;
+- [ ] 00A PASS.
+- [ ] 00B PASS.
+- [ ] 00C entendido y archivo local ignorado por Git.
+- [ ] 00D entendido.
+- [ ] Git y GitHub disponibles.
+- [ ] Java 21 disponible.
+- [ ] Angular CLI disponible.
+- [ ] editor frontend disponible.
+- [ ] navegador/DevTools disponible.
+- [ ] cuenta/sandbox Microsoft identificado.
+- [ ] cuenta/sandbox AWS identificado.
+- [ ] se entiende Maven Wrapper.
+- [ ] se distingue qué responsabilidad tendrá Entra y cuál AWS.
 - [ ] no hay credenciales guardadas en Git.
 
 ## Contenido relacionado
 
-- [00A · Preparar herramientas y entorno](./00a-preparar-entorno.md)
 - [Semana 1 · API Manager](../../semanas/semana-01/01-api-manager.md)
 - [Semana 2 · IDaaS/CIAM](../../semanas/semana-02/02-idaas-ciam.md)
