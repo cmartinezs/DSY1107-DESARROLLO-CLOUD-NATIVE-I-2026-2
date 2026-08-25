@@ -35,21 +35,59 @@ CloudTasks es intencionalmente pequeña. Solo permite iniciar sesión, consultar
 | DELETE | `/api/tasks/{id}` | `tasks.write` + ownership | autorización de negocio |
 | GET | `/api/admin/stats` | rol `Admin` | rol vs scope |
 
+## Principio de implementación: mínimo código, máxima evidencia EV1
+
+El alumno **no debe dedicar tiempo a programar capacidades que no aportan directamente a la evaluación**.
+
+La guía prioriza, en este orden:
+
+```text
+scaffolding de herramientas
+→ configuración explícita
+→ código mínimo indispensable
+→ validación observable
+→ evidencia
+```
+
+Por eso:
+
+- Spring Boot se crea con IntelliJ + Spring Initializr;
+- Maven se ejecuta con el wrapper generado por el proyecto (`mvnw` / `mvnw.cmd`);
+- Angular se crea con Angular CLI;
+- MSAL implementa el protocolo Authorization Code + PKCE;
+- los datos de CloudTasks permanecen en memoria;
+- no se incorpora base de datos si EV1 no la exige;
+- no se implementa login propio;
+- no se implementa generación ni validación criptográfica de JWT manualmente;
+- no se exige diseño frontend complejo;
+- no se construyen microservicios, Docker, Kubernetes ni mensajería;
+- cada fragmento de código manual debe tener una razón evaluativa clara.
+
+### Regla para decidir si algo se programa
+
+Antes de pedir código al alumno, la guía debe poder responder:
+
+> ¿Qué criterio o concepto específico de EV1 demuestra este código?
+
+Si la respuesta es “ninguno”, se usa scaffolding, configuración, una dependencia existente o se elimina esa complejidad.
+
 ## Orden obligatorio
 
 La guía está diseñada para que ningún paso use un artefacto inexistente.
 
 1. [00 · Mapa EV1 y prerequisitos](./00-mapa-y-prerequisitos.md)
-2. [01 · Crear y ejecutar CloudTasks local](./01-cloudtasks-local.md)
-3. [02 · Crear Microsoft Entra External ID](./02-entra-external-id.md)
-4. [03 · Integrar Angular con MSAL y PKCE](./03-angular-msal.md)
-5. [04 · JWT, scopes, roles y Spring Security](./04-jwt-y-backend.md)
-6. [05 · Desplegar backend en AWS](./05-aws-backend.md)
-7. [06 · Crear AWS API Gateway + JWT Authorizer](./06-api-gateway-jwt.md)
-8. [07 · Configurar CORS con URLs que ya existen](./07-cors.md)
-9. [08 · Desplegar frontend e integrar extremo a extremo](./08-frontend-cloud-e2e.md)
-10. [09 · Pruebas negativas y troubleshooting](./09-pruebas-y-troubleshooting.md)
-11. [10 · Evidencias y defensa EV1](./10-evidencias-y-defensa.md)
+2. [01A · Crear backend Spring Boot con IntelliJ](./01a-crear-backend-intellij.md)
+3. [01B · Crear frontend Angular](./01b-crear-frontend-angular.md)
+4. [01C · Integrar frontend y backend localmente + CORS](./01-cloudtasks-local.md)
+5. [02 · Crear Microsoft Entra External ID](./02-entra-external-id.md)
+6. [03 · Integrar Angular con MSAL y PKCE](./03-angular-msal.md)
+7. [04 · JWT, scopes, roles y Spring Security](./04-jwt-y-backend.md)
+8. [05 · Desplegar backend en AWS](./05-aws-backend.md)
+9. [06 · Crear AWS API Gateway + JWT Authorizer](./06-api-gateway-jwt.md)
+10. [07 · Configurar CORS con URLs que ya existen](./07-cors.md)
+11. [08 · Desplegar frontend e integrar extremo a extremo](./08-frontend-cloud-e2e.md)
+12. [09 · Pruebas negativas y troubleshooting](./09-pruebas-y-troubleshooting.md)
+13. [10 · Evidencias y defensa EV1](./10-evidencias-y-defensa.md)
 
 ## Regla de avance
 
