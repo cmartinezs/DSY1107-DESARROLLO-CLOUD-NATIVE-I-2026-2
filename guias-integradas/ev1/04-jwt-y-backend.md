@@ -4,7 +4,7 @@
 
 Convertir el backend en un **Resource Server** real que acepte Access Tokens válidos y aplique autorización.
 
-**REQUERIDO EV1** · El alumno configura issuer, audience y scopes; no implementa criptografía JWT, parsers ni login propio.
+El alumno configura issuer, audience y scopes; no implementa criptografía JWT, parsers ni login propio.
 
 ## Starter operativo
 
@@ -59,7 +59,7 @@ Validar explícitamente:
 jwt.aud contiene API_AUDIENCE
 ```
 
-Esto permite demostrar el caso institucional:
+Esto permite observar:
 
 ```text
 firma válida + issuer válido + audience incorrecta
@@ -115,7 +115,7 @@ Task
 - ownerId
 ```
 
-Persistencia en memoria. Sin JPA, DB, migrations o repositories porque no agregan evidencia EV1.
+Persistencia en memoria. Sin JPA, DB, migrations o repositories porque no aportan al objetivo de esta práctica.
 
 ## Ownership
 
