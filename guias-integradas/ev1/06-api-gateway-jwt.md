@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Crear la frontera pública evaluada por EV1: rutas, integración hacia el backend y validación JWT antes de que la petición llegue a Spring Boot.
+Crear la frontera pública de la práctica: rutas, integración hacia el backend y validación JWT antes de que la petición llegue a Spring Boot.
 
 ## 1. Crear HTTP API
 
@@ -129,7 +129,7 @@ Spring Boot
   vuelve a validar como Resource Server y aplica reglas de negocio
 ```
 
-La defensa no debe decir “el Gateway reemplaza la seguridad del backend”. Son controles complementarios.
+El estudiante debe poder explicar que el Gateway **no reemplaza** la seguridad del backend. Son controles complementarios.
 
 ## Puerta de validación 06
 
