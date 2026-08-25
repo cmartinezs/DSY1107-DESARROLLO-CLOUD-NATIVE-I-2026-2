@@ -10,10 +10,10 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 - [`examples/`](examples/) — ejemplos demostrativos independientes del proyecto transversal.
 - [`labs/`](labs/) — laboratorios de aprendizaje y aplicación del contenido.
 - [`proyecto-formativo/`](proyecto-formativo/) — **RegistrApp**, vertical transversal independiente que evoluciona clase a clase.
-- [`guias-integradas/`](guias-integradas/) — implementación real end-to-end de encargos institucionales, sin prerrequisitos ocultos ni piezas faltantes.
+- [`guias-integradas/`](guias-integradas/) — rutas end-to-end de práctica integrada, sin prerrequisitos ocultos ni piezas faltantes.
 - [`docs/`](docs/) — conocimientos y guías transversales.
 - [`page/`](page/) — portal web del curso.
-- [**EV1 · Guía integrada de implementación real**](guias-integradas/ev1/README.md) — Angular + Entra External ID + OAuth2/OIDC + PKCE + JWT + AWS API Gateway + CORS + Spring Boot.
+- [**EV1 · Guía integrada de preparación**](guias-integradas/ev1/README.md) — Angular + Entra External ID + OAuth2/OIDC + PKCE + JWT + AWS API Gateway + CORS + Spring Boot.
 - [**Estrategia de laboratorios: concepto → cloud**](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md) — primero patrón local/neutral; después implementación real en cloud.
 - [**Estándar de repositorio del estudiante**](docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — nombre, estructura, packages, Markdown, labs Cloud Native y entregas colaborativas.
 - [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing) — biblioteca pública organizada semana a semana.
@@ -48,17 +48,17 @@ contenido comprendido
 
 RegistrApp es el desafío transversal del semestre; **no es el ejemplo conductor ni forma parte física de una carpeta `semana-XX`**.
 
-### Vertical de implementación real · `guias-integradas/`
+### Vertical de práctica integrada · `guias-integradas/`
 
 ```text
-requisitos institucionales
+contenidos relacionados
 → prerequisitos explícitos
 → componente mínimo reproducible
 → configuración cloud real
 → integración end-to-end
 → pruebas positivas y negativas
 → troubleshooting
-→ evidencia evaluable
+→ checkpoint reproducible
 ```
 
 Las guías integradas no sustituyen la explicación conceptual ni RegistrApp. Su función es cerrar los cabos que una guía aislada puede dejar implícitos. Si una actividad necesita, por ejemplo, una URL de frontend para configurar CORS, la guía integrada **primero crea y valida ese frontend**; no pide valores o recursos que aún no existen.
@@ -72,7 +72,7 @@ semanas/            → qué se aprende y cuándo
 examples/           → ejemplos
 labs/               → laboratorios
 proyecto-formativo/ → RegistrApp y sus checkpoints
-guias-integradas/   → implementación real completa y reproducible
+guias-integradas/   → práctica integrada completa y reproducible
 ```
 
 Una semana puede enlazar al checkpoint vigente de RegistrApp o a una etapa de una guía integrada, pero no mantiene una segunda copia del mismo recurso.
@@ -93,7 +93,7 @@ comprender el concepto
 → mapear concepto ↔ servicio
 ```
 
-El laboratorio de contenido debe ser entendible por sí mismo. Si después la misma competencia se aplica a RegistrApp, esa aplicación pertenece al proyecto formativo y se documenta por separado. Si debe reproducirse el encargo institucional completo con servicios reales y dependencias encadenadas, esa ruta pertenece a `guias-integradas/`.
+El laboratorio de contenido debe ser entendible por sí mismo. Si después la misma competencia se aplica a RegistrApp, esa aplicación pertenece al proyecto formativo y se documenta por separado. Cuando varios contenidos deban practicarse de forma encadenada con servicios reales, esa ruta pertenece a `guias-integradas/`.
 
 → [Ver estrategia completa](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md)
 
@@ -158,9 +158,9 @@ Contenido:
 
 Después de cada clase, si existe una nueva competencia suficientemente comprendida, RegistrApp puede recibir un refuerzo en [`proyecto-formativo/`](proyecto-formativo/). No es necesario esperar al cierre de la semana ni forzar un incremento si todavía faltan prerrequisitos.
 
-La implementación real acumulativa de los contenidos que desembocan en EV1 vive en [`guias-integradas/ev1/`](guias-integradas/ev1/).
+La práctica integrada acumulativa vive en [`guias-integradas/ev1/`](guias-integradas/ev1/).
 
-Consulta [`semanas/semana-03/`](semanas/semana-03/) para contenido, [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp y [`guias-integradas/ev1/`](guias-integradas/ev1/) para la ruta end-to-end de implementación real.
+Consulta [`semanas/semana-03/`](semanas/semana-03/) para contenido, [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp y [`guias-integradas/ev1/`](guias-integradas/ev1/) para la ruta end-to-end de práctica integrada.
 
 ---
 
