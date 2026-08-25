@@ -2,16 +2,16 @@
 
 ## Objetivo
 
-Crear **desde cero** el frontend que se utilizará durante toda la guía EV1.
+Crear **desde cero** el frontend que se utilizará durante toda la guía integrada.
 
 En esta etapa no se implementa autenticación, MSAL, OAuth2, JWT ni lógica visual compleja. El objetivo es obtener una SPA Angular funcional en `http://localhost:4200` que más adelante pueda:
 
 - iniciar sesión mediante Microsoft Entra External ID;
 - recibir tokens;
 - llamar a AWS API Gateway;
-- demostrar CORS y consumo de una API protegida.
+- observar CORS y consumo de una API protegida.
 
-> DSY1107 no evalúa diseño visual avanzado ni arquitectura compleja de frontend. El frontend existe para demostrar integración Cloud Native.
+> El foco de esta práctica no es diseño visual avanzado ni arquitectura compleja de frontend. El frontend existe para hacer observable la integración Cloud Native.
 
 ---
 
@@ -90,11 +90,11 @@ Ejecutar:
 ng new frontend --routing --style=css --skip-git
 ```
 
-Cuando Angular CLI consulte opciones adicionales, mantener la configuración simple y evitar incorporar capacidades que no aporten a EV1.
+Cuando Angular CLI consulte opciones adicionales, mantener la configuración simple y evitar incorporar capacidades que no aporten a esta práctica.
 
 La intención es obtener una SPA Angular convencional.
 
-> `--skip-git` evita crear un segundo repositorio Git dentro del workspace de la actividad.
+> `--skip-git` evita crear un segundo repositorio Git dentro del workspace de la guía.
 
 ---
 
@@ -160,7 +160,7 @@ No crear todavía:
 - servicios de dominio;
 - librerías CSS externas.
 
-Todo eso agrega trabajo que no forma parte de EV1.
+Todo eso agrega trabajo que no aporta al objetivo de esta etapa.
 
 ---
 
@@ -181,7 +181,7 @@ CloudTasks
 
 No implementar esas capacidades todavía.
 
-La guía las agregará cuando exista una razón evaluativa para hacerlo.
+La guía las agregará cuando exista una razón de aprendizaje concreta para hacerlo.
 
 ---
 
@@ -302,9 +302,9 @@ No continuar hasta demostrar:
 - [ ] DevTools no muestra errores de ejecución;
 - [ ] la pantalla identifica claramente que CloudTasks frontend está operativo.
 
-## Evidencia mínima recomendada
+## Registro mínimo recomendado
 
-Una captura donde se observe:
+Si se lleva bitácora de aprendizaje, puede guardarse una captura donde se observe:
 
 ```text
 http://localhost:4200
@@ -312,4 +312,4 @@ http://localhost:4200
 + DevTools sin errores relevantes
 ```
 
-No se requiere evidencia de código complejo porque todavía no existe una competencia EV1 que justifique escribirlo.
+No se requiere código complejo en esta etapa porque todavía no existe una necesidad de aprendizaje que lo justifique.
