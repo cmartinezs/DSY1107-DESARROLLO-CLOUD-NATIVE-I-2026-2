@@ -4,7 +4,7 @@
 
 Conectar el frontend existente con Microsoft Entra External ID y obtener Access Tokens reales para CloudTasks API.
 
-**REQUERIDO EV1** · El alumno configura y explica OAuth2/OIDC; MSAL implementa Authorization Code + PKCE. No se programa PKCE manualmente.
+El alumno configura y explica OAuth2/OIDC; **MSAL implementa Authorization Code + PKCE**. No se programa PKCE manualmente.
 
 ## Antes de comenzar
 
@@ -26,7 +26,7 @@ Para evitar boilerplate accidental, utilizar:
 
 → [03A · Starter mínimo Angular + MSAL](./03a-starter-angular-msal.md)
 
-El starter define los únicos bloques que EV1 necesita:
+El starter define solo los bloques necesarios para esta práctica:
 
 ```text
 auth config
@@ -109,7 +109,7 @@ Decodificar un JWT **no valida** su firma ni autorización.
 - [ ] MSAL obtiene Access Token.
 - [ ] `aud` corresponde a CloudTasks API.
 - [ ] `scp`/scope contiene permiso solicitado.
-- [ ] token no se guarda en Git/evidencia pública.
+- [ ] token no se guarda en Git ni en registros compartidos.
 
 **SI FALLA** · revisar API permissions → scopes → consentimiento → recurso solicitado.
 
@@ -122,7 +122,7 @@ GET /api/tasks + Access Token tasks.read → éxito
 POST /api/tasks + Access Token tasks.write → éxito autorizado
 ```
 
-La separación read/write permite demostrar scopes sin agregar complejidad de negocio.
+La separación read/write permite observar scopes sin agregar complejidad de negocio.
 
 ## Diagnóstico resumido
 
