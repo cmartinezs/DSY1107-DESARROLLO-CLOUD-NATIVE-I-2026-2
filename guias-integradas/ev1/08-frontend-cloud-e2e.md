@@ -2,140 +2,129 @@
 
 ## Objetivo
 
-Publicar Angular, obtener por fin la URL real del frontend cloud y actualizar las dos configuraciones que dependen de ella: **redirect URI de Entra** y **CORS de API Gateway**.
+Publicar Angular, obtener una URL cloud real y cerrar el flujo navegador → Entra → API Gateway → EC2.
 
-## 1. Configurar URL de API de producción
+**REQUERIDO EV1** · Frontend y backend deben estar desplegados, activos e integrados.
 
-La aplicación no debe quedar amarrada a `localhost:8080`.
+## Hosting
 
-Configurar el frontend para usar:
+Usar primero:
+
+→ [08A · Hosting frontend, HTTPS y mixed content](./08a-hosting-frontend-https.md)
+
+El material institucional revisado no fija S3/CloudFront como tecnología obligatoria del frontend; se mantiene como opción de referencia AWS.
+
+## 1. Configuración de producción
+
+Angular debe usar:
 
 ```text
 API base URL = <API_GATEWAY_URL>
 ```
 
-Mantener configuración local y cloud separables mediante environments/configuración de build.
+Nunca `localhost:8080` ni EC2 directo en el build cloud.
 
-## 2. Build Angular
+## 2. Build
 
 ```bash
-cd frontend
 npm ci
 ng build
 ```
 
-Identificar el directorio exacto generado en `dist/`. No asumir el nombre si la versión de Angular cambió la estructura.
+**Checkpoint 08-1**
 
-Probar el build localmente con un servidor estático antes de subirlo.
+- [ ] build PASS.
+- [ ] no contiene secrets.
+- [ ] API URL corresponde al Gateway.
 
-## 3. Hosting AWS
+## 3. Publicar y registrar URL
 
-Usar el mecanismo autorizado por el curso. Opción de referencia:
-
-```text
-S3 + CloudFront
-```
-
-Se requiere una URL HTTPS estable para una experiencia realista de autenticación.
-
-Al finalizar registrar:
+Obtener:
 
 ```text
-FRONTEND_CLOUD_URL=https://<dominio real>
+FRONTEND_CLOUD_URL=https://...
 ```
 
-## 4. Actualizar redirect URI en Entra
+Validar en navegador antes de tocar Entra/CORS.
 
-Ahora —y no antes— existe la URL real.
+## 4. Propagar URL
 
-Agregar a `cloudtasks-spa` la redirect URI cloud correspondiente:
+Actualizar exactamente:
 
 ```text
-<FRONTEND_CLOUD_URL>
+Entra SPA redirect URI → FRONTEND_CLOUD_URL
+API Gateway CORS       → allowed origin FRONTEND_CLOUD_URL
 ```
 
-Mantener `http://localhost:4200` mientras se necesite desarrollo local.
+Usar [00C · matriz de valores](./00c-matriz-valores-y-checkpoints.md).
 
-Validar que la URI configurada y la utilizada por MSAL sean idénticas.
-
-## 5. Actualizar CORS en API Gateway
-
-Agregar el origen cloud real:
-
-```text
-Allowed origins:
-  http://localhost:4200
-  <FRONTEND_CLOUD_URL>
-```
-
-No poner la URL del API Gateway en `Allowed origins`; el origin es la aplicación web que ejecuta el navegador.
-
-## 6. Flujo final
+## 5. Flujo final
 
 ```mermaid
 sequenceDiagram
     actor U as Usuario
-    participant F as Angular AWS
+    participant F as Angular HTTPS
     participant E as Entra External ID
-    participant G as AWS API Gateway
-    participant B as Spring Boot AWS
+    participant G as API Gateway HTTPS
+    participant B as Spring Boot EC2
 
-    U->>F: abrir app
-    U->>F: iniciar sesión
+    U->>F: abrir
     F->>E: Authorization Code + PKCE
     E-->>F: tokens
-    F->>G: GET /api/tasks + Bearer
-    G->>G: validar JWT + scope
-    G->>B: request autorizable
-    B->>B: validar token + negocio
+    F->>G: request + Access Token
+    G->>G: JWT + scope
+    G->>B: integración
     B-->>G: JSON
-    G-->>F: JSON + CORS headers
-    F-->>U: mostrar tareas
+    G-->>F: JSON + CORS
 ```
 
-## 7. Checklist funcional final
+## Checkpoint 08-2 · login cloud
 
-Comprobar desde el frontend cloud:
+- [ ] frontend HTTPS abre.
+- [ ] login llega al External tenant correcto.
+- [ ] redirect vuelve al frontend cloud.
+- [ ] Access Token conserva `aud` correcto.
+
+## Checkpoint 08-3 · E2E
 
 ```text
-abrir app
-→ registrarse/iniciar sesión
-→ ver identidad
-→ consultar tareas
-→ crear tarea
-→ eliminar tarea propia
-→ cerrar sesión
+/api/me        PASS
+GET tasks      PASS
+POST task      PASS
+DELETE propia  PASS
 ```
 
-Si se implementó Admin, comprobar también acceso permitido/denegado por rol.
+DevTools Network debe mostrar **API Gateway** como destino.
+
+## Checkpoint 08-4 · navegador
+
+- [ ] no mixed content.
+- [ ] CORS cloud PASS.
+- [ ] preflight PASS.
+- [ ] refresh de SPA no rompe rutas relevantes.
+
+## Fallas típicas
+
+| Síntoma | Revisar primero |
+|---|---|
+| login cloud falla | redirect URI efectiva |
+| API CORS falla | allowed origin cloud |
+| sigue llamando localhost | build/config/cache |
+| Mixed Content | API URL HTTP incorrecta |
+| refresh 403/404 | SPA fallback hosting/CDN |
+| token 401 | iss/aud/exp; no CORS |
 
 ## Puerta de validación 08
 
-Debe existir evidencia de:
+Solo continuar cuando:
 
-- frontend servido desde AWS;
-- backend servido desde AWS;
-- login en Entra External ID;
-- Access Token emitido para la API;
-- consumo exclusivamente por API Gateway;
-- JWT Authorizer activo;
-- CORS válido para la URL cloud;
-- respuesta JSON visible en el frontend.
+```text
+frontend cloud PASS
+login cloud PASS
+Gateway PASS
+JWT PASS
+CORS PASS
+JSON en UI PASS
+```
 
-## Fallas típicas después del despliegue
-
-### Local funciona, cloud login falla
-
-Primero revisar redirect URI cloud en Entra y `redirectUri` efectiva de MSAL.
-
-### Login funciona, API falla por CORS
-
-Revisar que `FRONTEND_CLOUD_URL` esté permitida exactamente en API Gateway.
-
-### Frontend sigue llamando localhost
-
-El build usó configuración de desarrollo. Inspeccionar Network y corregir environment/build.
-
-### Recargar una ruta Angular devuelve 403/404
-
-Configurar fallback SPA en el hosting/CDN para que las rutas de cliente vuelvan a `index.html` cuando corresponda.
+**SI FALLA** · usar [09A · estado conocido](./09a-runbook-checkpoints-estado-conocido.md), no cambiar simultáneamente hosting, Entra y Gateway.
