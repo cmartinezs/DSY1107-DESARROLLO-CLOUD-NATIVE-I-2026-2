@@ -1,10 +1,8 @@
 # 11 · Costos, detención y cleanup
 
-**REQUERIDO OPERACIONAL** · La evaluación no termina dejando recursos cloud olvidados.
-
 ## Objetivo
 
-Evitar cobros accidentales, recursos huérfanos y confusión entre “detener temporalmente” y “eliminar definitivamente”.
+Cerrar la práctica sin dejar cobros accidentales, recursos huérfanos ni confusión entre “detener temporalmente” y “eliminar definitivamente”.
 
 ## Inventario antes de limpiar
 
@@ -21,7 +19,7 @@ AWS
 - CloudFront/S3 u alternativa autorizada
 
 Microsoft
-- External tenant (si fue creado solo para curso)
+- External tenant si fue creado solo para la práctica
 - cloudtasks-spa
 - cloudtasks-api
 - user flow
@@ -31,9 +29,9 @@ Microsoft
 
 No borrar recursos compartidos con otras actividades.
 
-## Durante las dos semanas
+## Mientras se desarrolla la práctica
 
-Cuando no se necesite EC2 durante un periodo prolongado y el laboratorio lo permita, detener la instancia puede reducir consumo. Tener presente:
+Cuando no se necesite EC2 durante un periodo prolongado y el laboratorio lo permita, detener la instancia puede reducir consumo.
 
 ```text
 Stop != Terminate
@@ -41,22 +39,21 @@ Stop != Terminate
 
 Al volver a iniciarla, comprobar nuevamente IP/DNS y `BACKEND_CLOUD_URL`.
 
-**EVIDENCIA** · Antes de la defensa, no depender de una IP que se asumió estable.
+No depender de una IP que se asumió estable.
 
-## Después de evaluación
+## Al terminar la práctica
 
 Orden sugerido:
 
-1. guardar evidencias sanitizadas;
-2. comprobar commits/push final;
-3. registrar IDs/nombres de recursos a eliminar;
-4. eliminar frontend/CDN/hosting creado exclusivamente para EV1;
-5. eliminar API Gateway de EV1;
-6. terminar EC2 de EV1 si ya no se usará;
-7. revisar Security Groups huérfanos;
-8. eliminar imágenes/registries opcionales creados por ★ Advanced si corresponde;
-9. revisar recursos Entra antes de borrar tenant/apps;
-10. verificar en consolas que no queden recursos inesperados.
+1. comprobar commits/push de la guía;
+2. registrar IDs/nombres de recursos creados;
+3. eliminar frontend/CDN/hosting creado exclusivamente para esta práctica si ya no se usará;
+4. eliminar API Gateway de práctica si ya no se usará;
+5. terminar EC2 si ya no se necesita;
+6. revisar Security Groups huérfanos;
+7. eliminar imágenes/registries opcionales de ★ Advanced si corresponde;
+8. revisar recursos Entra antes de borrar tenant/apps;
+9. verificar en las consolas que no queden recursos inesperados.
 
 ## ★ Docker
 
@@ -71,16 +68,15 @@ Eliminar contenedores/imágenes de práctica si ya no son útiles. Esto no susti
 
 ## No hacer
 
-- no borrar el tenant Microsoft si se reutilizará en otras evaluaciones;
+- no borrar un tenant Microsoft si se reutilizará en otras actividades;
 - no eliminar una VPC/subnet compartida;
 - no borrar un Security Group sin saber qué lo usa;
-- no eliminar evidencia antes de que la evaluación esté cerrada;
-- no asumir que cerrar la pestaña AWS detiene recursos.
+- no asumir que cerrar la pestaña AWS detiene recursos;
+- no eliminar configuraciones compartidas solo porque CloudTasks ya terminó.
 
 ## Checklist cleanup
 
-- [ ] repositorio final está en GitHub.
-- [ ] evidencia final está preservada sin secretos.
+- [ ] trabajo de la guía está en GitHub.
 - [ ] EC2 innecesaria detenida/terminada según decisión.
 - [ ] API Gateway innecesario eliminado.
 - [ ] hosting/CDN innecesario eliminado.
