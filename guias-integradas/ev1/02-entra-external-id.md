@@ -2,44 +2,62 @@
 
 ## Objetivo
 
-Crear la identidad real que reemplazará al simulador local: tenant, flujo de usuarios, SPA, API, scopes y roles.
+Crear la identidad real de CloudTasks: External tenant, flujo de usuarios, SPA, API y scopes.
 
-> No crear secretos para el frontend. Angular es un cliente público y utilizará Authorization Code + PKCE.
+> Angular es un cliente público. No crear ni utilizar un `client_secret` en el frontend. Authorization Code + PKCE será gestionado posteriormente por MSAL Angular.
 
-## 1. Crear o seleccionar External tenant
+Usar [00C · Matriz de valores](./00c-matriz-valores-y-checkpoints.md) para registrar cada dato cuando realmente exista.
 
-En Microsoft Entra admin center, trabajar sobre un **External tenant** autorizado para el curso.
+---
 
-Registrar en `ev1-local-values.txt`:
+# 1. Crear o seleccionar External tenant
+
+En Microsoft Entra admin center trabajar sobre un **External tenant** autorizado para la práctica.
+
+Registrar:
 
 ```text
 TENANT_ID=<id real>
 TENANT_DOMAIN=<dominio real>
-TENANT_SUBDOMAIN=<subdominio antes de .onmicrosoft.com>
+TENANT_SUBDOMAIN=<subdominio>
 ```
 
-### Validación
+**CHECKPOINT 02-0**
 
-Antes de seguir, confirmar que se está operando sobre el tenant correcto. Un error frecuente es registrar la app en el tenant corporativo/personal equivocado y luego obtener `issuer` inesperado.
+- [ ] directorio/tenant correcto seleccionado.
+- [ ] `TENANT_ID` corresponde a ese directorio.
+- [ ] se conoce el subdominio que se utilizará en CIAM.
 
-## 2. Crear flujo de sign-up/sign-in
+**SI FALLA** · no crear aplicaciones hasta confirmar en qué directorio se está trabajando.
 
-Crear un user flow para usuarios externos que permita al menos:
+---
 
-- registro;
-- inicio de sesión;
-- email como identificador, según capacidades del tenant;
-- atributos básicos necesarios para la demo.
+# 2. Crear flujo sign-up/sign-in
 
-No agregar atributos de negocio que CloudTasks no utilice.
+Crear un user flow para usuarios externos que permita, según capacidades del tenant:
 
-### Validación
+```text
+sign-up
+sign-in
+email como identificador
+atributos básicos
+```
 
-Ejecutar la experiencia de prueba del flujo desde la propia consola. Debe ser posible llegar a una pantalla real de autenticación/registro antes de integrar Angular.
+No agregar atributos de dominio que CloudTasks no necesita.
 
-## 3. Registrar la API
+Usar la experiencia de prueba del flujo antes de integrar Angular.
 
-Crear una app registration para:
+**CHECKPOINT 02-1**
+
+- [ ] user flow existe.
+- [ ] puede abrirse la experiencia de autenticación.
+- [ ] se distingue user flow de app registration.
+
+---
+
+# 3. Registrar CloudTasks API
+
+Crear una app registration:
 
 ```text
 cloudtasks-api
@@ -48,18 +66,24 @@ cloudtasks-api
 Registrar:
 
 ```text
-API_CLIENT_ID=<Application/Client ID>
+API_CLIENT_ID=<Application (client) ID>
 ```
 
-Definir el identificador/audience de la API. Usar el valor que entregue/configure Entra y registrarlo como:
+## Expose an API
+
+Configurar el **Application ID URI** que corresponda. Un formato habitual es:
 
 ```text
-API_AUDIENCE=<valor real>
+api://<API_CLIENT_ID>
 ```
 
-## 4. Exponer scopes
+pero se debe copiar el valor efectivo mostrado/configurado en el tenant, no reconstruirlo por intuición.
 
-Crear al menos:
+---
+
+# 4. Exponer scopes
+
+Crear:
 
 ```text
 tasks.read
@@ -69,44 +93,43 @@ tasks.write
 Semántica:
 
 ```text
-tasks.read  → consultar recursos propios
+tasks.read  → consultar recursos permitidos
 tasks.write → crear/modificar/eliminar recursos permitidos
 ```
 
-Registrar los nombres completos que deba solicitar MSAL:
+Registrar el scope **completo** que debe solicitar el cliente:
 
 ```text
 SCOPE_READ=<scope completo>
 SCOPE_WRITE=<scope completo>
 ```
 
-## 5. Crear app role
-
-Crear, si el entorno lo permite:
+Ejemplo conceptual:
 
 ```text
-Admin
+api://<API_CLIENT_ID>/tasks.read
+api://<API_CLIENT_ID>/tasks.write
 ```
 
-El rol se utilizará posteriormente para demostrar que:
+No reducir todavía esos valores a `tasks.read` / `tasks.write`: MSAL necesita el identificador completo del permiso solicitado.
 
-```text
-scope ≠ role
-```
+---
 
-Si la asignación de roles no está disponible en el sandbox, marcarlo como extensión y no bloquear la ruta principal EV1.
+# 5. Registrar la SPA
 
-## 6. Registrar la SPA
-
-Crear una app registration:
+Crear:
 
 ```text
 cloudtasks-spa
 ```
 
-Configurar plataforma **Single-page application**.
+Configurar plataforma:
 
-Primera redirect URI:
+```text
+Single-page application
+```
+
+Redirect URI local:
 
 ```text
 http://localhost:4200
@@ -115,42 +138,58 @@ http://localhost:4200
 Registrar:
 
 ```text
-SPA_CLIENT_ID=<Application/Client ID>
+SPA_CLIENT_ID=<Application (client) ID>
 ```
 
-No crear ni copiar `client_secret` al frontend.
+No crear un secret para Angular.
 
-## 7. Asociar la SPA al user flow
+**CHECKPOINT 02-2**
 
-En el External tenant, agregar `cloudtasks-spa` al user flow creado en el paso 2. Este paso es obligatorio: que la app registration exista no significa automáticamente que participe del flujo de registro/inicio de sesión para clientes externos.
+- [ ] existe app API.
+- [ ] existe app SPA diferente.
+- [ ] sus Client IDs no se confunden.
+- [ ] redirect URI local coincide exactamente.
+- [ ] no existe una dependencia de secret en frontend.
 
-### Validación
+---
 
-Usar `Run user flow` / experiencia equivalente seleccionando `cloudtasks-spa`. Comprobar que el flujo llega a la redirect URI local configurada o, al menos, que la aplicación aparece correctamente asociada al flujo.
+# 6. Asociar SPA al user flow
 
-## 8. Permisos de API
+Agregar `cloudtasks-spa` al user flow creado.
 
-Dar a `cloudtasks-spa` acceso delegado a los scopes expuestos por `cloudtasks-api`.
+Una app registration existente **no participa automáticamente** en el flujo para clientes externos.
 
-En External ID puede ser necesario que un administrador otorgue consentimiento en nombre de los usuarios del tenant. Si aparece un error de consentimiento durante login/token acquisition, revisar primero **API permissions + admin consent** antes de modificar MSAL.
+Usar `Run user flow` o experiencia equivalente seleccionando la SPA.
 
-El resultado conceptual debe ser:
+**CHECKPOINT 02-3**
 
-```mermaid
-flowchart LR
-    UF[Sign-up / sign-in user flow] --> SPA[cloudtasks-spa]
-    SPA -->|solicita tasks.read/tasks.write| API[cloudtasks-api]
-    T[External tenant] --> UF
-    T --> API
-```
+- [ ] SPA aparece asociada al flujo correcto.
+- [ ] experiencia de login corresponde al External tenant esperado.
 
-## 9. Autoridad de External ID
+---
 
-Para un External tenant, la autoridad de referencia de MSAL usa el dominio CIAM del tenant:
+# 7. Permisos delegados hacia CloudTasks API
+
+En `cloudtasks-spa`, agregar permisos delegados sobre los scopes de `cloudtasks-api`:
 
 ```text
-https://<TENANT_SUBDOMAIN>.ciamlogin.com/
+tasks.read
+tasks.write
 ```
+
+Si el tenant requiere consentimiento administrativo, otorgarlo mediante el mecanismo permitido.
+
+No modificar MSAL para resolver un problema que en realidad es:
+
+```text
+API permission ausente
+consent pendiente
+scope no expuesto
+```
+
+---
+
+# 8. Authority de External ID
 
 Registrar:
 
@@ -158,57 +197,157 @@ Registrar:
 MSAL_AUTHORITY=https://<TENANT_SUBDOMAIN>.ciamlogin.com/
 ```
 
-No reemplazarlo por `login.microsoftonline.com` por costumbre si se está trabajando con External ID.
+No sustituir `ciamlogin.com` por `login.microsoftonline.com` por costumbre cuando la aplicación utiliza un External tenant.
 
-## 10. Obtener metadata OIDC
+Validar que abrir el login desde el flujo efectivamente conduce al tenant esperado.
 
-Localizar la configuración OIDC/discovery del tenant y determinar el issuer real que aparecerá en tokens válidos.
+---
 
-Registrar:
+# 9. OIDC discovery: no adivinar issuer/JWKS
+
+Localizar el documento OpenID Connect discovery correspondiente al tenant/flujo y registrar los valores efectivos:
 
 ```text
 OIDC_ISSUER=<issuer real>
 OIDC_JWKS_URI=<jwks_uri real>
 ```
 
-No adivinar el issuer a partir del tenant ID. Debe verificarse contra metadata/token real.
+Regla:
 
-## Puerta de validación 02
+```text
+metadata real
+→ copiar issuer/jwks_uri
+→ token real
+→ confirmar iss
+```
 
-Debe existir y poder mostrarse:
+No construir `OIDC_ISSUER` únicamente a partir del tenant ID.
 
-- External tenant correcto;
-- user flow utilizable;
-- `cloudtasks-spa` con redirect local;
-- SPA asociada al user flow;
-- `cloudtasks-api`;
-- scopes `tasks.read` y `tasks.write`;
-- permisos entre SPA y API;
-- admin consent cuando el tenant lo requiera;
-- `MSAL_AUTHORITY` del dominio `ciamlogin.com`;
-- issuer identificado desde metadata real.
+---
 
-## Errores frecuentes
+# 10. API_AUDIENCE queda pendiente hasta observar Access Token
 
-### `redirect_uri` no coincide
+En esta etapa se conoce:
 
-La URI debe coincidir **exactamente** con una URI registrada. Revisar esquema, host, puerto, path y slash final.
+```text
+API_CLIENT_ID
+Application ID URI
+scopes completos
+```
 
-### La app existe pero el user flow no la encuentra
+Pero **no se debe cerrar `API_AUDIENCE` por intuición**.
 
-La app registration no quedó asociada al user flow correcto o se está mirando otro tenant/directorio.
+En la etapa 03, después de obtener un Access Token solicitado para CloudTasks API:
 
-### Login funciona, pero no se puede solicitar el scope de CloudTasks
+```text
+decodificar temporalmente token
+→ observar claim aud
+→ API_AUDIENCE=<aud real>
+→ marcar VALIDADO
+```
 
-Revisar que `cloudtasks-spa` tenga los permisos delegados sobre `cloudtasks-api` y que el consentimiento requerido esté otorgado.
+Esto evita confundir:
 
-### Se obtuvo un token pero el `aud` no es la API
+```text
+Client ID de SPA
+Application ID URI
+Client ID de API
+claim aud efectivo
+```
 
-Probablemente se solicitó un recurso/scope incorrecto. No continuar al Gateway hasta que `aud` corresponda a la API esperada.
+---
 
-### Se creó un secret para Angular
+# 11. Claim `scp`
 
-Eliminar esa dependencia. Un secreto dentro del bundle JavaScript deja de ser secreto.
+Después de obtener el Access Token también se confirmará:
+
+```text
+SCOPE_READ_CLAIM=tasks.read
+SCOPE_WRITE_CLAIM=tasks.write
+```
+
+si esos son los valores realmente emitidos.
+
+La cadena esperada es:
+
+```text
+MSAL solicita scope completo
+→ Entra emite Access Token
+→ scp contiene permiso
+→ Spring lo convierte a SCOPE_tasks.read / SCOPE_tasks.write
+```
+
+---
+
+# 12. Role Admin · extensión opcional
+
+Si el entorno permite app roles, puede crearse:
+
+```text
+Admin
+```
+
+pero **no bloquear la ruta principal** si la asignación/configuración de roles no está disponible.
+
+Además, que el token contenga `roles` no significa automáticamente que Spring lo convierta en `ROLE_Admin`; esa integración se estudia solo después de que scopes y ownership funcionen.
+
+---
+
+# 13. Diagrama de recursos
+
+```mermaid
+flowchart TD
+    T[External tenant] --> UF[Sign-up / sign-in user flow]
+    T --> SPA[cloudtasks-spa]
+    T --> API[cloudtasks-api]
+    UF --> SPA
+    API --> R[tasks.read]
+    API --> W[tasks.write]
+    SPA -->|delegated permissions| R
+    SPA -->|delegated permissions| W
+```
+
+---
+
+# Puerta de validación 02
+
+Antes de integrar MSAL:
+
+```text
+External tenant correcto PASS
+user flow PASS
+cloudtasks-api PASS
+Application ID URI conocido PASS
+SCOPE_READ completo PASS
+SCOPE_WRITE completo PASS
+cloudtasks-spa PASS
+redirect localhost:4200 PASS
+SPA asociada al user flow PASS
+permisos/consent PASS
+MSAL_AUTHORITY ciamlogin PASS
+OIDC discovery localizado PASS
+sin client secret frontend PASS
+```
+
+Todavía puede quedar:
+
+```text
+API_AUDIENCE=PENDIENTE
+SCOPE_*_CLAIM=PENDIENTE
+```
+
+porque esos valores se cierran con el Access Token real en 03.
+
+## SI FALLA
+
+| Síntoma | Revisar primero |
+|---|---|
+| redirect mismatch | URI literal registrada |
+| app no aparece en user flow | tenant + asociación |
+| login sí, scope no | Expose an API + API permissions + consent |
+| authority abre tenant incorrecto | `TENANT_SUBDOMAIN` |
+| se creó secret SPA | eliminar dependencia del secret |
+| no se sabe audience | correcto: esperar token real en 03 |
 
 ## Contenido relacionado
 
