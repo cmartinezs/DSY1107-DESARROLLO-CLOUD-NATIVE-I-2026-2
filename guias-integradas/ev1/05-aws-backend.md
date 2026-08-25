@@ -1,16 +1,68 @@
-# 05 · Desplegar backend en AWS
+# 05 · Desplegar backend en AWS EC2
 
 ## Objetivo
 
-Pasar el backend ya validado localmente a AWS sin introducir todavía API Gateway. Primero se demuestra que el proceso Spring Boot funciona en cloud; después se agrega la frontera de API Management.
+Pasar el backend ya validado localmente a AWS sin introducir todavía API Gateway. Primero se demuestra que Spring Boot funciona en EC2; después se agrega la frontera de API Management.
 
-## 1. Empaquetar
+> La pauta institucional de EV1 menciona explícitamente **despliegue en EC2 y uso de API Gateway**. Por eso EC2 es la referencia de esta etapa.
+
+## Elegir ruta de despliegue
+
+En este punto existen dos caminos que terminan en el mismo checkpoint:
+
+```text
+RUTA BASE
+JAR + Java 21 + EC2
+        ↓
+BACKEND_CLOUD_URL
+        ↓
+API Gateway
+
+★ ADVANCED DEVELOPER
+Docker image + Docker Engine + EC2
+        ↓
+BACKEND_CLOUD_URL
+        ↓
+API Gateway
+```
+
+### Ruta base
+
+Continuar en esta misma guía.
+
+### ★ Advanced Developer
+
+Si ya se completó la containerización local:
+
+→ [★ Desplegar CloudTasks containerizado en EC2](./advanced-developer/02-docker-ec2.md)
+
+Al terminar esa alternativa, volver directamente a:
+
+→ [06 · AWS API Gateway + JWT Authorizer](./06-api-gateway-jwt.md)
+
+> ECS no se utiliza como sustituto en EV1 porque no aparece como requisito en la pauta revisada. Puede estudiarse posteriormente como evolución de la solución Docker.
+
+---
+
+# Ruta base · JAR sobre EC2
+
+## 1. Empaquetar con Maven Wrapper
 
 Desde `backend/`:
 
+Linux/macOS/WSL/Git Bash:
+
 ```bash
-mvn clean package
+./mvnw clean package
 ```
+
+Windows PowerShell:
+
+```powershell
+.\mvnw.cmd clean package
+```
+
+No se requiere Maven global.
 
 Validar el JAR **localmente** antes de copiarlo:
 
@@ -18,7 +70,13 @@ Validar el JAR **localmente** antes de copiarlo:
 java -jar target/*.jar
 ```
 
-Probar `/api/public/health`.
+Probar:
+
+```text
+/api/public/health
+```
+
+No desplegar a AWS un artefacto que todavía falla localmente.
 
 ## 2. Crear EC2
 
@@ -40,7 +98,7 @@ Debe existir una versión compatible con el JAR. Si no existe, instalar JDK/JRE 
 
 ## 4. Copiar y ejecutar
 
-Copiar el JAR mediante el mecanismo permitido (SCP, SSM u otro del laboratorio).
+Copiar el JAR mediante el mecanismo permitido por el laboratorio, por ejemplo SCP o SSM.
 
 Ejecutar primero en foreground para observar errores:
 
@@ -52,7 +110,9 @@ No crear un servicio persistente hasta que el proceso arranque correctamente.
 
 ## 5. Variables/configuración
 
-El issuer no debe quedar hardcodeado en múltiples archivos. Preferir variable de entorno/configuración externa, por ejemplo:
+El issuer no debe quedar hardcodeado en múltiples archivos.
+
+Preferir configuración externa:
 
 ```bash
 export SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI='<OIDC_ISSUER>'
@@ -60,12 +120,42 @@ export SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI='<OIDC_ISSUER>'
 
 Luego ejecutar el JAR.
 
-## 6. Probar desde fuera de EC2
+No guardar Access Tokens ni credenciales cloud en archivos versionados.
 
-Primero health:
+## 6. Probar desde EC2 primero
+
+Dentro de la propia instancia:
 
 ```bash
-curl http://<HOST_EC2>:8080/api/public/health
+curl -i http://localhost:8080/api/public/health
+```
+
+Esperado:
+
+```text
+200
+```
+
+Luego:
+
+```bash
+curl -i http://localhost:8080/api/tasks
+```
+
+Esperado sin token:
+
+```text
+401
+```
+
+Esta prueba separa el problema de aplicación del problema de networking.
+
+## 7. Probar desde fuera de EC2
+
+Desde un origen autorizado:
+
+```bash
+curl -i http://<HOST_EC2>:8080/api/public/health
 ```
 
 Luego una ruta protegida sin token:
@@ -86,24 +176,51 @@ Con Access Token real, `/api/tasks` debe conservar el mismo comportamiento obser
 Registrar:
 
 ```text
-BACKEND_CLOUD_URL=http://<host>:8080
+BACKEND_CLOUD_URL=http://<HOST_EC2>:8080
 ```
 
-## 7. Persistencia del proceso
+## 8. Persistencia del proceso
 
-Una vez validado, configurar el mecanismo aprobado para mantener la app ejecutándose (por ejemplo systemd). El objetivo es que un reinicio de sesión SSH no apague el backend.
+Una vez validado, configurar el mecanismo aprobado para mantener la app ejecutándose, por ejemplo `systemd`.
+
+El objetivo es que cerrar la sesión SSH no apague el backend.
+
+La ruta ★ Docker resuelve esta misma necesidad mediante Docker daemon + restart policy.
 
 ## Puerta de validación 05
 
-Antes de crear API Gateway:
+Antes de crear API Gateway debe existir, por una de las dos rutas:
 
-- JAR validado localmente;
-- EC2 ejecuta Java compatible;
+- backend validado localmente;
+- EC2 operativo;
 - health remoto = 200;
 - endpoint protegido remoto sin token = 401;
 - endpoint protegido con token válido conserva su política;
-- se conoce `BACKEND_CLOUD_URL`;
-- el proceso continúa activo sin depender de una terminal interactiva.
+- `BACKEND_CLOUD_URL` conocido;
+- proceso/contenedor continúa activo sin depender de una terminal interactiva.
+
+### Evidencia según ruta
+
+**Base:**
+
+```text
+EC2
++ java -version
++ proceso Spring/JAR
++ health
+```
+
+**★ Advanced:**
+
+```text
+EC2
++ docker version
++ docker ps
++ container CloudTasks
++ health
+```
+
+La evidencia adicional Docker no sustituye ninguna evidencia institucional de EV1.
 
 ## Diagnóstico rápido
 
@@ -111,16 +228,38 @@ Antes de crear API Gateway:
 
 Revisar, en este orden:
 
-1. proceso Spring activo;
+1. proceso Spring o contenedor activo;
 2. puerto donde escucha la app;
 3. binding (`0.0.0.0` vs loopback);
-4. Security Group;
-5. rutas/networking del entorno.
+4. publicación de puerto Docker, si aplica;
+5. Security Group;
+6. rutas/networking del entorno.
 
 ### Connection refused
 
-Normalmente el host es alcanzable pero no hay proceso escuchando en ese puerto.
+Normalmente el host es alcanzable pero no existe un proceso escuchando en ese puerto.
+
+Ruta base:
+
+```bash
+ps aux | grep java
+```
+
+Ruta ★:
+
+```bash
+docker ps
+docker logs cloudtasks-api
+```
 
 ### 401 en cloud pero 200 local
 
-Comparar issuer/configuración y token. No modificar CORS: `curl` no depende de CORS.
+Comparar issuer/configuración y token.
+
+No modificar CORS: `curl` no depende de CORS.
+
+## Siguiente etapa
+
+Cuando exista un `BACKEND_CLOUD_URL` reproducible, ambas rutas convergen:
+
+→ [06 · AWS API Gateway + JWT Authorizer](./06-api-gateway-jwt.md)
