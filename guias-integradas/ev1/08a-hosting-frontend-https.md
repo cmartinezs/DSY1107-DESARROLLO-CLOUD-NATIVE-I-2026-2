@@ -2,6 +2,33 @@
 
 Este anexo usa **S3 + CloudFront** como opción de referencia para publicar una SPA Angular con una URL HTTPS estable. Si el laboratorio define otro hosting cloud, puede utilizarse siempre que produzca el mismo estado funcional.
 
+## Estado de entrada
+
+Antes de publicar debe existir:
+
+```text
+API_GATEWAY_URL validado
+frontend local PASS
+login local PASS
+CORS local→Gateway PASS
+```
+
+La configuración del frontend debe apuntar al Gateway antes de compilar:
+
+```ts
+export const apiConfig = {
+  baseUrl: '<API_GATEWAY_URL>'
+};
+```
+
+No construir el bundle cloud mientras todavía exista:
+
+```text
+http://localhost:8080
+```
+
+como base URL de producción.
+
 ## Decisión de referencia
 
 ```text
@@ -12,39 +39,57 @@ Angular build
 
 ## 1. Build limpio
 
+Desde `frontend/`:
+
 ```bash
-cd frontend
 npm ci
 ng build
 ```
 
-Localizar el directorio real dentro de `dist/`. No subir source code como si fuese el build.
+Localizar el directorio real generado dentro de `dist/`. No asumir una ruta fija si la versión/configuración de Angular produce otra estructura.
 
-## 2. Probar build antes de cloud
+No subir source code como si fuese el build.
 
-Servir `dist` con un servidor HTTP estático local y comprobar que `index.html` abre.
+## 2. Verificar el bundle antes de publicar
 
-**Checkpoint 08A-1**
+Comprobar:
 
-- [ ] build termina sin error.
-- [ ] bundle no contiene secrets.
-- [ ] API de producción no apunta a `localhost`.
+- [ ] build termina sin error;
+- [ ] bundle no contiene secrets;
+- [ ] bundle no contiene Access Tokens;
+- [ ] API de producción apunta a `API_GATEWAY_URL`;
+- [ ] no existen referencias funcionales a `localhost:8080`.
+
+Si se sirve `dist/` localmente para inspección, recordar que eso **no reemplaza** la prueba HTTPS final.
 
 ## 3. Publicar
 
-Crear/configurar hosting estático autorizado. Obtener:
+Crear/configurar hosting estático autorizado y obtener:
 
 ```text
 FRONTEND_CLOUD_URL=https://...
 ```
 
-Preferir HTTPS para la SPA.
+Registrar el valor en 00C antes de propagarlo.
 
-## 4. Mixed content
+## 4. Comprobar HTTPS antes de tocar Entra/CORS
 
-Una página cargada mediante HTTPS no debe depender de requests HTTP inseguras desde el navegador.
+Abrir `FRONTEND_CLOUD_URL` en navegador.
 
-Arquitectura final esperada:
+Debe cumplirse:
+
+```text
+HTTPS válido
+SPA carga
+assets cargan
+Console sin errores críticos
+```
+
+Si esto falla, corregir hosting antes de modificar identidad o CORS.
+
+## 5. Mixed content
+
+Arquitectura esperada:
 
 ```text
 HTTPS frontend
@@ -52,61 +97,96 @@ HTTPS frontend
 → backend EC2
 ```
 
-El navegador llama al endpoint HTTPS de API Gateway, no al `http://EC2:8080` directo.
+El navegador llama al endpoint HTTPS de API Gateway, no a `http://EC2:8080`.
 
-Si DevTools muestra `Mixed Content`, revisar primero la URL configurada en Angular.
+Si DevTools muestra `Mixed Content`, revisar primero `apiConfig.baseUrl` y el bundle realmente desplegado.
 
-## 5. Redirect URI
+## 6. Propagar `FRONTEND_CLOUD_URL`
 
-Agregar exactamente `FRONTEND_CLOUD_URL` a la plataforma SPA en Entra.
+Solo después de validar la URL cloud:
 
-Comparar carácter a carácter:
+### Microsoft Entra
+
+Agregar exactamente `FRONTEND_CLOUD_URL` como redirect URI de la plataforma SPA.
+
+Comparar:
 
 ```text
 scheme
 host
-port (si existe)
+port, si existe
 path
 slash final
 ```
 
-## 6. CORS
+### API Gateway CORS
 
-Agregar como allowed origin:
+Agregar exactamente:
 
 ```text
 FRONTEND_CLOUD_URL
 ```
 
-No agregar `API_GATEWAY_URL` como origin: el origin es la SPA.
+como allowed origin, conservando temporalmente `http://localhost:4200` si todavía se necesita desarrollo local.
 
-## 7. SPA fallback
+No agregar:
+
+```text
+API_GATEWAY_URL
+BACKEND_CLOUD_URL
+```
+
+como origins.
+
+## 7. Login cloud
+
+Desde `FRONTEND_CLOUD_URL`:
+
+```text
+abrir SPA
+→ login
+→ Entra External ID
+→ redirect vuelve a FRONTEND_CLOUD_URL
+→ active account disponible
+```
+
+El redirect local y el cloud son entradas distintas; ambos deben estar registrados si ambos se siguen utilizando.
+
+## 8. SPA fallback
 
 Si Angular usa rutas de cliente, una recarga directa puede devolver 403/404 desde hosting/CDN. Configurar el fallback correspondiente hacia `index.html` según el servicio utilizado.
 
-## 8. Cache
+No confundir un 403 del hosting por ruta SPA con un 403 de autorización del API.
+
+## 9. Cache/CDN
 
 Después de un redeploy, si el navegador sigue llamando a una URL antigua:
 
-1. revisar Network y nombre/hash de bundles;
+1. revisar Network y hash/nombre de bundles;
 2. recargar ignorando cache;
 3. invalidar/actualizar CDN si corresponde;
-4. verificar que el build desplegado contiene la config correcta.
+4. verificar que el build desplegado es el nuevo;
+5. revisar `apiConfig.baseUrl` del source solo después de confirmar qué bundle está sirviendo el CDN.
 
-No modificar Entra/CORS si el problema real es un bundle antiguo.
+No modificar Entra/CORS si el problema real es cache.
 
-## Checkpoint 08A-2
+## Checkpoint 08A
 
+- [ ] `ng build` PASS.
+- [ ] bundle no contiene secrets/tokens.
+- [ ] bundle usa `API_GATEWAY_URL`.
 - [ ] `FRONTEND_CLOUD_URL` abre por HTTPS.
-- [ ] login inicia y retorna a esa URL.
-- [ ] Network muestra llamadas a `API_GATEWAY_URL`, nunca EC2 directo.
+- [ ] SPA carga sin errores críticos.
+- [ ] redirect URI cloud está registrada.
+- [ ] CORS incluye origin cloud exacto.
+- [ ] login vuelve al frontend cloud.
+- [ ] Network muestra API Gateway, nunca EC2 directo.
 - [ ] no existe mixed content.
-- [ ] CORS permite origin cloud exacto.
-- [ ] refresh de la SPA no rompe navegación relevante.
+- [ ] refresh de rutas SPA relevantes no rompe navegación.
 
 ## Decisión tecnológica
 
-S3 + CloudFront es una referencia apropiada para esta práctica, no una dependencia conceptual de Angular, OAuth2/OIDC, JWT o CORS. Si se utiliza otra alternativa autorizada, debe conservarse:
+S3 + CloudFront es una referencia apropiada para esta práctica, no una dependencia conceptual de Angular, OAuth2/OIDC, JWT o CORS. Otra alternativa autorizada debe conservar:
 
 ```text
 SPA desplegada
