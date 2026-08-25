@@ -8,33 +8,18 @@ En esta etapa no se implementa OAuth2, JWT, roles, AWS ni lógica compleja. El �
 
 > El foco de DSY1107 no es aprender a construir un CRUD avanzado con Spring. Por eso el código de negocio se mantendrá deliberadamente mínimo.
 
----
+## Antes de comenzar
 
-## Antes de crear el proyecto: obtener el package personal
+Debe haberse completado [00A · Preparar el entorno](./00a-preparar-entorno.md).
 
-El estándar del curso exige una raíz personal Java/Kotlin basada en el usuario Duoc sin puntos.
+Verificar:
 
-Ejemplo:
-
-```text
-usuario Duoc: c.martinez
-sin puntos:   cmartinez
-package raíz: cl.duoc.cmartinez
+```powershell
+java -version
+git --version
 ```
 
-En esta guía se representará como:
-
-```text
-cl.duoc.<usuario>
-```
-
-CloudTasks puede vivir bajo esa raíz:
-
-```text
-cl.duoc.<usuario>.cloudtasks
-```
-
-No usar literalmente `<usuario>`: reemplazarlo por el usuario real sin puntos.
+Java debe corresponder a JDK 21 e IntelliJ IDEA debe abrir correctamente.
 
 ---
 
@@ -109,24 +94,24 @@ Elegir **Spring Boot** o **Spring Initializr**, según la versión de IntelliJ i
 
 Usar estos valores como referencia:
 
-| Campo | Valor |
+| Campo | Valor sugerido |
 |---|---|
 | Name | `backend` |
 | Location | carpeta `cloudtasks/` |
 | Language | Java |
 | Type / Build system | Maven |
-| Group | `cl.duoc.<usuario>` |
+| Group | `cl.duoc` |
 | Artifact | `cloudtasks-api` |
-| Package name | `cl.duoc.<usuario>.cloudtasks` |
+| Package name | `cl.duoc.<usuario-duoc-sin-puntos>.cloudtasks` |
 | JDK | 21 |
 | Java | 21 |
 | Packaging | Jar |
 
-Ejemplo para `c.martinez`:
+Ejemplo:
 
 ```text
-Group:        cl.duoc.cmartinez
-Package name: cl.duoc.cmartinez.cloudtasks
+usuario Duoc: c.martinez
+package: cl.duoc.cmartinez.cloudtasks
 ```
 
 La carpeta física del proyecto debe quedar como:
@@ -134,20 +119,6 @@ La carpeta física del proyecto debe quedar como:
 ```text
 cloudtasks/backend/
 ```
-
-## Importante sobre nombres
-
-El nombre visual del proyecto y el `artifactId` no tienen que ser idénticos.
-
-En esta guía se usa:
-
-```text
-carpeta: backend
-artifactId: cloudtasks-api
-package: cl.duoc.<usuario>.cloudtasks
-```
-
-para mantener el workspace simple sin romper el estándar personal del curso.
 
 ---
 
@@ -249,13 +220,13 @@ La intención es aprovechar al máximo el scaffolding generado por Spring Initia
 
 # 6. Crear un único controller mínimo
 
-Dentro del package:
+Dentro del package personal:
 
 ```text
-cl.duoc.<usuario>.cloudtasks
+cl.duoc.<usuario-duoc-sin-puntos>.cloudtasks
 ```
 
-crear el subpackage:
+crear un package:
 
 ```text
 controller
@@ -267,10 +238,10 @@ Luego crear:
 PublicController.java
 ```
 
-Código completo —reemplazando `<usuario>` en la declaración `package`—:
+Ejemplo usando `c.martinez`:
 
 ```java
-package cl.duoc.<usuario>.cloudtasks.controller;
+package cl.duoc.cmartinez.cloudtasks.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -292,11 +263,7 @@ public class PublicController {
 }
 ```
 
-Ejemplo real para `c.martinez`:
-
-```java
-package cl.duoc.cmartinez.cloudtasks.controller;
-```
+El alumno debe sustituir `cmartinez` por su raíz personal real.
 
 Este es prácticamente todo el código manual de backend necesario en esta primera etapa.
 
@@ -439,7 +406,7 @@ backend = http://localhost:8080
 Comprobar:
 
 1. que Spring arrancó correctamente;
-2. que `PublicController` está bajo `cl.duoc.<usuario>.cloudtasks` o uno de sus subpackages;
+2. que `PublicController` esté bajo el package raíz personal de la aplicación o uno de sus subpackages;
 3. que la URL sea exactamente `/api/public/health`.
 
 ## Error al importar dependencias
@@ -458,7 +425,6 @@ Antes de modificar `pom.xml` manualmente:
 No continuar hasta demostrar las cuatro condiciones:
 
 - [ ] el proyecto fue creado mediante IntelliJ + Spring Initializr;
-- [ ] usa la raíz `cl.duoc.<usuario-duoc-sin-puntos>` del estándar del curso;
 - [ ] usa Java 21 y Maven;
 - [ ] existen `mvnw`, `mvnw.cmd` y `.mvn/`;
 - [ ] `GET http://localhost:8080/api/public/health` devuelve JSON correctamente tanto desde IntelliJ como ejecutando el Maven Wrapper.
@@ -475,7 +441,3 @@ proyecto backend
 ```
 
 No incluir credenciales ni datos sensibles.
-
-## Estándar relacionado
-
-- [Estándar de repositorio del estudiante](../../docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md)
