@@ -2,38 +2,214 @@
 
 ## Objetivo
 
-Conectar el frontend existente con Microsoft Entra External ID y obtener tokens reales para la API.
+Conectar el frontend existente con Microsoft Entra External ID y obtener tokens reales para CloudTasks API sin depender de código que la guía no entregue.
 
-## 1. Instalar MSAL
+Esta implementación usa `@azure/msal-browser` dentro de Angular. Sigue siendo MSAL y utiliza Authorization Code + PKCE para SPA; evita esconder el flujo detrás de una plantilla adicional.
+
+## 1. Instalar dependencias
 
 Desde `frontend/`:
 
 ```bash
-npm install @azure/msal-browser @azure/msal-angular
+npm install @azure/msal-browser
 ```
 
-## 2. Configuración
+Angular ya incluye `HttpClient` en proyectos modernos cuando se configura `provideHttpClient()`.
 
-Crear una configuración que use exclusivamente valores obtenidos en la etapa anterior:
+## 2. Crear configuración de entorno
+
+Crear `src/app/auth-config.ts`:
 
 ```ts
 export const authConfig = {
-  auth: {
-    clientId: '<SPA_CLIENT_ID>',
-    authority: '<AUTHORITY_REAL_DEL_EXTERNAL_TENANT>',
-    redirectUri: 'http://localhost:4200'
-  }
+  clientId: '<SPA_CLIENT_ID>',
+  authority: '<MSAL_AUTHORITY>',
+  redirectUri: window.location.origin,
+  scopes: [
+    '<SCOPE_READ>',
+    '<SCOPE_WRITE>'
+  ]
 };
-
-export const apiScopes = [
-  '<SCOPE_READ>',
-  '<SCOPE_WRITE>'
-];
 ```
 
-No copiar secretos.
+Para External ID, `MSAL_AUTHORITY` debe venir de la etapa 02 y normalmente tendrá esta forma:
 
-## 3. Flujo esperado
+```text
+https://<TENANT_SUBDOMAIN>.ciamlogin.com/
+```
+
+No copiar secretos al frontend.
+
+## 3. Crear `AuthService`
+
+Crear `src/app/auth.service.ts`:
+
+```ts
+import { Injectable } from '@angular/core';
+import {
+  AccountInfo,
+  AuthenticationResult,
+  PublicClientApplication
+} from '@azure/msal-browser';
+import { authConfig } from './auth-config';
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private readonly msal = new PublicClientApplication({
+    auth: {
+      clientId: authConfig.clientId,
+      authority: authConfig.authority,
+      redirectUri: authConfig.redirectUri,
+      postLogoutRedirectUri: authConfig.redirectUri
+    },
+    cache: {
+      cacheLocation: 'sessionStorage'
+    }
+  });
+
+  private initialized = false;
+
+  async init(): Promise<void> {
+    if (this.initialized) return;
+
+    await this.msal.initialize();
+    const result = await this.msal.handleRedirectPromise();
+
+    if (result?.account) {
+      this.msal.setActiveAccount(result.account);
+    } else if (!this.msal.getActiveAccount()) {
+      const account = this.msal.getAllAccounts()[0];
+      if (account) this.msal.setActiveAccount(account);
+    }
+
+    this.initialized = true;
+  }
+
+  async login(): Promise<void> {
+    await this.init();
+    await this.msal.loginRedirect({
+      scopes: authConfig.scopes
+    });
+  }
+
+  async logout(): Promise<void> {
+    await this.init();
+    await this.msal.logoutRedirect();
+  }
+
+  async getAccessToken(): Promise<string> {
+    await this.init();
+
+    const account = this.requireAccount();
+
+    try {
+      const result = await this.msal.acquireTokenSilent({
+        account,
+        scopes: authConfig.scopes
+      });
+      return result.accessToken;
+    } catch {
+      await this.msal.acquireTokenRedirect({
+        account,
+        scopes: authConfig.scopes
+      });
+      throw new Error('Se inició una interacción para obtener el Access Token');
+    }
+  }
+
+  get account(): AccountInfo | null {
+    return this.msal.getActiveAccount();
+  }
+
+  private requireAccount(): AccountInfo {
+    const account = this.msal.getActiveAccount();
+    if (!account) throw new Error('No existe una sesión autenticada');
+    return account;
+  }
+}
+```
+
+## 4. Inicializar MSAL al abrir la aplicación
+
+En el componente raíz, ejecutar una sola vez:
+
+```ts
+constructor(public readonly auth: AuthService) {
+  void this.auth.init();
+}
+```
+
+Agregar botones:
+
+```html
+<button (click)="auth.login()">Iniciar sesión</button>
+<button (click)="auth.logout()">Cerrar sesión</button>
+```
+
+No iniciar dos logins simultáneos.
+
+## 5. Crear servicio API
+
+Crear `src/app/api.service.ts`:
+
+```ts
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { AuthService } from './auth.service';
+
+@Injectable({ providedIn: 'root' })
+export class ApiService {
+  private readonly baseUrl = '<API_BASE_URL>';
+
+  constructor(
+    private readonly http: HttpClient,
+    private readonly auth: AuthService
+  ) {}
+
+  async health(): Promise<unknown> {
+    return firstValueFrom(
+      this.http.get(`${this.baseUrl}/api/public/health`)
+    );
+  }
+
+  async tasks(): Promise<unknown> {
+    const token = await this.auth.getAccessToken();
+    return firstValueFrom(
+      this.http.get(`${this.baseUrl}/api/tasks`, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${token}`
+        })
+      })
+    );
+  }
+}
+```
+
+Durante desarrollo local:
+
+```text
+API_BASE_URL=http://localhost:8080
+```
+
+Más adelante se reemplazará por `API_GATEWAY_URL`.
+
+## 6. Habilitar HttpClient
+
+En `src/app/app.config.ts`, asegurar:
+
+```ts
+import { ApplicationConfig } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideHttpClient()]
+};
+```
+
+Si el proyecto ya tiene otros providers, conservarlos y agregar `provideHttpClient()`; no reemplazar la configuración completa a ciegas.
+
+## 7. Flujo esperado
 
 ```mermaid
 sequenceDiagram
@@ -48,74 +224,94 @@ sequenceDiagram
     E-->>F: ID Token + Access Token
 ```
 
-MSAL implementa PKCE; el estudiante debe saber **qué está ocurriendo**, aunque no programe manualmente `code_verifier`.
+MSAL genera y maneja PKCE. El estudiante no programa manualmente `code_verifier`, pero debe poder explicar su función.
 
-## 4. Login
+## 8. Mostrar identidad sin exponer secretos
 
-Implementar un botón de login con redirect o popup según la guía oficial vigente adoptada por el curso. Mantener un solo enfoque en la solución final para reducir ambigüedad.
-
-Después del login mostrar:
+Después del login mostrar al menos:
 
 ```text
-nombre visible
-username/email disponible
-estado: autenticado
+account.name
+account.username
+estado autenticado
 ```
 
-## 5. Obtener Access Token para la API
+Para la vista de claims, obtener el Access Token y decodificar únicamente su payload con fines didácticos. No usar esa decodificación como decisión de seguridad.
 
-Solicitar explícitamente los scopes de CloudTasks. Priorizar adquisición silenciosa cuando exista sesión y manejar fallback interactivo cuando sea necesario.
-
-La llamada a la API debe incluir:
-
-```http
-Authorization: Bearer <ACCESS_TOKEN>
-```
-
-Nunca usar el ID Token como Bearer para CloudTasks API.
-
-## 6. Inspección didáctica
-
-Agregar una vista `Mi identidad` que muestre, sin exponer el token completo:
+Mostrar:
 
 ```text
 iss
 aud
 sub
 exp
-scp/scopes
+scp
 roles (si existen)
 ```
 
-El token puede decodificarse para observar claims, pero la UI debe advertir:
+Advertencia visible:
 
-> Decodificar un JWT no valida su firma ni demuestra que sea confiable.
+> Decodificar un JWT permite leer claims; no valida firma, issuer, audience ni vigencia.
+
+## 9. ID Token ≠ Access Token
+
+El objeto de sesión de MSAL puede incluir información derivada del ID Token. Eso sirve al **cliente** para saber quién inició sesión.
+
+Para llamar CloudTasks API usar exclusivamente el resultado de:
+
+```ts
+acquireTokenSilent(...).accessToken
+```
+
+y enviar:
+
+```http
+Authorization: Bearer <ACCESS_TOKEN>
+```
 
 ## Puerta de validación 03
 
-Antes de continuar debe ocurrir todo esto:
+No continuar hasta que:
 
 1. Angular abre en `http://localhost:4200`.
-2. Login redirige al tenant correcto.
-3. El usuario puede autenticarse/registrarse según el user flow.
-4. Angular recupera sesión.
-5. Existe un Access Token para CloudTasks API.
-6. El `aud` coincide con la API esperada.
-7. El token contiene los scopes solicitados/autorizados.
+2. `auth.init()` no produce errores.
+3. Login redirige a `<TENANT_SUBDOMAIN>.ciamlogin.com`.
+4. El usuario puede registrarse/iniciar sesión mediante el user flow asociado.
+5. Angular recupera una cuenta activa después del redirect.
+6. `getAccessToken()` retorna un Access Token para CloudTasks API.
+7. El payload contiene el `aud` esperado.
+8. Los scopes autorizados aparecen en `scp` o en el claim real emitido.
+9. `/api/tasks` puede invocarse con `Authorization: Bearer ...` cuando el backend ya está protegido.
 
 ## Diagnóstico
 
-### Loop de login
+### `redirect_uri` mismatch
 
-Revisar `redirectUri`, authority y estado de cuenta activa antes de cambiar código.
+Comparar literalmente:
+
+```text
+window.location.origin
+vs
+redirect URI registrada en Entra
+```
+
+`http://localhost:4200` y `http://localhost:4200/otra-ruta` no son equivalentes.
+
+### Se abre un login de Microsoft distinto al esperado
+
+Revisar `MSAL_AUTHORITY`. En External ID debe apuntar al dominio CIAM del tenant correcto, no a un authority copiado de una guía de workforce tenant.
 
 ### `interaction_in_progress`
 
-No iniciar dos flujos interactivos simultáneamente. Esperar/completar la interacción vigente.
+No ejecutar `loginRedirect` o `acquireTokenRedirect` desde múltiples eventos simultáneamente.
+
+### Login funciona pero `getAccessToken()` falla por consentimiento
+
+Revisar `cloudtasks-spa` → API permissions → scopes de `cloudtasks-api` y admin consent cuando el External tenant lo requiera.
 
 ### Token para audiencia incorrecta
 
-Revisar scopes solicitados. Un login exitoso no implica que se haya obtenido un Access Token válido para **esta API**.
+Revisar los scopes solicitados. Un login exitoso solo demuestra autenticación; no demuestra que se obtuvo autorización para CloudTasks API.
 
 ## Contenido relacionado
 
