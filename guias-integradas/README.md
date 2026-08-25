@@ -1,6 +1,6 @@
 # Guías integradas de implementación real
 
-Esta raíz contiene **rutas de implementación end-to-end** que conectan los contenidos de DSY1107 con una solución real, reproducible y verificable.
+Esta raíz contiene **rutas de práctica end-to-end** que conectan los contenidos de DSY1107 con una solución real, reproducible y verificable.
 
 ## Qué problema resuelve
 
@@ -24,7 +24,7 @@ proyecto-formativo/
   RegistrApp: transferencia longitudinal y comprensión del concepto
 
 guias-integradas/
-  implementación real completa del encargo institucional
+  práctica técnica completa con dependencias encadenadas
 ```
 
 `guias-integradas/` **no sustituye RegistrApp**. Tampoco reemplaza las guías de `semanas/`. Las usa como referencia conceptual y agrega continuidad operacional.
@@ -44,15 +44,15 @@ Cada guía integrada debe cumplir estas reglas:
 9. indicar cómo volver a un estado conocido cuando un paso falla;
 10. evitar secretos y credenciales versionadas;
 11. incluir pruebas positivas y negativas;
-12. terminar con una evidencia observable y reproducible;
+12. terminar con un resultado observable y reproducible;
 13. documentar instalación, alternativa y verificación de las herramientas locales necesarias antes de utilizarlas;
-14. aplicar **mínimo código, máxima evidencia**: si una pieza de programación no demuestra una competencia de la evaluación, debe resolverse mediante scaffolding, configuración, dependencia existente o eliminarse.
+14. aplicar **mínimo código, máxima comprensión**: si una pieza de programación no aporta al aprendizaje de la ruta, debe resolverse mediante scaffolding, configuración, dependencia existente o eliminarse.
 
 ## EV1
 
 La primera guía integrada es:
 
-→ [EV1 · FullStack + IDaaS + OAuth2/OIDC + JWT + API Gateway + CORS + AWS/Azure](./ev1/README.md)
+→ [EV1 · Guía integrada de preparación FullStack + IDaaS + OAuth2/OIDC + JWT + API Gateway + CORS + AWS/Azure](./ev1/README.md)
 
 La ruta comienza con una preparación explícita del entorno:
 
@@ -82,4 +82,4 @@ La implementación de referencia utiliza:
 - CORS configurado explícitamente;
 - despliegue del frontend en AWS.
 
-La aplicación de referencia es deliberadamente mínima: su objetivo es hacer visibles los conceptos evaluados, no enseñar un dominio de negocio nuevo.
+La aplicación de referencia es deliberadamente mínima: su objetivo es hacer visibles e integrables los conceptos técnicos, no enseñar un dominio de negocio nuevo.
