@@ -44,13 +44,29 @@ Cada guía integrada debe cumplir estas reglas:
 9. indicar cómo volver a un estado conocido cuando un paso falla;
 10. evitar secretos y credenciales versionadas;
 11. incluir pruebas positivas y negativas;
-12. terminar con una evidencia observable y reproducible.
+12. terminar con una evidencia observable y reproducible;
+13. documentar instalación, alternativa y verificación de las herramientas locales necesarias antes de utilizarlas;
+14. aplicar **mínimo código, máxima evidencia**: si una pieza de programación no demuestra una competencia de la evaluación, debe resolverse mediante scaffolding, configuración, dependencia existente o eliminarse.
 
 ## EV1
 
 La primera guía integrada es:
 
 → [EV1 · FullStack + IDaaS + OAuth2/OIDC + JWT + API Gateway + CORS + AWS/Azure](./ev1/README.md)
+
+La ruta comienza con una preparación explícita del entorno:
+
+- Git y cuenta GitHub;
+- GitHub Desktop como alternativa gráfica recomendada;
+- GitHub CLI (`gh`) como herramienta recomendada;
+- JDK 21;
+- IntelliJ IDEA para Spring Boot;
+- Node.js LTS + npm + Angular CLI;
+- VS Code **o** WebStorm para Angular;
+- navegador con DevTools;
+- Postman como herramienta HTTP auxiliar.
+
+No se exige Maven global porque el backend usa Maven Wrapper generado con Spring Initializr.
 
 La implementación de referencia utiliza:
 
