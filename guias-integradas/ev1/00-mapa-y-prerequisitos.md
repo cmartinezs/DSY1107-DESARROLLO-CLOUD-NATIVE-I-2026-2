@@ -1,4 +1,4 @@
-# 00 · Mapa EV1 y prerequisitos
+# 00 · Mapa y prerequisitos
 
 ## Objetivo
 
@@ -100,9 +100,9 @@ VS Code
 WebStorm
 ```
 
-No existe diferencia funcional en la solución EV1 por escoger uno u otro.
+No existe diferencia funcional en la práctica por escoger uno u otro.
 
-No se entregará una aplicación visual compleja ni se evaluará diseño frontend avanzado. Angular se utilizará como SPA mínima para demostrar:
+No se necesita una aplicación visual compleja. Angular se utilizará como SPA mínima para practicar:
 
 - redirect URI;
 - OAuth2/OIDC;
