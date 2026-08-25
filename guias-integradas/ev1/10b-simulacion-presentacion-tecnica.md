@@ -118,7 +118,7 @@ Gateway health?
 backend health?
 ```
 
-## Preguntas rápidas de autoevaluación
+## Preguntas rápidas de comprobación
 
 ```text
 OAuth2 vs OIDC
