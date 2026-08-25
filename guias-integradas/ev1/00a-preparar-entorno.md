@@ -2,9 +2,9 @@
 
 ## Objetivo
 
-Instalar y verificar **antes de comenzar la EV1** las herramientas que se utilizarán en las guías posteriores.
+Instalar y verificar **antes de comenzar CloudTasks** las herramientas que se utilizarán en los pasos posteriores de la guía.
 
-La intención no es convertir la instalación de herramientas en parte de la evaluación. El objetivo es evitar que un alumno llegue a CORS, OAuth2, JWT o AWS con un entorno incompleto y termine diagnosticando problemas que en realidad pertenecen a Git, Java, Node o al IDE.
+El objetivo es evitar que un problema de Git, Java, Node, Angular o del IDE termine confundiéndose después con un problema de CORS, OAuth2/OIDC, JWT o cloud.
 
 > Instalar solo lo necesario. Cuando existan herramientas equivalentes, esta guía distingue entre **obligatoria**, **recomendada** y **alternativa**.
 
@@ -12,9 +12,9 @@ La intención no es convertir la instalación de herramientas en parte de la eva
 
 ## 1. Resumen de herramientas
 
-| Herramienta | Estado | Uso en EV1 |
+| Herramienta | Estado | Uso en la guía |
 |---|---|---|
-| Cuenta GitHub | obligatoria | repositorio y entrega |
+| Cuenta GitHub | obligatoria | repositorio personal y checkpoints |
 | Git | obligatoria | control de versiones |
 | GitHub Desktop | recomendada | Git mediante interfaz gráfica |
 | GitHub CLI (`gh`) | recomendada | autenticación y operaciones GitHub desde terminal |
@@ -33,7 +33,7 @@ No es necesario instalar Maven globalmente: el backend utilizará **Maven Wrappe
 
 # 2. Crear o verificar cuenta GitHub
 
-Se necesita una cuenta personal de GitHub que el estudiante pueda utilizar durante todo el semestre.
+Se necesita una cuenta personal de GitHub que el estudiante pueda utilizar durante el semestre.
 
 Sitio oficial:
 
@@ -59,7 +59,9 @@ https://git-scm.com/downloads
 
 ## Windows · dos formas de instalación
 
-Las dos alternativas instalan **Git for Windows**. El paquete oficial de `winget` utiliza actualmente el mismo instalador de Git for Windows, por lo que no debe enseñarse como si fueran dos productos distintos. Lo que cambia para el estudiante es principalmente **cómo se realiza la instalación, qué opciones de integración ve y qué terminal utiliza después**.
+Las dos alternativas instalan **Git for Windows**. El paquete `Git.Git` de `winget` automatiza la instalación de Git for Windows; no instala un “Git de PowerShell” distinto.
+
+La diferencia práctica para el estudiante está en **cómo se realiza la instalación, qué opciones de integración ve y qué terminal decide utilizar después**.
 
 ### Opción A · instalador `.exe` de Git for Windows
 
@@ -67,22 +69,22 @@ Descargar el instalador desde el sitio oficial y ejecutarlo manualmente.
 
 Esta alternativa muestra el asistente de Git for Windows y permite revisar explícitamente opciones como:
 
-- integración con PATH;
+- integración con `PATH`;
 - Git Bash;
-- Windows Terminal;
+- integración con Windows Terminal;
 - editor por defecto;
 - OpenSSH;
 - manejo de finales de línea.
 
-Git for Windows incluye **Git Bash**, una terminal Bash basada en el entorno Unix que acompaña a Git for Windows.
+Git for Windows incluye **Git Bash**.
 
-Después de instalar, el estudiante puede abrir:
+Después de instalar, puede abrirse:
 
 ```text
 Git Bash
 ```
 
-y ejecutar:
+y comprobar:
 
 ```bash
 git --version
@@ -90,7 +92,7 @@ pwd
 ls
 ```
 
-También puede utilizar Git desde PowerShell **si la instalación dejó `git.exe` disponible en PATH**.
+Git también puede utilizarse desde PowerShell si `git.exe` quedó disponible en el `PATH` de Windows.
 
 ### Opción B · instalación mediante `winget`
 
@@ -100,8 +102,6 @@ Desde PowerShell:
 winget install --id Git.Git -e --source winget
 ```
 
-`winget` automatiza la instalación del paquete Git for Windows y actualmente apunta al instalador oficial. No significa “Git nativo de PowerShell” ni instala un Git diferente.
-
 Cerrar y volver a abrir PowerShell después de instalar.
 
 Verificar directamente:
@@ -110,17 +110,18 @@ Verificar directamente:
 git --version
 ```
 
-Si funciona, Git quedó disponible en el PATH de Windows y puede utilizarse cómodamente desde:
+Si funciona, Git está disponible desde el `PATH` de Windows y puede utilizarse cómodamente desde:
 
 ```text
 PowerShell
 Command Prompt
-terminal integrada de VS Code / IntelliJ / WebStorm
+terminal integrada de VS Code
+terminal integrada de IntelliJ/WebStorm
 ```
 
-Git Bash normalmente también queda disponible porque forma parte de Git for Windows, aunque algunas integraciones visuales —por ejemplo perfiles de Windows Terminal— pueden depender de las opciones utilizadas durante la instalación.
+Git Bash normalmente también queda instalado porque forma parte de Git for Windows.
 
-## ¿Qué terminal usaremos en la ruta base?
+## ¿Qué terminal usaremos?
 
 Para evitar mezclar sintaxis, la guía diferencia los ejemplos:
 
@@ -129,67 +130,57 @@ PowerShell
 → comandos Windows / winget / mvnw.cmd
 
 Git Bash
-→ comandos con sintaxis Bash / ./mvnw / ls / pwd
+→ comandos Bash / ./mvnw / ls / pwd
 ```
 
-En la ruta base de EV1, **PowerShell es suficiente** si `git --version` funciona correctamente.
+**PowerShell es suficiente** para la ruta base si `git --version` funciona correctamente.
 
 Git Bash es útil cuando:
 
-- se instaló Git manualmente y el estudiante prefiere Bash;
-- una guía utiliza sintaxis Unix;
-- se quiere practicar comandos similares a Linux sin entrar todavía a WSL.
+- el estudiante prefiere Bash;
+- una instrucción utiliza sintaxis Unix;
+- se quiere practicar comandos similares a Linux sin usar todavía WSL.
 
-> **Git Bash no es WSL.** Git Bash entrega una shell Bash y varias utilidades Unix sobre Windows; WSL ejecuta una distribución Linux real dentro de WSL2. La ruta ★ Advanced Developer utiliza WSL2 + Ubuntu y no debe confundirse con Git Bash.
+> **Git Bash no es WSL.** Git Bash entrega una shell Bash y utilidades Unix sobre Windows. WSL2 ejecuta una distribución Linux real, como Ubuntu. La ruta ★ Advanced Developer utiliza WSL2 + Ubuntu.
 
 ## Checkpoint de instalación de Git
 
-### Si se utilizará PowerShell
+### PowerShell
 
 ```powershell
 git --version
 where.exe git
 ```
 
-Esperado:
+Debe aparecer una versión de Git y una ruta válida hacia `git.exe`.
 
-```text
-git version ...
-```
-
-y una ruta hacia `git.exe`.
-
-### Si se utilizará Git Bash
+### Git Bash
 
 ```bash
 git --version
 which git
 ```
 
-Esperado:
-
-```text
-git version ...
-```
-
-y una ruta válida al ejecutable Git.
+Debe aparecer una versión de Git y una ruta válida al ejecutable.
 
 ### SI FALLA
 
-Si `git --version` funciona en Git Bash pero no en PowerShell:
+Si Git funciona en Git Bash pero no en PowerShell:
 
 ```text
 Git está instalado
 pero PowerShell no lo encuentra mediante PATH
 ```
 
-No reinstalar otras herramientas. Primero cerrar/reabrir la terminal y revisar PATH/configuración de Git for Windows.
+No reinstalar todo a ciegas. Primero:
 
-Si `git --version` no funciona en ninguna terminal, la instalación de Git no está validada.
+1. cerrar y volver a abrir PowerShell;
+2. ejecutar `where.exe git`;
+3. revisar la integración/PATH de Git for Windows.
+
+Si `git --version` no funciona en ninguna terminal, la instalación todavía no está validada.
 
 ## Configurar identidad de commits
-
-Usar el nombre real y el correo asociado a GitHub o el correo académico elegido para el curso:
 
 ```powershell
 git config --global user.name "Nombre Apellido"
@@ -205,36 +196,31 @@ git config --global user.name
 git config --global user.email
 ```
 
-> Estos datos quedan registrados en los commits. No utilizar correos ajenos ni identidades ficticias.
+Estos datos quedan registrados en los commits.
 
 ---
 
 # 4. Instalar GitHub Desktop
 
-**Recomendado**, especialmente para estudiantes que todavía no dominan Git por terminal.
+**Recomendado**, especialmente si todavía no se domina Git por terminal.
 
 Sitio oficial:
 
 https://desktop.github.com/
 
-Documentación oficial:
+Documentación:
 
 https://docs.github.com/desktop
 
-GitHub Desktop permite clonar, revisar cambios, hacer commits, pull, push y trabajar con branches desde una interfaz gráfica.
-
 ## Instalación
 
-1. Descargar GitHub Desktop.
-2. Ejecutar el instalador.
-3. Abrir la aplicación.
-4. Seleccionar **Sign in to GitHub.com**.
-5. Completar la autenticación en navegador.
-6. Verificar nombre y correo configurados para commits.
+1. instalar GitHub Desktop;
+2. abrir la aplicación;
+3. seleccionar **Sign in to GitHub.com**;
+4. completar autenticación en navegador;
+5. verificar nombre y correo de commits.
 
-## Importante
-
-GitHub Desktop no sustituye la necesidad de comprender al menos:
+GitHub Desktop permite trabajar visualmente con:
 
 ```text
 clone
@@ -244,19 +230,19 @@ push
 branch
 ```
 
-pero evita que la sintaxis de terminal sea una barrera innecesaria para EV1.
+La interfaz reduce fricción de sintaxis, pero esos conceptos deben seguir siendo entendidos.
 
 ---
 
 # 5. Instalar GitHub CLI (`gh`)
 
-**Recomendado**. No es obligatorio para construir CloudTasks, pero facilita autenticación, repositorios y diagnóstico desde terminal.
+**Recomendado**, no obligatorio.
 
 Sitio oficial:
 
 https://cli.github.com/
 
-En Windows puede instalarse con:
+Desde PowerShell:
 
 ```powershell
 winget install --id GitHub.cli
@@ -276,7 +262,7 @@ Autenticar:
 gh auth login
 ```
 
-Elegir:
+Elegir una ruta equivalente a:
 
 ```text
 GitHub.com
@@ -290,23 +276,21 @@ Comprobar:
 gh auth status
 ```
 
-> `gh` y GitHub Desktop pueden coexistir. No son reemplazos obligatorios entre sí.
+`gh` y GitHub Desktop pueden coexistir.
 
 ---
 
 # 6. Instalar JDK 21
 
-Spring Boot utilizará **Java 21** durante la guía.
+Spring Boot utilizará **Java 21**.
 
 Puede utilizarse una distribución OpenJDK 21 mantenida, por ejemplo:
 
 - Microsoft Build of OpenJDK;
 - Eclipse Temurin;
-- OpenJDK provisto/configurado por IntelliJ.
+- OpenJDK configurado por IntelliJ.
 
-La condición importante es que el proyecto y Maven Wrapper ejecuten con Java 21.
-
-## Verificar
+Verificar:
 
 ```powershell
 java -version
@@ -315,11 +299,9 @@ javac -version
 
 Ambos deben indicar Java 21.
 
-### Si existen varias versiones de Java
+## Si existen varias versiones de Java
 
-No desinstalar versiones utilizadas por otras asignaturas sin necesidad.
-
-En IntelliJ se seleccionará explícitamente JDK 21 para el proyecto backend.
+No desinstalar otras versiones sin necesidad. En IntelliJ se seleccionará explícitamente **JDK 21** para CloudTasks.
 
 ---
 
@@ -331,40 +313,27 @@ Sitio oficial:
 
 https://www.jetbrains.com/idea/download/
 
-A partir de las versiones actuales IntelliJ IDEA utiliza una distribución unificada: las funciones esenciales de Java/Kotlin siguen disponibles gratuitamente y las funciones avanzadas se habilitan con una suscripción Ultimate.
-
-## Estudiantes con licencia académica
-
-JetBrains ofrece acceso educativo gratuito a estudiantes y docentes elegibles.
+Si el estudiante dispone de acceso académico de JetBrains, puede utilizar las capacidades habilitadas por ese programa.
 
 Información:
 
 https://www.jetbrains.com/academy/student-pack/
 
-La licencia educativa puede habilitar las capacidades avanzadas de IntelliJ y otras herramientas JetBrains.
+## Checkpoint IntelliJ
 
-## Instalación recomendada
-
-1. Descargar IntelliJ IDEA para Windows.
-2. Ejecutar el instalador.
-3. Mantener las asociaciones `.java` y opciones de launcher solo si se desean.
-4. Abrir IntelliJ.
-5. Iniciar sesión con JetBrains Account si se utilizará licencia académica.
-6. Confirmar que JDK 21 puede seleccionarse al crear un proyecto.
-
-No instalar plugins aleatorios antes de comenzar la guía.
+- [ ] IntelliJ abre correctamente;
+- [ ] puede seleccionarse JDK 21;
+- [ ] no se han instalado plugins innecesarios para CloudTasks.
 
 ---
 
 # 8. Instalar Node.js LTS y npm
 
-Angular depende de Node.js.
-
 Sitio oficial:
 
 https://nodejs.org/
 
-Instalar una versión **LTS** compatible con la versión vigente de Angular utilizada en el curso.
+Instalar una versión **LTS** compatible con la versión de Angular utilizada en el curso.
 
 `npm` se instala junto con Node.js.
 
@@ -377,7 +346,7 @@ node --version
 npm --version
 ```
 
-No continuar si alguno de los dos comandos falla.
+No continuar si alguno falla.
 
 ---
 
@@ -399,63 +368,53 @@ Verificar:
 ng version
 ```
 
-Debe aparecer información de Angular CLI y Node.js.
-
 ## Si PowerShell bloquea scripts
 
-No modificar políticas de seguridad de forma indiscriminada.
+No modificar `ExecutionPolicy` indiscriminadamente.
 
-Probar primero desde **Command Prompt**, Git Bash o una terminal nueva. Si el bloqueo persiste, revisar el mensaje exacto antes de cambiar `ExecutionPolicy`.
+Probar primero:
+
+- una terminal nueva;
+- Command Prompt;
+- Git Bash.
+
+Si persiste, revisar el mensaje exacto antes de cambiar una política de seguridad.
 
 ---
 
 # 10. Elegir editor para Angular
 
-El frontend no requiere un IDE específico. Elegir **una** de estas alternativas.
+Elegir **uno**.
 
 ## Opción A · Visual Studio Code
 
-Recomendación por defecto por ser gratuito y liviano.
-
-Sitio oficial:
-
 https://code.visualstudio.com/
 
-Extensiones útiles, no obligatorias:
+Extensiones útiles:
 
 - Angular Language Service;
-- ESLint, solo si el proyecto lo utiliza;
-- EditorConfig, si se requiere.
-
-Evitar instalar múltiples extensiones que formateen el mismo código.
+- ESLint, si el proyecto lo utiliza;
+- EditorConfig, si corresponde.
 
 ## Opción B · WebStorm
 
-Alternativa excelente para estudiantes que prefieran JetBrains.
-
-Sitio oficial:
-
 https://www.jetbrains.com/webstorm/
 
-WebStorm dispone de opciones gratuitas/no comerciales y forma parte de las herramientas disponibles mediante programas educativos de JetBrains cuando corresponda.
+Es una alternativa equivalente para Angular/TypeScript, especialmente si ya se dispone de acceso JetBrains.
 
-Si el estudiante ya tiene Student Pack, puede utilizar WebStorm en vez de VS Code sin cambiar ningún paso funcional de la guía.
-
-> **No instalar ambos por obligación.** Basta con VS Code o WebStorm.
+> No es necesario instalar VS Code y WebStorm por obligación. Basta uno.
 
 ---
 
-# 11. Instalar navegador y conocer DevTools
+# 11. Navegador y DevTools
 
-Se necesita un navegador moderno con herramientas de desarrollo.
-
-Recomendados:
+Usar un navegador moderno, por ejemplo:
 
 - Chrome;
 - Edge;
 - Firefox.
 
-El estudiante debe poder abrir DevTools con `F12` y ubicar como mínimo:
+El estudiante debe saber abrir DevTools (`F12`) y ubicar:
 
 ```text
 Console
@@ -463,43 +422,41 @@ Network
 Application / Storage
 ```
 
-Esto es esencial para diagnosticar:
+Se utilizarán para observar:
 
 - CORS;
 - redirects OAuth/OIDC;
 - requests al API Gateway;
-- códigos HTTP;
+- status HTTP;
 - headers `Authorization`;
-- errores de frontend.
+- errores del frontend.
 
-> Para CORS, la evidencia válida proviene del navegador. Postman no aplica la política Same-Origin del navegador.
+> Postman no aplica la Same-Origin Policy del navegador. Por eso una llamada exitosa en Postman no demuestra que CORS esté correctamente configurado.
 
 ---
 
 # 12. Instalar Postman
 
-**Recomendado**, no obligatorio si el estudiante maneja `curl` correctamente.
-
-Sitio oficial:
+**Recomendado**, no obligatorio si se utiliza `curl` correctamente.
 
 https://www.postman.com/downloads/
 
-Postman se utilizará para aislar pruebas HTTP del frontend.
+Postman sirve para aislar una prueba HTTP de los problemas propios del navegador.
 
-Ejemplo:
+Ejemplo conceptual:
 
 ```text
-si Postman → 200
-pero navegador → error CORS
+Postman → 200
+navegador → bloqueo CORS
 ```
 
-entonces el backend probablemente responde correctamente y el problema está en la política aplicada al navegador.
+indica que conviene revisar primero la política cross-origin.
 
 ---
 
-# 13. Qué NO instalar para EV1
+# 13. Qué NO instalar por adelantado
 
-No es necesario instalar por adelantado:
+La ruta base no necesita inicialmente:
 
 - Maven global;
 - Docker Desktop;
@@ -511,11 +468,9 @@ No es necesario instalar por adelantado:
 - Gradle;
 - Keycloak.
 
-Docker Desktop aparece posteriormente solo en la ruta **★ Advanced Developer**.
+Docker Desktop aparece posteriormente solo en **★ Advanced Developer**.
 
-Si una etapa posterior requiere una herramienta adicional, la guía la introducirá en ese momento.
-
-Esto reduce conflictos, consumo de recursos y diagnósticos innecesarios.
+Si una etapa necesita otra herramienta, se introducirá cuando exista una razón concreta.
 
 ---
 
@@ -533,18 +488,18 @@ npm --version
 ng version
 ```
 
-`gh` puede omitirse si el alumno optó por no instalarlo.
+`gh` puede omitirse si no fue instalado.
 
-Maven **no aparece** en esta validación porque no se exige Maven global. Se verificará mediante `mvnw` después de generar el proyecto Spring Boot.
+Maven no aparece porque se verificará posteriormente mediante el Wrapper generado por Spring Initializr.
 
-También comprobar manualmente:
+Comprobar también:
 
-- [ ] GitHub abre y permite iniciar sesión;
-- [ ] Git funciona desde la terminal elegida (PowerShell o Git Bash);
-- [ ] el estudiante sabe distinguir PowerShell, Git Bash y WSL;
+- [ ] GitHub permite iniciar sesión;
+- [ ] Git funciona desde la terminal elegida;
+- [ ] se distingue PowerShell de Git Bash;
+- [ ] se entiende que Git Bash no es WSL;
 - [ ] GitHub Desktop abre y está autenticado, si se utilizará;
-- [ ] IntelliJ IDEA abre;
-- [ ] JDK 21 aparece disponible en IntelliJ;
+- [ ] IntelliJ abre y reconoce JDK 21;
 - [ ] VS Code o WebStorm abre;
 - [ ] navegador abre DevTools;
 - [ ] Postman abre, si se utilizará.
@@ -553,19 +508,19 @@ También comprobar manualmente:
 
 # Puerta de validación 00A
 
-No comenzar la creación de CloudTasks hasta que:
+No comenzar CloudTasks hasta que:
 
-- [ ] Git funciona desde la terminal elegida;
+- [ ] Git funciona;
 - [ ] existe acceso a GitHub;
 - [ ] Java 21 funciona;
 - [ ] IntelliJ puede utilizar JDK 21;
 - [ ] Node y npm funcionan;
 - [ ] Angular CLI funciona;
 - [ ] existe un editor para Angular;
-- [ ] el estudiante sabe abrir DevTools;
-- [ ] el estudiante distingue Git Bash de WSL2/Ubuntu;
-- [ ] no se han instalado herramientas cloud o frameworks adicionales sin necesidad.
+- [ ] se pueden abrir DevTools;
+- [ ] se distingue Git Bash de WSL2/Ubuntu;
+- [ ] no se han agregado herramientas innecesarias.
 
 ## Resultado esperado
 
-El entorno queda preparado para que los errores posteriores pertenezcan realmente a la arquitectura EV1 y no a una instalación incompleta.
+El entorno queda preparado para que los errores posteriores pertenezcan realmente al componente que se está aprendiendo y no a una instalación incompleta.
