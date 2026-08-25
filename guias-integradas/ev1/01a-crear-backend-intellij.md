@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Crear **desde cero** el backend que se utilizará durante toda la guía EV1, usando IntelliJ IDEA y Spring Initializr.
+Crear **desde cero** el backend que se utilizará durante toda la guía integrada, usando IntelliJ IDEA y Spring Initializr.
 
 En esta etapa no se implementa OAuth2, JWT, roles, AWS ni lógica compleja. El único objetivo es terminar con un proyecto Spring Boot reproducible, con Maven Wrapper y un endpoint mínimo que permita comprobar que el backend funciona.
 
@@ -267,7 +267,7 @@ El alumno debe sustituir `cmartinez` por su raíz personal real.
 
 Este es prácticamente todo el código manual de backend necesario en esta primera etapa.
 
-## Qué aporta este código a EV1
+## Qué aporta este código a la práctica
 
 Permite comprobar separadamente:
 
@@ -278,7 +278,7 @@ Spring Boot funciona
 → más adelante puede ser expuesta por API Gateway
 ```
 
-No se está evaluando diseño de dominio ni persistencia.
+El foco no está en diseño de dominio ni persistencia.
 
 ---
 
@@ -429,9 +429,9 @@ No continuar hasta demostrar las cuatro condiciones:
 - [ ] existen `mvnw`, `mvnw.cmd` y `.mvn/`;
 - [ ] `GET http://localhost:8080/api/public/health` devuelve JSON correctamente tanto desde IntelliJ como ejecutando el Maven Wrapper.
 
-## Evidencia mínima recomendada
+## Registro mínimo recomendado
 
-Una captura o registro que permita observar:
+Si se lleva bitácora, puede guardarse una captura o registro que permita observar:
 
 ```text
 proyecto backend
