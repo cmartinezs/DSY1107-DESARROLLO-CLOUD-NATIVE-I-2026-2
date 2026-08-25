@@ -1,17 +1,16 @@
-# EV1 · Guía integrada de implementación real
+# EV1 · Guía integrada de preparación
 
-Esta ruta implementa de extremo a extremo los contenidos evaluados en EV1: frontend + backend, API Gateway, CORS, IDaaS, OAuth2/OIDC, Authorization Code + PKCE, JWT, scopes/roles y despliegue cloud.
+> **Importante:** esta guía **no es la evaluación E1**, no reemplaza sus instrucciones oficiales y no define una estructura de entrega. Es una práctica integrada para comprender, relacionar y ejercitar los conocimientos que se medirán en E1 mediante una aplicación técnica mínima llamada **CloudTasks**.
 
-> No reemplaza RegistrApp. CloudTasks es una aplicación técnica mínima cuyo dominio existe solo para hacer observable la arquitectura evaluada.
+CloudTasks permite recorrer de extremo a extremo frontend + backend, API Gateway, CORS, IDaaS, OAuth2/OIDC, Authorization Code + PKCE, JWT, scopes/roles y despliegue cloud sin mezclar esos aprendizajes con RegistrApp ni con la futura evaluación.
 
 ## Convenciones visuales
 
-- **REQUERIDO EV1**: necesario para cubrir la evaluación.
-- **EVIDENCIA**: debe poder demostrarse o registrarse.
-- **SI FALLA**: no avanzar; volver al último checkpoint PASS.
-- **★ OPCIONAL / Advanced Developer**: profundización técnica; no agrega criterios institucionales.
+- **CHECKPOINT**: estado observable que debe quedar funcionando antes de avanzar.
+- **SI FALLA**: volver al último checkpoint `PASS` y aislar una capa.
+- **★ OPCIONAL / Advanced Developer**: profundización técnica adicional.
 
-## Arquitectura final
+## Arquitectura final de la práctica
 
 ```mermaid
 flowchart LR
@@ -24,33 +23,33 @@ flowchart LR
 
 ## CloudTasks mínimo
 
-| Método | Ruta | Requisito | Evidencia |
-|---|---|---|---|
-| GET | `/api/public/health` | público | backend/Gateway disponible |
-| GET | `/api/me` | token válido | identidad/claims |
-| GET | `/api/tasks` | `tasks.read` | scope lectura |
-| POST | `/api/tasks` | `tasks.write` | scope escritura |
-| DELETE | `/api/tasks/{id}` | `tasks.write` + ownership | autorización de negocio |
-| GET | `/api/admin/stats` | `Admin` | opcional si sandbox permite roles |
+| Método | Ruta | Propósito de aprendizaje |
+|---|---|---|
+| GET | `/api/public/health` | comprobar backend/Gateway |
+| GET | `/api/me` | observar identidad y claims |
+| GET | `/api/tasks` | autorización por `tasks.read` |
+| POST | `/api/tasks` | autorización por `tasks.write` |
+| DELETE | `/api/tasks/{id}` | combinar scope + ownership |
+| GET | `/api/admin/stats` | diferenciar role y scope, si el sandbox lo permite |
 
-## Principio: mínimo código, máxima evidencia EV1
+## Principio: mínimo código, máxima comprensión
 
 ```text
 scaffolding
 → configuración explícita
 → código mínimo indispensable
 → checkpoint
-→ evidencia
+→ explicación técnica
 ```
 
-Si un fragmento de código no demuestra una competencia EV1, se evita o se entrega como starter.
+Si un fragmento de código no aporta directamente al aprendizaje de esta vertical, se evita o se entrega como starter.
 
 ## Ruta completa
 
 ### Preparación
 
 0. [00A · Instalar herramientas](./00a-preparar-entorno.md)
-1. [00B · Git/GitHub aplicado a la evaluación](./00b-git-github-flujo-evaluacion.md)
+1. [00B · Git/GitHub aplicado a la guía](./00b-git-github-flujo-guia.md)
 2. [00C · Matriz de valores y checkpoints](./00c-matriz-valores-y-checkpoints.md)
 3. [00 · Mapa y prerequisitos](./00-mapa-y-prerequisitos.md)
 
@@ -77,14 +76,28 @@ Si un fragmento de código no demuestra una competencia EV1, se evita o se entre
 13. [08 · Frontend cloud + E2E](./08-frontend-cloud-e2e.md)
     - [08A · Hosting, HTTPS y mixed content](./08a-hosting-frontend-https.md)
 
-### Validación y cierre
+### Verificación y cierre de la práctica
 
 14. [09 · Pruebas negativas y troubleshooting](./09-pruebas-y-troubleshooting.md)
     - [09A · Runbook de checkpoints/estado conocido](./09a-runbook-checkpoints-estado-conocido.md)
-15. [10 · Evidencias y defensa](./10-evidencias-y-defensa.md)
-    - [10A · Evidencias EV1-01…EV1-08](./10a-plan-evidencias-ev1.md)
-    - [10B · Runbook del día de defensa](./10b-runbook-dia-defensa.md)
+15. [10 · Verificación integrada](./10-verificacion-integrada.md)
+    - [10A · Mapa de cobertura de conocimientos E1](./10a-mapa-cobertura-e1.md)
+    - [10B · Simulación de presentación técnica](./10b-simulacion-presentacion-tecnica.md)
 16. [11 · Costos y cleanup](./11-costos-y-cleanup.md)
+
+## Estructura sugerida dentro del repositorio personal
+
+```text
+DSY1107-00XD-nombre-apellido/
+└── guia/
+    └── ev1/
+        ├── README.md
+        ├── frontend/
+        ├── backend/
+        └── docs/
+```
+
+La carpeta `evaluaciones/` queda reservada para actividades evaluativas reales cuando corresponda y según las instrucciones que se entreguen para ellas.
 
 ## ★ Advanced Developer
 
@@ -104,14 +117,14 @@ backend base     → JAR
 deployment base  → Java/JAR en EC2
 ★ advanced       → Docker Engine/container en EC2
 
-ambas rutas       → mismo API Gateway → mismo frontend → mismas evidencias
+ambas rutas       → mismo API Gateway → mismo frontend → mismos checkpoints
 ```
 
-La pauta revisada exige **EC2 + API Gateway**; ECS no se encontró como requisito de EV1 y no sustituye EC2 en esta guía.
+La práctica mantiene EC2 + API Gateway porque esos componentes aparecen en el material revisado; ECS queda como profundización posterior.
 
 ## Hosting frontend
 
-La pauta exige frontend desplegado y activo, pero en el material revisado no se encontró S3/CloudFront como tecnología obligatoria. Se mantiene como referencia AWS apropiada para SPA; una alternativa autorizada por el laboratorio es válida si produce la misma evidencia.
+S3 + CloudFront se mantiene como referencia técnica apropiada para una SPA. Si el laboratorio autoriza otra alternativa cloud que produzca la misma arquitectura observable, puede utilizarse.
 
 ## Regla de avance
 
