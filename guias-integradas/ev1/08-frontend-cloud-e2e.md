@@ -4,7 +4,7 @@
 
 Publicar Angular, obtener una URL cloud real y cerrar el flujo navegador → Entra → API Gateway → EC2.
 
-**REQUERIDO EV1** · Frontend y backend deben estar desplegados, activos e integrados.
+El objetivo de esta etapa es que frontend y backend queden desplegados, activos e integrados dentro de la práctica.
 
 ## Hosting
 
@@ -12,7 +12,7 @@ Usar primero:
 
 → [08A · Hosting frontend, HTTPS y mixed content](./08a-hosting-frontend-https.md)
 
-El material institucional revisado no fija S3/CloudFront como tecnología obligatoria del frontend; se mantiene como opción de referencia AWS.
+S3 + CloudFront se mantiene como opción de referencia AWS, no como dependencia necesaria del aprendizaje.
 
 ## 1. Configuración de producción
 
