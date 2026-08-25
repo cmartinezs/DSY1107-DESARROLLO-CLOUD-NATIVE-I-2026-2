@@ -11,7 +11,8 @@ Empaquetar el mismo backend CloudTasks que ya funciona como JAR dentro de una im
 Completar antes:
 
 - `01A` backend operativo;
-- `04` Resource Server/JWT operativo localmente.
+- `04` Resource Server/JWT operativo localmente;
+- `OIDC_ISSUER` y `API_AUDIENCE` validados.
 
 La bifurcación ocurre **después de validar el backend**, no antes.
 
@@ -75,7 +76,7 @@ stage runtime
   JRE + JAR
 ```
 
-La imagen final no necesita conservar el source tree ni las herramientas de compilación.
+La imagen final no necesita conservar source tree ni herramientas de compilación.
 
 ## 3. Construir imagen
 
@@ -91,42 +92,40 @@ Verificar:
 docker image ls cloudtasks-api
 ```
 
-## 4. Ejecutar health sin seguridad externa
+## 4. Ejecutar con la misma configuración del backend base
 
 Las variables reales se pasan en runtime, no se escriben en Dockerfile.
-
-Ejemplo:
 
 ```bash
 docker run --rm \
   --name cloudtasks-api \
   -p 8080:8080 \
-  -e SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI='<OIDC_ISSUER>' \
+  -e OIDC_ISSUER='<OIDC_ISSUER>' \
+  -e API_AUDIENCE='<API_AUDIENCE>' \
   cloudtasks-api:ev1
 ```
+
+Estas variables coinciden exactamente con la configuración canónica de 04A:
+
+```properties
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${OIDC_ISSUER}
+cloudtasks.security.audience=${API_AUDIENCE}
+```
+
+No usar una variante de nombres solo para Docker.
 
 En otra terminal:
 
 ```bash
 curl -i http://localhost:8080/api/public/health
-```
-
-Esperado:
-
-```text
-HTTP 200
-```
-
-Sin token:
-
-```bash
 curl -i http://localhost:8080/api/tasks
 ```
 
 Esperado:
 
 ```text
-401
+health → 200
+/tasks sin token → 401
 ```
 
 ## 5. Probar con Access Token real
@@ -139,9 +138,16 @@ curl -i \
 
 Debe comportarse igual que el backend ejecutado directamente con `./mvnw spring-boot:run` o `java -jar`.
 
-## 6. Comparación obligatoria
+Si aparece 401 después de containerizar, comparar primero:
 
-El estudiante avanzado debe poder explicar:
+```text
+OIDC_ISSUER
+API_AUDIENCE
+Access Token real
+conectividad hacia discovery/JWKS
+```
+
+## 6. Comparación obligatoria
 
 | Aspecto | JAR directo | Docker |
 |---|---|---|
@@ -149,30 +155,19 @@ El estudiante avanzado debe poder explicar:
 | puerto app | 8080 | 8080 interno |
 | Java host requerido | sí | no para runtime del contenedor |
 | artefacto | JAR | imagen |
-| config sensible | env/config | env/config |
+| config runtime | env/config | env/config |
 | JWT | igual | igual |
 | endpoints | iguales | iguales |
 | API Gateway posterior | igual | igual |
 
 ## 7. Comandos de diagnóstico
 
-Contenedores:
-
 ```bash
 docker ps
 docker ps -a
-```
-
-Logs:
-
-```bash
 docker logs cloudtasks-api
-```
-
-Procesos/puertos:
-
-```bash
 docker port cloudtasks-api
+docker inspect cloudtasks-api
 ```
 
 Detener:
@@ -193,7 +188,7 @@ El Dockerfile debe ejecutar:
 RUN chmod +x mvnw
 ```
 
-Además revisar que `mvnw` no tenga finales CRLF.
+Además revisar finales de línea de `mvnw` si corresponde.
 
 ### `port is already allocated`
 
@@ -201,13 +196,14 @@ Existe otro proceso/contenedor usando 8080. Detenerlo en vez de cambiar puertos 
 
 ### funciona como JAR pero falla en Docker
 
-Comparar:
+Comparar, en orden:
 
-1. variable `issuer-uri`;
-2. conectividad del contenedor hacia el issuer/JWKS;
-3. puerto publicado;
-4. logs Docker;
-5. Java runtime de la imagen.
+1. `OIDC_ISSUER`;
+2. `API_AUDIENCE`;
+3. conectividad del contenedor hacia issuer/JWKS;
+4. puerto publicado;
+5. logs Docker;
+6. Java runtime de la imagen.
 
 ### secreto dentro del Dockerfile
 
@@ -217,7 +213,7 @@ Incorrecto:
 ENV CLIENT_SECRET=...
 ```
 
-EV1 no necesita client secret en Angular y cualquier configuración sensible backend debe entrar en runtime/secrets, no quedar horneada en la imagen.
+CloudTasks no necesita client secret en Angular y la configuración runtime no debe quedar horneada en la imagen.
 
 ## Puerta de validación ★01
 
@@ -225,11 +221,12 @@ EV1 no necesita client secret en Angular y cualquier configuración sensible bac
 - [ ] existe `Dockerfile` reproducible.
 - [ ] existe `.dockerignore`.
 - [ ] `docker build` finaliza correctamente.
+- [ ] `OIDC_ISSUER` y `API_AUDIENCE` llegan al contenedor.
 - [ ] health containerizado = 200.
 - [ ] protegida sin token = 401.
 - [ ] Access Token válido conserva el comportamiento esperado.
 - [ ] no hay secretos en imagen/Dockerfile/repositorio.
-- [ ] el alumno puede explicar imagen vs contenedor.
+- [ ] el estudiante puede explicar imagen vs contenedor.
 
 ## Siguiente bifurcación
 
