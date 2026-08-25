@@ -135,7 +135,7 @@ Postman funciona
 CORS está correctamente configurado
 ```
 
-La evidencia debe provenir de una llamada realizada por el frontend desde el navegador.
+La comprobación debe provenir de una llamada realizada por el frontend desde el navegador.
 
 ---
 
@@ -195,7 +195,7 @@ package cl.duoc.cmartinez.cloudtasks.config;
 
 Este archivo es deliberadamente pequeño.
 
-El objetivo evaluativo es comprender:
+El objetivo de aprendizaje es comprender:
 
 ```text
 qué origen está llamando
@@ -274,7 +274,7 @@ flowchart LR
 
 En ese escenario el navegador conversa con **API Gateway**, no directamente con Spring Boot.
 
-Por eso la política CORS relevante para EV1 terminará configurándose en API Gateway usando la URL real del frontend desplegado.
+Por eso la política CORS de la práctica terminará configurándose en API Gateway usando la URL real del frontend desplegado.
 
 > No borrar este aprendizaje: la configuración local existe para comprender el problema antes de trasladarlo a la frontera cloud correcta.
 
@@ -363,9 +363,9 @@ No continuar hasta demostrar:
 - [ ] la request frontend → backend termina con respuesta HTTP exitosa;
 - [ ] el alumno puede explicar por qué Postman no demuestra CORS.
 
-## Evidencia mínima recomendada
+## Registro mínimo recomendado
 
-Guardar evidencia de:
+Guardar, si se desea como bitácora de aprendizaje:
 
 ```text
 Angular mostrando Backend: UP
