@@ -2,7 +2,7 @@
 
 > **Importante:** esta guía **no es la evaluación E1**, no reemplaza sus instrucciones oficiales y no define una estructura de entrega. Es una práctica integrada para comprender, relacionar y ejercitar los conocimientos que se medirán en E1 mediante una aplicación técnica mínima llamada **CloudTasks**.
 
-CloudTasks permite recorrer de extremo a extremo frontend + backend, API Gateway, CORS, IDaaS, OAuth2/OIDC, Authorization Code + PKCE, JWT, scopes/roles y despliegue cloud sin mezclar esos aprendizajes con RegistrApp ni con la futura evaluación.
+CloudTasks permite recorrer de extremo a extremo frontend + backend, API Gateway, CORS, IDaaS, OAuth2/OIDC, Authorization Code + PKCE, JWT, scopes/roles y despliegue cloud sin mezclar esos aprendizajes con RegistrApp.
 
 ## Convenciones visuales
 
@@ -81,7 +81,7 @@ Si un fragmento de código no aporta directamente al aprendizaje de esta vertica
 14. [09 · Pruebas negativas y troubleshooting](./09-pruebas-y-troubleshooting.md)
     - [09A · Runbook de checkpoints/estado conocido](./09a-runbook-checkpoints-estado-conocido.md)
 15. [10 · Verificación integrada](./10-verificacion-integrada.md)
-    - [10A · Mapa de cobertura de conocimientos E1](./10a-mapa-cobertura-e1.md)
+    - [10A · Mapa de cobertura de conocimientos](./10a-mapa-cobertura-conocimientos.md)
     - [10B · Simulación de presentación técnica](./10b-simulacion-presentacion-tecnica.md)
 16. [11 · Costos y cleanup](./11-costos-y-cleanup.md)
 
@@ -96,8 +96,6 @@ DSY1107-00XD-nombre-apellido/
         ├── backend/
         └── docs/
 ```
-
-La carpeta `evaluaciones/` queda reservada para actividades evaluativas reales cuando corresponda y según las instrucciones que se entreguen para ellas.
 
 ## ★ Advanced Developer
 
