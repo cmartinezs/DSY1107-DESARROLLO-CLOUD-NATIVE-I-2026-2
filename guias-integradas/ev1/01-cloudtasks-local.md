@@ -141,16 +141,34 @@ La evidencia debe provenir de una llamada realizada por el frontend desde el nav
 
 # 4. Configurar CORS local de forma mínima
 
-En el backend crear una configuración que permita únicamente el origen real que ya existe:
+En el backend, dentro de:
+
+```text
+cl.duoc.<usuario>.cloudtasks
+```
+
+crear el subpackage:
+
+```text
+config
+```
+
+Luego crear:
+
+```text
+CorsConfig.java
+```
+
+Configurar únicamente el origen real que ya existe:
 
 ```text
 http://localhost:4200
 ```
 
-Ejemplo:
+Código completo —reemplazando `<usuario>` por el usuario Duoc sin puntos—:
 
 ```java
-package cl.duoc.cloudtasks.config;
+package cl.duoc.<usuario>.cloudtasks.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -167,6 +185,12 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedHeaders("Authorization", "Content-Type");
     }
 }
+```
+
+Ejemplo para el usuario `c.martinez`:
+
+```java
+package cl.duoc.cmartinez.cloudtasks.config;
 ```
 
 Este archivo es deliberadamente pequeño.
@@ -309,6 +333,16 @@ http://localhost:8080
 
 No propagar cambios de puerto innecesarios porque después generan discrepancias en toda la guía.
 
+## El package no coincide
+
+No copiar literalmente:
+
+```text
+cl.duoc.<usuario>.cloudtasks.config
+```
+
+Debe usarse el usuario Duoc sin puntos, respetando el estándar del curso.
+
 ## Se prueba solo con Postman
 
 La prueba no es suficiente para CORS.
@@ -346,3 +380,4 @@ Angular mostrando Backend: UP
 
 - [Semana 1 · CORS](../../semanas/semana-01/04-cors-api-gateway.md)
 - [Diagnóstico CORS](../../semanas/semana-01/04-cors-api-gateway/03-diagnostico-cors.md)
+- [Estándar de repositorio del estudiante](../../docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md)
