@@ -75,6 +75,7 @@ Si la respuesta es “ninguno”, se usa scaffolding, configuración, una depend
 
 La guía está diseñada para que ningún paso use un artefacto inexistente.
 
+0. [00A · Preparar herramientas y entorno](./00a-preparar-entorno.md)
 1. [00 · Mapa EV1 y prerequisitos](./00-mapa-y-prerequisitos.md)
 2. [01A · Crear backend Spring Boot con IntelliJ](./01a-crear-backend-intellij.md)
 3. [01B · Crear frontend Angular](./01b-crear-frontend-angular.md)
@@ -88,6 +89,22 @@ La guía está diseñada para que ningún paso use un artefacto inexistente.
 11. [08 · Desplegar frontend e integrar extremo a extremo](./08-frontend-cloud-e2e.md)
 12. [09 · Pruebas negativas y troubleshooting](./09-pruebas-y-troubleshooting.md)
 13. [10 · Evidencias y defensa EV1](./10-evidencias-y-defensa.md)
+
+## Herramientas esperadas
+
+La etapa `00A` deja instalado y verificado lo necesario para el resto de la ruta. La guía distingue entre obligatorio, recomendado y alternativo para evitar instalaciones redundantes.
+
+Principales decisiones:
+
+- Git es obligatorio;
+- GitHub Desktop y `gh` son recomendados;
+- IntelliJ IDEA es la ruta oficial de esta guía para Spring Boot;
+- Java 21 es obligatorio;
+- Maven global **no** es requisito porque se usa Maven Wrapper;
+- Node.js LTS + npm + Angular CLI son obligatorios para frontend;
+- para Angular se usa **VS Code o WebStorm**, no ambos;
+- navegador con DevTools es obligatorio;
+- Postman es recomendado como herramienta auxiliar.
 
 ## Regla de avance
 
