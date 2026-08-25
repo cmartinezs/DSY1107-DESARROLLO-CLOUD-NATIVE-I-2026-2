@@ -4,7 +4,7 @@
 
 Esta carpeta define **cómo validar la guía**, no una segunda implementación de CloudTasks.
 
-Se evita mantener una copia paralela completa del código porque produciría dos fuentes de verdad que podrían divergir:
+Se evita mantener una copia paralela completa del código porque produciría dos fuentes de verdad:
 
 ```text
 guía dice A
@@ -25,7 +25,7 @@ Los snippets completos de las etapas son la fuente canónica:
 
 ## Qué significa “starter conocido”
 
-Un starter es un conjunto de archivos completos que puede aplicarse sobre el scaffolding generado en etapas anteriores.
+Un starter es un conjunto de archivos completos que se aplica sobre el scaffolding generado previamente.
 
 ```text
 Spring Initializr genera backend
@@ -37,11 +37,45 @@ Angular CLI genera frontend
 → aplica archivos completos de 03A
 ```
 
-No significa copiar un repositorio terminado sin entenderlo.
+No significa copiar un repositorio terminado sin comprenderlo.
 
-## Matriz de validación técnica
+---
 
-### Backend
+# Validación estática local
+
+Desde la raíz del repositorio docente ejecutar:
+
+```bash
+python scripts/validate_integrated_guides.py
+```
+
+El script no usa Internet ni GitHub Actions. Comprueba:
+
+```text
+archivos canónicos presentes
+enlaces Markdown relativos existentes
+fences Markdown balanceados
+bloques Mermaid con cabecera reconocible
+no reintroducir evaluaciones/ep1/
+no reintroducir nombres antiguos
+una sola aclaración guía ≠ evaluación
+no reintroducir REQUERIDO EV1
+no usar comandos Maven globales en code blocks
+```
+
+Resultado esperado:
+
+```text
+PASS: enlaces relativos, fences, Mermaid básico y reglas semánticas.
+```
+
+Este control debe ejecutarse después de renombrar/mover episodios.
+
+---
+
+# Matriz de validación funcional
+
+## Backend
 
 Desde `guia/ev1/backend/`:
 
@@ -71,7 +105,7 @@ DELETE propia + write scope      → 204
 DELETE ajena + write scope       → 403
 ```
 
-### Frontend
+## Frontend
 
 Desde `guia/ev1/frontend/`:
 
@@ -80,7 +114,7 @@ npm ci
 npm start
 ```
 
-Y antes de publicar:
+Antes de publicar:
 
 ```bash
 ng build
@@ -98,9 +132,9 @@ POST/DELETE solicitan write scope
 health público no necesita token
 ```
 
-### Navegador
+## Navegador
 
-La prueba integrada requiere DevTools:
+DevTools:
 
 ```text
 Console
@@ -118,9 +152,11 @@ Gateway como destino cloud
 sin mixed content
 ```
 
-## Validación en un computador limpio
+---
 
-La prueba más fuerte de la guía es ejecutarla desde un entorno donde no exista configuración implícita previa.
+# Validación en un computador limpio
+
+La prueba más fuerte es ejecutar la guía donde no exista configuración implícita previa.
 
 Orden:
 
@@ -129,6 +165,7 @@ Orden:
 00B repo/guia/ev1
 00C valores
 00D responsabilidades
+00 mapa
 01A backend
 01B frontend
 01C CORS local
@@ -144,19 +181,33 @@ Orden:
 11 cleanup
 ```
 
-En cada etapa registrar el primer checkpoint que no puede reproducirse. No compensar una instrucción incompleta con conocimiento implícito del docente; corregir la guía.
+En cada etapa registrar el primer checkpoint que no puede reproducirse. No compensar una instrucción incompleta con conocimiento implícito del docente: **corregir la guía**.
 
-## Restricción de validación automatizada
+---
 
-La validación de estos snippets depende de dependencias externas (Maven Central, npm, Microsoft Entra y AWS). El repositorio no debe fingir un `PASS` cuando esos servicios no se ejecutaron realmente.
+# Restricción de validación funcional automatizada
 
-La documentación puede someterse a validaciones estáticas en cualquier momento; la validación funcional exige ejecutar los comandos anteriores en un entorno con red y credenciales/sandbox apropiados.
+Los builds y pruebas integradas dependen de servicios externos:
 
-## Regla de mantenimiento
+```text
+Maven Central
+npm registry
+Microsoft Entra External ID
+AWS
+```
+
+No declarar un `PASS` funcional si esos comandos/servicios no se ejecutaron realmente.
+
+La validación estática puede ejecutarse offline. La funcional requiere un entorno con red y sandbox/credenciales apropiados.
+
+---
+
+# Regla de mantenimiento
 
 Cuando cambie una API relevante de Angular, MSAL, Spring Security, Entra o AWS:
 
 1. actualizar primero el starter canónico;
-2. volver a ejecutar sus checkpoints;
-3. actualizar las explicaciones que dependan del cambio;
-4. no crear un segundo snippet alternativo sin una razón pedagógica explícita.
+2. ejecutar el validador estático;
+3. volver a ejecutar checkpoints funcionales afectados;
+4. actualizar explicaciones dependientes;
+5. no crear un segundo snippet alternativo sin razón pedagógica explícita.
