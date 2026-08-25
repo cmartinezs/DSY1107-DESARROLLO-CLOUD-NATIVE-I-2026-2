@@ -8,6 +8,7 @@ Este anexo separa los problemas de instancia/red de los problemas de Spring Secu
 - [ ] `java -jar target/*.jar` arranca localmente.
 - [ ] health local = 200.
 - [ ] protegida local sin token = 401.
+- [ ] `OIDC_ISSUER` y `API_AUDIENCE` fueron validados en 00C/03/04.
 
 Si cualquiera falla, no crear EC2 todavía.
 
@@ -79,10 +80,15 @@ ls -lh cloudtasks-api.jar
 
 ## 7. Ejecutar foreground primero
 
+El backend canónico lee estas dos variables:
+
 ```bash
 export OIDC_ISSUER='<OIDC_ISSUER>'
+export API_AUDIENCE='<API_AUDIENCE>'
 java -jar cloudtasks-api.jar
 ```
+
+No reemplazar una de ellas por nombres distintos sin actualizar también la configuración Spring de 04A.
 
 Desde la misma EC2:
 
@@ -97,6 +103,8 @@ Esperado:
 health = 200
 /tasks sin token = 401
 ```
+
+Con un Access Token real repetir una ruta protegida y comprobar que issuer, audience y scope conservan el comportamiento local.
 
 ## 8. Recién ahora revisar networking externo
 
@@ -117,13 +125,22 @@ No tocar Spring Security ni CORS.
 
 ## 9. Persistencia
 
-Después de validar foreground, configurar `systemd` o mecanismo autorizado. Luego:
+Después de validar foreground, configurar `systemd` o mecanismo autorizado. El servicio debe recibir también:
+
+```text
+OIDC_ISSUER
+API_AUDIENCE
+```
+
+No basta con que esas variables existan en la sesión SSH interactiva: el proceso administrado debe heredarlas mediante el mecanismo de configuración aprobado.
+
+Luego:
 
 ```bash
 sudo systemctl status cloudtasks-api
 ```
 
-Cerrar SSH y repetir health remoto.
+Cerrar SSH y repetir health remoto y una prueba protegida.
 
 ## 10. Checkpoint EC2
 
@@ -131,8 +148,11 @@ Cerrar SSH y repetir health remoto.
 - [ ] administración restringida.
 - [ ] distribución conocida.
 - [ ] runtime correcto.
+- [ ] `OIDC_ISSUER` disponible al proceso real.
+- [ ] `API_AUDIENCE` disponible al proceso real.
 - [ ] health desde EC2 = 200.
 - [ ] protegida desde EC2 sin token = 401.
+- [ ] ruta protegida con Access Token válido conserva su política.
 - [ ] health remoto = 200.
 - [ ] proceso persiste al cerrar sesión.
 - [ ] `BACKEND_CLOUD_URL` registrado y validado.
@@ -147,7 +167,9 @@ timeout
 connection refused
 └─ revisar proceso + puerto/listening
 401
-└─ token/issuer/audience; no CORS
+└─ Access Token → iss → aud → exp; no CORS
+403
+└─ scope/ownership/role; no networking
 5xx
 └─ logs aplicación antes de tocar Gateway
 ```
