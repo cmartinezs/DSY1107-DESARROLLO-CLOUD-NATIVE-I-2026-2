@@ -84,7 +84,7 @@ CORS válido desde navegador
 respuesta JSON visible en la UI
 ```
 
-## Preguntas de autoevaluación
+## Preguntas de autoverificación
 
 1. ¿OAuth2 y OIDC resuelven exactamente lo mismo?
 2. ¿Por qué Angular no guarda un client secret?
