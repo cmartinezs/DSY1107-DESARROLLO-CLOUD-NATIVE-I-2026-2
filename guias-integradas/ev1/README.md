@@ -42,7 +42,7 @@ scaffolding
 → explicación técnica
 ```
 
-Si un fragmento de código no aporta directamente al aprendizaje de esta vertical, se evita o se entrega como starter.
+Si un fragmento de código no aporta directamente al aprendizaje de esta vertical, se evita o se proporciona como starter.
 
 ## Ruta completa
 
