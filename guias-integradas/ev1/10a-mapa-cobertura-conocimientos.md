@@ -32,7 +32,7 @@ docs/cobertura/
 
 Estos archivos son opcionales como bitácora de aprendizaje.
 
-## Plantilla de autoexplicación
+## Plantilla de autoverificación
 
 ```markdown
 # COV-XX · <conocimiento>
