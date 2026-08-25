@@ -4,7 +4,7 @@
 
 Pasar el backend ya validado localmente a AWS sin introducir todavía API Gateway. Primero se demuestra que Spring Boot funciona en EC2; después se agrega la frontera de API Management.
 
-> La pauta institucional de EV1 menciona explícitamente **despliegue en EC2 y uso de API Gateway**. Por eso EC2 es la referencia de esta etapa.
+Esta práctica usa **EC2 + API Gateway** como arquitectura de referencia. La variante con ECS se deja fuera para no introducir orquestación de contenedores antes de dominar este flujo base.
 
 ## Elegir ruta de despliegue
 
@@ -40,7 +40,7 @@ Al terminar esa alternativa, volver directamente a:
 
 → [06 · AWS API Gateway + JWT Authorizer](./06-api-gateway-jwt.md)
 
-> ECS no se utiliza como sustituto en EV1 porque no aparece como requisito en la pauta revisada. Puede estudiarse posteriormente como evolución de la solución Docker.
+> ECS puede estudiarse posteriormente como evolución de la solución Docker, pero no forma parte de esta ruta de práctica.
 
 ---
 
@@ -199,7 +199,7 @@ Antes de crear API Gateway debe existir, por una de las dos rutas:
 - `BACKEND_CLOUD_URL` conocido;
 - proceso/contenedor continúa activo sin depender de una terminal interactiva.
 
-### Evidencia según ruta
+### Registro según ruta
 
 **Base:**
 
@@ -220,7 +220,7 @@ EC2
 + health
 ```
 
-La evidencia adicional Docker no sustituye ninguna evidencia institucional de EV1.
+La variante Docker agrega profundidad operativa, pero ambas rutas deben terminar en el mismo estado funcional.
 
 ## Diagnóstico rápido
 
