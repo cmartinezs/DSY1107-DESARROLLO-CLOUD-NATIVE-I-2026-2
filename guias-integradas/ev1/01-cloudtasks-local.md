@@ -2,173 +2,210 @@
 
 ## Objetivo
 
-Conectar los dos proyectos que ya fueron creados y validados por separado:
+Conectar los dos proyectos ya validados:
 
 ```text
-Angular  →  Spring Boot
-:4200       :8080
+Angular :4200 → Spring Boot :8080
 ```
 
-Esta etapa introduce el primer problema real de integración de la guía: **CORS**.
+y observar **CORS desde el navegador** antes de corregirlo.
 
-> Aquí ya no se crea ningún proyecto. Si frontend o backend no funcionan por separado, volver a 01A o 01B antes de continuar.
+> Si `http://localhost:4200` o `http://localhost:8080/api/public/health` no funcionan por separado, volver a 01A/01B.
 
----
-
-## Prerrequisitos obligatorios
-
-Antes de empezar debe funcionar:
-
-```text
-http://localhost:4200
-```
-
-Y también:
-
-```text
-http://localhost:8080/api/public/health
-```
-
-Guías anteriores:
-
-- [01A · Crear backend Spring Boot con IntelliJ](./01a-crear-backend-intellij.md)
-- [01B · Crear frontend Angular](./01b-crear-frontend-angular.md)
-
----
-
-# 1. Ejecutar ambos proyectos simultáneamente
-
-Backend desde IntelliJ o Maven Wrapper:
-
-Windows:
-
-```powershell
-.\mvnw.cmd spring-boot:run
-```
-
-Linux/macOS:
-
-```bash
-./mvnw spring-boot:run
-```
-
-Frontend:
-
-```bash
-npm start
-```
-
-Comprobar nuevamente:
+## Estado inicial
 
 ```text
 frontend → http://localhost:4200
 backend  → http://localhost:8080/api/public/health
 ```
 
+Resultado backend esperado:
+
+```json
+{"status":"UP","service":"cloudtasks-api"}
+```
+
 ---
 
-# 2. Hacer una única llamada HTTP desde Angular
+# 1. Habilitar `HttpClient` en Angular
 
-No crear todavía una arquitectura compleja de servicios.
-
-Para esta prueba basta con que el componente raíz realice un `GET` al endpoint público del backend.
-
-La idea conceptual es:
+El proyecto generado por Angular CLI utiliza configuración standalone. Abrir:
 
 ```text
-Angular
-  ↓ GET
+frontend/src/app/app.config.ts
+```
+
+y dejar, como mínimo:
+
+```ts
+import { ApplicationConfig } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient()
+  ]
+};
+```
+
+Si Angular CLI generó providers adicionales, conservarlos y **agregar** `provideHttpClient()` en vez de borrar configuración válida.
+
+**CHECKPOINT 01C-0**
+
+```bash
+npm start
+```
+
+- [ ] Angular compila.
+- [ ] `http://localhost:4200` abre.
+- [ ] Console no muestra error de provider de `HttpClient`.
+
+---
+
+# 2. Agregar una llamada mínima al backend
+
+Reemplazar temporalmente el componente raíz por una versión mínima. No crear services todavía; esta etapa solo demuestra la conexión HTTP.
+
+`src/app/app.component.ts`:
+
+```ts
+import { Component, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+interface HealthResponse {
+  status: string;
+  service: string;
+}
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  private readonly http = inject(HttpClient);
+
+  readonly backendStatus = signal('pendiente');
+
+  probarBackend(): void {
+    this.backendStatus.set('consultando...');
+
+    this.http
+      .get<HealthResponse>('http://localhost:8080/api/public/health')
+      .subscribe({
+        next: response => this.backendStatus.set(response.status),
+        error: error => {
+          console.error('Error al consultar backend', error);
+          this.backendStatus.set('ERROR');
+        }
+      });
+  }
+}
+```
+
+`src/app/app.component.html`:
+
+```html
+<main>
+  <h1>CloudTasks</h1>
+  <p>Frontend operativo</p>
+  <p>Backend: {{ backendStatus() }}</p>
+
+  <button type="button" (click)="probarBackend()">
+    Probar backend
+  </button>
+</main>
+```
+
+No agregar CSS framework, routing extra ni arquitectura de services en este punto.
+
+---
+
+# 3. Ejecutar ambos proyectos
+
+Backend, desde `backend/`:
+
+PowerShell:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+Git Bash/Linux/macOS:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Frontend, desde `frontend/`:
+
+```bash
+npm start
+```
+
+Abrir DevTools antes de presionar **Probar backend**:
+
+```text
+Console
+Network
+```
+
+---
+
+# 4. Observar CORS antes de corregirlo
+
+Presionar **Probar backend**.
+
+La llamada sale desde:
+
+```text
+Origin: http://localhost:4200
+```
+
+y tiene como destino:
+
+```text
 http://localhost:8080/api/public/health
 ```
 
-El resultado debe mostrarse de forma sencilla en pantalla, por ejemplo:
+Si el navegador muestra:
 
 ```text
-Backend: UP
-```
-
-No se requiere diseño adicional.
-
----
-
-# 3. Observar el error CORS antes de corregirlo
-
-Es posible que el navegador bloquee la llamada.
-
-Eso es esperado y pedagógicamente útil.
-
-Abrir:
-
-```text
-DevTools
-→ Console
-→ Network
-```
-
-Registrar:
-
-```text
-Origin del frontend: http://localhost:4200
-Destino backend:     http://localhost:8080
-Método:              GET
-```
-
-Si aparece un mensaje relacionado con:
-
-```text
+blocked by CORS policy
 Access-Control-Allow-Origin
-CORS policy
-blocked by CORS
 ```
 
-no cambiar todavía URLs ni usar Postman como prueba sustitutiva.
+el checkpoint es pedagógicamente correcto: frontend y backend existen, pero el navegador impide que un origen lea la respuesta de otro origen sin autorización explícita.
 
-## Punto clave
+> Postman/curl no aplican la Same-Origin Policy del navegador. Que respondan `200` no demuestra que CORS esté configurado.
 
-Postman no aplica la política CORS del navegador.
+**CHECKPOINT 01C-1 · problema observado**
 
-Por eso:
-
-```text
-Postman funciona
-≠
-CORS está correctamente configurado
-```
-
-La comprobación debe provenir de una llamada realizada por el frontend desde el navegador.
+- [ ] backend directo = 200.
+- [ ] Angular intentó la request.
+- [ ] Network muestra URL/método.
+- [ ] se conoce el `Origin` real.
+- [ ] el estudiante puede distinguir error CORS de error HTTP del backend.
 
 ---
 
-# 4. Configurar CORS local de forma mínima
+# 5. Configurar CORS local en Spring Boot
 
-En el backend, dentro de:
-
-```text
-cl.duoc.<usuario>.cloudtasks
-```
-
-crear el subpackage:
+Dentro de:
 
 ```text
-config
+cl.duoc.<usuario-duoc-sin-puntos>.cloudtasks.config
 ```
 
-Luego crear:
+crear `CorsConfig.java`.
 
-```text
-CorsConfig.java
-```
-
-Configurar únicamente el origen real que ya existe:
-
-```text
-http://localhost:4200
-```
-
-Código completo —reemplazando `<usuario>` por el usuario Duoc sin puntos—:
+Ejemplo para `c.martinez`:
 
 ```java
-package cl.duoc.<usuario>.cloudtasks.config;
+package cl.duoc.cmartinez.cloudtasks.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -187,197 +224,115 @@ public class CorsConfig implements WebMvcConfigurer {
 }
 ```
 
-Ejemplo para el usuario `c.martinez`:
+Cambiar únicamente el package personal. No usar literalmente `<usuario-duoc-sin-puntos>` dentro de Java.
+
+No utilizar:
 
 ```java
-package cl.duoc.cmartinez.cloudtasks.config;
+.allowedOrigins("*")
 ```
 
-Este archivo es deliberadamente pequeño.
-
-El objetivo de aprendizaje es comprender:
-
-```text
-qué origen está llamando
-qué servidor recibe
-qué métodos se permiten
-qué headers se permiten
-```
-
-No se busca construir una política CORS genérica ni sofisticada.
+para esconder el problema.
 
 ---
 
-# 5. Reiniciar el backend
+# 6. Reiniciar y repetir
 
-Después de agregar la configuración CORS, reiniciar Spring Boot.
+Reiniciar Spring Boot y volver a presionar **Probar backend**.
 
-Mantener Angular ejecutándose.
-
-Volver a cargar:
-
-```text
-http://localhost:4200
-```
-
-La llamada debe completarse correctamente.
-
-La pantalla debería poder mostrar algo equivalente a:
+Esperado en UI:
 
 ```text
 Backend: UP
 ```
 
----
-
-# 6. Validar en Network
-
-En DevTools → Network seleccionar la llamada al backend.
-
-Verificar:
+En DevTools → Network comprobar:
 
 ```text
-Request URL:
-http://localhost:8080/api/public/health
-
-Request Method:
-GET
-
-Origin:
-http://localhost:4200
+Request URL: http://localhost:8080/api/public/health
+Request Method: GET
+Origin: http://localhost:4200
+Status: 200
 ```
 
-Y una respuesta HTTP exitosa.
+**CHECKPOINT 01C-2 · integración local**
 
-Según el navegador/configuración pueden observarse headers CORS en la respuesta.
+- [ ] UI muestra `Backend: UP`.
+- [ ] Network muestra request real del navegador.
+- [ ] status HTTP = 200.
+- [ ] origen permitido = `http://localhost:4200`.
+- [ ] Postman/curl se reconocen como pruebas HTTP, no pruebas de CORS.
 
 ---
 
-# 7. Entender qué configuración es temporal
+# 7. Qué es temporal
 
-En este momento la arquitectura es:
+Ahora:
 
 ```mermaid
 flowchart LR
     F[Angular localhost:4200] --> B[Spring Boot localhost:8080]
 ```
 
-Por eso CORS se resuelve temporalmente en Spring Boot.
-
-Más adelante la arquitectura será:
+Más adelante:
 
 ```mermaid
 flowchart LR
     F[Frontend cloud] --> G[AWS API Gateway]
-    G --> B[Spring Boot AWS]
+    G --> B[Spring Boot en AWS]
 ```
 
-En ese escenario el navegador conversa con **API Gateway**, no directamente con Spring Boot.
-
-Por eso la política CORS de la práctica terminará configurándose en API Gateway usando la URL real del frontend desplegado.
-
-> No borrar este aprendizaje: la configuración local existe para comprender el problema antes de trasladarlo a la frontera cloud correcta.
+Cuando el navegador consuma API Gateway, la política CORS principal estará en esa frontera. La configuración local de Spring existe para comprender el mecanismo y mantener una ruta local reproducible.
 
 ---
 
-# 8. No introducir todavía seguridad
+# 8. No introducir todavía
 
-En esta etapa no agregar:
-
-- login;
-- MSAL;
-- Bearer tokens;
-- Spring Security;
-- JWT;
-- scopes;
-- roles.
-
-Primero debe quedar comprobado:
+No agregar todavía:
 
 ```text
-frontend funciona
-backend funciona
-frontend puede llamar al backend
-CORS se entiende y está controlado
+MSAL
+login
+Bearer tokens
+Spring Security
+JWT
+scopes
+roles
 ```
 
-Luego se incorpora identidad.
-
----
-
-# Errores frecuentes
-
-## Backend responde en navegador pero Angular falla
-
-Revisar DevTools. Si el error menciona CORS, no cambiar el endpoint ni el backend antes de revisar la política de origen.
-
-## Se configuró `allowedOrigins("*")`
-
-No usar `*` para esconder el problema.
-
-La guía conoce un origen concreto:
+El estado conocido que debe quedar es:
 
 ```text
-http://localhost:4200
+frontend PASS
+backend PASS
+HTTP frontend → backend PASS
+CORS local PASS
 ```
 
-Usarlo explícitamente prepara al alumno para configurar posteriormente la URL cloud real.
+## SI FALLA
 
-## Angular llama a un puerto distinto
+| Síntoma | Revisar primero |
+|---|---|
+| `NullInjectorError`/provider HttpClient | `provideHttpClient()` |
+| botón no cambia estado | Console + binding `(click)` |
+| backend directo falla | 01A; no CORS |
+| backend directo 200, Angular CORS | `CorsConfig` + origin exacto |
+| status 404 | ruta `/api/public/health` |
+| status 500 | logs Spring |
+| puerto distinto | detener proceso conflictivo y conservar 4200/8080 |
 
-Revisar que el backend siga en:
+## Puerta de validación 01C
+
+No continuar hasta que todos sean `PASS`:
 
 ```text
-http://localhost:8080
+01C-0 Angular con HttpClient
+01C-1 CORS observado y entendido
+01C-2 request navegador → backend = 200
 ```
-
-No propagar cambios de puerto innecesarios porque después generan discrepancias en toda la guía.
-
-## El package no coincide
-
-No copiar literalmente:
-
-```text
-cl.duoc.<usuario>.cloudtasks.config
-```
-
-Debe usarse el usuario Duoc sin puntos, respetando el estándar del curso.
-
-## Se prueba solo con Postman
-
-La prueba no es suficiente para CORS.
-
-Debe existir una request desde el navegador originada por Angular.
-
----
-
-# Puerta de validación 01C
-
-No continuar hasta demostrar:
-
-- [ ] Angular funciona en `http://localhost:4200`;
-- [ ] Spring Boot funciona en `http://localhost:8080`;
-- [ ] Angular realiza una request real al backend;
-- [ ] se identificó el origen usado por el navegador;
-- [ ] CORS permite explícitamente ese origen;
-- [ ] la request frontend → backend termina con respuesta HTTP exitosa;
-- [ ] el alumno puede explicar por qué Postman no demuestra CORS.
-
-## Registro mínimo recomendado
-
-Guardar, si se desea como bitácora de aprendizaje:
-
-```text
-Angular mostrando Backend: UP
-+ DevTools/Network mostrando la request
-+ origen http://localhost:4200
-+ respuesta exitosa
-```
-
----
 
 ## Contenido relacionado
 
 - [Semana 1 · CORS](../../semanas/semana-01/04-cors-api-gateway.md)
 - [Diagnóstico CORS](../../semanas/semana-01/04-cors-api-gateway/03-diagnostico-cors.md)
-- [Estándar de repositorio del estudiante](../../docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md)
+- [00D · Scaffolding vs código del estudiante](./00d-scaffolding-vs-codigo-estudiante.md)
