@@ -38,19 +38,12 @@ Después de instalar:
 
 ```bash
 docker version
-```
-
-Y validar:
-
-```bash
 docker run --rm hello-world
 ```
 
-Si el usuario de administración todavía requiere `sudo docker`, corregir/configurar conscientemente según las reglas del laboratorio antes de automatizar nada.
+Si el usuario todavía requiere `sudo docker`, resolverlo conscientemente según las reglas del laboratorio antes de automatizar nada.
 
 ## 3. Llevar la imagen al servidor
-
-Se pueden utilizar dos estrategias didácticas.
 
 ### Estrategia A · construir en EC2
 
@@ -61,23 +54,11 @@ cd backend
 docker build -t cloudtasks-api:guia .
 ```
 
-Ventaja:
-
-```text
-menos infraestructura adicional
-```
-
-Desventaja:
-
-```text
-EC2 necesita descargar dependencias y compilar
-```
+Ventaja: menos infraestructura adicional. Desventaja: EC2 descarga dependencias y compila.
 
 ### Estrategia B · mover una imagen ya construida
 
-Usar un registry autorizado si el curso dispone de uno.
-
-Conceptualmente:
+Usar un registry autorizado si el curso dispone de uno:
 
 ```text
 build local
@@ -86,70 +67,58 @@ build local
 → run
 ```
 
-No introducir ECR por defecto si el entorno académico no lo ha habilitado. El foco aquí es comprender imagen → contenedor → EC2 → API Gateway, no administrar un registry.
+No introducir ECR por defecto si el entorno académico no lo ha habilitado. El foco es imagen → contenedor → EC2 → API Gateway.
 
 ## 4. Variables de entorno
 
-No escribir issuer, tokens o credenciales dentro de la imagen.
+No escribir issuer, audience, tokens o credenciales dentro de la imagen.
 
-Ejecutar, por ejemplo:
+Ejecutar:
 
 ```bash
 docker run -d \
   --name cloudtasks-api \
   --restart unless-stopped \
   -p 8080:8080 \
-  -e SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI='<OIDC_ISSUER>' \
+  -e OIDC_ISSUER='<OIDC_ISSUER>' \
+  -e API_AUDIENCE='<API_AUDIENCE>' \
   cloudtasks-api:guia
 ```
+
+Estos nombres son los mismos utilizados por 04A y por la ruta JAR. No crear una convención especial para Docker.
 
 Comprobar:
 
 ```bash
 docker ps
-```
-
-## 5. Logs
-
-```bash
 docker logs cloudtasks-api
 ```
 
-Para seguimiento temporal:
-
-```bash
-docker logs -f cloudtasks-api
-```
-
-Salir con `Ctrl+C` no detiene el contenedor.
-
-## 6. Validar desde EC2
+## 5. Validar desde EC2
 
 ```bash
 curl -i http://localhost:8080/api/public/health
-```
-
-Esperado:
-
-```text
-200
-```
-
-Sin token:
-
-```bash
 curl -i http://localhost:8080/api/tasks
 ```
 
 Esperado:
 
 ```text
-401
+health → 200
+/tasks sin token → 401
 ```
 
-Esto prueba primero aplicación + Docker sin introducir networking externo.
+Con Access Token real:
 
-## 7. Validar remotamente
+```bash
+curl -i \
+  -H "Authorization: Bearer <ACCESS_TOKEN>" \
+  http://localhost:8080/api/tasks
+```
+
+Debe conservar la misma validación de issuer, audience y scopes que en local.
+
+## 6. Validar remotamente
 
 Desde un origen autorizado:
 
@@ -165,41 +134,40 @@ BACKEND_CLOUD_URL=http://<HOST_EC2>:8080
 
 La URL tiene la misma función que en la ruta base.
 
-## 8. Reinicio y persistencia
-
-La ruta base utiliza un proceso Java administrado, por ejemplo, mediante `systemd`.
+## 7. Reinicio y persistencia
 
 La ruta Docker utiliza:
 
 ```text
 Docker daemon
-+ restart policy del contenedor
++ --restart unless-stopped
 ```
 
-Con:
+Cerrar SSH y comprobar que el backend sigue respondiendo.
+
+Después de reiniciar la instancia, comprobar otra vez:
 
 ```bash
---restart unless-stopped
+docker ps
+curl -i http://localhost:8080/api/public/health
 ```
 
-probar que el backend no dependa de mantener una sesión SSH abierta.
+## 8. Actualizar una versión
 
-## 9. Actualizar una versión
+No modificar manualmente el JAR dentro de un contenedor.
 
-No entrar al contenedor a reemplazar el JAR manualmente.
-
-Flujo correcto:
+Flujo:
 
 ```text
 cambio código
 → tests
 → docker build nueva imagen
-→ detener/eliminar container anterior
-→ iniciar nueva imagen
-→ health check
+→ detener/eliminar contenedor anterior
+→ iniciar nueva imagen con OIDC_ISSUER + API_AUDIENCE
+→ health + prueba protegida
 ```
 
-Ejemplo simple:
+Ejemplo:
 
 ```bash
 docker stop cloudtasks-api
@@ -209,25 +177,18 @@ docker run -d \
   --name cloudtasks-api \
   --restart unless-stopped \
   -p 8080:8080 \
-  -e SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI='<OIDC_ISSUER>' \
+  -e OIDC_ISSUER='<OIDC_ISSUER>' \
+  -e API_AUDIENCE='<API_AUDIENCE>' \
   cloudtasks-api:guia
 ```
 
-## 10. Convergencia con la ruta base
+## 9. Convergencia con la ruta base
 
 Cuando esto funcione, volver a:
 
 → [06 · AWS API Gateway + JWT Authorizer](../06-api-gateway-jwt.md)
 
-Desde allí no existe una segunda práctica Docker: ambas variantes convergen.
-
-API Gateway recibe:
-
-```text
-BACKEND_CLOUD_URL
-```
-
-independientemente de si detrás existe:
+API Gateway recibe `BACKEND_CLOUD_URL` independientemente de si detrás existe:
 
 ```text
 EC2 → java -jar
@@ -239,9 +200,9 @@ o:
 EC2 → Docker → java -jar dentro del container
 ```
 
-## 11. ECS: dónde encaja conceptualmente
+## 10. ECS: dónde encaja conceptualmente
 
-Una vez que existe una imagen Docker, una evolución profesional posible es:
+Una evolución profesional posible es:
 
 ```text
 Docker image
@@ -252,25 +213,26 @@ Docker image
 → API Gateway
 ```
 
-Eso agrega registry, task definitions, services, capacity y networking. Conviene estudiarlo después de comprender y validar primero Docker sobre una EC2 simple.
+Eso agrega infraestructura que no es necesaria para comprender esta práctica base.
 
 ## Puerta de validación ★02
 
 - [ ] EC2 creada y accesible.
 - [ ] Docker Engine funciona en EC2.
 - [ ] CloudTasks corre como contenedor.
+- [ ] `OIDC_ISSUER` está presente en runtime.
+- [ ] `API_AUDIENCE` está presente en runtime.
 - [ ] health local EC2 = 200.
 - [ ] protegida sin token = 401.
+- [ ] Access Token válido conserva la política.
 - [ ] endpoint remoto validado desde origen autorizado.
-- [ ] container sobrevive al cierre de SSH.
+- [ ] contenedor sobrevive al cierre de SSH.
 - [ ] no hay secretos dentro de la imagen.
 - [ ] `BACKEND_CLOUD_URL` queda listo para API Gateway.
-- [ ] el alumno puede explicar diferencia entre EC2, Docker Engine, imagen y contenedor.
+- [ ] el estudiante puede explicar EC2, Docker Engine, imagen y contenedor.
 
 ## Pregunta de comprobación avanzada
 
 > ¿Qué cambió para API Gateway al pasar de JAR directo a Docker?
 
-Respuesta conceptual esperada:
-
-> Prácticamente nada en el contrato HTTP. Cambió la forma en que el backend se empaqueta y ejecuta dentro de EC2, no la API pública ni el mecanismo de autenticación/autorización.
+Respuesta conceptual esperada: prácticamente nada en el contrato HTTP; cambió el empaquetado/runtime dentro de EC2, no la API ni la autenticación/autorización.
