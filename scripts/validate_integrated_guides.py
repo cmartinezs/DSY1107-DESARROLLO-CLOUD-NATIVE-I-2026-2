@@ -30,7 +30,6 @@ FORBIDDEN_TEXT = {
 }
 
 ALLOWED_EVALUATION_PHRASE = "esta guía **no es la evaluación E1**"
-
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
 FENCE = re.compile(r"^\s*```([^`]*)$")
 GLOBAL_MAVEN_COMMAND = re.compile(r"^\s*mvn(?:\s|$)")
@@ -92,14 +91,15 @@ def validate_mermaid(path: Path, text: str, errors: list[str]) -> None:
 
 def validate_semantics(path: Path, text: str, errors: list[str]) -> None:
     rel = path.relative_to(ROOT)
+
     for forbidden, reason in FORBIDDEN_TEXT.items():
         if forbidden in text:
             errors.append(f"{rel}: texto prohibido {forbidden!r}. {reason}")
 
-    if path.is_relative_to(EV1) and path.name != "README.md":
-        if "la evaluación E1" in text or "evaluación E1" in text:
+    if path.is_relative_to(EV1) and path != EV1 / "README.md":
+        if "evaluación E1" in text:
             errors.append(
-                f"{rel}: la distinción guía vs evaluación debe declararse una sola vez en ev1/README.md"
+                f"{rel}: la distinción guía vs evaluación debe declararse solo en ev1/README.md"
             )
 
     if path == EV1 / "README.md":
@@ -129,6 +129,7 @@ def validate_required_files(errors: list[str]) -> None:
         EV1 / "00b-git-github-flujo-guia.md",
         EV1 / "00c-matriz-valores-y-checkpoints.md",
         EV1 / "00d-scaffolding-vs-codigo-estudiante.md",
+        EV1 / "00-mapa-y-prerequisitos.md",
         EV1 / "01a-crear-backend-intellij.md",
         EV1 / "01b-crear-frontend-angular.md",
         EV1 / "01-cloudtasks-local.md",
@@ -138,10 +139,13 @@ def validate_required_files(errors: list[str]) -> None:
         EV1 / "04-jwt-y-backend.md",
         EV1 / "04a-starter-spring-security.md",
         EV1 / "05-aws-backend.md",
+        EV1 / "05a-ec2-paso-a-paso.md",
         EV1 / "06-api-gateway-jwt.md",
         EV1 / "07-cors.md",
         EV1 / "08-frontend-cloud-e2e.md",
+        EV1 / "08a-hosting-frontend-https.md",
         EV1 / "09-pruebas-y-troubleshooting.md",
+        EV1 / "09a-runbook-checkpoints-estado-conocido.md",
         EV1 / "10-verificacion-integrada.md",
         EV1 / "10a-mapa-cobertura-conocimientos.md",
         EV1 / "10b-simulacion-presentacion-tecnica.md",
