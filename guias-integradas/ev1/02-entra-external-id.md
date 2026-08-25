@@ -15,6 +15,7 @@ Registrar en `ev1-local-values.txt`:
 ```text
 TENANT_ID=<id real>
 TENANT_DOMAIN=<dominio real>
+TENANT_SUBDOMAIN=<subdominio antes de .onmicrosoft.com>
 ```
 
 ### Validación
@@ -119,20 +120,47 @@ SPA_CLIENT_ID=<Application/Client ID>
 
 No crear ni copiar `client_secret` al frontend.
 
-## 7. Permisos de API
+## 7. Asociar la SPA al user flow
+
+En el External tenant, agregar `cloudtasks-spa` al user flow creado en el paso 2. Este paso es obligatorio: que la app registration exista no significa automáticamente que participe del flujo de registro/inicio de sesión para clientes externos.
+
+### Validación
+
+Usar `Run user flow` / experiencia equivalente seleccionando `cloudtasks-spa`. Comprobar que el flujo llega a la redirect URI local configurada o, al menos, que la aplicación aparece correctamente asociada al flujo.
+
+## 8. Permisos de API
 
 Dar a `cloudtasks-spa` acceso delegado a los scopes expuestos por `cloudtasks-api`.
+
+En External ID puede ser necesario que un administrador otorgue consentimiento en nombre de los usuarios del tenant. Si aparece un error de consentimiento durante login/token acquisition, revisar primero **API permissions + admin consent** antes de modificar MSAL.
 
 El resultado conceptual debe ser:
 
 ```mermaid
 flowchart LR
-    SPA[cloudtasks-spa] -->|solicita tasks.read/tasks.write| API[cloudtasks-api]
-    T[External tenant] --> SPA
+    UF[Sign-up / sign-in user flow] --> SPA[cloudtasks-spa]
+    SPA -->|solicita tasks.read/tasks.write| API[cloudtasks-api]
+    T[External tenant] --> UF
     T --> API
 ```
 
-## 8. Obtener metadata OIDC
+## 9. Autoridad de External ID
+
+Para un External tenant, la autoridad de referencia de MSAL usa el dominio CIAM del tenant:
+
+```text
+https://<TENANT_SUBDOMAIN>.ciamlogin.com/
+```
+
+Registrar:
+
+```text
+MSAL_AUTHORITY=https://<TENANT_SUBDOMAIN>.ciamlogin.com/
+```
+
+No reemplazarlo por `login.microsoftonline.com` por costumbre si se está trabajando con External ID.
+
+## 10. Obtener metadata OIDC
 
 Localizar la configuración OIDC/discovery del tenant y determinar el issuer real que aparecerá en tokens válidos.
 
@@ -152,9 +180,12 @@ Debe existir y poder mostrarse:
 - External tenant correcto;
 - user flow utilizable;
 - `cloudtasks-spa` con redirect local;
+- SPA asociada al user flow;
 - `cloudtasks-api`;
 - scopes `tasks.read` y `tasks.write`;
 - permisos entre SPA y API;
+- admin consent cuando el tenant lo requiera;
+- `MSAL_AUTHORITY` del dominio `ciamlogin.com`;
 - issuer identificado desde metadata real.
 
 ## Errores frecuentes
@@ -162,6 +193,14 @@ Debe existir y poder mostrarse:
 ### `redirect_uri` no coincide
 
 La URI debe coincidir **exactamente** con una URI registrada. Revisar esquema, host, puerto, path y slash final.
+
+### La app existe pero el user flow no la encuentra
+
+La app registration no quedó asociada al user flow correcto o se está mirando otro tenant/directorio.
+
+### Login funciona, pero no se puede solicitar el scope de CloudTasks
+
+Revisar que `cloudtasks-spa` tenga los permisos delegados sobre `cloudtasks-api` y que el consentimiento requerido esté otorgado.
 
 ### Se obtuvo un token pero el `aud` no es la API
 
