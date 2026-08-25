@@ -4,84 +4,77 @@
 
 Crear **desde cero** el frontend que se utilizará durante toda la guía integrada.
 
-En esta etapa no se implementa autenticación, MSAL, OAuth2, JWT ni lógica visual compleja. El objetivo es obtener una SPA Angular funcional en `http://localhost:4200` que más adelante pueda:
+En esta etapa no se implementa autenticación, MSAL, OAuth2, JWT ni lógica visual compleja. El objetivo es obtener una SPA Angular funcional en `http://localhost:4200`.
 
-- iniciar sesión mediante Microsoft Entra External ID;
-- recibir tokens;
-- llamar a AWS API Gateway;
-- observar CORS y consumo de una API protegida.
+> El frontend existe para hacer observable la integración Cloud Native, no para introducir arquitectura frontend avanzada.
 
-> El foco de esta práctica no es diseño visual avanzado ni arquitectura compleja de frontend. El frontend existe para hacer observable la integración Cloud Native.
+## Antes de comenzar
+
+Completar:
+
+- [00A · Preparar el entorno](./00a-preparar-entorno.md)
+- [00B · Git/GitHub aplicado a la guía](./00b-git-github-flujo-guia.md)
+- [00D · Scaffolding vs código del estudiante](./00d-scaffolding-vs-codigo-estudiante.md)
+
+Verificar:
+
+```bash
+node --version
+npm --version
+ng version
+```
+
+Registrar qué versión mayor de Angular CLI se utilizará. La etapa MSAL seleccionará una versión compatible con ese Angular en vez de instalar dependencias al azar.
 
 ---
 
 ## Resultado esperado
 
-Al finalizar debe existir:
-
 ```text
-cloudtasks/
+guia/ev1/
 ├── backend/
 └── frontend/
     ├── package.json
+    ├── package-lock.json
     ├── angular.json
     ├── src/
     └── ...
 ```
 
-Y debe abrirse:
+Y:
 
 ```text
 http://localhost:4200
 ```
 
-mostrando una pantalla mínima de CloudTasks.
+debe mostrar CloudTasks.
 
 ---
 
-# 1. Verificar Node.js
+# 1. Verificar Angular CLI
 
-Abrir una terminal.
-
-Ejecutar:
-
-```bash
-node --version
-npm --version
-```
-
-La guía requiere una versión LTS vigente compatible con la versión de Angular utilizada en el curso.
-
-Si ambos comandos funcionan, continuar.
-
-Si `node` o `npm` no existen, instalar Node.js LTS antes de seguir.
-
----
-
-# 2. Instalar Angular CLI
-
-Si `ng` todavía no existe:
+Si `ng` no existe:
 
 ```bash
 npm install -g @angular/cli
 ```
 
-Validar:
+Cerrar/reabrir terminal y comprobar:
 
 ```bash
 ng version
 ```
 
-No continuar hasta que Angular CLI responda correctamente.
+No continuar con un CLI que no pueda ejecutarse.
 
 ---
 
-# 3. Crear el proyecto
+# 2. Crear el proyecto
 
-Desde la carpeta:
+Desde:
 
 ```text
-cloudtasks/
+guia/ev1/
 ```
 
 Ejecutar:
@@ -90,25 +83,63 @@ Ejecutar:
 ng new frontend --routing --style=css --skip-git
 ```
 
-Cuando Angular CLI consulte opciones adicionales, mantener la configuración simple y evitar incorporar capacidades que no aporten a esta práctica.
+## Respuestas a prompts adicionales
 
-La intención es obtener una SPA Angular convencional.
+Las preguntas exactas cambian entre versiones de Angular. Aplicar estas reglas:
 
-> `--skip-git` evita crear un segundo repositorio Git dentro del workspace de la guía.
+```text
+Routing                    → sí
+Styles                     → CSS
+SSR / SSG / prerendering   → NO
+Git interno                → NO (--skip-git)
+framework CSS              → ninguno
+```
+
+### Por qué no usar SSR/SSG aquí
+
+CloudTasks utiliza APIs de navegador y un flujo SPA con MSAL. Incorporar server-side rendering agrega otra frontera de ejecución y no aporta al aprendizaje de esta guía.
+
+La aplicación debe ser una **SPA de navegador** simple.
 
 ---
 
-# 4. Entrar al frontend
+# 3. Confirmar un solo repositorio Git
+
+Después de generar:
 
 ```bash
 cd frontend
+git rev-parse --show-toplevel
 ```
 
-Instalar dependencias si Angular CLI no lo hizo automáticamente:
+Debe devolver la raíz del repositorio personal DSY1107, no `frontend/`.
+
+Si aparece:
+
+```text
+frontend/.git
+```
+
+se creó accidentalmente un repo anidado. Corregirlo antes de seguir.
+
+---
+
+# 4. Revisar versiones generadas
+
+Desde `frontend/`:
 
 ```bash
-npm install
+ng version
+npm list @angular/core --depth=0
 ```
+
+Registrar la versión mayor, por ejemplo:
+
+```text
+ANGULAR_MAJOR=22
+```
+
+No editar `package.json` para “subir todo a latest” después de generar el proyecto.
 
 ---
 
@@ -118,7 +149,7 @@ npm install
 npm start
 ```
 
-Si el proyecto generado no tiene script `start`, usar:
+Si el proyecto generado no incluye script `start`:
 
 ```bash
 ng serve
@@ -130,186 +161,148 @@ Abrir:
 http://localhost:4200
 ```
 
-Debe verse la aplicación Angular.
+**CHECKPOINT 01B-0 · scaffolding**
+
+- [ ] Angular compila.
+- [ ] puerto 4200 activo.
+- [ ] Console sin errores críticos.
+- [ ] no existe repo Git anidado.
+- [ ] versión Angular conocida.
 
 ---
 
-# 6. Reemplazar la pantalla inicial por una versión mínima
+# 6. Dejar una UI mínima
 
-No se necesita diseñar una interfaz completa.
+Usar el componente raíz generado y reemplazar el contenido visual por algo equivalente a:
 
-La pantalla debe comunicar únicamente que el frontend existe y está operativo.
-
-Contenido mínimo sugerido:
-
-```text
-CloudTasks
-Frontend operativo
-Backend: pendiente de integración
-Identidad: pendiente
+```html
+<main>
+  <h1>CloudTasks</h1>
+  <p>Frontend operativo</p>
+  <p>Backend: pendiente de integración</p>
+  <p>Identidad: pendiente</p>
+</main>
 ```
-
-Puede utilizarse directamente el componente raíz generado por Angular.
 
 No crear todavía:
 
-- navbar;
-- dashboard complejo;
-- componentes visuales adicionales;
-- formularios extensos;
-- servicios de dominio;
-- librerías CSS externas.
-
-Todo eso agrega trabajo que no aporta al objetivo de esta etapa.
+```text
+navbar
+dashboard
+routing adicional
+formularios complejos
+servicios de dominio
+state manager
+framework CSS
+login propio
+```
 
 ---
 
-# 7. Estructura funcional mínima que tendrá más adelante
+# 7. Validar nuevamente
 
-La interfaz final solo necesitará:
-
-```text
-CloudTasks
-├── Iniciar sesión / Cerrar sesión
-├── Mi identidad
-├── Tareas
-│   ├── listar
-│   ├── crear
-│   └── eliminar
-└── estado de integración
+```bash
+npm start
 ```
 
-No implementar esas capacidades todavía.
+DevTools:
 
-La guía las agregará cuando exista una razón de aprendizaje concreta para hacerlo.
+```text
+Console → sin errores de ejecución
+Network → bundles cargan correctamente
+```
+
+**CHECKPOINT 01B-1 · frontend mínimo**
+
+- [ ] pantalla CloudTasks visible.
+- [ ] frontend sigue en `http://localhost:4200`.
+- [ ] DevTools sin error crítico.
 
 ---
 
-# 8. Validar que el puerto sea 4200
+# 8. Mantener puerto 4200
 
-La guía utiliza:
+Ese origen se utilizará posteriormente en:
 
 ```text
-http://localhost:4200
+CORS local
+redirect URI Entra
+MSAL
+comparación con URL cloud
 ```
 
-como origen local del frontend.
-
-Ese valor será utilizado posteriormente para:
-
-- redirect URI de la SPA en Microsoft Entra;
-- pruebas de CORS;
-- configuración temporal/local del backend;
-- comparación con la URL cloud definitiva.
-
-Si Angular solicita otro puerto porque `4200` está ocupado, cerrar la aplicación que lo esté utilizando antes de aceptar otro puerto.
-
-Evitar cambiar el origen sin necesidad, porque después debe coincidir exactamente en configuraciones de CORS y autenticación.
+Si Angular propone 4201 porque 4200 está ocupado, identificar y detener primero el proceso conflictivo en vez de aceptar un puerto nuevo por comodidad.
 
 ---
 
-# 9. Verificar desde DevTools
+# 9. Qué genera Angular y qué hará el estudiante
 
-Abrir el navegador en:
+| Pieza | Origen |
+|---|---|
+| `angular.json` | Angular CLI |
+| `package.json` | Angular CLI |
+| `package-lock.json` | npm/Angular CLI |
+| `src/main.ts` | Angular CLI |
+| estructura del componente raíz | Angular CLI |
+| UI mínima | estudiante adapta |
+| `HttpClient` local | etapa 01C |
+| MSAL Angular | etapa 03 |
+| token Bearer | `MsalInterceptor` |
 
-```text
-http://localhost:4200
-```
-
-Abrir DevTools.
-
-Revisar:
-
-```text
-Console
-```
-
-No deben existir errores rojos de ejecución de Angular.
-
-En:
-
-```text
-Network
-```
-
-la página debe cargar sus recursos correctamente.
+No reescribir archivos generados si no existe una razón concreta.
 
 ---
 
-# 10. Qué NO tiene que programar el alumno aquí
-
-No se espera que el alumno implemente manualmente:
-
-- OAuth2;
-- PKCE;
-- generación de JWT;
-- almacenamiento de tokens;
-- un sistema de usuarios;
-- un formulario de login propio;
-- una API falsa en Angular;
-- lógica de seguridad;
-- un framework CSS;
-- una aplicación de negocio real.
-
-Más adelante MSAL resolverá el protocolo OAuth2/OIDC y el frontend solo configurará lo necesario para utilizarlo correctamente.
-
----
-
-# Errores frecuentes
+# 10. Errores frecuentes
 
 ## `ng` no se reconoce
 
-Cerrar y volver a abrir la terminal después de instalar Angular CLI.
-
-Validar:
+Cerrar/reabrir terminal y ejecutar:
 
 ```bash
 ng version
 ```
 
-## `npm install` falla
+## `npm install` / generación falla
 
-Antes de borrar archivos o cambiar versiones arbitrariamente:
+Revisar, en orden:
 
-1. comprobar conexión a Internet;
-2. revisar la primera línea real del error;
-3. verificar versiones de Node y npm;
-4. intentar nuevamente desde la carpeta `frontend/`.
+```text
+conectividad
+Node version
+npm version
+primer error real
+compatibilidad Angular/Node
+```
+
+No borrar `package-lock.json` como primera reacción.
+
+## Se activó SSR accidentalmente
+
+Para esta práctica es preferible regenerar correctamente una SPA simple antes de arrastrar archivos/configuración server que después compliquen MSAL.
 
 ## Puerto 4200 ocupado
 
-Cerrar el proceso que está usando el puerto.
-
-No cambiar a `4201`, `4300` u otro puerto si no existe una razón real, porque todas las configuraciones posteriores usan el origen exacto `http://localhost:4200`.
+Detener proceso conflictivo y conservar el origen canónico.
 
 ## Pantalla en blanco
 
-Abrir DevTools → Console.
-
-Corregir primero el error mostrado antes de continuar hacia identidad o cloud.
+DevTools → Console antes de cambiar dependencias.
 
 ---
 
 # Puerta de validación 01B
 
-No continuar hasta demostrar:
-
-- [ ] Node y npm funcionan;
-- [ ] Angular CLI funciona;
-- [ ] existe `cloudtasks/frontend/`;
-- [ ] `npm start` o `ng serve` inicia la aplicación;
-- [ ] `http://localhost:4200` abre correctamente;
-- [ ] DevTools no muestra errores de ejecución;
-- [ ] la pantalla identifica claramente que CloudTasks frontend está operativo.
-
-## Registro mínimo recomendado
-
-Si se lleva bitácora de aprendizaje, puede guardarse una captura donde se observe:
-
 ```text
-http://localhost:4200
-+ pantalla CloudTasks
-+ DevTools sin errores relevantes
+Node/npm PASS
+Angular CLI PASS
+proyecto generado PASS
+SPA sin SSR PASS
+repo Git único PASS
+Angular major conocido PASS
+localhost:4200 PASS
+DevTools PASS
+UI mínima PASS
 ```
 
-No se requiere código complejo en esta etapa porque todavía no existe una necesidad de aprendizaje que lo justifique.
+No continuar a 01C hasta que este estado sea reproducible.
