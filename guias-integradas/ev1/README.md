@@ -1,189 +1,131 @@
 # EV1 · Guía integrada de implementación real
 
-Esta guía conecta, en una sola ruta reproducible, los contenidos que la EV1 exige demostrar: frontend + backend, API Manager/Gateway, CORS, Identity as a Service, OAuth2, OpenID Connect, Authorization Code + PKCE, JWT, scopes/roles y despliegue cloud.
+Esta ruta implementa de extremo a extremo los contenidos evaluados en EV1: frontend + backend, API Gateway, CORS, IDaaS, OAuth2/OIDC, Authorization Code + PKCE, JWT, scopes/roles y despliegue cloud.
 
-> Esta vertical no es RegistrApp. RegistrApp permanece como proyecto formativo transversal. Aquí se construye una **aplicación técnica de referencia** para demostrar el encargo institucional sin dependencias ocultas.
+> No reemplaza RegistrApp. CloudTasks es una aplicación técnica mínima cuyo dominio existe solo para hacer observable la arquitectura evaluada.
 
-## Resultado final
+## Convenciones visuales
+
+- **REQUERIDO EV1**: necesario para cubrir la evaluación.
+- **EVIDENCIA**: debe poder demostrarse o registrarse.
+- **SI FALLA**: no avanzar; volver al último checkpoint PASS.
+- **★ OPCIONAL / Advanced Developer**: profundización técnica; no agrega criterios institucionales.
+
+## Arquitectura final
 
 ```mermaid
 flowchart LR
     U[Usuario] --> F[Angular SPA]
     F -->|Authorization Code + PKCE| E[Microsoft Entra External ID]
     E -->|ID Token + Access Token| F
-    F -->|HTTPS + Bearer Access Token| G[AWS API Gateway]
-    G -->|JWT válido + scope| B[Spring Boot en AWS EC2]
+    F -->|HTTPS + Bearer| G[AWS API Gateway]
+    G -->|JWT + scope| B[Spring Boot en EC2]
 ```
 
-El estudiante debe poder demostrar y explicar cada salto.
+## CloudTasks mínimo
 
-## Aplicación de referencia: CloudTasks
-
-CloudTasks es intencionalmente pequeña. Solo permite iniciar sesión, consultar tareas, crear una tarea, eliminar una tarea propia y consultar información básica de identidad. El dominio es irrelevante; la arquitectura y la seguridad son lo evaluado.
-
-### Endpoints mínimos
-
-| Método | Ruta | Requisito | Propósito didáctico |
+| Método | Ruta | Requisito | Evidencia |
 |---|---|---|---|
-| GET | `/api/public/health` | público | comprobar backend |
-| GET | `/api/me` | token válido | inspeccionar identidad |
-| GET | `/api/tasks` | `tasks.read` | autorización por scope |
-| POST | `/api/tasks` | `tasks.write` | autorización por scope |
+| GET | `/api/public/health` | público | backend/Gateway disponible |
+| GET | `/api/me` | token válido | identidad/claims |
+| GET | `/api/tasks` | `tasks.read` | scope lectura |
+| POST | `/api/tasks` | `tasks.write` | scope escritura |
 | DELETE | `/api/tasks/{id}` | `tasks.write` + ownership | autorización de negocio |
-| GET | `/api/admin/stats` | rol `Admin` | rol vs scope |
+| GET | `/api/admin/stats` | `Admin` | opcional si sandbox permite roles |
 
-## Principio de implementación: mínimo código, máxima evidencia EV1
-
-El alumno **no debe dedicar tiempo a programar capacidades que no aportan directamente a la evaluación**.
-
-La guía prioriza:
+## Principio: mínimo código, máxima evidencia EV1
 
 ```text
-scaffolding de herramientas
+scaffolding
 → configuración explícita
 → código mínimo indispensable
-→ validación observable
+→ checkpoint
 → evidencia
 ```
 
-Por eso, en la ruta base:
+Si un fragmento de código no demuestra una competencia EV1, se evita o se entrega como starter.
 
-- Spring Boot se crea con IntelliJ + Spring Initializr;
-- Maven se ejecuta con Maven Wrapper (`mvnw` / `mvnw.cmd`);
-- Angular se crea con Angular CLI;
-- MSAL implementa Authorization Code + PKCE;
-- los datos permanecen en memoria;
-- no se implementa login propio;
-- no se implementa criptografía JWT manual;
-- no se exige diseño frontend complejo;
-- no se agregan Docker, Kubernetes o mensajería **como requisitos de la ruta base**;
-- cada fragmento de código manual debe tener una razón evaluativa clara.
+## Ruta completa
 
-### Regla para decidir si algo se programa
+### Preparación
 
-> ¿Qué criterio o concepto específico de EV1 demuestra este código?
+0. [00A · Instalar herramientas](./00a-preparar-entorno.md)
+1. [00B · Git/GitHub aplicado a la evaluación](./00b-git-github-flujo-evaluacion.md)
+2. [00C · Matriz de valores y checkpoints](./00c-matriz-valores-y-checkpoints.md)
+3. [00 · Mapa y prerequisitos](./00-mapa-y-prerequisitos.md)
 
-Si la respuesta es “ninguno”, se usa scaffolding, configuración, una dependencia existente o se elimina esa complejidad.
+### Aplicaciones locales
 
-## Orden obligatorio · ruta base
+4. [01A · Backend Spring Boot con IntelliJ](./01a-crear-backend-intellij.md)
+5. [01B · Frontend Angular](./01b-crear-frontend-angular.md)
+6. [01C · Integración local + CORS](./01-cloudtasks-local.md)
 
-0. [00A · Preparar herramientas y entorno](./00a-preparar-entorno.md)
-1. [00 · Mapa EV1 y prerequisitos](./00-mapa-y-prerequisitos.md)
-2. [01A · Crear backend Spring Boot con IntelliJ](./01a-crear-backend-intellij.md)
-3. [01B · Crear frontend Angular](./01b-crear-frontend-angular.md)
-4. [01C · Integrar frontend y backend localmente + CORS](./01-cloudtasks-local.md)
-5. [02 · Crear Microsoft Entra External ID](./02-entra-external-id.md)
-6. [03 · Integrar Angular con MSAL y PKCE](./03-angular-msal.md)
-7. [04 · JWT, scopes, roles y Spring Security](./04-jwt-y-backend.md)
-8. [05 · Desplegar backend en AWS EC2](./05-aws-backend.md)
-9. [06 · Crear AWS API Gateway + JWT Authorizer](./06-api-gateway-jwt.md)
-10. [07 · Configurar CORS con URLs que ya existen](./07-cors.md)
-11. [08 · Desplegar frontend e integrar extremo a extremo](./08-frontend-cloud-e2e.md)
-12. [09 · Pruebas negativas y troubleshooting](./09-pruebas-y-troubleshooting.md)
-13. [10 · Evidencias y defensa EV1](./10-evidencias-y-defensa.md)
+### Identidad y seguridad
 
----
+7. [02 · Microsoft Entra External ID](./02-entra-external-id.md)
+8. [03 · Angular + MSAL + PKCE](./03-angular-msal.md)
+   - [03A · Starter mínimo Angular/MSAL](./03a-starter-angular-msal.md)
+9. [04 · JWT, scopes, roles y Spring Security](./04-jwt-y-backend.md)
+   - [04A · Starter mínimo Spring Security](./04a-starter-spring-security.md)
 
-# ★ Ruta opcional · Advanced Developer
+### AWS
 
-Para estudiantes que quieran trabajar en un entorno más cercano al desarrollo profesional existe una ruta adicional:
+10. [05 · Backend en AWS EC2](./05-aws-backend.md)
+    - [05A · EC2 paso a paso](./05a-ec2-paso-a-paso.md)
+11. [06 · API Gateway + JWT Authorizer](./06-api-gateway-jwt.md)
+12. [07 · CORS con URLs reales](./07-cors.md)
+13. [08 · Frontend cloud + E2E](./08-frontend-cloud-e2e.md)
+    - [08A · Hosting, HTTPS y mixed content](./08a-hosting-frontend-https.md)
 
-→ [**★ Advanced Developer · WSL2 + Ubuntu + Docker**](./advanced-developer/README.md)
+### Validación y cierre
 
-No es requisito de EV1 y no reemplaza el contenido evaluado.
+14. [09 · Pruebas negativas y troubleshooting](./09-pruebas-y-troubleshooting.md)
+    - [09A · Runbook de checkpoints/estado conocido](./09a-runbook-checkpoints-estado-conocido.md)
+15. [10 · Evidencias y defensa](./10-evidencias-y-defensa.md)
+    - [10A · Evidencias EV1-01…EV1-08](./10a-plan-evidencias-ev1.md)
+    - [10B · Runbook del día de defensa](./10b-runbook-dia-defensa.md)
+16. [11 · Costos y cleanup](./11-costos-y-cleanup.md)
 
-La ruta agrega:
+## ★ Advanced Developer
 
-```text
-WSL2
-+ Ubuntu
-+ terminal Linux
-+ repositorio en filesystem Linux
-+ Docker Desktop / WSL integration
-+ Dockerfile multi-stage
-+ Spring Boot containerizado
-+ Docker sobre EC2
-```
+Ruta opcional:
 
-### Mismo sistema, diferente empaquetado
+→ [WSL2 + Ubuntu + Docker](./advanced-developer/README.md)
+
+Bifurcaciones:
 
 ```text
-RUTA BASE
-Spring Boot
-→ JAR
-→ Java 21 en EC2
-→ API Gateway
+entorno base     → Windows/tooling habitual
+★ advanced       → WSL2 + Ubuntu
 
-★ ADVANCED
-Spring Boot
-→ Docker image
-→ Docker Engine en EC2
-→ API Gateway
+backend base     → JAR
+★ advanced       → Docker image
+
+deployment base  → Java/JAR en EC2
+★ advanced       → Docker Engine/container en EC2
+
+ambas rutas       → mismo API Gateway → mismo frontend → mismas evidencias
 ```
 
-El contrato HTTP, Entra External ID, Access Token, JWT, scopes, CORS y API Gateway son los mismos.
+La pauta revisada exige **EC2 + API Gateway**; ECS no se encontró como requisito de EV1 y no sustituye EC2 en esta guía.
 
-### ¿Por qué Docker sobre EC2 y no ECS?
+## Hosting frontend
 
-La pauta institucional de EV1 indica explícitamente **despliegue en EC2 y uso de API Gateway**. ECS no aparece como requisito de esta evaluación.
-
-Por esa razón:
-
-```text
-EV1 base     → EC2 + JAR
-EV1 advanced → EC2 + Docker
-```
-
-ECS se documenta solo como evolución profesional posterior y no como sustitución silenciosa de un requisito institucional.
-
-### Puntos donde la ruta diverge
-
-| Etapa | Base | ★ Advanced |
-|---|---|---|
-| entorno | Windows/tooling habitual | [WSL2 + Ubuntu](./advanced-developer/00-wsl2-ubuntu.md) |
-| backend local | JAR/proceso Java | [imagen + container Docker](./advanced-developer/01-docker-local.md) |
-| backend AWS | Java + JAR en EC2 | [Docker + container en EC2](./advanced-developer/02-docker-ec2.md) |
-| API Gateway en adelante | igual | vuelve a la ruta base |
-
----
-
-## Herramientas esperadas
-
-La etapa `00A` deja instalado y verificado lo necesario para la ruta base.
-
-Principales decisiones:
-
-- Git es obligatorio;
-- GitHub Desktop y `gh` son recomendados;
-- IntelliJ IDEA es la ruta principal para Spring Boot;
-- Java 21 es obligatorio;
-- Maven global no es requisito porque se usa Maven Wrapper;
-- Node.js LTS + npm + Angular CLI son obligatorios;
-- para Angular se usa VS Code o WebStorm;
-- navegador con DevTools es obligatorio;
-- Postman es recomendado;
-- WSL2 y Docker Desktop son **opcionales y pertenecen a ★ Advanced Developer**.
+La pauta exige frontend desplegado y activo, pero en el material revisado no se encontró S3/CloudFront como tecnología obligatoria. Se mantiene como referencia AWS apropiada para SPA; una alternativa autorizada por el laboratorio es válida si produce la misma evidencia.
 
 ## Regla de avance
 
-No se continúa porque “parece estar bien”. Cada etapa termina con una **puerta de validación**. Si falla, se corrige antes de seguir.
-
-## Convención de valores
+Cada episodio termina en un estado observable. Solo se avanza con checkpoint `PASS`.
 
 ```text
-<VALOR_ASI>
+FAIL
+→ identificar último PASS
+→ aislar una capa
+→ corregir
+→ repetir prueba positiva
+→ continuar
 ```
 
-significa que debe reemplazarse por un valor real obtenido en un paso anterior.
+## Seguridad
 
-Nunca versionar:
-
-- contraseñas;
-- client secrets;
-- access tokens reutilizables;
-- claves AWS;
-- credenciales del tenant.
-
-## Correspondencia con el contenido existente
-
-Esta guía enlaza los contenidos canónicos de Semanas 1–3. No vuelve a escribir la teoría de OAuth2, CORS o JWT: muestra **dónde aparece y cómo se valida en una solución real**.
+Nunca versionar contraseñas, client secrets, Access/Refresh Tokens, AWS keys, cookies de sesión o claves privadas.
