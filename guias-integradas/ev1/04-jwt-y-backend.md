@@ -277,11 +277,23 @@ password database
 
 Cada una de esas responsabilidades pertenece a un framework/servicio ya utilizado.
 
-## Roles · profundización posterior
+## ★ Roles · profundización posterior
 
-Si se desea observar `roles`, primero comprobar el claim real. Spring no debe suponerse configurado para `ROLE_Admin` solo porque el token contiene una lista `roles`.
+La ruta base termina con scopes + ownership. Si el sandbox permite asignar app roles y se desea observar de forma real:
 
-Agregar un converter de roles únicamente como extensión consciente, sin bloquear la ruta principal.
+```text
+claim roles
+→ authority ROLE_Admin
+→ endpoint administrativo
+```
+
+seguir:
+
+→ [04B · Roles de Entra a Spring Security](./04b-opcional-roles-entra-spring.md)
+
+No agregar `hasRole("Admin")` antes de comprobar que el Access Token contiene el claim `roles` esperado y que existe un converter explícito hacia `ROLE_Admin`.
+
+★04B no bloquea las etapas AWS de la ruta base.
 
 ## Puerta de validación 04
 
@@ -311,5 +323,6 @@ No agregar otra librería JWT como primera reacción.
 ## Contenido relacionado
 
 - [04A · Starter Spring Security](./04a-starter-spring-security.md)
+- [04B · Roles opcionales](./04b-opcional-roles-entra-spring.md)
 - [JWT y claims](../../semanas/semana-03/01-jwt-claims.md)
 - [Gateway vs backend](../../semanas/semana-03/02-seguridad-api/01-gateway-vs-backend.md)
