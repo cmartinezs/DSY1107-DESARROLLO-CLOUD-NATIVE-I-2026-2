@@ -1,6 +1,6 @@
 # 09A · Runbook de checkpoints y estado conocido
 
-**REQUERIDO EV1** · Esta guía permite retomar el trabajo después de horas/días sin asumir que “todo sigue funcionando”.
+Esta guía permite retomar el trabajo después de horas o días sin asumir que “todo sigue funcionando”.
 
 ## Regla general
 
@@ -118,7 +118,7 @@ Commit:
 Resultado esperado:
 Resultado observado:
 Estado: PASS | FAIL
-Evidencia:
+Registro:
 Cambio desde último PASS:
 ```
 
@@ -140,4 +140,4 @@ NO borrar configuración que antes funcionaba
 
 ## Checkpoint 09A final
 
-La solución está lista para defensa solo cuando CP-00 a CP-09 pueden repetirse sin intervención improvisada del docente.
+La práctica queda técnicamente estable cuando CP-00 a CP-09 pueden repetirse sin intervención improvisada del docente.
