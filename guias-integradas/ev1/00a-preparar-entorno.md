@@ -57,25 +57,135 @@ Sitio oficial:
 
 https://git-scm.com/downloads
 
-### Windows
+## Windows · dos formas de instalación
 
-Descargar **Git for Windows** desde el sitio oficial e instalarlo con las opciones por defecto salvo instrucción del docente.
+Las dos alternativas instalan **Git for Windows**. El paquete oficial de `winget` utiliza actualmente el mismo instalador de Git for Windows, por lo que no debe enseñarse como si fueran dos productos distintos. Lo que cambia para el estudiante es principalmente **cómo se realiza la instalación, qué opciones de integración ve y qué terminal utiliza después**.
 
-También puede instalarse con `winget`:
+### Opción A · instalador `.exe` de Git for Windows
+
+Descargar el instalador desde el sitio oficial y ejecutarlo manualmente.
+
+Esta alternativa muestra el asistente de Git for Windows y permite revisar explícitamente opciones como:
+
+- integración con PATH;
+- Git Bash;
+- Windows Terminal;
+- editor por defecto;
+- OpenSSH;
+- manejo de finales de línea.
+
+Git for Windows incluye **Git Bash**, una terminal Bash basada en el entorno Unix que acompaña a Git for Windows.
+
+Después de instalar, el estudiante puede abrir:
+
+```text
+Git Bash
+```
+
+y ejecutar:
+
+```bash
+git --version
+pwd
+ls
+```
+
+También puede utilizar Git desde PowerShell **si la instalación dejó `git.exe` disponible en PATH**.
+
+### Opción B · instalación mediante `winget`
+
+Desde PowerShell:
 
 ```powershell
 winget install --id Git.Git -e --source winget
 ```
 
+`winget` automatiza la instalación del paquete Git for Windows y actualmente apunta al instalador oficial. No significa “Git nativo de PowerShell” ni instala un Git diferente.
+
 Cerrar y volver a abrir PowerShell después de instalar.
 
-### Verificar
+Verificar directamente:
 
 ```powershell
 git --version
 ```
 
-Debe aparecer una versión de Git.
+Si funciona, Git quedó disponible en el PATH de Windows y puede utilizarse cómodamente desde:
+
+```text
+PowerShell
+Command Prompt
+terminal integrada de VS Code / IntelliJ / WebStorm
+```
+
+Git Bash normalmente también queda disponible porque forma parte de Git for Windows, aunque algunas integraciones visuales —por ejemplo perfiles de Windows Terminal— pueden depender de las opciones utilizadas durante la instalación.
+
+## ¿Qué terminal usaremos en la ruta base?
+
+Para evitar mezclar sintaxis, la guía diferencia los ejemplos:
+
+```text
+PowerShell
+→ comandos Windows / winget / mvnw.cmd
+
+Git Bash
+→ comandos con sintaxis Bash / ./mvnw / ls / pwd
+```
+
+En la ruta base de EV1, **PowerShell es suficiente** si `git --version` funciona correctamente.
+
+Git Bash es útil cuando:
+
+- se instaló Git manualmente y el estudiante prefiere Bash;
+- una guía utiliza sintaxis Unix;
+- se quiere practicar comandos similares a Linux sin entrar todavía a WSL.
+
+> **Git Bash no es WSL.** Git Bash entrega una shell Bash y varias utilidades Unix sobre Windows; WSL ejecuta una distribución Linux real dentro de WSL2. La ruta ★ Advanced Developer utiliza WSL2 + Ubuntu y no debe confundirse con Git Bash.
+
+## Checkpoint de instalación de Git
+
+### Si se utilizará PowerShell
+
+```powershell
+git --version
+where.exe git
+```
+
+Esperado:
+
+```text
+git version ...
+```
+
+y una ruta hacia `git.exe`.
+
+### Si se utilizará Git Bash
+
+```bash
+git --version
+which git
+```
+
+Esperado:
+
+```text
+git version ...
+```
+
+y una ruta válida al ejecutable Git.
+
+### SI FALLA
+
+Si `git --version` funciona en Git Bash pero no en PowerShell:
+
+```text
+Git está instalado
+pero PowerShell no lo encuentra mediante PATH
+```
+
+No reinstalar otras herramientas. Primero cerrar/reabrir la terminal y revisar PATH/configuración de Git for Windows.
+
+Si `git --version` no funciona en ninguna terminal, la instalación de Git no está validada.
 
 ## Configurar identidad de commits
 
@@ -85,6 +195,8 @@ Usar el nombre real y el correo asociado a GitHub o el correo académico elegido
 git config --global user.name "Nombre Apellido"
 git config --global user.email "correo@ejemplo.cl"
 ```
+
+Los mismos comandos funcionan en Git Bash.
 
 Comprobar:
 
@@ -399,6 +511,8 @@ No es necesario instalar por adelantado:
 - Gradle;
 - Keycloak.
 
+Docker Desktop aparece posteriormente solo en la ruta **★ Advanced Developer**.
+
 Si una etapa posterior requiere una herramienta adicional, la guía la introducirá en ese momento.
 
 Esto reduce conflictos, consumo de recursos y diagnósticos innecesarios.
@@ -426,6 +540,8 @@ Maven **no aparece** en esta validación porque no se exige Maven global. Se ver
 También comprobar manualmente:
 
 - [ ] GitHub abre y permite iniciar sesión;
+- [ ] Git funciona desde la terminal elegida (PowerShell o Git Bash);
+- [ ] el estudiante sabe distinguir PowerShell, Git Bash y WSL;
 - [ ] GitHub Desktop abre y está autenticado, si se utilizará;
 - [ ] IntelliJ IDEA abre;
 - [ ] JDK 21 aparece disponible en IntelliJ;
@@ -439,7 +555,7 @@ También comprobar manualmente:
 
 No comenzar la creación de CloudTasks hasta que:
 
-- [ ] Git funciona;
+- [ ] Git funciona desde la terminal elegida;
 - [ ] existe acceso a GitHub;
 - [ ] Java 21 funciona;
 - [ ] IntelliJ puede utilizar JDK 21;
@@ -447,6 +563,7 @@ No comenzar la creación de CloudTasks hasta que:
 - [ ] Angular CLI funciona;
 - [ ] existe un editor para Angular;
 - [ ] el estudiante sabe abrir DevTools;
+- [ ] el estudiante distingue Git Bash de WSL2/Ubuntu;
 - [ ] no se han instalado herramientas cloud o frameworks adicionales sin necesidad.
 
 ## Resultado esperado
