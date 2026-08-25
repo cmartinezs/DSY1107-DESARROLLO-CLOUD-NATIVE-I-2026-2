@@ -1,6 +1,6 @@
 # 03A · Starter mínimo Angular + MSAL
 
-**REQUERIDO EV1** · Este anexo reduce boilerplate. El alumno reemplaza valores y explica el flujo; no implementa OAuth2/PKCE manualmente.
+Este anexo reduce boilerplate. El alumno reemplaza valores, ejecuta el flujo y explica qué hace cada pieza; no implementa OAuth2/PKCE manualmente.
 
 ## Archivos mínimos
 
@@ -62,7 +62,7 @@ getWriteToken() → tasks.write
 logout()        → logoutRedirect
 ```
 
-Separar lectura/escritura permite demostrar scopes distintos sin crear lógica artificial.
+Separar lectura/escritura permite observar scopes distintos sin crear lógica artificial.
 
 ## `ApiService`
 
@@ -97,7 +97,7 @@ Título: [________] [Crear]
 Estado: ...
 ```
 
-Sin routing adicional, CSS framework, state manager ni componentes que no aporten a EV1.
+Sin routing adicional, CSS framework, state manager ni componentes que no aporten al objetivo de aprendizaje.
 
 ## Checkpoint 03A-1 · compilación
 
