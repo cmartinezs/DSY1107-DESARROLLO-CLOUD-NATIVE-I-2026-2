@@ -1,28 +1,58 @@
-# 04 · JWT, scopes, roles y Spring Security
+# 04 · JWT, scopes, ownership y Spring Security
 
 ## Objetivo
 
-Convertir el backend en un **Resource Server** real que acepte Access Tokens válidos y aplique autorización.
+Convertir el backend en un **Resource Server** real que acepte Access Tokens válidos y aplique autorización sin implementar criptografía JWT manualmente.
 
-El alumno configura issuer, audience y scopes; no implementa criptografía JWT, parsers ni login propio.
+El estudiante configura y explica:
 
-## Starter operativo
+```text
+issuer
+audience
+scopes
+subject
+ownership
+401 vs 403
+```
+
+Spring Security se encarga de la validación técnica del token.
+
+## Antes de comenzar
+
+Debe existir:
+
+```text
+OIDC_ISSUER validado
+API_AUDIENCE validado contra Access Token real
+Access Token obtenible desde Angular/MSAL
+```
 
 Usar:
 
-→ [04A · Starter mínimo Spring Security](./04a-starter-spring-security.md)
+- [00C · Matriz de valores](./00c-matriz-valores-y-checkpoints.md)
+- [00D · Scaffolding vs código del estudiante](./00d-scaffolding-vs-codigo-estudiante.md)
 
-El starter reduce el código a:
+## Starter operativo
+
+Seguir:
+
+→ [04A · Starter reproducible Spring Security Resource Server](./04a-starter-spring-security.md)
+
+El starter incluye código exacto para:
 
 ```text
 SecurityFilterChain
-validación explícita audience
+AudienceValidator
+JwtDecoder con issuer + audience
 /api/me
 Task en memoria
-ownership
+GET/POST/DELETE
+ownership por jwt.sub
 ```
 
-## Dependencias
+No inventar una segunda implementación paralela.
+
+## 1. Dependencias
 
 ```xml
 <dependency>
@@ -35,38 +65,73 @@ ownership
 </dependency>
 ```
 
-Validar con wrapper:
+Después de modificarlas, compilar **antes** de escribir más código.
+
+PowerShell:
+
+```powershell
+.\mvnw.cmd test
+```
+
+Git Bash/Linux/macOS:
 
 ```bash
 ./mvnw test
 ```
 
-## Issuer
+## 2. Configuración externa
 
 ```properties
 spring.security.oauth2.resourceserver.jwt.issuer-uri=${OIDC_ISSUER}
+cloudtasks.security.audience=${API_AUDIENCE}
 ```
 
-Spring usa metadata/JWKS para validación. No copiar public keys manualmente si discovery funciona.
+No hardcodear esos valores en varias clases.
 
-## Audience
+## 3. Validación JWT
 
-Además del issuer, CloudTasks debe rechazar tokens dirigidos a otro recurso.
+La cadena conceptual es:
 
-Validar explícitamente:
+```text
+Access Token recibido
+↓
+Spring Resource Server
+↓
+issuer/discovery
+↓
+JWKS / firma
+↓
+validaciones temporales
+↓
+issuer esperado
+↓
+audience esperada
+↓
+autenticación válida
+```
+
+Decodificar el payload de un JWT no reemplaza este proceso.
+
+## 4. Audience explícita
+
+Un token puede tener firma válida y venir del issuer correcto, pero estar destinado a otro recurso.
+
+Por eso el starter agrega:
 
 ```text
 jwt.aud contiene API_AUDIENCE
 ```
 
-Esto permite observar:
+Caso esperado:
 
 ```text
-firma válida + issuer válido + audience incorrecta
-→ rechazo / 401
+firma válida
++ issuer válido
++ audience incorrecta
+→ 401
 ```
 
-## Política mínima
+## 5. Política mínima
 
 ```text
 GET    /api/public/health → público
@@ -74,23 +139,24 @@ GET    /api/me            → authenticated
 GET    /api/tasks         → tasks.read
 POST   /api/tasks         → tasks.write
 DELETE /api/tasks/{id}    → tasks.write + ownership
-GET    /api/admin/stats   → Admin, solo si sandbox permite roles
 ```
 
-## Scopes
+La ruta base no obliga a implementar `Admin`. Roles queda como extensión después de que scopes y ownership funcionen correctamente.
 
-Observar primero el Access Token real. Confirmar si Entra emite `scp`/scope y cómo Spring lo traduce a authorities.
+## 6. Scopes
 
-No escribir converter custom si el mapping estándar ya produce:
+Con el mapping estándar esperado:
 
 ```text
-SCOPE_tasks.read
-SCOPE_tasks.write
+tasks.read  → SCOPE_tasks.read
+tasks.write → SCOPE_tasks.write
 ```
 
-## `/api/me`
+Observar primero el token real. No escribir un converter custom si Spring ya transforma correctamente `scp`/`scope`.
 
-Debe devolver únicamente claims sanitizados:
+## 7. `/api/me`
+
+Debe devolver solo información sanitizada:
 
 ```json
 {
@@ -102,11 +168,9 @@ Debe devolver únicamente claims sanitizados:
 }
 ```
 
-No devolver el token completo.
+Nunca devolver el token completo.
 
-## Datos
-
-Modelo mínimo:
+## 8. Datos deliberadamente mínimos
 
 ```text
 Task
@@ -115,33 +179,62 @@ Task
 - ownerId
 ```
 
-Persistencia en memoria. Sin JPA, DB, migrations o repositories porque no aportan al objetivo de esta práctica.
+Persistencia:
 
-## Ownership
+```text
+memoria del proceso
+```
+
+No agregar JPA, base de datos, migrations, repositories ni Docker para resolver esta etapa.
+
+## 9. Ownership
+
+Al crear una tarea:
+
+```text
+ownerId = JWT.sub
+```
+
+No aceptar `ownerId` enviado por Angular.
+
+Al eliminar:
 
 ```text
 tasks.write
 +
 JWT.sub == task.ownerId
-→ DELETE permitido
+→ permitido
 ```
 
-Si scope correcto pero recurso ajeno:
+Si el scope es correcto pero el recurso pertenece a otro sujeto:
 
 ```text
 403
 ```
 
-Esto distingue autorización técnica por scope de autorización de negocio.
-
-## Checkpoint 04-1 · seguridad básica
+Esto distingue:
 
 ```text
-health sin token → 200
-tasks sin token  → 401
+scope       → autorización sobre una clase de operación
+ownership   → autorización sobre un recurso concreto
 ```
 
-## Checkpoint 04-2 · JWT
+## Checkpoint 04-0 · build
+
+```text
+Maven Wrapper PASS
+Java compile PASS
+variables runtime definidas PASS
+```
+
+## Checkpoint 04-1 · frontera pública/protegida
+
+```text
+GET /api/public/health sin token → 200
+GET /api/tasks sin token         → 401
+```
+
+## Checkpoint 04-2 · validación JWT
 
 | Caso | Esperado |
 |---|---|
@@ -151,39 +244,72 @@ tasks sin token  → 401
 | audience incorrecta | 401 |
 | Access Token correcto | autenticación válida |
 
-## Checkpoint 04-3 · autorización
+## Checkpoint 04-3 · scopes
 
 | Caso | Esperado |
 |---|---|
-| sin `tasks.read` | 403/rechazo |
-| con `tasks.read` | GET 200 |
-| sin `tasks.write` | 403/rechazo |
-| con `tasks.write` | POST permitido |
-| recurso ajeno | 403 |
+| GET sin `tasks.read` | 403/rechazo |
+| GET con `tasks.read` | 200 |
+| POST sin `tasks.write` | 403/rechazo |
+| POST con `tasks.write` | 201 |
 
-## Qué NO programa el alumno
+## Checkpoint 04-4 · ownership
+
+```text
+usuario A crea tarea
+usuario B posee tasks.write
+usuario B intenta borrar tarea de A
+→ 403
+```
+
+## Qué NO se programa
 
 ```text
 generación/firma JWT
 RSA
-JWKS rotation
+parser JWT
+rotación JWKS
 Authorization Code
 PKCE
-refresh flow
+refresh-token flow
 password database
 ```
 
-Debe explicar qué componente realiza cada responsabilidad.
+Cada una de esas responsabilidades pertenece a un framework/servicio ya utilizado.
+
+## Roles · profundización posterior
+
+Si se desea observar `roles`, primero comprobar el claim real. Spring no debe suponerse configurado para `ROLE_Admin` solo porque el token contiene una lista `roles`.
+
+Agregar un converter de roles únicamente como extensión consciente, sin bloquear la ruta principal.
 
 ## Puerta de validación 04
 
-No desplegar a EC2 hasta que todos los checkpoints locales sean PASS.
+No desplegar a EC2 hasta obtener:
 
-**SI FALLA** · revisar en orden: Access Token real → iss → aud → exp → scope/authority → ownership. No agregar librerías JWT externas como primera reacción.
+```text
+04-0 build PASS
+04-1 200/401 PASS
+04-2 JWT issuer/audience PASS
+04-3 scopes PASS
+04-4 ownership PASS
+```
+
+**SI FALLA** · diagnosticar en orden:
+
+```text
+Access Token real
+→ iss
+→ aud
+→ exp
+→ authority SCOPE_...
+→ ownership
+```
+
+No agregar otra librería JWT como primera reacción.
 
 ## Contenido relacionado
 
 - [04A · Starter Spring Security](./04a-starter-spring-security.md)
-- [Matriz de valores](./00c-matriz-valores-y-checkpoints.md)
 - [JWT y claims](../../semanas/semana-03/01-jwt-claims.md)
 - [Gateway vs backend](../../semanas/semana-03/02-seguridad-api/01-gateway-vs-backend.md)
