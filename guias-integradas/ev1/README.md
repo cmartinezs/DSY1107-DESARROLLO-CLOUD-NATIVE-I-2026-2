@@ -10,6 +10,38 @@ CloudTasks permite recorrer de extremo a extremo frontend + backend, API Gateway
 - **SI FALLA**: volver al último checkpoint `PASS` y aislar una capa.
 - **★ OPCIONAL / Advanced Developer**: profundización técnica adicional.
 
+## Checkpoint curricular vigente · Semana 3
+
+La guía completa llega hasta despliegue cloud, pero **el avance esperado para la semana actual** termina en:
+
+→ [03B · Checkpoint Semana 3 · IDaaS + JWT + seguridad en API Manager](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md)
+
+Este checkpoint integra específicamente:
+
+```text
+1.2 Implementando autenticación con Identity as a Service
+1.2.5 Creando una aplicación para usuarios externos
+1.2.6 Integrando Seguridad en nuestro API Manager
+1.2.7 Introducción a JWT y Claims
+1.2.8 Decodificando tokens JWT
+```
+
+Estado esperado al cerrar la semana:
+
+```text
+CloudTasks local
+→ External tenant + user flow
+→ SPA/API registrations + scopes
+→ login real mediante MSAL
+→ Access Token real
+→ JWT decodificado
+→ iss/aud/sub/exp/scp comprendidos
+→ API_AUDIENCE validado desde aud real
+→ JWT Authorizer configurado en API Gateway
+```
+
+No se exige todavía EC2, integración Gateway→backend, CORS cloud ni frontend cloud.
+
 ## Arquitectura final de la práctica
 
 ```mermaid
@@ -65,6 +97,7 @@ Si un fragmento de código no aporta directamente al aprendizaje de esta vertica
 8. [02 · Microsoft Entra External ID](./02-entra-external-id.md)
 9. [03 · Angular + MSAL Angular + PKCE](./03-angular-msal.md)
    - [03A · Starter reproducible Angular/MSAL](./03a-starter-angular-msal.md)
+   - [03B · Checkpoint Semana 3 · IDaaS + JWT + API Manager](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md)
 10. [04 · JWT, scopes, ownership y Spring Security](./04-jwt-y-backend.md)
    - [04A · Starter reproducible Spring Security](./04a-starter-spring-security.md)
    - [★ 04B · Roles Entra + Spring Security](./04b-opcional-roles-entra-spring.md)
