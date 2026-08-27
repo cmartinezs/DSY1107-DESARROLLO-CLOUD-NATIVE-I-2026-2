@@ -1,30 +1,47 @@
-# RegistrApp · Semana 4
+# RegistrApp · Checkpoint Semana 4
 
-## Estado
+## Entrada
 
-Checkpoint reservado. El contenido específico se define cuando la planificación de Semana 4 esté confirmada.
+Estado acumulado y verificable de Semana 3. Este checkpoint no autoriza a asumir que todos los contenidos curriculares fueron cubiertos: cada sección parte desde su último estado real.
 
-## Estado de entrada
+## Competencias potencialmente transferibles
 
-Recibe **todo el estado de salida de Semana 3**, incluidas sus deudas explícitas.
+Cuando hayan sido comprendidas fuera de RegistrApp, pueden transferirse:
 
-## Contenido transferible
+- Authorization Code + PKCE;
+- configuración de cliente frontend con MSAL;
+- obtención y uso correcto de access token;
+- protección de API con Spring Security Resource Server;
+- scopes/claims y decisiones 401/403;
+- separación de responsabilidades frontend / IdP / gateway / backend;
+- controles básicos de arquitectura segura.
 
-Por definir según el contenido efectivamente trabajado en clases. No incorporar capacidades no aprendidas.
+## Incremento esperado
 
-## Incremento
+No existe un incremento obligatorio único. El estudiante debe seleccionar solo los cambios habilitados por lo realmente aprendido y justificar su incorporación al proyecto.
 
-Debe extender el estado anterior; no reiniciar RegistrApp.
+Ejemplos válidos de incremento, si corresponde:
 
-## Evidencia obligatoria
+- proteger un endpoint previamente público;
+- incorporar autenticación de usuario en frontend;
+- definir y aplicar un scope mínimo;
+- corregir una frontera de seguridad detectada en el diseño;
+- documentar el flujo completo de acceso a una capacidad existente.
 
-- comparación antes/después;
-- artefactos modificados;
-- decisión técnica;
-- referencia a commits/archivos cuando corresponda;
-- DevLog;
-- deuda pendiente.
+## Evidencia
 
-## Estado de salida
+Registrar:
 
-El estado completo resultante será la entrada de Semana 5.
+1. estado antes del cambio;
+2. competencia nueva que habilitó el cambio;
+3. archivos/commits modificados;
+4. prueba funcional o técnica;
+5. comportamiento 401/403 cuando aplique;
+6. decisión técnica y deuda pendiente;
+7. DevLog.
+
+## Salida
+
+El estado final de Semana 4 se convierte en la entrada de Semana 5. Si no hubo incremento, se conserva el último estado válido y se documenta la razón.
+
+> RegistrApp es transferencia del aprendizaje; no es el dominio usado para enseñar por primera vez MSAL, Spring Security o arquitectura segura.

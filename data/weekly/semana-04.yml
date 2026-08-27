@@ -1,0 +1,50 @@
+schema_version: 1
+course: DSY1107
+term: 2026-2
+week: 4
+period:
+  start: 2026-08-31
+  end: 2026-09-05
+
+sections:
+  - id: 002D
+    curricular_progress:
+      planned_topics:
+        - MSAL
+        - MSAL en frontend
+        - Spring Security Resource Server
+        - arquitecturas seguras en la nube
+      covered_topics: []
+      pending_topics: []
+    evidence:
+      class_practice_available: true
+      labs_available: true
+    formative_project:
+      name: RegistrApp
+      status: in_progress
+      checkpoint: proyecto-formativo/semana-04/README.md
+    blockers: []
+
+  - id: 003D
+    curricular_progress:
+      planned_topics:
+        - MSAL
+        - MSAL en frontend
+        - Spring Security Resource Server
+        - arquitecturas seguras en la nube
+      covered_topics: []
+      pending_topics: []
+    evidence:
+      class_practice_available: true
+      labs_available: true
+    formative_project:
+      name: RegistrApp
+      status: in_progress
+      checkpoint: proyecto-formativo/semana-04/README.md
+    blockers: []
+
+course_specific:
+  official_partial_1_instructions_due: true
+  strategy: "concepto -> ejemplo independiente -> lab -> cloud -> transferencia opcional a RegistrApp"
+  sections_must_remain_independent: true
+  execution_claimed: false

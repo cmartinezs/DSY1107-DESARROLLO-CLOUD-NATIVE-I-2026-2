@@ -43,7 +43,7 @@ Cada checkpoint debe evidenciar:
 | 01 | [Inicio y arquitectura/API mínima](./semana-01/) |
 | 02 | [Gateway, gestión de API e identidad según avance](./semana-02/) |
 | 03 | [JWT, claims y seguridad según avance](./semana-03/) |
-| 04 | [Checkpoint reservado](./semana-04/) |
+| 04 | [MSAL, Spring Security y arquitectura segura según avance](./semana-04/) |
 | 05 | [Checkpoint reservado](./semana-05/) |
 | 06 | [Checkpoint reservado](./semana-06/) |
 | 07 | [Checkpoint reservado](./semana-07/) |
