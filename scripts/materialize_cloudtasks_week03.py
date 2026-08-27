@@ -18,11 +18,8 @@ Luego:
 from __future__ import annotations
 
 import argparse
-import json
-import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import urllib.parse
 import urllib.request
@@ -98,7 +95,7 @@ def materialize_backend() -> None:
         print("INFO  descargando scaffolding desde Spring Initializr")
         try:
             urllib.request.urlretrieve(url, archive)
-        except Exception as exc:  # noqa: BLE001 - queremos diagnóstico directo de red
+        except Exception as exc:  # diagnóstico explícito de red
             raise SystemExit(f"FAIL: no se pudo descargar Spring Initializr: {exc}") from exc
 
         BACKEND.mkdir(parents=True, exist_ok=True)
@@ -120,22 +117,27 @@ def materialize_backend() -> None:
     controller_dir.mkdir(parents=True, exist_ok=True)
     controller = controller_dir / "PublicController.java"
     controller.write_text(
-        """package cl.duoc.reference.cloudtasks.controller;\n\n"
-        "import org.springframework.web.bind.annotation.GetMapping;\n"
-        "import org.springframework.web.bind.annotation.RequestMapping;\n"
-        "import org.springframework.web.bind.annotation.RestController;\n\n"
-        "import java.util.Map;\n\n"
-        "@RestController\n"
-        "@RequestMapping(\"/api/public\")\n"
-        "public class PublicController {\n\n"
-        "    @GetMapping(\"/health\")\n"
-        "    public Map<String, String> health() {\n"
-        "        return Map.of(\n"
-        "                \"status\", \"UP\",\n"
-        "                \"service\", \"cloudtasks-api\"\n"
-        "        );\n"
-        "    }\n"
-        "}\n""",
+        """package cl.duoc.reference.cloudtasks.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/public")
+public class PublicController {
+
+    @GetMapping("/health")
+    public Map<String, String> health() {
+        return Map.of(
+                "status", "UP",
+                "service", "cloudtasks-api"
+        );
+    }
+}
+""",
         encoding="utf-8",
     )
 
