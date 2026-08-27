@@ -129,11 +129,21 @@ Si un fragmento de código no aporta directamente al aprendizaje de esta vertica
 python3 scripts/validate_ev1.py
 ```
 
-Para exigir también backend/frontend materializados:
+Para materializar automáticamente un **workspace técnico de referencia hasta Semana 3**:
 
 ```bash
-python3 scripts/validate_ev1.py --require-projects
+python3 scripts/materialize_cloudtasks_week03.py
 ```
+
+Ese materializador descarga scaffolding oficial de Spring Initializr, crea Angular 22, instala MSAL Angular 6 y deja una UI mínima capaz de iniciar sesión, adquirir un Access Token y mostrar solo los claims relevantes del JWT. Los artefactos generados viven localmente en `guia/ev1/backend` y `guia/ev1/frontend` y están ignorados por Git para no crear una segunda fuente de verdad.
+
+Después se exige compilación real de ambos proyectos:
+
+```bash
+python3 scripts/validate_ev1.py --require-projects --strict
+```
+
+El materializador **no crea recursos Entra ni AWS**. El PASS de compilación no sustituye el smoke test real del checkpoint 03B.
 
 ## Estructura sugerida dentro del repositorio personal
 
