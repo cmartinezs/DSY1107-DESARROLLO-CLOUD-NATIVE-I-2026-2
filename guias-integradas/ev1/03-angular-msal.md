@@ -6,6 +6,10 @@ Conectar el frontend existente con Microsoft Entra External ID y obtener Access 
 
 El estudiante configura y explica OAuth2/OIDC; **MSAL implementa Authorization Code + PKCE**. No se programa PKCE ni adquisición manual de tokens.
 
+Este episodio termina en un Access Token real y enlaza inmediatamente con el checkpoint curricular de la semana:
+
+→ [03B · Checkpoint Semana 3 · IDaaS + JWT + seguridad en API Manager](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md)
+
 ## Antes de comenzar
 
 Debe existir:
@@ -50,7 +54,7 @@ Primero:
 ng version
 ```
 
-Referencia vigente:
+Referencia vigente de la guía:
 
 ```text
 Angular 22      → @azure/msal-angular 6
@@ -153,6 +157,29 @@ DELETE /api/tasks/id → write scope
 
 La diferencia debe observarse sin implementar adquisición manual de tokens.
 
+## Checkpoint 03-4 · claims listos para Semana 3
+
+Antes de cerrar este episodio, inspeccionar temporalmente el **Access Token** real y registrar solo sus valores no sensibles necesarios para continuar:
+
+```text
+OIDC_ISSUER     ← claim iss / metadata OIDC
+API_AUDIENCE    ← claim aud real
+SCOPE_*_CLAIM   ← permisos observados en scp
+```
+
+También localizar y comprender:
+
+```text
+sub
+exp
+```
+
+No basta con leer el payload: la validación criptográfica será responsabilidad de API Gateway y Spring Security en las etapas correspondientes.
+
+A partir de aquí continuar obligatoriamente con:
+
+→ [03B · IDaaS + JWT + seguridad en API Manager](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md)
+
 ## Diagnóstico
 
 | Síntoma | Revisar primero |
@@ -174,13 +201,17 @@ MSAL Angular compila PASS
 login real PASS
 active account PASS
 Access Token PASS
-audience PASS
-scope read/write PASS
-request protegida PASS
+audience observado PASS
+issuer observado PASS
+scope read/write observado PASS
+sub/exp identificados PASS
 ```
+
+El gate curricular de la semana no termina aquí: se completa en 03B con decodificación explícita de JWT y configuración del JWT Authorizer del API Manager.
 
 ## Contenido relacionado
 
 - [03A · Starter Angular/MSAL](./03a-starter-angular-msal.md)
+- [03B · Checkpoint Semana 3](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md)
 - [Authorization Code + PKCE](../../semanas/semana-02/01-oauth2-oidc/07-authorization-code-pkce/README.md)
 - [JWT y claims](../../semanas/semana-03/01-jwt-claims.md)
