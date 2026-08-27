@@ -1,0 +1,12 @@
+# Local validation workspace generated from the CloudTasks integrated guide
+guia/ev1/backend/
+guia/ev1/frontend/
+
+# Python local artifacts
+__pycache__/
+*.pyc
+
+# Common build artifacts
+target/
+node_modules/
+dist/
