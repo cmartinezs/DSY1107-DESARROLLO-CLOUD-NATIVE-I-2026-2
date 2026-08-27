@@ -1,0 +1,81 @@
+schema_version: 1
+course: DSY1107
+term: 2026-2
+week: 3
+period:
+  start: 2026-08-24
+  end: 2026-08-29
+
+sections:
+  - id: 002D
+    sessions:
+      planned: null
+      completed: null
+    blocks:
+      planned: null
+      completed: null
+    curricular_progress:
+      planned_topics:
+        - aplicacion para usuarios externos
+        - seguridad en API Manager
+        - JWT y claims
+        - decodificacion de JWT
+      covered_topics: []
+      pending_topics: []
+    evidence:
+      class_practice_available: true
+      labs_available: true
+      weekly_challenge_available: true
+    devlog:
+      expected: null
+      submitted: null
+      reviewed: null
+    formative_project:
+      name: RegistrApp
+      status: in_progress
+      checkpoint: proyecto-formativo/semana-03/README.md
+    blockers: []
+    next_week_focus: []
+
+  - id: 003D
+    sessions:
+      planned: null
+      completed: null
+    blocks:
+      planned: null
+      completed: null
+    curricular_progress:
+      planned_topics:
+        - recuperacion gateway y OAuth2/OIDC segun evidencia
+        - aplicacion para usuarios externos
+        - seguridad en API Manager
+        - JWT y claims
+        - decodificacion de JWT
+      covered_topics: []
+      pending_topics: []
+    evidence:
+      class_practice_available: true
+      labs_available: true
+      weekly_challenge_available: true
+    devlog:
+      expected: null
+      submitted: null
+      reviewed: null
+    formative_project:
+      name: RegistrApp
+      status: in_progress
+      checkpoint: proyecto-formativo/semana-03/README.md
+    blockers: []
+    next_week_focus: []
+
+course_specific:
+  official_activities:
+    - 1.2.5 Creando una aplicacion para usuarios externos
+    - 1.2.6 Integrando Seguridad en nuestro API Manager
+    - 1.2.7 Introduccion a JWT y Claims
+    - 1.2.8 Decodificando tokens JWT
+  canonical_lab: labs/jwt-forense/README.md
+  canonical_example: examples/semana-03/README.md
+  strategy: "concepto -> ejemplo independiente -> laboratorio neutral -> cloud -> transferencia a RegistrApp"
+  sections_must_remain_independent: true
+  execution_claimed: false

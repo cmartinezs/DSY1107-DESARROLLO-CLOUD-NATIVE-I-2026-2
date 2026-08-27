@@ -8,13 +8,16 @@ La estrategia pedagógica es:
 concepto → laboratorio local/neutral → laboratorio cloud real → comparación
 ```
 
-## Disponibles hasta Semana 2
+## Disponibles
 
 - [`api-gateway-local/`](api-gateway-local/) — routing, integración, versionado, políticas y CORS mediante Spring Cloud Gateway + backend público.
-- [`identidad-local/`](identidad-local/) — OAuth2/OIDC, PKCE, tokens, scopes, roles, 401/403, tenant y app registration mediante ReservApp + mock-identity.
+- [`identidad-local/`](identidad-local/) — laboratorio histórico de OAuth2/OIDC, PKCE, tokens, scopes, roles, 401/403, tenant y app registration.
+- [`jwt-forense/`](jwt-forense/) — Semana 3: JWT, claims, audience/issuer/expiración, scopes, 401/403 y frontera gateway/backend con dominio neutral.
 
 ## Regla de evolución
 
-Cuando aparezca el laboratorio cloud real, se agregará como una experiencia separada y enlazada al correspondiente laboratorio conceptual. El laboratorio local no se elimina: sirve como referencia para comparar qué cambia al usar un servicio administrado y qué conceptos permanecen iguales.
+Cuando aparezca el laboratorio cloud real, se agrega como experiencia separada y enlazada al laboratorio conceptual. El laboratorio local/neutral no se elimina: permite comparar qué cambia al usar un servicio administrado y qué conceptos permanecen iguales.
+
+Los laboratorios nuevos deben mantenerse independientes de RegistrApp; la transferencia al proyecto ocurre después y vive en `proyecto-formativo/`.
 
 → [Estrategia completa: concepto a cloud](../docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md)
