@@ -90,7 +90,17 @@ Si un fragmento de código no aporta directamente al aprendizaje de esta vertica
 ### Referencia docente/técnica
 
 - [Protocolo de validación y fuentes canónicas](./reference/README.md)
-- validador local: `python scripts/validate_integrated_guides.py` desde la raíz del repositorio docente.
+- validación local integral, desde la raíz del repositorio:
+
+```bash
+python3 scripts/validate_ev1.py
+```
+
+Para exigir también backend/frontend materializados:
+
+```bash
+python3 scripts/validate_ev1.py --require-projects
+```
 
 ## Estructura sugerida dentro del repositorio personal
 
