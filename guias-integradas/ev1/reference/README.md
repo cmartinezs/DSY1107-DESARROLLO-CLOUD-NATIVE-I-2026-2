@@ -63,15 +63,58 @@ El mismo par debe llegar al proceso Spring ejecutado mediante IntelliJ/Maven Wra
 
 ---
 
-# Validación estática local
+# Validación local profesional · un solo comando
 
-Desde la raíz del repositorio docente ejecutar:
+Desde la raíz del repositorio ejecutar:
 
 ```bash
-python scripts/validate_integrated_guides.py
+python3 scripts/validate_ev1.py
 ```
 
-El script no usa Internet ni GitHub Actions. Comprueba:
+Este es el **entry point canónico** de validación local. Ejecuta en orden:
+
+```text
+preflight de herramientas
+→ estado Git
+→ validación estática de guías
+→ Maven clean verify, si existe guia/ev1/backend
+→ npm ci + npm run build, si existe guia/ev1/frontend
+→ resumen único PASS/WARN/SKIP/FAIL
+```
+
+En el repositorio docente, `backend/` y `frontend/` pueden no existir todavía porque la guía enseña a crearlos. En ese caso aparecen como `SKIP`, no como un falso `PASS`.
+
+Para una comprobación funcional estricta de un workspace donde ambos proyectos ya fueron materializados:
+
+```bash
+python3 scripts/validate_ev1.py --require-projects
+```
+
+Para convertir también warnings operacionales —por ejemplo working tree sucio— en fallo:
+
+```bash
+python3 scripts/validate_ev1.py --require-projects --strict
+```
+
+Para producir además un reporte machine-readable:
+
+```bash
+python3 scripts/validate_ev1.py \
+  --require-projects \
+  --json-report /tmp/dsy1107-ev1-validation.json
+```
+
+El script informa versión de Python, Git, Java, Node y npm; exige Java 21; informa branch/HEAD; comprueba si `origin` usa SSH; y delega la auditoría documental al validador estático especializado.
+
+## Validador estático especializado
+
+El comando anterior ejecuta internamente:
+
+```bash
+python3 scripts/validate_integrated_guides.py
+```
+
+Ese script comprueba:
 
 ```text
 archivos canónicos presentes
@@ -84,13 +127,11 @@ no reintroducir framing evaluativo dentro de episodios
 no usar comandos Maven globales en code blocks
 ```
 
-Resultado esperado:
+Resultado esperado del subcheck:
 
 ```text
 PASS: enlaces relativos, fences, Mermaid básico y reglas semánticas.
 ```
-
-Este control debe ejecutarse después de renombrar/mover episodios.
 
 ---
 
@@ -98,23 +139,13 @@ Este control debe ejecutarse después de renombrar/mover episodios.
 
 ## Backend
 
-Desde `guia/ev1/backend/`:
-
-PowerShell:
-
-```powershell
-.\mvnw.cmd clean test
-.\mvnw.cmd spring-boot:run
-```
-
-Git Bash/Linux/macOS:
+Desde `guia/ev1/backend/` el validador integral utiliza Maven Wrapper:
 
 ```bash
-./mvnw clean test
-./mvnw spring-boot:run
+./mvnw -B clean verify
 ```
 
-Pruebas mínimas:
+Pruebas mínimas posteriores con el servicio ejecutándose:
 
 ```text
 GET /api/public/health sin token → 200
@@ -135,20 +166,16 @@ GET /api/admin/stats con ROLE_Admin → 200
 
 ## Frontend
 
-Desde `guia/ev1/frontend/`:
+Desde `guia/ev1/frontend/` el validador exige instalación reproducible:
 
 ```bash
 npm ci
-npm start
+npm run build
 ```
 
-Antes de publicar:
+Por eso un frontend materializado debe conservar `package-lock.json`.
 
-```bash
-ng build
-```
-
-Pruebas mínimas:
+Pruebas mínimas posteriores en navegador:
 
 ```text
 Angular compila
@@ -240,7 +267,7 @@ AWS
 
 No declarar un `PASS` funcional si esos comandos/servicios no se ejecutaron realmente.
 
-La validación estática puede ejecutarse offline **si el repositorio ya está disponible localmente**. Un entorno sin workspace local y sin conectividad para clonar GitHub no puede fingir la ejecución del script; debe registrar esa limitación y ejecutar la validación cuando exista una copia local.
+`validate_ev1.py` cubre tooling, Git, documentación y builds locales materializados. No crea ni modifica recursos AWS/Entra y no reemplaza el smoke test E2E real de autenticación, API Gateway y CORS en navegador.
 
 ---
 
@@ -249,7 +276,7 @@ La validación estática puede ejecutarse offline **si el repositorio ya está d
 Cuando cambie una API relevante de Angular, MSAL, Spring Security, Entra o AWS:
 
 1. actualizar primero el starter canónico;
-2. ejecutar el validador estático;
+2. ejecutar `python3 scripts/validate_ev1.py`;
 3. volver a ejecutar checkpoints funcionales afectados;
 4. actualizar explicaciones dependientes;
 5. no crear un segundo snippet alternativo sin razón pedagógica explícita.
