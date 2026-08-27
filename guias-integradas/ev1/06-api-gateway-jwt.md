@@ -2,7 +2,9 @@
 
 ## Objetivo
 
-Crear la frontera pública de la práctica: rutas, integración hacia el backend y validación JWT antes de que la petición llegue a Spring Boot.
+Completar la frontera pública de la práctica: rutas, integración hacia el backend y validación JWT antes de que la petición llegue a Spring Boot.
+
+> Si ya se completó [03B · Checkpoint Semana 3](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md), **no crear un segundo API Gateway ni un segundo authorizer**. Reutilizar `cloudtasks-api-gateway` y `cloudtasks-jwt-authorizer` creados allí.
 
 ## Antes de comenzar
 
@@ -31,15 +33,27 @@ api://<API_CLIENT_ID>/tasks.read
 
 Usar [00C · Matriz de valores](./00c-matriz-valores-y-checkpoints.md).
 
-## 1. Crear HTTP API
+## 1. Crear o reutilizar HTTP API
 
-En AWS API Gateway crear una **HTTP API** para CloudTasks.
+### Si 03B está en PASS
 
-Nombre sugerido:
+Abrir el API ya creado:
 
 ```text
 cloudtasks-api-gateway
 ```
+
+Confirmar que corresponde al `API_GATEWAY_ID` registrado en el checkpoint semanal.
+
+### Si 03B no se ejecutó
+
+Crear una **HTTP API** para CloudTasks:
+
+```text
+cloudtasks-api-gateway
+```
+
+Registrar su ID para evitar duplicados posteriores.
 
 ## 2. Crear integración
 
@@ -81,14 +95,26 @@ Solo después registrar:
 API_GATEWAY_URL=<Invoke URL real>
 ```
 
-## 4. Crear JWT Authorizer
+## 4. Crear o verificar JWT Authorizer
 
-Configurar literalmente:
+### Si 03B está en PASS
+
+Abrir:
+
+```text
+cloudtasks-jwt-authorizer
+```
+
+Comprobar que conserva exactamente:
 
 ```text
 Issuer   = <OIDC_ISSUER>
 Audience = <API_AUDIENCE>
 ```
+
+### Si no existe
+
+Crearlo con esos mismos valores.
 
 `API_AUDIENCE` debe provenir del `aud` del Access Token real validado previamente. No usar `SPA_CLIENT_ID` por intuición.
 
@@ -209,6 +235,7 @@ El Gateway no reemplaza la seguridad del backend.
 
 | Prueba | Esperado |
 |---|---|
+| mismo Gateway/authorizer de 03B reutilizado, si existía | sí |
 | health vía Gateway | 200 |
 | protegida sin token | 401 |
 | token alterado | 401 |
@@ -222,7 +249,8 @@ No configurar CORS para corregir fallas de `curl`: CORS es política del navegad
 
 ## Contenido relacionado
 
+- [03B · Checkpoint Semana 3](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md)
 - [00C · Matriz de valores](./00c-matriz-valores-y-checkpoints.md)
 - [API Gateway/Management](../../semanas/semana-01/01-api-manager.md)
 - [Rutas e integraciones](../../semanas/semana-01/02-primer-api-manager.md)
-- [Seguridad API/gateway](../../semanas/semana-03/02-seguridad-api.md)
+- [Seguridad API/gateway](../../semanas/semana-03/02-seguridad-api/README.md)
