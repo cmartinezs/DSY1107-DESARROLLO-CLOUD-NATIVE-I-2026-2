@@ -18,7 +18,9 @@ Los snippets completos de las etapas son la fuente canónica:
 |---|---|
 | health Spring Boot | `01a-crear-backend-intellij.md` |
 | HttpClient + CORS local | `01-cloudtasks-local.md` |
+| External ID / apps / scopes | `02-entra-external-id.md` |
 | Angular + MSAL Angular | `03a-starter-angular-msal.md` |
+| **gate curricular Semana 3: IDaaS + JWT + API Manager** | `03b-checkpoint-semana-03-idaas-jwt-api-manager.md` |
 | Spring Security/JWT/scopes/ownership | `04a-starter-spring-security.md` |
 | ★ roles Entra → Spring | `04b-opcional-roles-entra-spring.md` |
 | JAR en EC2 | `05-aws-backend.md` + `05a-ec2-paso-a-paso.md` |
@@ -26,6 +28,36 @@ Los snippets completos de las etapas son la fuente canónica:
 | CORS cloud | `07-cors.md` |
 | frontend cloud | `08-frontend-cloud-e2e.md` + `08a-hosting-frontend-https.md` |
 | ★ Docker local/EC2 | `advanced-developer/` |
+
+## Gate curricular vigente · Semana 3
+
+El avance pedagógico actual de CloudTasks termina en `03B`, no en la arquitectura E2E final.
+
+Debe quedar demostrable:
+
+```text
+External tenant + user flow
+cloudtasks-spa + cloudtasks-api
+scopes delegados
+login real mediante MSAL
+Access Token real
+JWT decodificado
+iss / aud / sub / exp / scp comprendidos
+API_AUDIENCE derivado de aud real
+JWT Authorizer creado en API Gateway
+```
+
+No se exige todavía:
+
+```text
+EC2
+BACKEND_CLOUD_URL
+rutas Gateway → backend
+CORS cloud
+frontend cloud
+```
+
+El Gateway/authorizer creados en Semana 3 son **recursos acumulativos**: 06 los reutiliza y agrega integración/rutas; no se crean duplicados.
 
 ## Qué significa “starter conocido”
 
@@ -226,7 +258,7 @@ sin mixed content
 
 La prueba más fuerte es ejecutar la guía donde no exista configuración implícita previa.
 
-Orden:
+Orden hasta el gate vigente:
 
 ```text
 00A herramientas
@@ -239,10 +271,16 @@ Orden:
 01C CORS local
 02 Entra
 03/03A MSAL Angular
+03B gate Semana 3
+```
+
+Después continúa la ruta completa:
+
+```text
 04/04A Spring Security
 ★04B roles si se elige
 05 EC2
-06 Gateway
+06 Gateway: reutiliza authorizer y agrega integración/rutas
 07 CORS cloud
 08 frontend cloud
 09 troubleshooting
@@ -267,7 +305,7 @@ AWS
 
 No declarar un `PASS` funcional si esos comandos/servicios no se ejecutaron realmente.
 
-`validate_ev1.py` cubre tooling, Git, documentación y builds locales materializados. No crea ni modifica recursos AWS/Entra y no reemplaza el smoke test E2E real de autenticación, API Gateway y CORS en navegador.
+`validate_ev1.py` cubre tooling, Git, documentación y builds locales materializados. No crea ni modifica recursos AWS/Entra y no reemplaza el smoke test real de autenticación/JWT/authorizer.
 
 ---
 
