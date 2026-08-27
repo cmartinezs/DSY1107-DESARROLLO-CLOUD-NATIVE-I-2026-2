@@ -8,7 +8,49 @@ CloudTasks permite recorrer de extremo a extremo frontend + backend, API Gateway
 
 - **CHECKPOINT**: estado observable que debe quedar funcionando antes de avanzar.
 - **SI FALLA**: volver al último checkpoint `PASS` y aislar una capa.
+- **FEEDBACK**: al cerrar cada checkpoint, informar al docente si funcionó, si algo falló, si una instrucción no fue clara, si faltó un paso o si fue necesario hacer algo no documentado.
 - **★ OPCIONAL / Advanced Developer**: profundización técnica adicional.
+
+### Regla de feedback de los checkpoints
+
+Cada checkpoint de CloudTasks debe cerrar con una mini-retrospectiva del estudiante. No basta con marcar `PASS` o `FAIL`.
+
+Registrar o comunicar, como mínimo:
+
+```text
+Estado: PASS | FAIL | PARCIAL
+¿Qué funcionó correctamente?
+¿Qué no funcionó, si aplica?
+¿Qué paso o explicación no se entendió?
+¿Faltó algún paso, dato, permiso, comando o captura?
+¿Tuviste que hacer algo que la guía no indicaba?
+¿Qué mensaje de error apareció, si hubo uno?
+¿Qué cambiarías para que el siguiente estudiante pueda avanzar sin ayuda externa?
+```
+
+Si todo funciona, también se debe decir explícitamente. El feedback positivo permite confirmar que una instrucción es reproducible y no solo detectar defectos.
+
+Nunca incluir en el feedback:
+
+```text
+Access Tokens completos
+Refresh Tokens
+contraseñas
+client secrets
+AWS access keys
+cookies de sesión
+claves privadas
+```
+
+La intención es que la guía evolucione con evidencia real de uso:
+
+```text
+checkpoint ejecutado
+→ resultado observado
+→ feedback del estudiante
+→ corrección de la guía si corresponde
+→ siguiente checkpoint
+```
 
 ## Checkpoint curricular vigente · Semana 3
 
@@ -71,6 +113,7 @@ scaffolding
 → configuración explícita
 → código mínimo indispensable
 → checkpoint
+→ feedback
 → explicación técnica
 ```
 
@@ -129,21 +172,11 @@ Si un fragmento de código no aporta directamente al aprendizaje de esta vertica
 python3 scripts/validate_ev1.py
 ```
 
-Para materializar automáticamente un **workspace técnico de referencia hasta Semana 3**:
+Para exigir también backend/frontend materializados:
 
 ```bash
-python3 scripts/materialize_cloudtasks_week03.py
+python3 scripts/validate_ev1.py --require-projects
 ```
-
-Ese materializador descarga scaffolding oficial de Spring Initializr, crea Angular 22, instala MSAL Angular 6 y deja una UI mínima capaz de iniciar sesión, adquirir un Access Token y mostrar solo los claims relevantes del JWT. Los artefactos generados viven localmente en `guia/ev1/backend` y `guia/ev1/frontend` y están ignorados por Git para no crear una segunda fuente de verdad.
-
-Después se exige compilación real de ambos proyectos:
-
-```bash
-python3 scripts/validate_ev1.py --require-projects --strict
-```
-
-El materializador **no crea recursos Entra ni AWS**. El PASS de compilación no sustituye el smoke test real del checkpoint 03B.
 
 ## Estructura sugerida dentro del repositorio personal
 
@@ -186,7 +219,7 @@ S3 + CloudFront se mantiene como referencia técnica apropiada para una SPA. Si 
 
 ## Regla de avance
 
-Cada episodio termina en un estado observable. Solo se avanza con checkpoint `PASS`.
+Cada episodio termina en un estado observable. Solo se avanza con checkpoint `PASS` y feedback registrado/comunicado.
 
 ```text
 FAIL
@@ -194,6 +227,7 @@ FAIL
 → aislar una capa
 → corregir
 → repetir prueba positiva
+→ registrar feedback
 → continuar
 ```
 
