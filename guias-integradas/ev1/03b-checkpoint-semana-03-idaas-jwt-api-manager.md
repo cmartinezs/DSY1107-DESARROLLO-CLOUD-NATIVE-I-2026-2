@@ -65,6 +65,27 @@ No continuar usando valores inventados o reconstruidos manualmente.
 
 ---
 
+# Regla de feedback de esta semana
+
+Después de **cada CHECKPOINT W3-***, además de marcar el resultado, informar brevemente al docente:
+
+```text
+Estado: PASS | FAIL | PARCIAL
+Funcionó bien: <sí/no + qué>
+No funcionó: <qué ocurrió, si aplica>
+No se entendió: <paso o explicación, si aplica>
+Faltó: <paso/dato/permiso/comando, si aplica>
+Tuve que hacer algo no documentado: <qué, si aplica>
+Mensaje de error: <texto relevante, sin secretos>
+Sugerencia para mejorar la guía: <opcional>
+```
+
+Si todo funcionó, indicarlo igualmente: ese feedback confirma que la guía es reproducible.
+
+Nunca incluir tokens completos, contraseñas, secrets, claves AWS, cookies ni credenciales en el feedback.
+
+---
+
 # Parte A · 1.2.5 · Aplicación para usuarios externos
 
 ## A1. Comprobar el External tenant
@@ -107,6 +128,8 @@ usuario externo puede registrarse/iniciar sesión
 - [ ] login/sign-up real funciona.
 - [ ] no existe `client_secret` en Angular.
 
+**FEEDBACK W3-A** · informar si el flujo funcionó completo; si no, indicar en qué pantalla/paso falló, qué no fue entendible o qué paso faltó.
+
 ---
 
 # Parte B · Access Token real de CloudTasks
@@ -140,6 +163,8 @@ No copiar el token completo a GitHub, README, capturas públicas ni archivos ver
 - [ ] Access Token real obtenido.
 - [ ] token corresponde a CloudTasks API.
 - [ ] token no fue persistido en el repositorio.
+
+**FEEDBACK W3-B** · informar si fue fácil encontrar el request/token en DevTools, si faltó alguna instrucción para obtenerlo o si apareció un error de permisos/consent/scopes.
 
 ---
 
@@ -196,6 +221,8 @@ sub → sujeto autenticado
 exp → instante después del cual el token deja de ser válido
 scp → tasks.read/tasks.write u otros scopes realmente emitidos
 ```
+
+**FEEDBACK W3-C** · informar qué claim costó más comprender, si alguno no apareció como se esperaba o si la relación entre claim y concepto no quedó clara.
 
 ---
 
@@ -256,6 +283,8 @@ Por tanto:
 - [ ] `scp` observado.
 - [ ] diferencia decodificación/validación explicable.
 
+**FEEDBACK W3-D** · informar si el comando funcionó tal cual, si requirió adaptar algo al sistema operativo y si la diferencia entre decodificar y validar quedó suficientemente explicada.
+
 ---
 
 # Parte E · Cerrar valores derivados del token real
@@ -290,6 +319,8 @@ OIDC_ISSUER == iss esperado
 API_AUDIENCE == aud real
 scope solicitado ↔ scp emitido comprendido
 ```
+
+**FEEDBACK W3-E** · informar si hubo confusión entre scope completo, claim `scp` y authority Spring, o si alguno de los valores efectivos fue distinto al esperado por la guía.
 
 ---
 
@@ -371,6 +402,8 @@ Esas dependencias se crearán en orden en 05–08.
 - [ ] estudiante puede explicar qué claim se usará para scopes por ruta.
 - [ ] no se inventó un backend cloud para completar esta etapa.
 
+**FEEDBACK W3-F** · informar si la consola de AWS coincide con los pasos, si alguna opción cambió de nombre/ubicación, si faltó un permiso o si hubo que realizar una acción no documentada.
+
 ---
 
 # Mapa completo de la semana
@@ -407,6 +440,7 @@ W3-C JWT + claims comprendidos          PASS
 W3-D token decodificado                 PASS
 W3-E issuer/audience/scopes validados   PASS
 W3-F JWT Authorizer API Manager         PASS
+FEEDBACK W3-A..W3-F                    REGISTRADO/COMUNICADO
 ```
 
 No se exige todavía:
@@ -420,6 +454,24 @@ frontend cloud
 ```
 
 Estos elementos pertenecen a las siguientes puertas de la guía.
+
+---
+
+# Feedback final de la semana
+
+Antes de cerrar WEEK-03, responder brevemente:
+
+```text
+1. ¿Qué parte funcionó sin problemas?
+2. ¿Dónde te detuviste o tuviste que pedir ayuda?
+3. ¿Qué instrucción fue poco clara?
+4. ¿Qué paso, permiso, dato o comando faltó?
+5. ¿Tuviste que hacer algo que no estaba documentado?
+6. ¿Qué error fue el más importante y cómo lo resolviste?
+7. ¿Hay algo que debería cambiarse antes de que otro estudiante siga esta guía?
+```
+
+Este feedback es parte del mecanismo de mejora continua de la guía, no una calificación adicional.
 
 ---
 
