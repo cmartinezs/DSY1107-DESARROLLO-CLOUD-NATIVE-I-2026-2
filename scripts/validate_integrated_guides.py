@@ -136,6 +136,7 @@ def validate_required_files(errors: list[str]) -> None:
         EV1 / "02-entra-external-id.md",
         EV1 / "03-angular-msal.md",
         EV1 / "03a-starter-angular-msal.md",
+        EV1 / "03b-checkpoint-semana-03-idaas-jwt-api-manager.md",
         EV1 / "04-jwt-y-backend.md",
         EV1 / "04a-starter-spring-security.md",
         EV1 / "04b-opcional-roles-entra-spring.md",
