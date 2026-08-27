@@ -8,6 +8,10 @@ Crear la identidad real de CloudTasks: External tenant, flujo de usuarios, SPA, 
 
 Usar [00C · Matriz de valores](./00c-matriz-valores-y-checkpoints.md) para registrar cada dato cuando realmente exista.
 
+Este episodio alimenta directamente el checkpoint curricular vigente:
+
+→ [03B · Checkpoint Semana 3 · IDaaS + JWT + seguridad en API Manager](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md)
+
 ---
 
 # 1. Crear o seleccionar External tenant
@@ -274,7 +278,7 @@ La cadena esperada es:
 MSAL solicita scope completo
 → Entra emite Access Token
 → scp contiene permiso
-→ Spring lo convierte a SCOPE_tasks.read / SCOPE_tasks.write
+→ Spring lo convierte posteriormente a SCOPE_tasks.read / SCOPE_tasks.write
 ```
 
 ---
@@ -336,7 +340,7 @@ API_AUDIENCE=PENDIENTE
 SCOPE_*_CLAIM=PENDIENTE
 ```
 
-porque esos valores se cierran con el Access Token real en 03.
+porque esos valores se cierran con el Access Token real en 03/03B.
 
 ## SI FALLA
 
@@ -355,3 +359,4 @@ porque esos valores se cierran con el Access Token real en 03.
 - [IDaaS/CIAM](../../semanas/semana-02/02-idaas-ciam.md)
 - [Tenant](../../semanas/semana-02/03-configurando-tenant.md)
 - [App registration](../../semanas/semana-02/04-configurando-apps-idaas.md)
+- [03B · Checkpoint curricular Semana 3](./03b-checkpoint-semana-03-idaas-jwt-api-manager.md)
