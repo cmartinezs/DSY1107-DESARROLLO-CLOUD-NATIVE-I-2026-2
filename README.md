@@ -123,24 +123,32 @@ No se sincronizan artificialmente: cada sección registra su último checkpoint 
 
 ## Semana actual
 
-**Semana 3 · 24 al 29 de agosto de 2026**
+**Semana 4 · 31 de agosto al 5 de septiembre de 2026**
 
-**Seguridad de APIs, JWT y usuarios externos**.
+**Cierre de Identity as a Service + integración Full Stack segura.**
 
-Contenido:
+Esta semana debe:
 
-- JWT y claims;
-- access token;
-- decodificación vs verificación;
-- `iss`, `aud`, `exp` y scopes;
-- 401 vs 403;
-- responsabilidades de identidad, gateway y backend;
-- seguridad de API/gateway;
-- CIAM y mapeo posterior a cloud.
+- cerrar **1.2.5–1.2.8**: usuarios externos, seguridad en API Manager, JWT/Claims y decodificación de tokens;
+- continuar con **1.3.1–1.3.4**: MSAL, MSAL en frontend, Spring Security en backend y arquitecturas seguras en la nube;
+- revisar con los estudiantes la **Evaluación Parcial 1**, su rúbrica, condiciones de entrega y la ventana planificada de semanas 6–7;
+- aclarar que **Pedidos360** es el nombre de referencia usado en el documento institucional, mientras que cada grupo aplica los requisitos a su proyecto real.
 
-Después de cada clase, si existe una nueva competencia suficientemente comprendida, RegistrApp puede recibir un refuerzo en [`proyecto-formativo/`](proyecto-formativo/). No es necesario esperar al cierre de la semana ni forzar un incremento si todavía faltan prerrequisitos.
+Ruta técnica:
 
-Consulta [`semanas/semana-03/`](semanas/semana-03/) para contenido y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
+```text
+usuarios externos + API Manager
+→ JWT / claims / decode vs verify
+→ Authorization Code + PKCE
+→ MSAL
+→ access token
+→ Gateway
+→ Spring Security Resource Server
+→ scopes / 401 / 403
+→ arquitectura segura
+```
+
+Consulta [`semanas/semana-04/`](semanas/semana-04/) para el contenido, [`labs/fullstack-seguro/`](labs/fullstack-seguro/) para el laboratorio canónico y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
 
 ---
 
