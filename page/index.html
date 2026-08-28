@@ -12,9 +12,9 @@
     <div class="container">
       <p class="eyebrow">DSY1107 · 2026-2</p>
       <h1>Desarrollo Cloud Native I</h1>
-      <p class="lead">Primero entendemos la capacidad y el patrón; después lo llevamos a infraestructura local/neutral y finalmente al servicio cloud real.</p>
+      <p class="lead">Primero entendemos la capacidad y el patrón; después lo llevamos a una implementación reproducible y finalmente al servicio cloud real.</p>
       <div class="actions">
-        <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-02">Ver semana actual</a>
+        <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-04">Ver semana actual</a>
         <a class="button" href="progreso.html">Mi progreso</a>
         <a class="button" href="repositorio-estudiante.html">Repositorio del estudiante</a>
         <a class="button" href="https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing">Material público</a>
@@ -27,26 +27,27 @@
     <section class="card current-week">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Esta semana · Semana 2 · 17–22 agosto</p>
-          <h2>Tu ruta de trabajo</h2>
+          <p class="eyebrow">Esta semana · Semana 4 · 31 agosto–5 septiembre</p>
+          <h2>Identity as a Service → Full Stack seguro</h2>
         </div>
-        <span class="badge">En curso</span>
+        <span class="badge">Semana 4</span>
       </div>
 
       <ol class="topics">
-        <li><strong>1 · Comprende el concepto.</strong> Cierra gestión de APIs y trabaja OAuth2/OIDC, actores, tokens, scopes y responsabilidades sin depender de una consola cloud.</li>
-        <li><strong>2 · Obsérvalo localmente.</strong> Usa los laboratorios canónicos para hacer visible routing, CORS, identidad, tokens, 401/403 y flujo cliente → gateway → backend.</li>
-        <li><strong>3 · Relaciónalo con ReservApp.</strong> Mapea usuarios, cliente, IdP, gateway, API y permisos sobre el mismo dominio formativo.</li>
-        <li><strong>4 · Transfiérelo a cloud.</strong> Cuando corresponda el laboratorio real, compara qué cambió al usar un proveedor y qué conceptos permanecieron.</li>
-        <li><strong>+ Opcional.</strong> Revisa ejemplos, repite pruebas o investiga un caso real de OAuth2/OIDC y documenta sus actores.</li>
+        <li><strong>1 · Cierra el bloque 1.2.</strong> Completa usuarios externos, seguridad en API Manager, JWT/Claims y decodificación de tokens desde el último checkpoint real de tu sección.</li>
+        <li><strong>2 · Conecta el frontend con identidad.</strong> Comprende MSAL, Authorization Code + PKCE, public clients, scopes y la diferencia entre ID token y access token.</li>
+        <li><strong>3 · Protege el backend.</strong> Usa Spring Security como OAuth2 Resource Server y razona sobre issuer, audience, expiración, scopes, 401 y 403.</li>
+        <li><strong>4 · Integra la arquitectura.</strong> Ubica responsabilidades entre SPA, Identity Provider, API Manager/Gateway y backend bajo defensa en profundidad.</li>
+        <li><strong>5 · Prepárate para Parcial 1.</strong> Revisa rúbrica, condiciones de entrega y la aclaración sobre el nombre “Pedidos360”.</li>
       </ol>
 
-      <p><strong>Al terminar deberías poder explicar:</strong> el flujo y las responsabilidades sin necesitar mencionar AWS o Azure; después, recién mapear cada concepto al servicio concreto.</p>
+      <p><strong>Al terminar deberías poder explicar:</strong> por qué el backend valida por sí mismo el access token, qué controles pertenecen al gateway y cuáles al Resource Server, y cómo se interpreta un 401 frente a un 403.</p>
 
       <div class="actions">
-        <a class="button primary" href="progreso.html">✓ Ver mi progreso</a>
-        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs">Abrir laboratorios</a>
-        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-02">Contenido Semana 2</a>
+        <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-04">Contenido Semana 4</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/fullstack-seguro">Laboratorio Full Stack</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/05-evaluacion-parcial-1.md">Parcial 1</a>
+        <a class="button" href="progreso.html">✓ Ver mi progreso</a>
       </div>
     </section>
 
@@ -54,21 +55,28 @@
       <article class="card">
         <p class="eyebrow">Seguimiento personal</p>
         <h2>Mi progreso</h2>
-        <p>Checklist local de la semana para distinguir lo realizado de lo que todavía debes poder explicar. No es una calificación.</p>
+        <p>Checklist local de Semana 4 para distinguir material publicado de competencias que realmente puedes explicar y demostrar.</p>
         <a class="text-link" href="progreso.html">Abrir progreso →</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Evaluación</p>
+        <h2>Parcial 1 · Orientaciones</h2>
+        <p>Rúbrica, condiciones de entrega, ventana planificada semanas 6–7 y aclaración sobre el caso nominal “Pedidos360”.</p>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/05-evaluacion-parcial-1.md">Abrir orientaciones →</a>
       </article>
 
       <article class="card">
         <p class="eyebrow">Concepto → local → cloud</p>
         <h2>Laboratorios</h2>
-        <p>Los laboratorios tienen hogar canónico en <code>labs/</code>. La semana curricular los enlaza, pero no duplica el proyecto.</p>
+        <p>Los laboratorios tienen hogar canónico en <code>labs/</code>. Semana 4 utiliza el flujo Full Stack protegido como laboratorio principal.</p>
         <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs">Abrir laboratorios →</a>
       </article>
 
       <article class="card">
         <p class="eyebrow">Contenido</p>
         <h2>Material de estudio</h2>
-        <p>El repositorio consolida el contenido de cada semana e incorpora aclaraciones y contexto técnico.</p>
+        <p>El repositorio consolida el contenido de cada semana e incorpora aclaraciones, contexto técnico y mapeo curricular.</p>
         <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/README.md">Revisar índice de semanas →</a>
       </article>
 
