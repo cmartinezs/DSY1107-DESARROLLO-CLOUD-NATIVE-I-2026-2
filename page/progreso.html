@@ -13,28 +13,31 @@
 <main class="container wrap py-4">
   <a href="index.html" class="btn btn-sm btn-outline-secondary mb-3">← Volver al inicio</a>
   <section class="hero p-4 mb-4">
-    <div class="small text-white-50 fw-bold">DSY1107 · Semana 2</div>
+    <div class="small text-white-50 fw-bold">DSY1107 · Semana 4</div>
     <h1 class="h2 fw-bold">Tu progreso</h1>
-    <p class="mb-0 text-white-50">Marca lo que ya realizaste o puedes explicar. Se guarda solo en este navegador y no corresponde a una calificación.</p>
+    <p class="mb-0 text-white-50">Marca solo lo que ya realizaste o puedes explicar. Se guarda en este navegador y no corresponde a una calificación.</p>
   </section>
   <section class="bg-white border rounded-4 p-4 mb-4">
-    <div class="d-flex justify-content-between align-items-center gap-3 mb-2"><strong id="counter">0 de 8</strong><button id="reset" class="btn btn-sm btn-outline-danger">Reiniciar</button></div>
+    <div class="d-flex justify-content-between align-items-center gap-3 mb-2"><strong id="counter">0 de 10</strong><button id="reset" class="btn btn-sm btn-outline-danger">Reiniciar</button></div>
     <div class="progress"><div id="bar" class="progress-bar" style="width:0%"></div></div>
   </section>
   <section id="items" class="d-grid gap-2">
-    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p1"><label for="p1">Puedo explicar API, API Gateway y API Management como conceptos distintos.</label></div>
-    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p2"><label for="p2">Cerré o avancé el laboratorio local de API Gateway con evidencia reproducible.</label></div>
-    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p3"><label for="p3">Puedo distinguir autenticación, autorización, OAuth2 y OpenID Connect.</label></div>
-    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p4"><label for="p4">Puedo identificar usuario, cliente, IdP/Authorization Server y API protegida en un caso real.</label></div>
-    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p5"><label for="p5">Puedo explicar Access Token vs ID Token y el sentido de scopes/claims al nivel trabajado.</label></div>
-    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p6"><label for="p6">Trabajé o revisé el laboratorio local de identidad cuando correspondió al avance de mi sección.</label></div>
-    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p7"><label for="p7">Puedo explicar qué se mantiene conceptualmente al pasar de local/neutral a un servicio cloud real.</label></div>
-    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p8"><label for="p8">Mi repositorio/entrega documenta arquitectura, ejecución, evidencia y configuración sin exponer secretos.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p1"><label for="p1">Puedo explicar usuarios externos/CIAM y cómo se relacionan con una API protegida.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p2"><label for="p2">Puedo explicar qué seguridad corresponde al API Manager/Gateway y qué responsabilidad conserva el backend.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p3"><label for="p3">Puedo interpretar header, payload y signature de un JWT y explicar por qué decodificar no equivale a verificar.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p4"><label for="p4">Puedo justificar issuer, audience, expiración, scopes y claims en una decisión de acceso.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p5"><label for="p5">Puedo explicar Authorization Code + PKCE y por qué una SPA es un public client sin client secret.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p6"><label for="p6">Puedo distinguir ID token de access token y sé cuál debe enviarse a la API.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p7"><label for="p7">Puedo describir cómo MSAL obtiene un access token para un scope concreto de la API.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p8"><label for="p8">Puedo explicar cómo Spring Security Resource Server valida un token y por qué algunos casos producen 401 y otros 403.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p9"><label for="p9">Completé o puedo defender la matriz del laboratorio Full Stack: sin token, token inválido, sin scope y con scope.</label></div>
+    <div class="item p-3"><input class="form-check-input me-2" type="checkbox" id="p10"><label for="p10">Revisé las orientaciones de la Evaluación Parcial 1 y entiendo que “Pedidos360” es una referencia nominal, no un proyecto nuevo obligatorio.</label></div>
   </section>
-  <section class="alert alert-primary mt-4"><strong>Importante:</strong> 002D y 003D pueden llevar ritmos distintos. No marques una actividad solo porque aparece aquí; úsala como mapa de lo que corresponde aprender durante esta etapa.</section>
+  <section class="alert alert-primary mt-4"><strong>Importante:</strong> 002D y 003D pueden llevar ritmos distintos. El checklist representa el horizonte de Semana 4; no marques una competencia únicamente porque el material esté publicado.</section>
+  <section class="alert alert-warning mt-3"><strong>Seguridad:</strong> las evidencias nunca deben incluir client secrets, contraseñas, tokens reutilizables ni credenciales cloud.</section>
 </main>
 <script>
-const KEY='dsy1107-progreso-semana-02';
+const KEY='dsy1107-progreso-semana-04';
 const boxes=[...document.querySelectorAll('input[type=checkbox]')];
 function load(){const saved=JSON.parse(localStorage.getItem(KEY)||'{}');boxes.forEach(b=>b.checked=Boolean(saved[b.id]));render();}
 function save(){const state={};boxes.forEach(b=>state[b.id]=b.checked);localStorage.setItem(KEY,JSON.stringify(state));render();}
