@@ -14,7 +14,7 @@ button?.addEventListener('click', async () => {
 const currentWeek = document.querySelector('.current-week');
 if (currentWeek) {
   const lab = document.createElement('p');
-  lab.innerHTML = '<strong>Laboratorio puente:</strong> API Gateway local con Spring Cloud Gateway · routing, HTTP nivel 2, versionado, CORS y colaboración GitHub. <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/api-gateway-local">Abrir guía y starter →</a>';
+  lab.innerHTML = '<strong>Laboratorio de Semana 4:</strong> flujo Full Stack protegido con Authorization Code + PKCE, MSAL, API Manager/Gateway y Spring Security Resource Server. <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/fullstack-seguro">Abrir laboratorio →</a>';
   currentWeek.appendChild(lab);
 
   const params = new URLSearchParams(window.location.search);
@@ -25,7 +25,7 @@ if (currentWeek) {
   selector.innerHTML = `
     <p class="eyebrow">Avance real por sección</p>
     <h2>Selecciona tu sección</h2>
-    <p>Los resúmenes reflejan lo que efectivamente se alcanzó en cada curso. El material común sigue siendo el mismo para ambas secciones.</p>
+    <p>El horizonte curricular de Semana 4 es común, pero 002D y 003D deben continuar desde su último checkpoint demostrable. Que un contenido esté publicado no significa que ya se haya ejecutado en aula.</p>
     <p>
       <a class="text-link" href="?seccion=002D">Ver DSY1107-002D →</a>
       &nbsp;&nbsp;·&nbsp;&nbsp;
@@ -39,9 +39,9 @@ if (currentWeek) {
     detail.innerHTML = `
       <hr />
       <p class="eyebrow">DSY1107-002D</p>
-      <h2>Resumen de la sección</h2>
-      <p>Consulta únicamente los registros de avance de la sección 002D.</p>
-      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-02/DSY1107-002D.md">Abrir planificación/avance de Semana 2 →</a>
+      <h2>Semana 4 · planificación</h2>
+      <p>Consulta el plan de la sección y actualízalo únicamente con evidencia real de clase.</p>
+      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/DSY1107-002D.md">Abrir planificación Semana 4 →</a>
     `;
   }
 
@@ -49,13 +49,9 @@ if (currentWeek) {
     detail.innerHTML = `
       <hr />
       <p class="eyebrow">DSY1107-003D</p>
-      <h2>API Gateway + OAuth2/OIDC</h2>
-      <p>La sección mantiene su propio checkpoint real. Consulta el registro de Semana 2 para distinguir lo ya trabajado de lo planificado.</p>
-      <p>
-        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-02/DSY1107-003D.md">Abrir avance de Semana 2 →</a><br />
-        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/api-gateway-local">Continuar laboratorio API Gateway →</a><br />
-        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/identidad-local">Abrir laboratorio de identidad →</a>
-      </p>
+      <h2>Semana 4 · planificación</h2>
+      <p>Consulta el plan de la sección y actualízalo únicamente con evidencia real de clase.</p>
+      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/DSY1107-003D.md">Abrir planificación Semana 4 →</a>
     `;
   }
 
