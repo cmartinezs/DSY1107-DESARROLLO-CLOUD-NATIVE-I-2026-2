@@ -13,6 +13,7 @@ concepto → laboratorio local/neutral → laboratorio cloud real → comparaci�
 - [`api-gateway-local/`](api-gateway-local/) — routing, integración, versionado, políticas y CORS mediante Spring Cloud Gateway + backend público.
 - [`identidad-local/`](identidad-local/) — laboratorio histórico de OAuth2/OIDC, PKCE, tokens, scopes, roles, 401/403, tenant y app registration.
 - [`jwt-forense/`](jwt-forense/) — Semana 3: JWT, claims, audience/issuer/expiración, scopes, 401/403 y frontera gateway/backend con dominio neutral.
+- [`fullstack-seguro/`](fullstack-seguro/) — Semana 4: flujo SPA + Authorization Code/PKCE + MSAL + API Manager/Gateway + Spring Security Resource Server, con checkpoints y matriz 401/403/2xx.
 
 ## Regla de evolución
 
