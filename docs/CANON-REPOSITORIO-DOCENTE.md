@@ -231,6 +231,6 @@ Este canon admite especializaciones:
 
 - **DSY1102:** práctica de clase, laboratorios, PetCare y grandes desafíos progresivos.
 - **DSY1105:** Kotlin/Android, PocketLog y evolución de consola → app móvil → persistencia/REST.
-- **DSY1107:** dominio ReservApp y estrategia concepto → laboratorio local/neutral → laboratorio cloud real.
+- **DSY1107:** labs del repositorio locales, autocontenidos e independientes; los ejercicios/labs cloud oficiales permanecen en AVA; RegistrApp recibe por separado la transferencia al proyecto formativo.
 
 Estas especializaciones complementan el canon; las reglas generales anteriores se mantienen.
