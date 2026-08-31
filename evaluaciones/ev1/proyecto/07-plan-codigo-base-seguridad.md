@@ -3,8 +3,8 @@
 ## Estado
 
 - ✅ **Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS:** implementada en `evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`.
-- ⏭️ **Etapa 2 — Toolkit JWT conceptual:** siguiente etapa.
-- ⬜ Etapa 3 — Spring Security Resource Server Starter.
+- ✅ **Etapa 2 — Toolkit JWT conceptual:** implementada en `evaluaciones/ev1/starters/jwt-conceptos/`.
+- ⏭️ **Etapa 3 — Spring Security Resource Server Starter:** siguiente etapa.
 - ⬜ Etapa 4 — Starter MSAL para React y Angular.
 - ⬜ Etapa 5 — Kit de integración y pruebas.
 - ⬜ Etapa 6 — Aplicaciones mínimas de referencia.
@@ -109,84 +109,52 @@ evaluaciones/
         │   └── application.example.yml
         │
         ├── react-msal/
-        │   ├── README.md
-        │   ├── msalConfig.ts
-        │   ├── AuthProvider.tsx
-        │   ├── ProtectedRoute.tsx
-        │   ├── useAccessToken.ts
-        │   ├── apiClient.ts
-        │   └── .env.example
-        │
+        │   └── ...
         ├── angular-msal/
-        │   ├── README.md
-        │   ├── auth.config.ts
-        │   ├── auth.service.ts
-        │   ├── auth.guard.ts
-        │   ├── auth.interceptor.ts
-        │   └── environment.example.ts
-        │
+        │   └── ...
         ├── jwt-conceptos/
         │   ├── README.md
-        │   ├── JwtCreateExample.java
-        │   ├── JwtSignExample.java
+        │   ├── pom.xml
+        │   ├── JwtCreateAndSignExample.java
+        │   ├── JwtDecodeExample.java
         │   ├── JwtVerifyExample.java
-        │   └── JwtDecodeExample.java
+        │   └── JwtTamperExample.java
         │
         └── testing/
-            ├── README.md
-            ├── matriz-401-403.md
-            └── requests.http
+            └── ...
 ```
 
-La estructura podrá ajustarse durante la implementación, pero debe preservar la separación entre frontend, Resource Server, material conceptual JWT y pruebas.
+La estructura puede ajustarse durante la implementación, pero debe preservar la separación entre frontend, Resource Server, material conceptual JWT y pruebas.
 
 # Plan de implementación
 
 ## Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS — ✅ COMPLETADA
 
-### Objetivo
+Entregable: `evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`.
 
-Documentar el flujo Authorization Code + PKCE y delimitar claramente las responsabilidades del frontend, proveedor de identidad, API Gateway y Resource Server.
+Cubre flujo Authorization Code + PKCE, responsabilidades de SPA/IDaaS/Gateway/Resource Server, Bearer Token y diferencias 401/403/2xx.
 
-### Entregable
+## Etapa 2 — Toolkit JWT conceptual — ✅ COMPLETADA
 
-`evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`
+Entregable: `evaluaciones/ev1/starters/jwt-conceptos/`.
 
-El documento cubre:
+Incluye:
 
-- flujo Authorization Code + PKCE paso a paso;
-- responsabilidades de SPA, IDaaS, gateway y Resource Server;
-- diferencia entre authorization code y Access Token;
-- función conceptual de `code_verifier` y `code_challenge`;
-- uso de `Authorization: Bearer`;
-- diferencia entre decodificar y validar un JWT;
-- frontera de responsabilidades que impide convertir el backend de negocio en Authorization Server;
-- comportamiento 401, 403 y 2xx;
-- preguntas de comprobación conceptual.
+- creación de claims y construcción de JWT;
+- firma local didáctica;
+- decodificación de header/payload sin validación;
+- validación de firma;
+- validación automática de expiración;
+- comprobación de issuer y audience;
+- alteración del payload para demostrar fallo de integridad;
+- proyecto Maven autocontenido;
+- instrucciones paso a paso y preguntas de comprobación.
 
-## Etapa 2 — Toolkit JWT conceptual — ⏭️ SIGUIENTE
-
-### Objetivo
-
-Permitir experimentar de manera aislada con JWT antes de utilizar tokens emitidos por el IDaaS.
-
-### Ejemplos mínimos
-
-- creación de claims;
-- construcción de JWT;
-- firma;
-- decodificación;
-- verificación de firma;
-- verificación de expiración;
-- modificación del payload para demostrar fallo de integridad.
-
-### Restricción
-
-El material debe indicar explícitamente:
+### Restricción preservada
 
 > Estos ejemplos permiten comprender JWT. No deben utilizarse para emitir los Access Tokens de la solución EV1 cuando se utiliza IDaaS.
 
-## Etapa 3 — Spring Security Resource Server Starter
+## Etapa 3 — Spring Security Resource Server Starter — ⏭️ SIGUIENTE
 
 ### Objetivo
 
@@ -220,152 +188,32 @@ Entregar una base mínima pero observable para proteger el backend Spring Boot.
 
 ### No incluir
 
-El starter no debe implementar:
-
-- login con usuario/password;
-- almacenamiento de credenciales;
-- `generateToken()`;
-- firma propia de Access Tokens;
-- endpoint `/oauth2/token` propio.
+El starter no debe implementar login con usuario/password, almacenamiento de credenciales, generación/firma propia de Access Tokens ni endpoint `/oauth2/token`.
 
 ## Etapa 4 — Starter MSAL para React y Angular
 
-### Objetivo
-
-Permitir que ambas tecnologías frontend implementen el mismo contrato de autenticación sin exigir implementación manual de OAuth 2.0.
-
-### React
-
-Base prevista:
-
-- `@azure/msal-browser`;
-- `@azure/msal-react`.
-
-### Angular
-
-Base prevista:
-
-- `@azure/msal-browser`;
-- `@azure/msal-angular`.
-
-### Contrato pedagógico común
-
-Ambas variantes deben permitir reconocer conceptualmente:
-
-```text
-login
-logout
-usuario autenticado
-cuenta actual
-adquisición de Access Token
-llamada autenticada a API
-```
-
-MSAL será responsable de ejecutar Authorization Code + PKCE contra el proveedor de identidad.
-
-La generación manual de `code_verifier` y `code_challenge` puede mostrarse de forma aislada para comprender PKCE, pero no será código obligatorio de producción para los estudiantes.
+Debe permitir login, logout, usuario autenticado, cuenta actual, adquisición de Access Token y llamada autenticada a API. MSAL ejecutará Authorization Code + PKCE contra el proveedor de identidad.
 
 ## Etapa 5 — Kit de integración y pruebas
 
-### Objetivo
-
-Convertir la implementación de seguridad en evidencia verificable de EV1.
-
-### Casos mínimos
-
-```text
-GET /public/health
-→ 200
-
-GET /api/recurso
-sin Authorization
-→ 401
-
-GET /api/recurso
-token inválido
-→ 401
-
-GET /api/admin/recurso
-token válido sin permiso requerido
-→ 403
-
-GET /api/admin/recurso
-token válido con permiso requerido
-→ 2xx
-```
-
-### Claims a observar
-
-Según la configuración del proveedor:
-
-- `iss`;
-- `aud`;
-- `exp`;
-- `scp` y/o `roles`;
-- identificador del sujeto (`sub`, `oid` u otro claim equivalente).
-
-Nunca se deben publicar tokens completos como evidencia.
+Debe convertir la implementación en evidencia verificable: 200 público, 401 sin/invalid token, 403 con token sin permiso y 2xx con permiso correcto; además observación segura de claims relevantes.
 
 ## Etapa 6 — Aplicaciones mínimas de referencia
 
-### Objetivo
-
-Validar los starters antes de declararlos material canónico para estudiantes.
-
-Se deben construir dos clientes mínimos:
-
-```text
-React ───┐
-         ├── mismo IDaaS
-Angular ─┘
-              │
-              ▼
-       misma Spring API
-```
-
-La funcionalidad de negocio debe ser deliberadamente mínima. El propósito es demostrar el flujo:
-
-```text
-login
-→ Authorization Code + PKCE
-→ Access Token
-→ Authorization: Bearer
-→ API Manager/Gateway cuando corresponda
-→ Spring Resource Server
-→ autorización
-→ 200 / 401 / 403
-```
-
-Solo después de validar ambos caminos los starters deben considerarse estables para uso en EV1.
+Se validarán clientes mínimos React y Angular contra el mismo IDaaS y la misma Spring API antes de declarar los starters estables para uso en EV1.
 
 # Principios didácticos
 
-## Entender antes de abstraer
-
-Los estudiantes deben comprender los elementos visibles del flujo OAuth 2.0/OIDC y las responsabilidades de cada componente antes de utilizar las abstracciones del SDK.
-
-## Reducir complejidad accidental, no eliminar aprendizaje
-
-El código base debe resolver boilerplate y configuraciones repetitivas, pero debe mantener visibles las decisiones arquitectónicas relevantes.
-
-## Separar demostración conceptual de arquitectura de producción
-
-Crear y firmar JWT manualmente es útil para aprender integridad, claims y firma. Emitir manualmente el Access Token de una aplicación integrada con IDaaS es arquitectónicamente incorrecto para el objetivo de EV1.
-
-## Mismo aprendizaje independiente del framework
-
-React y Angular pueden diferir en implementación, pero deben cubrir el mismo flujo, mismos conceptos y mismas evidencias.
-
-## Seguridad demostrable
-
-Una integración se considera completa cuando el estudiante puede explicar y demostrar el comportamiento de autenticación y autorización, incluyendo al menos diferencias observables entre 200, 401 y 403.
+- entender antes de abstraer;
+- reducir complejidad accidental, no eliminar aprendizaje;
+- separar demostración conceptual de arquitectura productiva;
+- mantener el mismo aprendizaje independientemente de React o Angular;
+- exigir seguridad demostrable, no solo configuración declarada.
 
 # Criterio de término
 
-El plan se considera implementado cuando existen y han sido probados:
-
 1. ✅ documentación del flujo Authorization Code + PKCE con IDaaS;
-2. ⬜ ejemplos conceptuales JWT;
+2. ✅ ejemplos conceptuales JWT;
 3. ⬜ starter Spring Resource Server;
 4. ⬜ starter React + MSAL;
 5. ⬜ starter Angular + MSAL;
