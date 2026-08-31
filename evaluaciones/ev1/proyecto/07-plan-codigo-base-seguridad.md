@@ -16,45 +16,9 @@ El código base debe permitir trabajar de forma consistente con:
 - validación de issuer, audience, expiración, scopes y/o roles;
 - respuestas 401 y 403 demostrables.
 
-## Referencia técnica: KeyGo
-
-KeyGo se utilizará como referencia técnica porque ya implementa explícitamente las piezas internas del flujo OAuth 2.0/OIDC que en una arquitectura con IDaaS quedan encapsuladas por el proveedor de identidad.
-
-En KeyGo existen, entre otras piezas:
-
-- generación de `code_verifier`;
-- generación de `code_challenge` usando S256;
-- generación y validación de `state`;
-- endpoint de autorización;
-- autenticación de usuario;
-- emisión de authorization code;
-- intercambio de authorization code por tokens;
-- validación PKCE;
-- emisión y firma de tokens;
-- refresh token y rotación.
-
-KeyGo se utilizará principalmente para **explicar qué ocurre dentro de un Authorization Server**. No se copiará su arquitectura completa hacia las aplicaciones EV1.
+> Este documento define únicamente el material visible y utilizable por estudiantes. Las referencias internas utilizadas por el equipo docente para diseñar, contrastar o validar técnicamente los starters no forman parte del material de la asignatura y no deben exponerse en documentación, ejemplos ni código entregable a los alumnos.
 
 ## Frontera arquitectónica obligatoria
-
-### Modelo KeyGo de referencia
-
-```text
-Frontend
-   │
-   ├── genera verifier/challenge
-   ├── /authorize
-   ├── login
-   └── /token
-             │
-             ▼
-       KeyGo backend
-       ├── autentica usuario
-       ├── emite authorization code
-       ├── valida PKCE
-       ├── crea/firma access token
-       └── administra refresh token
-```
 
 ### Modelo objetivo EV1
 
@@ -168,11 +132,11 @@ La estructura podrá ajustarse durante la implementación, pero debe preservar l
 
 # Plan de implementación
 
-## Etapa 1 — Extraer el modelo conceptual desde KeyGo
+## Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS
 
 ### Objetivo
 
-Documentar el flujo interno que KeyGo implementa explícitamente y mapearlo contra las responsabilidades que asume un IDaaS.
+Documentar el flujo Authorization Code + PKCE y delimitar claramente las responsabilidades del frontend, proveedor de identidad, API Gateway y Resource Server.
 
 ### Flujo conceptual
 
@@ -181,26 +145,22 @@ Authorization Request
         ↓
 code_challenge
         ↓
-autenticación
+autenticación en IDaaS
         ↓
 authorization_code
         ↓
 code_verifier
         ↓
-token endpoint
+token endpoint del IDaaS
         ↓
 access_token
 ```
 
 ### Entregable esperado
 
-Documento comparativo:
+Documento de arquitectura y responsabilidades del flujo IDaaS.
 
-```text
-flujo-keygo-vs-idaas.md
-```
-
-Debe permitir identificar claramente qué responsabilidades desaparecen del backend de la aplicación cuando se integra un proveedor de identidad.
+Debe permitir identificar claramente qué componente ejecuta cada responsabilidad y por qué el backend de negocio no debe implementar un Authorization Server.
 
 ## Etapa 2 — Toolkit JWT conceptual
 
@@ -301,7 +261,7 @@ llamada autenticada a API
 
 MSAL será responsable de ejecutar Authorization Code + PKCE contra el proveedor de identidad.
 
-La generación manual de `code_verifier` y `code_challenge` de KeyGo se conservará como referencia pedagógica, no como código obligatorio de producción para los estudiantes.
+La generación manual de `code_verifier` y `code_challenge` puede mostrarse de forma aislada para comprender PKCE, pero no será código obligatorio de producción para los estudiantes.
 
 ## Etapa 5 — Kit de integración y pruebas
 
@@ -376,31 +336,11 @@ login
 
 Solo después de validar ambos caminos los starters deben considerarse estables para uso en EV1.
 
-# Matriz de reutilización desde KeyGo
-
-| Pieza | Uso en material EV1 |
-|---|---|
-| generación de `code_verifier` | referencia conceptual/demostración |
-| generación de `code_challenge` S256 | referencia conceptual/demostración |
-| `state` | referencia conceptual |
-| verificador PKCE backend | explicación interna de Authorization Server |
-| endpoint `/authorize` propio | no reutilizar en aplicación EV1 |
-| endpoint de login propio | no reutilizar |
-| password en backend | no reutilizar |
-| endpoint `/oauth2/token` propio | reemplazado por IDaaS |
-| creación/firma de Access Token | material conceptual únicamente |
-| refresh token propio | responsabilidad del cliente/IDaaS |
-| validación JWT en API | implementar en starter |
-| scopes/roles | implementar en starter |
-| 401/403 | implementar y probar |
-| Bearer Token frontend → API | implementar |
-| configuración por entorno | implementar |
-
 # Principios didácticos
 
 ## Entender antes de abstraer
 
-KeyGo permite mostrar qué hace internamente un Authorization Server. MSAL e IDaaS permiten posteriormente utilizar ese flujo de forma correcta sin reinventarlo.
+Los estudiantes deben comprender los elementos visibles del flujo OAuth 2.0/OIDC y las responsabilidades de cada componente antes de utilizar las abstracciones del SDK.
 
 ## Reducir complejidad accidental, no eliminar aprendizaje
 
@@ -422,7 +362,7 @@ Una integración se considera completa cuando el estudiante puede explicar y dem
 
 El plan se considera implementado cuando existen y han sido probados:
 
-1. documentación KeyGo vs IDaaS;
+1. documentación del flujo Authorization Code + PKCE con IDaaS;
 2. ejemplos conceptuales JWT;
 3. starter Spring Resource Server;
 4. starter React + MSAL;
