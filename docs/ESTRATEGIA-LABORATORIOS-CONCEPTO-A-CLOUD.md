@@ -1,12 +1,35 @@
-# Estrategia de laboratorios · concepto → implementación cloud
+# Estrategia de laboratorios · local en repo, cloud en AVA
 
-DSY1107 busca que el estudiante aprenda **conceptos, patrones y responsabilidades Cloud Native**, no que memorice una secuencia de clics de un proveedor.
+DSY1107 busca que el estudiante aprenda **conceptos, patrones y responsabilidades Cloud Native** sin convertir los laboratorios del repositorio docente en ejercicios dependientes de infraestructura cloud.
 
-Por eso, cada tema práctico que dependa de infraestructura cloud seguirá, cuando sea razonable, una progresión en dos etapas.
+## 1. Frontera canónica
 
-## 1. Etapa conceptual: laboratorio local o neutral
+Existen dos superficies pedagógicas distintas:
 
-Primero se implementa o simula el concepto en un entorno controlado, reproducible y de bajo costo.
+```text
+Repositorio docente
+→ explicación y ejemplos
+→ labs locales/autocontenidos
+→ checkpoints de comprensión
+
+AVA institucional
+→ contenido oficial
+→ ejercicios/labs cloud
+→ actividades y evidencias institucionales
+```
+
+Ambas superficies pueden abordar una misma competencia, pero no forman una única secuencia técnica ni comparten la misma raíz documental.
+
+## 2. Laboratorios del repositorio
+
+Todo laboratorio bajo `labs/` debe ser:
+
+- ejecutable sin infraestructura cloud real;
+- autocontenido;
+- reproducible desde otra máquina con prerrequisitos razonables;
+- independiente del Proyecto Formativo;
+- asociado al contenido de una semana o competencia concreta;
+- diseñado para hacer observable el concepto, no para enseñar una consola de proveedor.
 
 Puede utilizar:
 
@@ -14,10 +37,10 @@ Puede utilizar:
 - contenedores;
 - servicios open source;
 - simuladores didácticos;
-- servicios SaaS gratuitos o alternativos;
+- backends públicos simples;
 - componentes equivalentes que permitan observar claramente el patrón.
 
-El objetivo no es replicar cada detalle del servicio cloud. El objetivo es reconocer:
+El objetivo es reconocer:
 
 - actores y componentes;
 - flujo de una petición;
@@ -29,68 +52,42 @@ El objetivo no es replicar cada detalle del servicio cloud. El objetivo es recon
 
 ### Regla de sencillez
 
-El laboratorio conceptual debe utilizar la **menor cantidad posible de tecnología accidental**.
+El laboratorio debe utilizar la **menor cantidad posible de tecnología accidental**.
 
-No se agrega un framework, lenguaje, protocolo o herramienta solo porque exista. Si un starter o simulador permite observar el concepto sin programar lógica irrelevante, se prefiere ese camino.
+No se agrega un framework, lenguaje, protocolo o herramienta solo porque exista. Si un simulador o componente local permite observar el concepto sin programar lógica irrelevante, se prefiere ese camino.
 
-## 2. Etapa de transferencia: laboratorio real de la asignatura
+## 3. Actividades cloud del AVA
 
-Después de comprender el patrón, se realiza el laboratorio institucional o equivalente usando la nube y el proveedor que corresponda al contenido oficial.
+Cuando el programa institucional contemple ejercicios, guías o laboratorios sobre AWS, Azure u otro proveedor, esos recursos pertenecen al **AVA** y mantienen su carácter oficial.
 
-En esta segunda etapa el estudiante debe poder mapear conscientemente:
+El repositorio docente puede:
 
-```text
-concepto aprendido → elemento del proveedor
-```
+- indicar qué competencia del lab local se relaciona con una actividad del AVA;
+- explicar equivalencias conceptuales de forma complementaria;
+- preparar al estudiante para comprender la actividad oficial.
 
-Por ejemplo:
+El repositorio docente no debe:
 
-| Concepto | Laboratorio conceptual | Implementación cloud |
+- copiar la actividad cloud del AVA dentro de `labs/`;
+- crear una segunda fase obligatoria llamada “lab cloud”;
+- exigir credenciales o recursos cloud para completar un lab del repo;
+- hacer pasar una actividad propia por sustituto de una actividad institucional obligatoria.
+
+## 4. Correspondencia conceptual
+
+Puede existir una correspondencia como esta:
+
+| Concepto | Lab local del repo | Manifestación posible en AVA/cloud |
 |---|---|---|
-| API Gateway | Spring Cloud Gateway local | Amazon API Gateway / servicio indicado |
-| Route | Path + destino configurado | Route / resource / integration |
-| Integración | URI backend | Integration target |
-| Política transversal | filter/header/CORS | policy/configuración gestionada |
-| IdP / Authorization Server | simulador o proveedor neutral | IDaaS indicado en la asignatura |
-| Client registration | configuración local observable | app/client registration real |
+| API Gateway | Spring Cloud Gateway local | API Gateway / API Management del proveedor indicado |
+| Route | path + destino configurado | route/resource/integration |
+| Integración | URI backend | integration target |
+| Política transversal | filter/header/CORS | políticas gestionadas |
+| IdP / Authorization Server | simulador local | IDaaS indicado en la asignatura |
+| Client registration | configuración observable | app/client registration real |
 | Scope / claim | datos observables en el flujo | configuración real del proveedor |
 
-La tecnología cambia; **la explicación conceptual debe sobrevivir al cambio**.
-
-## 3. Qué no buscamos
-
-Un laboratorio no está bien resuelto si el estudiante solo puede decir:
-
-> “Hice clic aquí porque la guía decía que lo hiciera”.
-
-Debe poder explicar, al menos:
-
-1. qué problema resuelve el componente;
-2. quién lo utiliza;
-3. qué recibe;
-4. qué decisión toma o qué transforma;
-5. qué entrega al siguiente componente;
-6. qué equivalente encontró luego en el proveedor cloud.
-
-## 4. Evidencia de transferencia
-
-Cuando exista el par local → cloud, el README de la entrega cloud debe incluir una sección breve:
-
-```markdown
-## Del laboratorio conceptual al laboratorio cloud
-
-| Concepto | En local/neutral | En cloud |
-|---|---|---|
-| ... | ... | ... |
-
-### Qué cambió
-...
-
-### Qué se mantuvo
-...
-```
-
-No se espera una comparación comercial de proveedores. Se espera demostrar que el estudiante reconoce el mismo patrón bajo implementaciones distintas.
+Esta tabla expresa **equivalencia pedagógica**, no una dependencia de ejecución entre ambos recursos.
 
 ## 5. Laboratorios iniciales que fijan el patrón
 
@@ -106,7 +103,7 @@ Utiliza Spring Cloud Gateway, JSONPlaceholder y un cliente web simple para estud
 - políticas transversales;
 - CORS.
 
-Luego estos conceptos se transfieren al laboratorio real de API Management/API Gateway en cloud.
+El estudiante puede después reconocer estos mismos conceptos en actividades cloud oficiales del AVA, si corresponden a la semana.
 
 ### Lab 2 · Identidad y autorización local
 
@@ -121,23 +118,39 @@ Utiliza ReservApp y `mock-identity` para estudiar de forma observable:
 - autorización técnica vs reglas de negocio;
 - tenant y app registration a nivel conceptual.
 
-`mock-identity` es deliberadamente un simulador didáctico. Posteriormente se reemplaza por un proveedor real sin cambiar el modelo mental aprendido.
+`mock-identity` es deliberadamente un simulador didáctico. Su función es permitir comprender el modelo sin requerir un proveedor cloud para completar el laboratorio.
 
 ## 6. Regla para nuevos laboratorios
 
-Antes de crear un nuevo laboratorio dependiente de AWS, Azure u otro proveedor, revisar estas preguntas:
+Antes de crear un nuevo laboratorio en `labs/`, revisar:
 
-1. ¿Cuál es el concepto independiente del proveedor?
-2. ¿Puede observarse localmente o con una alternativa neutral de forma sencilla?
-3. ¿Qué partes deben simularse y cuáles deben ser reales?
-4. ¿Qué evidencia demuestra que el concepto fue comprendido?
-5. ¿Cuál será el laboratorio cloud que permitirá transferir lo aprendido?
-6. ¿Qué tabla de equivalencias podrá construir el estudiante entre ambas experiencias?
+1. ¿Qué competencia semanal practica?
+2. ¿Puede ejecutarse completamente sin infraestructura cloud real?
+3. ¿Cuál es el mínimo de tecnología necesario para observar el concepto?
+4. ¿Qué evidencia demuestra comprensión?
+5. ¿Es independiente de RegistrApp?
+6. ¿Existe una actividad cloud relacionada en AVA que solo debamos referenciar, no replicar?
 
-Si la etapa local agrega más complejidad que el propio concepto, debe simplificarse o descartarse.
+Si un laboratorio requiere obligatoriamente AWS, Azure u otro proveedor para funcionar, **no pertenece a `labs/` bajo este canon**.
 
-## 7. Principio rector
+## 7. Relación con el Proyecto Formativo
 
-> **Primero el concepto. Después el servicio. Finalmente, la capacidad de reconocer el mismo patrón en otra tecnología.**
+Los labs tampoco son incrementos de RegistrApp.
 
-El objetivo de DSY1107 no es producir operadores de una consola específica, sino estudiantes capaces de comprender y transferir patrones Cloud Native entre implementaciones.
+```text
+contenido comprendido
+→ lab local independiente
+→ evidencia de comprensión
+
+──────── frontera ────────
+
+transferencia posterior
+→ proyecto-formativo/
+→ incremento de RegistrApp cuando corresponda
+```
+
+La transferencia al Proyecto Formativo se documenta en su vertical propia.
+
+## 8. Principio rector
+
+> **El lab del repo hace observable el concepto sin depender de cloud; el AVA conserva los ejercicios cloud institucionales; el Proyecto Formativo recibe después la transferencia cuando corresponda.**
