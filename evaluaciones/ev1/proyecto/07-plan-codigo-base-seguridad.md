@@ -1,5 +1,14 @@
 # Plan de código base de seguridad para EV1
 
+## Estado
+
+- ✅ **Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS:** implementada en `evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`.
+- ⏭️ **Etapa 2 — Toolkit JWT conceptual:** siguiente etapa.
+- ⬜ Etapa 3 — Spring Security Resource Server Starter.
+- ⬜ Etapa 4 — Starter MSAL para React y Angular.
+- ⬜ Etapa 5 — Kit de integración y pruebas.
+- ⬜ Etapa 6 — Aplicaciones mínimas de referencia.
+
 ## Objetivo
 
 Proveer a los estudiantes código base reutilizable que reduzca complejidad accidental al implementar los aprendizajes de seguridad de EV1, sin ocultar los conceptos que deben comprender, configurar y demostrar.
@@ -87,6 +96,7 @@ evaluaciones/
     │
     └── starters/
         ├── README.md
+        ├── 01-flujo-authorization-code-pkce.md
         │
         ├── spring-resource-server/
         │   ├── README.md
@@ -132,37 +142,29 @@ La estructura podrá ajustarse durante la implementación, pero debe preservar l
 
 # Plan de implementación
 
-## Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS
+## Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS — ✅ COMPLETADA
 
 ### Objetivo
 
 Documentar el flujo Authorization Code + PKCE y delimitar claramente las responsabilidades del frontend, proveedor de identidad, API Gateway y Resource Server.
 
-### Flujo conceptual
+### Entregable
 
-```text
-Authorization Request
-        ↓
-code_challenge
-        ↓
-autenticación en IDaaS
-        ↓
-authorization_code
-        ↓
-code_verifier
-        ↓
-token endpoint del IDaaS
-        ↓
-access_token
-```
+`evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`
 
-### Entregable esperado
+El documento cubre:
 
-Documento de arquitectura y responsabilidades del flujo IDaaS.
+- flujo Authorization Code + PKCE paso a paso;
+- responsabilidades de SPA, IDaaS, gateway y Resource Server;
+- diferencia entre authorization code y Access Token;
+- función conceptual de `code_verifier` y `code_challenge`;
+- uso de `Authorization: Bearer`;
+- diferencia entre decodificar y validar un JWT;
+- frontera de responsabilidades que impide convertir el backend de negocio en Authorization Server;
+- comportamiento 401, 403 y 2xx;
+- preguntas de comprobación conceptual.
 
-Debe permitir identificar claramente qué componente ejecuta cada responsabilidad y por qué el backend de negocio no debe implementar un Authorization Server.
-
-## Etapa 2 — Toolkit JWT conceptual
+## Etapa 2 — Toolkit JWT conceptual — ⏭️ SIGUIENTE
 
 ### Objetivo
 
@@ -362,14 +364,14 @@ Una integración se considera completa cuando el estudiante puede explicar y dem
 
 El plan se considera implementado cuando existen y han sido probados:
 
-1. documentación del flujo Authorization Code + PKCE con IDaaS;
-2. ejemplos conceptuales JWT;
-3. starter Spring Resource Server;
-4. starter React + MSAL;
-5. starter Angular + MSAL;
-6. kit de pruebas y evidencia;
-7. aplicación mínima React validada end-to-end;
-8. aplicación mínima Angular validada end-to-end;
-9. documentación de incorporación paso a paso para estudiantes.
+1. ✅ documentación del flujo Authorization Code + PKCE con IDaaS;
+2. ⬜ ejemplos conceptuales JWT;
+3. ⬜ starter Spring Resource Server;
+4. ⬜ starter React + MSAL;
+5. ⬜ starter Angular + MSAL;
+6. ⬜ kit de pruebas y evidencia;
+7. ⬜ aplicación mínima React validada end-to-end;
+8. ⬜ aplicación mínima Angular validada end-to-end;
+9. ⬜ documentación de incorporación paso a paso para estudiantes.
 
-Hasta entonces, este documento actúa como plan canónico de construcción del código base de seguridad para EV1.
+Hasta completar todos los puntos, este documento actúa como plan canónico de construcción del código base de seguridad para EV1.
