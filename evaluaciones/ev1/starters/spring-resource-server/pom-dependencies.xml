@@ -1,0 +1,17 @@
+<!-- Copia estas dependencias dentro de <dependencies> en tu pom.xml. -->
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+</dependency>
+
+<!-- Normalmente ya existe en una API REST Spring Boot. -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
