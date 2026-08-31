@@ -8,11 +8,11 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 
 - [`semanas/`](semanas/) — índice y contenido curricular consolidado de cada semana.
 - [`examples/`](examples/) — ejemplos demostrativos independientes del proyecto transversal.
-- [`labs/`](labs/) — laboratorios de aprendizaje y aplicación del contenido.
+- [`labs/`](labs/) — laboratorios locales, autocontenidos e independientes del proyecto formativo.
 - [`proyecto-formativo/`](proyecto-formativo/) — **RegistrApp**, vertical transversal independiente que evoluciona clase a clase.
 - [`docs/`](docs/) — conocimientos y guías transversales.
 - [`page/`](page/) — portal web del curso.
-- [**Estrategia de laboratorios: concepto → cloud**](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md) — primero patrón local/neutral; después implementación real en cloud.
+- [**Estrategia de laboratorios y relación con AVA**](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md) — labs locales en el repo; ejercicios/labs cloud institucionales en AVA.
 - [**Estándar de repositorio del estudiante**](docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — nombre, estructura, packages, Markdown, labs Cloud Native y entregas colaborativas.
 - [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing) — biblioteca pública organizada semana a semana.
 
@@ -26,7 +26,7 @@ DSY1107 mantiene **dos verticales distintas, con raíces distintas**.
 concepto
 → explicación
 → ejemplo pequeño y autocontenido
-→ mini ejercicio/laboratorio independiente
+→ mini ejercicio/laboratorio local e independiente
 → evidencia de comprensión
 ```
 
@@ -53,7 +53,7 @@ La semana curricular dice **qué corresponde aprender ahora**. Las raíces trans
 ```text
 semanas/            → qué se aprende y cuándo
 examples/           → ejemplos
-labs/               → laboratorios
+labs/               → laboratorios locales y autocontenidos
 proyecto-formativo/ → RegistrApp y sus checkpoints
 ```
 
@@ -65,15 +65,17 @@ Los archivos originales de la asignatura utilizados durante cada semana se manti
 
 ## Filosofía de laboratorios
 
-Cuando un contenido dependa de infraestructura cloud, se busca primero una experiencia **local, neutral o con un servicio alternativo sencillo** que permita observar el patrón sin quedar amarrado al proveedor.
+Los laboratorios de este repositorio deben poder ejecutarse **sin infraestructura cloud real**. Su función es hacer observable el concepto con recursos locales, neutrales o simulados y con la menor complejidad accidental posible.
 
 ```text
-comprender el concepto
-→ probarlo localmente o de forma neutral
+contenido semanal
+→ comprender el concepto
+→ practicarlo en un lab local/autocontenido
 → observar flujos, errores y responsabilidades
-→ repetir el objetivo usando el servicio cloud real
-→ mapear concepto ↔ servicio
+→ evidenciar comprensión
 ```
+
+Los ejercicios, guías o laboratorios que requieran AWS, Azure u otro proveedor pertenecen al **contenido institucional del AVA**. El repo puede referenciar la correspondencia conceptual, pero no convierte esa actividad institucional en una segunda fase de `labs/`.
 
 El laboratorio de contenido debe ser entendible por sí mismo. Si después la misma competencia se aplica a RegistrApp, esa aplicación pertenece al proyecto formativo y se documenta por separado.
 
@@ -148,8 +150,8 @@ usuarios externos + API Manager
 → arquitectura segura
 ```
 
-Consulta [`semanas/semana-04/`](semanas/semana-04/) para el contenido, [`labs/fullstack-seguro/`](labs/fullstack-seguro/) para el laboratorio canónico y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
+Consulta [`semanas/semana-04/`](semanas/semana-04/) para el contenido, [`labs/fullstack-seguro/`](labs/fullstack-seguro/) para el laboratorio local canónico y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
 
 ---
 
-> AVA continúa siendo la plataforma oficial para comunicaciones, actividades y recursos institucionales que deban gestionarse desde el entorno académico.
+> AVA continúa siendo la plataforma oficial para comunicaciones, actividades, ejercicios/labs cloud y recursos institucionales que deban gestionarse desde el entorno académico.
