@@ -45,6 +45,13 @@ La solución debe poder evolucionar hacia una arquitectura con Identity Provider
 4. [Seguridad, identidad y autorización](./04-seguridad-identidad-autorizacion.md)
 5. [Preparación para API Manager y cloud](./05-api-manager-y-cloud.md)
 6. [Demostrabilidad y checklist de preparación](./06-demostrabilidad-y-checklist.md)
+7. [Plan de código base de seguridad y starters](./07-plan-codigo-base-seguridad.md)
+
+## Código base de apoyo
+
+Para los aprendizajes de seguridad se construirá material reutilizable orientado a estudiantes: starters para Spring Security Resource Server, React + MSAL, Angular + MSAL, ejemplos conceptuales de JWT y un kit de pruebas 200/401/403.
+
+La estrategia y frontera arquitectónica están definidas en el [plan de código base de seguridad](./07-plan-codigo-base-seguridad.md). KeyGo se utilizará como implementación de referencia para estudiar internamente Authorization Code + PKCE, emisión/firma de tokens y validaciones propias de un Authorization Server; la solución EV1 delegará esas responsabilidades al IDaaS y mantendrá Spring Boot como Resource Server.
 
 ## Antes de la configuración cloud
 
