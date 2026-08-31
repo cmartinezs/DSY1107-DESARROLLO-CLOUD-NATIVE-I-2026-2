@@ -4,8 +4,8 @@
 
 - ✅ **Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS:** implementada en `evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`.
 - ✅ **Etapa 2 — Toolkit JWT conceptual:** implementada en `evaluaciones/ev1/starters/jwt-conceptos/`.
-- ⏭️ **Etapa 3 — Spring Security Resource Server Starter:** siguiente etapa.
-- ⬜ Etapa 4 — Starter MSAL para React y Angular.
+- ✅ **Etapa 3 — Spring Security Resource Server Starter:** implementada en `evaluaciones/ev1/starters/spring-resource-server/`.
+- ⏭️ **Etapa 4 — Starter MSAL para React y Angular:** siguiente etapa.
 - ⬜ Etapa 5 — Kit de integración y pruebas.
 - ⬜ Etapa 6 — Aplicaciones mínimas de referencia.
 
@@ -29,102 +29,27 @@ El código base debe permitir trabajar de forma consistente con:
 
 ## Frontera arquitectónica obligatoria
 
-### Modelo objetivo EV1
-
 ```text
-                       ┌──────────────────┐
-                       │      IDaaS       │
-                       │ Authorization    │
-                       │ Token endpoint   │
-                       │ firma JWT        │
-                       └────────▲─────────┘
-                                │
-                   Authorization Code + PKCE
-                                │
-┌──────────┐       ┌────────────┴────────────┐
-│ Usuario  │──────►│ Angular / React SPA     │
-└──────────┘       │ MSAL                    │
-                   └────────────┬────────────┘
-                                │ Access Token
-                                ▼
-                   ┌─────────────────────────┐
-                   │ API Manager / Gateway   │
-                   └────────────┬────────────┘
-                                │ Bearer JWT
-                                ▼
-                   ┌─────────────────────────┐
-                   │ Spring Boot API         │
-                   │ Resource Server         │
-                   │                         │
-                   │ valida                  │
-                   │ - firma                 │
-                   │ - issuer                │
-                   │ - audience              │
-                   │ - expiración            │
-                   │ - scopes / roles        │
-                   └─────────────────────────┘
+Usuario
+   │
+   ▼
+Angular / React SPA
+   │ Authorization Code + PKCE
+   ▼
+IDaaS
+   │ Access Token JWT
+   ▼
+Frontend SPA
+   │ Authorization: Bearer <token>
+   ▼
+API Manager / Gateway
+   │
+   ▼
+Spring Boot API
+Resource Server
 ```
-
-### Regla principal
 
 > Con IDaaS, el backend de la aplicación EV1 **no autentica credenciales ni crea o firma el Access Token**. La API actúa como Resource Server y valida tokens emitidos por el proveedor de identidad.
-
-La creación y firma manual de JWT podrá utilizarse como material conceptual y demostrativo, no como mecanismo de autenticación productivo de la solución evaluada.
-
-## Estrategia de entrega
-
-Para EV1 se privilegiarán **starter kits de código fuente** por sobre una librería propia que oculte la implementación.
-
-Esto permite que los estudiantes puedan:
-
-- leer el código;
-- modificarlo;
-- depurarlo;
-- relacionarlo con los conceptos vistos en clases;
-- incorporarlo directamente a su proyecto;
-- explicar qué responsabilidad cumple cada pieza.
-
-No se debe entregar una dependencia que reduzca todo el flujo a llamadas opacas como `login()` o `secureApi()` sin que la arquitectura sea observable.
-
-## Estructura objetivo
-
-```text
-evaluaciones/
-└── ev1/
-    ├── proyecto/
-    │   └── ...
-    │
-    └── starters/
-        ├── README.md
-        ├── 01-flujo-authorization-code-pkce.md
-        │
-        ├── spring-resource-server/
-        │   ├── README.md
-        │   ├── pom-dependencies.xml
-        │   ├── SecurityConfig.java
-        │   ├── AudienceValidator.java
-        │   ├── AuthoritiesConverter.java
-        │   ├── RestAuthenticationEntryPoint.java
-        │   ├── RestAccessDeniedHandler.java
-        │   └── application.example.yml
-        │
-        ├── react-msal/
-        │   └── ...
-        ├── angular-msal/
-        │   └── ...
-        ├── jwt-conceptos/
-        │   ├── README.md
-        │   ├── pom.xml
-        │   ├── JwtCreateAndSignExample.java
-        │   ├── JwtDecodeExample.java
-        │   ├── JwtVerifyExample.java
-        │   └── JwtTamperExample.java
-        │
-        └── testing/
-            └── ...
-```
-
-La estructura puede ajustarse durante la implementación, pero debe preservar la separación entre frontend, Resource Server, material conceptual JWT y pruebas.
 
 # Plan de implementación
 
@@ -138,59 +63,50 @@ Cubre flujo Authorization Code + PKCE, responsabilidades de SPA/IDaaS/Gateway/Re
 
 Entregable: `evaluaciones/ev1/starters/jwt-conceptos/`.
 
-Incluye:
-
-- creación de claims y construcción de JWT;
-- firma local didáctica;
-- decodificación de header/payload sin validación;
-- validación de firma;
-- validación automática de expiración;
-- comprobación de issuer y audience;
-- alteración del payload para demostrar fallo de integridad;
-- proyecto Maven autocontenido;
-- instrucciones paso a paso y preguntas de comprobación.
-
-### Restricción preservada
+Incluye creación de claims, firma local didáctica, decodificación sin validación, validación de firma/expiración/issuer/audience y alteración del payload para demostrar fallo de integridad.
 
 > Estos ejemplos permiten comprender JWT. No deben utilizarse para emitir los Access Tokens de la solución EV1 cuando se utiliza IDaaS.
 
-## Etapa 3 — Spring Security Resource Server Starter — ⏭️ SIGUIENTE
+## Etapa 3 — Spring Security Resource Server Starter — ✅ COMPLETADA
 
-### Objetivo
+Entregable: `evaluaciones/ev1/starters/spring-resource-server/`.
 
-Entregar una base mínima pero observable para proteger el backend Spring Boot.
+Incluye:
 
-### Dependencias principales
+- dependencias Maven mínimas de Spring Security y OAuth2 Resource Server;
+- `SecurityFilterChain` stateless;
+- `NimbusJwtDecoder` basado en issuer discovery;
+- validación estándar de issuer y tiempo;
+- `AudienceValidator` explícito;
+- conversión de `scope`/`scp` a `SCOPE_*`;
+- conversión de `roles` a `ROLE_*`;
+- CORS mediante lista configurable de orígenes;
+- respuestas JSON consistentes para 401 y 403;
+- endpoints mínimos para comprobar acceso público, autenticado, por scope y por rol;
+- configuración externa mediante `JWT_ISSUER`, `JWT_AUDIENCE` y `ALLOWED_ORIGINS`;
+- guía de incorporación y checkpoint conceptual.
 
-- `spring-boot-starter-security`;
-- `spring-boot-starter-oauth2-resource-server`.
-
-### Capacidades incluidas
-
-- `SecurityFilterChain`;
-- configuración de Resource Server JWT;
-- `JwtDecoder` cuando sea necesario configurarlo explícitamente;
-- validación de issuer;
-- validación de audience;
-- conversión de scopes/roles a `GrantedAuthority`;
-- CORS;
-- manejo REST de 401;
-- manejo REST de 403;
-- configuración externa mediante variables de entorno.
-
-### Política mínima de ejemplo
+### Política demostrativa
 
 ```text
-/public/**         → permitAll
-/api/**            → authenticated
-/api/admin/**      → scope o rol requerido
+/public/**
+→ permitAll
+
+/api/**
+→ authenticated
+
+/api/write/**
+→ SCOPE_recurso.write
+
+/api/admin/**
+→ ROLE_ADMIN
 ```
 
-### No incluir
+### Restricción preservada
 
-El starter no debe implementar login con usuario/password, almacenamiento de credenciales, generación/firma propia de Access Tokens ni endpoint `/oauth2/token`.
+El starter no implementa login con usuario/password, almacenamiento de credenciales, generación/firma propia de Access Tokens ni endpoint `/oauth2/token`.
 
-## Etapa 4 — Starter MSAL para React y Angular
+## Etapa 4 — Starter MSAL para React y Angular — ⏭️ SIGUIENTE
 
 Debe permitir login, logout, usuario autenticado, cuenta actual, adquisición de Access Token y llamada autenticada a API. MSAL ejecutará Authorization Code + PKCE contra el proveedor de identidad.
 
@@ -214,7 +130,7 @@ Se validarán clientes mínimos React y Angular contra el mismo IDaaS y la misma
 
 1. ✅ documentación del flujo Authorization Code + PKCE con IDaaS;
 2. ✅ ejemplos conceptuales JWT;
-3. ⬜ starter Spring Resource Server;
+3. ✅ starter Spring Resource Server;
 4. ⬜ starter React + MSAL;
 5. ⬜ starter Angular + MSAL;
 6. ⬜ kit de pruebas y evidencia;
