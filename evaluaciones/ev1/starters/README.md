@@ -47,14 +47,14 @@ La aplicación de negocio **no implementa su propio Authorization Server**.
 
 1. [Flujo Authorization Code + PKCE con IDaaS](./01-flujo-authorization-code-pkce.md)
 2. [Toolkit conceptual JWT](./jwt-conceptos/README.md)
+3. [Spring Boot Resource Server Starter](./spring-resource-server/README.md)
 
 ## Estado
 
 - ✅ Modelo conceptual Authorization Code + PKCE.
 - ✅ Toolkit conceptual JWT.
-- ⏭️ Spring Security Resource Server Starter.
-- ⬜ React + MSAL.
-- ⬜ Angular + MSAL.
+- ✅ Spring Security Resource Server Starter.
+- ⏭️ React + MSAL y Angular + MSAL.
 - ⬜ Kit de integración y pruebas.
 
 Los componentes se incorporan progresivamente y se declaran disponibles cuando su etapa queda cerrada.
