@@ -28,48 +28,97 @@ header.payload.signature
 
 El header y el payload están codificados en Base64URL. **No están cifrados.** Cualquier persona que posea el token puede decodificarlos.
 
-## Orden recomendado
+## Archivos
 
-1. `JwtCreateAndSignExample.java` — crear claims y firmar un JWT.
-2. `JwtDecodeExample.java` — leer header y payload sin validar la firma.
-3. `JwtVerifyExample.java` — verificar firma y expiración.
-4. `JwtTamperExample.java` — modificar el payload y comprobar que la validación falla.
+1. `JwtCreateAndSignExample.java` — crea claims y firma un JWT.
+2. `JwtDecodeExample.java` — lee header y payload sin validar la firma.
+3. `JwtVerifyExample.java` — verifica firma, expiración, issuer y audience.
+4. `JwtTamperExample.java` — altera el payload y demuestra que la firma deja de ser válida.
+5. `pom.xml` — proyecto Maven mínimo para ejecutar los ejemplos.
+
+## Requisitos
+
+- JDK 17 o superior.
+- Maven disponible en terminal.
+
+Los ejemplos utilizan **JJWT 0.12.6**. La API utilizada corresponde a la línea 0.12.x (`Jwts.builder()`, `Jwts.parser()`, `verifyWith`, `requireIssuer` y `requireAudience`).
+
+## Ejecución guiada
+
+Ubícate en este directorio:
+
+```bash
+cd evaluaciones/ev1/starters/jwt-conceptos
+```
+
+### 1. Compilar
+
+```bash
+mvn clean compile
+```
+
+### 2. Crear y firmar un token
+
+```bash
+mvn exec:java \
+  -Dexec.mainClass="cl.duoc.dsy1107.ev1.jwt.JwtCreateAndSignExample"
+```
+
+Copia solamente el JWT generado para utilizarlo en los pasos siguientes.
+
+### 3. Decodificar sin validar
+
+```bash
+mvn exec:java \
+  -Dexec.mainClass="cl.duoc.dsy1107.ev1.jwt.JwtDecodeExample" \
+  -Dexec.args="<JWT>"
+```
+
+Observa que puedes leer header y payload sin disponer de una clave de firma.
+
+### 4. Validar
+
+```bash
+mvn exec:java \
+  -Dexec.mainClass="cl.duoc.dsy1107.ev1.jwt.JwtVerifyExample" \
+  -Dexec.args="<JWT>"
+```
+
+El programa valida la firma y los claims esperados. JJWT también rechaza automáticamente un token expirado durante el parsing.
+
+### 5. Alterar el payload
+
+```bash
+mvn exec:java \
+  -Dexec.mainClass="cl.duoc.dsy1107.ev1.jwt.JwtTamperExample" \
+  -Dexec.args="<JWT>"
+```
+
+El ejemplo cambia el scope del payload sin recalcular correctamente la firma. El token debe ser rechazado.
 
 ## Dependencia usada
 
-Los ejemplos utilizan JJWT para mantener el código breve y concentrarnos en los conceptos:
+El `pom.xml` incluye:
 
-```xml
-<dependency>
-  <groupId>io.jsonwebtoken</groupId>
-  <artifactId>jjwt-api</artifactId>
-  <version>0.12.6</version>
-</dependency>
-<dependency>
-  <groupId>io.jsonwebtoken</groupId>
-  <artifactId>jjwt-impl</artifactId>
-  <version>0.12.6</version>
-  <scope>runtime</scope>
-</dependency>
-<dependency>
-  <groupId>io.jsonwebtoken</groupId>
-  <artifactId>jjwt-jackson</artifactId>
-  <version>0.12.6</version>
-  <scope>runtime</scope>
-</dependency>
-```
+- `jjwt-api`;
+- `jjwt-impl`;
+- `jjwt-jackson`.
 
-La versión podrá actualizarse si el proyecto base utiliza una versión posterior compatible.
+Se usa una biblioteca para no distraer el ejercicio implementando manualmente el formato JWS. El objetivo es comprender claims, firma y validación.
 
 ## Clave de demostración
 
-Para los ejemplos locales se usa una clave generada en memoria. No se versionan secretos reales ni claves productivas.
+Para mantener el ejercicio autocontenido, los ejemplos utilizan una **clave didáctica fija y explícitamente no productiva** compartida solo entre los ejemplos de este directorio.
+
+Esta decisión permite crear un token en un programa y validarlo en otro sin agregar almacenamiento de claves al ejercicio.
+
+> Nunca reutilices esta clave ni este patrón en una aplicación real. Las claves reales no deben quedar versionadas en el repositorio.
 
 ## Qué debes observar
 
 ### Al crear y firmar
 
-El token debe contener claims como:
+El token contiene claims como:
 
 ```text
 iss
@@ -82,21 +131,63 @@ scope
 
 ### Al decodificar
 
-Podrás leer el payload aunque no tengas la clave de firma. Esto demuestra que JWT no implica confidencialidad.
+Puedes leer el payload aunque no poseas la clave. Esto demuestra que **decodificar no es validar** y que JWT no implica confidencialidad.
 
 ### Al validar
 
-La verificación correcta debe comprobar al menos:
+El ejemplo comprueba:
 
 - integridad de la firma;
 - expiración;
-- emisor esperado cuando corresponda;
-- audiencia esperada cuando corresponda.
+- issuer esperado;
+- audience esperada.
+
+Posteriormente Spring Security realizará este tipo de validaciones sobre los Access Tokens emitidos por el IDaaS.
 
 ### Al alterar el token
 
-Si modificas el payload sin volver a firmar correctamente el token, la firma deja de ser válida.
+Modificar el payload cambia el contenido firmado. Mantener la firma antigua provoca que la verificación falle.
+
+```text
+token original
+      ↓
+modificar payload
+      ↓
+conservar firma original
+      ↓
+verificación criptográfica falla
+```
+
+## Preguntas de comprobación
+
+Antes de continuar debes poder responder:
+
+1. ¿Por qué es posible leer un JWT sin conocer la clave de firma?
+2. ¿Qué diferencia existe entre decodificar y validar?
+3. ¿Qué protege la firma?
+4. ¿Qué ocurre cuando `exp` ya quedó en el pasado?
+5. ¿Para qué sirven `iss` y `aud`?
+6. ¿Por qué modificar manualmente un claim invalida el token?
+7. ¿Quién emitirá y firmará el Access Token real de EV1?
 
 ## Relación con EV1
 
-Más adelante Spring Security realizará estas validaciones sobre Access Tokens reales emitidos por el IDaaS. Este toolkit existe para que puedas comprender qué está ocurriendo cuando Spring acepta o rechaza un Bearer Token.
+Este toolkit termina en la **comprensión del token**.
+
+La arquitectura real continúa así:
+
+```text
+IDaaS
+  │
+  │ emite y firma Access Token
+  ▼
+SPA
+  │
+  │ Authorization: Bearer <token>
+  ▼
+Spring Boot Resource Server
+  │
+  └── valida token y aplica autorización
+```
+
+La siguiente etapa construye precisamente ese Resource Server con Spring Security.
