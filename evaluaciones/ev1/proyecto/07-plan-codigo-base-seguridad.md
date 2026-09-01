@@ -7,25 +7,15 @@
 - ✅ **Etapa 3 — Spring Security Resource Server Starter:** implementada en `evaluaciones/ev1/starters/spring-resource-server/`.
 - ✅ **Etapa 4 — Starter MSAL para React y Angular:** implementada en `evaluaciones/ev1/starters/react-msal/` y `evaluaciones/ev1/starters/angular-msal/`.
 - ✅ **Etapa 5 — Kit de integración y pruebas:** implementada en `evaluaciones/ev1/starters/testing/`.
-- ⏭️ **Etapa 6 — Aplicaciones mínimas de referencia:** siguiente etapa.
+- 🟡 **Etapa 6 — Aplicaciones mínimas de referencia:** código construido en `evaluaciones/ev1/referencias/`; validación E2E real pendiente de un tenant/configuración IDaaS real.
 
 ## Objetivo
 
 Proveer a los estudiantes código base reutilizable que reduzca complejidad accidental al implementar los aprendizajes de seguridad de EV1, sin ocultar los conceptos que deben comprender, configurar y demostrar.
 
-El código base debe permitir trabajar de forma consistente con:
+El código base debe permitir trabajar de forma consistente con frontend SPA React o Angular, Authorization Code + PKCE, IDaaS, MSAL, Access Token JWT, API Manager/Gateway y Spring Boot Resource Server.
 
-- frontend SPA en React o Angular;
-- Authorization Code + PKCE;
-- Identity as a Service (IDaaS);
-- MSAL en frontend;
-- Access Token JWT;
-- API Manager/Gateway;
-- Spring Boot como Resource Server;
-- validación de issuer, audience, expiración, scopes y/o roles;
-- respuestas 401 y 403 demostrables.
-
-> Este documento define únicamente el material visible y utilizable por estudiantes. Las referencias internas utilizadas por el equipo docente para diseñar, contrastar o validar técnicamente los starters no forman parte del material de la asignatura y no deben exponerse en documentación, ejemplos ni código entregable a los alumnos.
+> Las referencias internas utilizadas por el equipo docente para diseñar, contrastar o validar técnicamente estos materiales no forman parte del material estudiantil.
 
 ## Frontera arquitectónica obligatoria
 
@@ -49,63 +39,38 @@ Spring Boot API
 Resource Server
 ```
 
-> Con IDaaS, el backend de la aplicación EV1 **no autentica credenciales ni crea o firma el Access Token**. La API actúa como Resource Server y valida tokens emitidos por el proveedor de identidad.
+> Con IDaaS, el backend EV1 no autentica credenciales ni crea o firma Access Tokens. Actúa como Resource Server y valida tokens emitidos por el proveedor de identidad.
 
-# Plan de implementación
+# Etapas
 
-## Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS — ✅ COMPLETADA
+## 1 — OAuth 2.0 / OIDC + PKCE — ✅
 
-Entregable: `evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`.
+`evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`
 
-Cubre flujo Authorization Code + PKCE, responsabilidades de SPA/IDaaS/Gateway/Resource Server, Bearer Token y diferencias 401/403/2xx.
+## 2 — JWT conceptual — ✅
 
-## Etapa 2 — Toolkit JWT conceptual — ✅ COMPLETADA
+`evaluaciones/ev1/starters/jwt-conceptos/`
 
-Entregable: `evaluaciones/ev1/starters/jwt-conceptos/`.
+## 3 — Spring Security Resource Server — ✅
 
-Incluye creación de claims, firma local didáctica, decodificación sin validación, validación de firma/expiración/issuer/audience y alteración del payload para demostrar fallo de integridad.
+`evaluaciones/ev1/starters/spring-resource-server/`
 
-> Estos ejemplos permiten comprender JWT. No deben utilizarse para emitir los Access Tokens de la solución EV1 cuando se utiliza IDaaS.
-
-## Etapa 3 — Spring Security Resource Server Starter — ✅ COMPLETADA
-
-Entregable: `evaluaciones/ev1/starters/spring-resource-server/`.
-
-Incluye dependencias Maven, `SecurityFilterChain`, `NimbusJwtDecoder`, validación de issuer/audience/tiempo, conversión de scopes y roles, CORS, handlers 401/403, endpoints de demostración y configuración externa.
-
-### Política demostrativa
+Política demostrativa:
 
 ```text
-/public/**
-→ permitAll
-
-/api/**
-→ authenticated
-
-/api/write/**
-→ SCOPE_recurso.write
-
-/api/admin/**
-→ ROLE_ADMIN
+/public/**        → permitAll
+/api/**           → authenticated
+/api/write/**     → SCOPE_recurso.write
+/api/admin/**     → ROLE_ADMIN
 ```
 
-El starter no implementa login con usuario/password, almacenamiento de credenciales, generación/firma propia de Access Tokens ni endpoint `/oauth2/token`.
+## 4 — React + MSAL / Angular + MSAL — ✅
 
-## Etapa 4 — Starter MSAL para React y Angular — ✅ COMPLETADA
+`evaluaciones/ev1/starters/react-msal/`
 
-### React
+`evaluaciones/ev1/starters/angular-msal/`
 
-Entregable: `evaluaciones/ev1/starters/react-msal/`.
-
-Incluye configuración MSAL externalizada, `MsalProvider`, login/logout por redirect, cuenta autenticada, adquisición silenciosa de Access Token con fallback interactivo, componente protegido y cliente HTTP Bearer.
-
-### Angular
-
-Entregable: `evaluaciones/ev1/starters/angular-msal/`.
-
-Incluye `PublicClientApplication`, providers, manejo de redirect, cuenta activa, login/logout, adquisición silenciosa de Access Token con fallback, guard e interceptor pedagógicos y configuración de entorno.
-
-### Contrato pedagógico común
+Contrato común:
 
 ```text
 login
@@ -116,49 +81,50 @@ adquisición de Access Token
 llamada autenticada a API
 ```
 
-MSAL ejecuta Authorization Code + PKCE contra el proveedor de identidad. Una SPA no utiliza `client_secret`, el Access Token se envía a la API y la protección frontend no sustituye autorización backend.
+## 5 — Integración, pruebas y evidencia — ✅
 
-## Etapa 5 — Kit de integración y pruebas — ✅ COMPLETADA
+`evaluaciones/ev1/starters/testing/`
 
-Entregable: `evaluaciones/ev1/starters/testing/`.
+Evidencia mínima:
+
+```text
+200  público
+401  protegido sin token
+401  token inválido
+200  token válido
+403  token válido sin permiso
+2xx  token válido con permiso
+```
+
+## 6 — Aplicaciones mínimas de referencia — 🟡 CÓDIGO CONSTRUIDO / E2E PENDIENTE
+
+Entregable: `evaluaciones/ev1/referencias/`.
 
 Incluye:
 
-- `README.md` como guía central;
-- `matriz-200-401-403.md` con escenarios reproducibles;
-- `requests.http` para pruebas directas;
-- `inspeccion-claims.md` para observar `iss`, `aud`, `exp`, scopes y roles sin exponer tokens;
-- `checklist-diagnostico.md` para aislar problemas por capas: frontend, token, Spring Resource Server y Gateway.
+- backend Spring Boot mínimo compartido;
+- cliente React mínimo;
+- cliente Angular mínimo;
+- mismo conjunto de endpoints y política de autorización;
+- configuración externalizada;
+- protocolo `VALIDACION-E2E.md` para ejecutar y registrar la prueba real.
 
-### Evidencia mínima requerida
-
-```text
-200  recurso público
-401  recurso protegido sin token
-401  recurso protegido con token inválido
-200  recurso protegido con token válido
-403  token válido sin permiso suficiente
-2xx  token válido con permiso suficiente
-```
-
-La evidencia debe asociar precondición, request, permisos, status observado y explicación. Nunca debe publicar un Access Token completo.
-
-## Etapa 6 — Aplicaciones mínimas de referencia — ⏭️ SIGUIENTE
-
-Se validarán clientes mínimos React y Angular contra el mismo IDaaS y la misma Spring API antes de declarar los starters estables para uso en EV1.
-
-El objetivo no es construir una aplicación de negocio completa, sino comprobar end-to-end:
+Arquitectura:
 
 ```text
-login
-→ Authorization Code + PKCE
-→ Access Token
-→ Bearer
-→ API/Gateway
-→ Spring Resource Server
-→ autorización
-→ 200 / 401 / 403
+React ───┐
+         ├──► mismo IDaaS
+Angular ─┘
+              │
+              ▼
+       mismo Access Token
+              │
+              ▼
+      Spring Boot API
+      Resource Server
 ```
+
+La construcción del código no equivale a validación real. El cierre final de esta etapa exige ejecutar ambos clientes contra el mismo tenant, registros de aplicaciones, scopes/roles y backend configurado realmente.
 
 # Principios didácticos
 
@@ -170,14 +136,14 @@ login
 
 # Criterio de término
 
-1. ✅ documentación del flujo Authorization Code + PKCE con IDaaS;
+1. ✅ documentación Authorization Code + PKCE;
 2. ✅ ejemplos conceptuales JWT;
 3. ✅ starter Spring Resource Server;
 4. ✅ starter React + MSAL;
 5. ✅ starter Angular + MSAL;
 6. ✅ kit de pruebas y evidencia;
-7. ⬜ aplicación mínima React validada end-to-end;
-8. ⬜ aplicación mínima Angular validada end-to-end;
-9. ⬜ documentación de incorporación paso a paso para estudiantes.
+7. 🟡 aplicación mínima React construida; validación E2E real pendiente;
+8. 🟡 aplicación mínima Angular construida; validación E2E real pendiente;
+9. ✅ documentación de incorporación/prueba disponible en starters y referencias.
 
-Hasta completar todos los puntos, este documento actúa como plan canónico de construcción del código base de seguridad para EV1.
+El único pendiente para declarar el plan completamente cerrado es la validación E2E real de ambas referencias contra una configuración IDaaS efectiva.
