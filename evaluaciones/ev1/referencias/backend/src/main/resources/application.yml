@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+app:
+  security:
+    issuer: ${JWT_ISSUER}
+    audience: ${JWT_AUDIENCE}
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:4200}
