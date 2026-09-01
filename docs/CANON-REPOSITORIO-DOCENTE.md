@@ -14,6 +14,7 @@ Este documento define la **estructura y reglas comunes** de los repositorios doc
 6. **Todo recurso que evoluciona durante el semestre debe tener un punto de entrada README o página equivalente.**
 7. **La estructura debe seguir siendo comprensible en Semana 18.** Si una decisión funciona solo porque el docente recuerda dónde dejó algo, debe corregirse.
 8. **El estado semanal debe ser medible con un contrato común.** Los agregados operacionales viven en `data/weekly/` y separan siempre plan de avance real.
+9. **Los diagramas técnicos deben ser versionables.** Mermaid es el formato canónico; PlantUML es fallback; ASCII es última opción. Para piezas principalmente visuales o ilustrativas se privilegia generación de imagen por IA cuando aporte más valor.
 
 ## 2. Estructura base
 
@@ -152,10 +153,11 @@ Un mismo recurso puede aparecer en varias rutas de navegación, pero debe tener 
 
 Ejemplo:
 
-```text
-semanas/semana-04/README.md ───────┐
-README.md ──────────────────────────┼──> labs/mensajeria-local/README.md
-page/index.html ────────────────────┘
+```mermaid
+flowchart LR
+    W[semanas/semana-04/README.md] --> L[labs/mensajeria-local/README.md]
+    R[README.md] --> L
+    P[page/index.html] --> L
 ```
 
 Tres accesos; un solo laboratorio.
@@ -215,12 +217,14 @@ Si es acceso, se crea un enlace/índice. Si es fuente, se define explícitamente
 
 El contrato estadístico común permite comparar cursos sin borrar sus diferencias pedagógicas.
 
-```text
-planificación + avance real + evidencias + DevLog agregado + proyecto formativo
-                                      ↓
-                         data/weekly/semana-XX.yml
-                                      ↓
-                         dashboard / tendencias / alertas
+```mermaid
+flowchart TD
+    P[Planificación] --> W[data/weekly/semana-XX.yml]
+    A[Avance real] --> W
+    E[Evidencias] --> W
+    D[DevLog agregado] --> W
+    F[Proyecto formativo] --> W
+    W --> O[Dashboard / tendencias / alertas]
 ```
 
 Las estadísticas nunca sustituyen la interpretación docente: sirven para detectar diferencias de avance, deuda acumulada, participación y bloqueos que merecen revisión.
@@ -234,3 +238,17 @@ Este canon admite especializaciones:
 - **DSY1107:** labs del repositorio locales, autocontenidos e independientes; los ejercicios/labs cloud oficiales permanecen en AVA; RegistrApp recibe por separado la transferencia al proyecto formativo.
 
 Estas especializaciones complementan el canon; las reglas generales anteriores se mantienen.
+
+## 12. Diagramas y visualización
+
+El estándar detallado vive en [`docs/ESTANDAR-DIAGRAMAS-Y-VISUALIZACION.md`](ESTANDAR-DIAGRAMAS-Y-VISUALIZACION.md).
+
+Orden obligatorio:
+
+```mermaid
+flowchart LR
+    M[Mermaid] -->|si no cubre la necesidad| P[PlantUML]
+    P -->|si tampoco es viable| A[ASCII]
+```
+
+Para una pieza cuyo valor principal sea visual, ilustrativo o comunicacional, se debe considerar generación de imagen por IA. La imagen puede complementar, pero no sustituir, el diagrama textual canónico cuando se requiere precisión técnica.
