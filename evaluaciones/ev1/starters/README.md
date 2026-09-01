@@ -50,6 +50,7 @@ La aplicación de negocio **no implementa su propio Authorization Server**.
 3. [Spring Boot Resource Server Starter](./spring-resource-server/README.md)
 4. [React + MSAL Starter](./react-msal/README.md)
 5. [Angular + MSAL Starter](./angular-msal/README.md)
+6. [Kit de integración y pruebas](./testing/README.md)
 
 ## Contrato común de frontend
 
@@ -66,6 +67,21 @@ llamada autenticada a API
 
 El framework cambia la implementación, no el aprendizaje evaluable.
 
+## Evidencia mínima de seguridad
+
+La integración debe permitir reproducir deliberadamente:
+
+```text
+200  recurso público
+401  recurso protegido sin token
+401  recurso protegido con token inválido
+200  recurso protegido con token válido
+403  token válido sin permiso suficiente
+2xx  token válido con permiso suficiente
+```
+
+La evidencia nunca debe publicar un Access Token completo.
+
 ## Estado
 
 - ✅ Modelo conceptual Authorization Code + PKCE.
@@ -73,6 +89,7 @@ El framework cambia la implementación, no el aprendizaje evaluable.
 - ✅ Spring Security Resource Server Starter.
 - ✅ React + MSAL.
 - ✅ Angular + MSAL.
-- ⏭️ Kit de integración y pruebas.
+- ✅ Kit de integración y pruebas.
+- ⏭️ Aplicaciones mínimas de referencia end-to-end.
 
 Los componentes se incorporan progresivamente y se declaran disponibles cuando su etapa queda cerrada.
