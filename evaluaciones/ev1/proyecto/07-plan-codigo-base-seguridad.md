@@ -5,8 +5,8 @@
 - ✅ **Etapa 1 — Modelo conceptual OAuth 2.0 / OIDC con IDaaS:** implementada en `evaluaciones/ev1/starters/01-flujo-authorization-code-pkce.md`.
 - ✅ **Etapa 2 — Toolkit JWT conceptual:** implementada en `evaluaciones/ev1/starters/jwt-conceptos/`.
 - ✅ **Etapa 3 — Spring Security Resource Server Starter:** implementada en `evaluaciones/ev1/starters/spring-resource-server/`.
-- ⏭️ **Etapa 4 — Starter MSAL para React y Angular:** siguiente etapa.
-- ⬜ Etapa 5 — Kit de integración y pruebas.
+- ✅ **Etapa 4 — Starter MSAL para React y Angular:** implementada en `evaluaciones/ev1/starters/react-msal/` y `evaluaciones/ev1/starters/angular-msal/`.
+- ⏭️ **Etapa 5 — Kit de integración y pruebas:** siguiente etapa.
 - ⬜ Etapa 6 — Aplicaciones mínimas de referencia.
 
 ## Objetivo
@@ -71,20 +71,7 @@ Incluye creación de claims, firma local didáctica, decodificación sin validac
 
 Entregable: `evaluaciones/ev1/starters/spring-resource-server/`.
 
-Incluye:
-
-- dependencias Maven mínimas de Spring Security y OAuth2 Resource Server;
-- `SecurityFilterChain` stateless;
-- `NimbusJwtDecoder` basado en issuer discovery;
-- validación estándar de issuer y tiempo;
-- `AudienceValidator` explícito;
-- conversión de `scope`/`scp` a `SCOPE_*`;
-- conversión de `roles` a `ROLE_*`;
-- CORS mediante lista configurable de orígenes;
-- respuestas JSON consistentes para 401 y 403;
-- endpoints mínimos para comprobar acceso público, autenticado, por scope y por rol;
-- configuración externa mediante `JWT_ISSUER`, `JWT_AUDIENCE` y `ALLOWED_ORIGINS`;
-- guía de incorporación y checkpoint conceptual.
+Incluye dependencias Maven, `SecurityFilterChain`, `NimbusJwtDecoder`, validación de issuer/audience/tiempo, conversión de scopes y roles, CORS, handlers 401/403, endpoints de demostración y configuración externa.
 
 ### Política demostrativa
 
@@ -102,15 +89,64 @@ Incluye:
 → ROLE_ADMIN
 ```
 
-### Restricción preservada
-
 El starter no implementa login con usuario/password, almacenamiento de credenciales, generación/firma propia de Access Tokens ni endpoint `/oauth2/token`.
 
-## Etapa 4 — Starter MSAL para React y Angular — ⏭️ SIGUIENTE
+## Etapa 4 — Starter MSAL para React y Angular — ✅ COMPLETADA
 
-Debe permitir login, logout, usuario autenticado, cuenta actual, adquisición de Access Token y llamada autenticada a API. MSAL ejecutará Authorization Code + PKCE contra el proveedor de identidad.
+### React
 
-## Etapa 5 — Kit de integración y pruebas
+Entregable: `evaluaciones/ev1/starters/react-msal/`.
+
+Incluye:
+
+- configuración MSAL externalizada mediante variables Vite;
+- `MsalProvider`;
+- login y logout por redirect;
+- detección de cuenta autenticada;
+- `acquireTokenSilent()` con fallback interactivo;
+- componente protegido de ejemplo;
+- cliente HTTP que envía `Authorization: Bearer`;
+- guía de incorporación y variables de entorno.
+
+### Angular
+
+Entregable: `evaluaciones/ev1/starters/angular-msal/`.
+
+Incluye:
+
+- configuración de `PublicClientApplication`;
+- ejemplo de providers para aplicación standalone;
+- manejo del resultado de redirect;
+- cuenta activa;
+- login y logout por redirect;
+- adquisición silenciosa de Access Token con fallback interactivo;
+- guard pedagógico mínimo;
+- interceptor pedagógico que agrega Bearer Token solo a la API configurada;
+- configuración de entorno y guía de incorporación.
+
+### Contrato pedagógico común
+
+React y Angular deben exponer conceptualmente las mismas capacidades:
+
+```text
+login
+logout
+usuario autenticado
+cuenta actual
+adquisición de Access Token
+llamada autenticada a API
+```
+
+MSAL es responsable de ejecutar Authorization Code + PKCE contra el proveedor de identidad. Los estudiantes no generan manualmente authorization codes, PKCE ni Access Tokens en su aplicación productiva.
+
+### Fronteras preservadas
+
+- una SPA no utiliza `client_secret`;
+- el Access Token se envía a la API, no el ID Token;
+- proteger una ruta/componente frontend no sustituye autorización en backend;
+- scopes y endpoints son ejemplos y deben adaptarse al dominio del proyecto.
+
+## Etapa 5 — Kit de integración y pruebas — ⏭️ SIGUIENTE
 
 Debe convertir la implementación en evidencia verificable: 200 público, 401 sin/invalid token, 403 con token sin permiso y 2xx con permiso correcto; además observación segura de claims relevantes.
 
@@ -131,8 +167,8 @@ Se validarán clientes mínimos React y Angular contra el mismo IDaaS y la misma
 1. ✅ documentación del flujo Authorization Code + PKCE con IDaaS;
 2. ✅ ejemplos conceptuales JWT;
 3. ✅ starter Spring Resource Server;
-4. ⬜ starter React + MSAL;
-5. ⬜ starter Angular + MSAL;
+4. ✅ starter React + MSAL;
+5. ✅ starter Angular + MSAL;
 6. ⬜ kit de pruebas y evidencia;
 7. ⬜ aplicación mínima React validada end-to-end;
 8. ⬜ aplicación mínima Angular validada end-to-end;
