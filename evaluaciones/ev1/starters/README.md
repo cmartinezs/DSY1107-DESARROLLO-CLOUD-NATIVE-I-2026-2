@@ -39,7 +39,7 @@ La aplicación de negocio **no implementa su propio Authorization Server**.
 
 - El IDaaS autentica al usuario.
 - El IDaaS ejecuta el flujo de autorización y emite los tokens.
-- El frontend obtiene un Access Token mediante el SDK correspondiente.
+- El frontend obtiene un Access Token mediante MSAL.
 - El frontend envía el Access Token a la API como Bearer Token.
 - Spring Boot valida el token y aplica autorización.
 
@@ -48,13 +48,31 @@ La aplicación de negocio **no implementa su propio Authorization Server**.
 1. [Flujo Authorization Code + PKCE con IDaaS](./01-flujo-authorization-code-pkce.md)
 2. [Toolkit conceptual JWT](./jwt-conceptos/README.md)
 3. [Spring Boot Resource Server Starter](./spring-resource-server/README.md)
+4. [React + MSAL Starter](./react-msal/README.md)
+5. [Angular + MSAL Starter](./angular-msal/README.md)
+
+## Contrato común de frontend
+
+Independientemente de si el equipo usa React o Angular, debe poder reconocer y demostrar:
+
+```text
+login
+logout
+usuario autenticado
+cuenta actual
+adquisición de Access Token
+llamada autenticada a API
+```
+
+El framework cambia la implementación, no el aprendizaje evaluable.
 
 ## Estado
 
 - ✅ Modelo conceptual Authorization Code + PKCE.
 - ✅ Toolkit conceptual JWT.
 - ✅ Spring Security Resource Server Starter.
-- ⏭️ React + MSAL y Angular + MSAL.
-- ⬜ Kit de integración y pruebas.
+- ✅ React + MSAL.
+- ✅ Angular + MSAL.
+- ⏭️ Kit de integración y pruebas.
 
 Los componentes se incorporan progresivamente y se declaran disponibles cuando su etapa queda cerrada.
