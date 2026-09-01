@@ -6,8 +6,8 @@
 - ✅ **Etapa 2 — Toolkit JWT conceptual:** implementada en `evaluaciones/ev1/starters/jwt-conceptos/`.
 - ✅ **Etapa 3 — Spring Security Resource Server Starter:** implementada en `evaluaciones/ev1/starters/spring-resource-server/`.
 - ✅ **Etapa 4 — Starter MSAL para React y Angular:** implementada en `evaluaciones/ev1/starters/react-msal/` y `evaluaciones/ev1/starters/angular-msal/`.
-- ⏭️ **Etapa 5 — Kit de integración y pruebas:** siguiente etapa.
-- ⬜ Etapa 6 — Aplicaciones mínimas de referencia.
+- ✅ **Etapa 5 — Kit de integración y pruebas:** implementada en `evaluaciones/ev1/starters/testing/`.
+- ⏭️ **Etapa 6 — Aplicaciones mínimas de referencia:** siguiente etapa.
 
 ## Objetivo
 
@@ -97,36 +97,15 @@ El starter no implementa login con usuario/password, almacenamiento de credencia
 
 Entregable: `evaluaciones/ev1/starters/react-msal/`.
 
-Incluye:
-
-- configuración MSAL externalizada mediante variables Vite;
-- `MsalProvider`;
-- login y logout por redirect;
-- detección de cuenta autenticada;
-- `acquireTokenSilent()` con fallback interactivo;
-- componente protegido de ejemplo;
-- cliente HTTP que envía `Authorization: Bearer`;
-- guía de incorporación y variables de entorno.
+Incluye configuración MSAL externalizada, `MsalProvider`, login/logout por redirect, cuenta autenticada, adquisición silenciosa de Access Token con fallback interactivo, componente protegido y cliente HTTP Bearer.
 
 ### Angular
 
 Entregable: `evaluaciones/ev1/starters/angular-msal/`.
 
-Incluye:
-
-- configuración de `PublicClientApplication`;
-- ejemplo de providers para aplicación standalone;
-- manejo del resultado de redirect;
-- cuenta activa;
-- login y logout por redirect;
-- adquisición silenciosa de Access Token con fallback interactivo;
-- guard pedagógico mínimo;
-- interceptor pedagógico que agrega Bearer Token solo a la API configurada;
-- configuración de entorno y guía de incorporación.
+Incluye `PublicClientApplication`, providers, manejo de redirect, cuenta activa, login/logout, adquisición silenciosa de Access Token con fallback, guard e interceptor pedagógicos y configuración de entorno.
 
 ### Contrato pedagógico común
-
-React y Angular deben exponer conceptualmente las mismas capacidades:
 
 ```text
 login
@@ -137,22 +116,49 @@ adquisición de Access Token
 llamada autenticada a API
 ```
 
-MSAL es responsable de ejecutar Authorization Code + PKCE contra el proveedor de identidad. Los estudiantes no generan manualmente authorization codes, PKCE ni Access Tokens en su aplicación productiva.
+MSAL ejecuta Authorization Code + PKCE contra el proveedor de identidad. Una SPA no utiliza `client_secret`, el Access Token se envía a la API y la protección frontend no sustituye autorización backend.
 
-### Fronteras preservadas
+## Etapa 5 — Kit de integración y pruebas — ✅ COMPLETADA
 
-- una SPA no utiliza `client_secret`;
-- el Access Token se envía a la API, no el ID Token;
-- proteger una ruta/componente frontend no sustituye autorización en backend;
-- scopes y endpoints son ejemplos y deben adaptarse al dominio del proyecto.
+Entregable: `evaluaciones/ev1/starters/testing/`.
 
-## Etapa 5 — Kit de integración y pruebas — ⏭️ SIGUIENTE
+Incluye:
 
-Debe convertir la implementación en evidencia verificable: 200 público, 401 sin/invalid token, 403 con token sin permiso y 2xx con permiso correcto; además observación segura de claims relevantes.
+- `README.md` como guía central;
+- `matriz-200-401-403.md` con escenarios reproducibles;
+- `requests.http` para pruebas directas;
+- `inspeccion-claims.md` para observar `iss`, `aud`, `exp`, scopes y roles sin exponer tokens;
+- `checklist-diagnostico.md` para aislar problemas por capas: frontend, token, Spring Resource Server y Gateway.
 
-## Etapa 6 — Aplicaciones mínimas de referencia
+### Evidencia mínima requerida
+
+```text
+200  recurso público
+401  recurso protegido sin token
+401  recurso protegido con token inválido
+200  recurso protegido con token válido
+403  token válido sin permiso suficiente
+2xx  token válido con permiso suficiente
+```
+
+La evidencia debe asociar precondición, request, permisos, status observado y explicación. Nunca debe publicar un Access Token completo.
+
+## Etapa 6 — Aplicaciones mínimas de referencia — ⏭️ SIGUIENTE
 
 Se validarán clientes mínimos React y Angular contra el mismo IDaaS y la misma Spring API antes de declarar los starters estables para uso en EV1.
+
+El objetivo no es construir una aplicación de negocio completa, sino comprobar end-to-end:
+
+```text
+login
+→ Authorization Code + PKCE
+→ Access Token
+→ Bearer
+→ API/Gateway
+→ Spring Resource Server
+→ autorización
+→ 200 / 401 / 403
+```
 
 # Principios didácticos
 
@@ -169,7 +175,7 @@ Se validarán clientes mínimos React y Angular contra el mismo IDaaS y la misma
 3. ✅ starter Spring Resource Server;
 4. ✅ starter React + MSAL;
 5. ✅ starter Angular + MSAL;
-6. ⬜ kit de pruebas y evidencia;
+6. ✅ kit de pruebas y evidencia;
 7. ⬜ aplicación mínima React validada end-to-end;
 8. ⬜ aplicación mínima Angular validada end-to-end;
 9. ⬜ documentación de incorporación paso a paso para estudiantes.
