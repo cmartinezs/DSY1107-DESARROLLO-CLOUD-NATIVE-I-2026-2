@@ -6,7 +6,21 @@ import { environment } from './environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private readonly msal: MsalService) {}
+  constructor(private readonly msal: MsalService) {
+    this.msal.handleRedirectObservable().subscribe((result) => {
+      if (result?.account) {
+        this.msal.instance.setActiveAccount(result.account);
+        return;
+      }
+
+      if (!this.msal.instance.getActiveAccount()) {
+        const firstAccount = this.msal.instance.getAllAccounts()[0];
+        if (firstAccount) {
+          this.msal.instance.setActiveAccount(firstAccount);
+        }
+      }
+    });
+  }
 
   isAuthenticated(): boolean {
     return this.msal.instance.getAllAccounts().length > 0;
