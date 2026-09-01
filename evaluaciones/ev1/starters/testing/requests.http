@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:8080
+@accessToken = REEMPLAZAR_ACCESS_TOKEN
+
+### 1. Recurso público → 200
+GET {{baseUrl}}/public/health
+Accept: application/json
+
+### 2. Recurso protegido sin token → 401
+GET {{baseUrl}}/api/profile
+Accept: application/json
+
+### 3. Recurso protegido con token inválido → 401
+GET {{baseUrl}}/api/profile
+Accept: application/json
+Authorization: Bearer token-invalido
+
+### 4. Recurso protegido con Access Token válido → 200
+GET {{baseUrl}}/api/profile
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### 5. Escritura protegida por scope → 403 o 2xx según claims
+POST {{baseUrl}}/api/write/example
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### 6. Recurso protegido por rol ADMIN → 403 o 2xx según claims
+GET {{baseUrl}}/api/admin/example
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### Notas
+# - No guardes un Access Token real en Git.
+# - Reemplaza @accessToken solo en tu copia local o usa variables privadas de tu cliente HTTP.
+# - Un token válido pero sin el permiso requerido debe producir 403.
+# - Un token ausente o inválido debe producir 401 en endpoints protegidos.
