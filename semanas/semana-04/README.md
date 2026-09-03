@@ -60,29 +60,49 @@ Repasar y completar, según el último checkpoint real de cada sección:
 - [Seguridad de API, API Manager y usuarios externos](../semana-03/02-seguridad-api.md)
 - [Laboratorio JWT forense](../../labs/jwt-forense/README.md)
 
-### 2. MSAL y frontend
+### 2. Práctica guiada · Identity as a Service real
+
+→ [Mini App con Firebase Authentication](../../labs/firebase-auth-miniapp/README.md)
+
+Este laboratorio provider-backed usa Firebase Authentication como servicio administrado real y construye una mini aplicación con:
+
+```text
+zona pública
++ Register
++ Login Email/Password
++ Password Reset
++ estado de sesión
++ zona privada
++ Logout
+```
+
+**Gate pedagógico obligatorio:** todo el flujo Email/Password debe funcionar antes de habilitar Google. Después se agrega Google Sign-In como segundo proveedor y se verifica que ambos mecanismos conduzcan a la misma zona privada.
+
+El objetivo es experimentar directamente la delegación de autenticación a un IDaaS sin mezclar todavía la complejidad de un backend propio.
+
+### 3. MSAL y frontend
 
 → [MSAL y autenticación de frontend](./01-msal-frontend.md)
 
 Competencias clave: public client, Authorization Code + PKCE, `clientId`, `redirectUri`, scopes, ID token vs access token y ausencia de secretos en JavaScript.
 
-### 3. Spring Security en backend
+### 4. Spring Security en backend
 
 → [Spring Security como Resource Server](./02-spring-security-backend.md)
 
 Competencias clave: validación criptográfica/contextual, issuer, audience, expiración, scopes/authorities y diferencia 401/403.
 
-### 4. Arquitectura segura en la nube
+### 5. Arquitectura segura en la nube
 
 → [Arquitectura Full Stack segura](./03-arquitectura-segura-cloud.md)
 
 Competencias clave: responsabilidades de frontend, IdP, gateway y backend; mínimo privilegio; CORS; observabilidad segura; defensa en profundidad.
 
-### 5. Ejemplo independiente
+### 6. Ejemplo independiente
 
 → [BookShelf · Ejemplo Semana 4](../../examples/semana-04/README.md)
 
-### 6. Laboratorio canónico
+### 7. Laboratorio Full Stack canónico
 
 → [Flujo Full Stack protegido](../../labs/fullstack-seguro/README.md)
 
@@ -104,6 +124,10 @@ Durante esta semana se deben proporcionar los detalles de la **Evaluación Parci
 
 Al finalizar el contenido, el estudiante debe poder:
 
+- explicar qué significa delegar autenticación a un servicio IDaaS;
+- implementar un flujo básico de Register, Login, Password Reset y Logout con un proveedor administrado;
+- observar el estado de sesión y distinguir zona pública de zona privada en frontend;
+- agregar un proveedor federado como Google sin romper el mecanismo Email/Password ya validado;
 - explicar el rol de usuarios externos/CIAM y la protección del API Manager;
 - interpretar estructura y claims de un JWT;
 - distinguir decodificar de verificar;
@@ -118,9 +142,11 @@ Al finalizar el contenido, el estudiante debe poder:
 
 ## Evidencia mínima
 
+- evidencia del flujo Firebase Email/Password antes de habilitar Google;
+- evidencia posterior de Google Sign-In funcionando;
 - diagrama del flujo completo;
 - configuración sanitizada o pseudoconfiguración equivalente;
-- request autorizado y casos 401/403;
+- request autorizado y casos 401/403 para el laboratorio Full Stack;
 - explicación de qué componente valida cada condición;
 - breve threat sketch;
 - DevLog;
