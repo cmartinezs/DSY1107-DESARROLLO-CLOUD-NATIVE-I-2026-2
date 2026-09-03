@@ -65,12 +65,12 @@ No queremos que el botón Login decida por sí mismo si la aplicación está aut
 
 La fuente de verdad es Firebase:
 
-```text
-acción del usuario
-→ Firebase Authentication
-→ estado de sesión cambia
-→ onAuthStateChanged recibe el nuevo estado
-→ UI reacciona
+```mermaid
+flowchart LR
+    A[Acción del usuario] --> F[Firebase Authentication]
+    F --> S[Estado de sesión cambia]
+    S --> O[onAuthStateChanged recibe el nuevo estado]
+    O --> UI[UI reacciona]
 ```
 
 Esto también permite restaurar correctamente la interfaz al recargar la página.
@@ -138,11 +138,11 @@ Un usuario podría abrir DevTools y quitar el atributo `hidden` de una sección 
 
 Por eso una aplicación real suele tener otra frontera:
 
-```text
-frontend autenticado
-→ envía token
-→ backend/API valida token
-→ backend decide acceso al recurso
+```mermaid
+flowchart LR
+    FE[Frontend autenticado] -->|envía token| API[Backend / API]
+    API --> V[Valida token]
+    V --> D[Decide acceso al recurso]
 ```
 
 Ese backend no es necesario en este lab porque queremos aislar el aprendizaje de IDaaS en frontend.
@@ -151,20 +151,20 @@ Ese backend no es necesario en este lab porque queremos aislar el aprendizaje de
 
 # Checkpoint 3
 
-Ejecuta exactamente:
+Ejecuta exactamente este flujo:
 
-```text
-abrir app sin sesión
-→ zona pública visible
-→ autenticación visible
-→ zona privada oculta
-→ Login
-→ zona privada visible
-→ recargar navegador
-→ zona privada continúa visible
-→ Logout
-→ autenticación vuelve a mostrarse
-→ zona privada desaparece
+```mermaid
+flowchart TD
+    A[Abrir app sin sesión] --> B[Zona pública visible]
+    B --> C[Autenticación visible]
+    C --> D[Zona privada oculta]
+    D --> E[Login]
+    E --> F[Zona privada visible]
+    F --> G[Recargar navegador]
+    G --> H[Zona privada continúa visible]
+    H --> I[Logout]
+    I --> J[Autenticación vuelve a mostrarse]
+    J --> K[Zona privada desaparece]
 ```
 
 Debes marcar:
