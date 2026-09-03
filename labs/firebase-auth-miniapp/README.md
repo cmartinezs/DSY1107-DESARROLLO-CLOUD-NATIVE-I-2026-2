@@ -25,6 +25,10 @@ Construir una mini aplicación web con:
 
 > **Regla principal:** primero debe funcionar completamente Email/Password. Google se habilita solo después de superar el gate de la Parte 4.
 
+### Estándar de diagramación
+
+Este laboratorio **consume**, sin redefinirlo, el estándar transversal `STD-ENG-DIAG-001 — Diagramming & Visual Representation Standard` de ADÜMÜN. Los diagramas técnicos se expresan en Mermaid cuando sea viable; PlantUML es fallback justificado y ASCII queda como último recurso.
+
 ---
 
 # Ruta guiada
@@ -148,22 +152,17 @@ Incluye:
 
 # Secuencia obligatoria
 
-```text
-Parte 0 · conceptos
-    ↓
-Parte 1 · setup
-    ↓
-Parte 2 · Register + Login Email/Password
-    ↓
-Parte 3 · sesión + zona privada + Logout
-    ↓
-Parte 4 · Password Reset
-    ↓
-──────────── GATE Email/Password ────────────
-    ↓
-Parte 5 · Google Sign-In
-    ↓
-Parte 6 · AUTH-01…AUTH-11 + evidencia
+```mermaid
+flowchart TD
+    P0[Parte 0 · conceptos] --> P1[Parte 1 · setup]
+    P1 --> P2[Parte 2 · Register + Login Email/Password]
+    P2 --> P3[Parte 3 · sesión + zona privada + Logout]
+    P3 --> P4[Parte 4 · Password Reset]
+    P4 --> G{Gate Email/Password completo}
+    G -- Sí --> P5[Parte 5 · Google Sign-In]
+    G -- No --> FIX[Corregir flujo Email/Password]
+    FIX --> P2
+    P5 --> P6[Parte 6 · AUTH-01…AUTH-11 + evidencia]
 ```
 
 No se considera terminado el laboratorio si Google funciona pero alguno de los casos Email/Password quedó incompleto.
@@ -202,14 +201,14 @@ No se construye una pantalla custom de reset dentro del alcance obligatorio.
 
 ## 4. No agregar backend artificial
 
-Una aplicación productiva puede hacer:
+Una aplicación productiva puede extenderse así:
 
-```text
-Firebase Auth
-→ ID token
-→ API
-→ validación backend
-→ autorización / reglas de negocio
+```mermaid
+flowchart LR
+    F[Firebase Auth] --> T[ID token]
+    T --> API[API / backend]
+    API --> V[Validación del token]
+    V --> A[Autorización / reglas de negocio]
 ```
 
 Ese patrón es importante, pero queda fuera de esta miniapp porque el objetivo aquí es aislar y comprender Firebase Authentication como IDaaS.
@@ -224,21 +223,19 @@ Ocultar HTML según sesión sirve para estudiar estado autenticado en frontend. 
 
 Al terminar debes ser capaz de explicar y demostrar:
 
-```text
-VISITANTE
-├── zona pública
-├── Register Email/Password
-├── Login Email/Password
-└── Password Reset
+```mermaid
+flowchart TD
+    V[Visitante] --> PUB[Zona pública]
+    V --> REG[Register Email/Password]
+    V --> LOG[Login Email/Password]
+    V --> RESET[Password Reset]
 
-USUARIO AUTENTICADO
-├── sesión administrada por Firebase
-├── zona privada visible
-└── Logout
+    REG --> AUTH[Sesión administrada por Firebase]
+    LOG --> AUTH
+    AUTH --> PRIV[Zona privada visible]
+    PRIV --> OUT[Logout]
 
-SEGUNDA ETAPA
-└── Google Sign-In
-    └── misma sesión / misma zona privada
+    G[Google Sign-In · segunda etapa] --> AUTH
 ```
 
 ---
