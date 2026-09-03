@@ -37,15 +37,15 @@ Estos contenidos conservan como fuente canónica el material de [Semana 3](../se
 
 Evolucionar desde OAuth2/OIDC, usuarios externos y JWT hacia una protección Full Stack verificable:
 
-```text
-usuario
-→ SPA
-→ IdP / Authorization Code + PKCE
-→ access token
-→ API Manager / Gateway
-→ Spring Security Resource Server
-→ autorización por scopes/claims
-→ backend protegido
+```mermaid
+flowchart LR
+    U[Usuario] --> SPA[SPA]
+    SPA --> IDP[IdP · Authorization Code + PKCE]
+    IDP --> TOKEN[Access token]
+    TOKEN --> GW[API Manager / Gateway]
+    GW --> RS[Spring Security Resource Server]
+    RS --> AUTHZ[Autorización por scopes / claims]
+    AUTHZ --> BE[Backend protegido]
 ```
 
 La idea central es que **el backend no confía en el frontend por estar autenticado**: valida el access token y aplica su propia autorización.
@@ -66,14 +66,15 @@ Repasar y completar, según el último checkpoint real de cada sección:
 
 Este laboratorio provider-backed usa Firebase Authentication como servicio administrado real y construye una mini aplicación con:
 
-```text
-zona pública
-+ Register
-+ Login Email/Password
-+ Password Reset
-+ estado de sesión
-+ zona privada
-+ Logout
+```mermaid
+flowchart TD
+    P[Zona pública] --> R[Register]
+    P --> L[Login Email/Password]
+    P --> PR[Password Reset]
+    R --> S[Estado de sesión]
+    L --> S
+    S --> Z[Zona privada]
+    Z --> O[Logout]
 ```
 
 **Gate pedagógico obligatorio:** todo el flujo Email/Password debe funcionar antes de habilitar Google. Después se agrega Google Sign-In como segundo proveedor y se verifica que ambos mecanismos conduzcan a la misma zona privada.
@@ -144,7 +145,7 @@ Al finalizar el contenido, el estudiante debe poder:
 
 - evidencia del flujo Firebase Email/Password antes de habilitar Google;
 - evidencia posterior de Google Sign-In funcionando;
-- diagrama del flujo completo;
+- diagrama del flujo completo conforme a `STD-ENG-DIAG-001`;
 - configuración sanitizada o pseudoconfiguración equivalente;
 - request autorizado y casos 401/403 para el laboratorio Full Stack;
 - explicación de qué componente valida cada condición;
