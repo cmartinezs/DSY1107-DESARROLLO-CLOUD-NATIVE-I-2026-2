@@ -8,29 +8,18 @@ La miniapp necesita distinguir entre personas anónimas y personas autenticadas 
 
 La solución elegida es **Firebase Authentication como Identity as a Service (IDaaS)**.
 
-```text
-Usuario
-  │
-  ▼
-Miniapp web
-  │
-  ├── Email/Password ─────┐
-  │                       │
-  └── Google ─────────────┤
-                          ▼
-                Firebase Authentication
-                          │
-                          ▼
-                    sesión / user
-                          │
-                 onAuthStateChanged
-                          │
-                ┌─────────┴─────────┐
-                ▼                   ▼
-            no hay user          hay user
-                │                   │
-         zona pública +        zona pública +
-         autenticación         zona privada
+```mermaid
+flowchart TD
+    U[Usuario] --> APP[Miniapp web]
+    APP --> E[Email / Password]
+    APP --> G[Google]
+    E --> F[Firebase Authentication]
+    G --> F
+    F --> S[Sesión / user]
+    S --> O[onAuthStateChanged]
+    O --> Q{¿Existe user?}
+    Q -- No --> P[Zona pública + autenticación]
+    Q -- Sí --> PR[Zona pública + zona privada]
 ```
 
 ---
@@ -98,18 +87,18 @@ La sesión de Firebase es la única fuente de verdad de autenticación.
 
 ### Correcto
 
-```text
-Firebase Auth
-→ onAuthStateChanged
-→ UI
+```mermaid
+flowchart LR
+    F[Firebase Auth] --> O[onAuthStateChanged]
+    O --> UI[UI]
 ```
 
 ### Incorrecto
 
-```text
-Login exitoso
-→ localStorage.isLoggedIn = true
-→ confiar en localStorage
+```mermaid
+flowchart LR
+    L[Login exitoso] --> LS[localStorage.isLoggedIn = true]
+    LS --> C[Confiar en localStorage]
 ```
 
 Un booleano local puede falsificarse y además puede quedar desincronizado respecto de Firebase.
@@ -120,18 +109,19 @@ Un booleano local puede falsificarse y además puede quedar desincronizado respe
 
 La secuencia es intencional:
 
-```text
-1. configurar Firebase
-2. Register Email/Password
-3. Login Email/Password
-4. observar sesión
-5. zona privada
-6. Logout
-7. Password Reset
--------------------- GATE --------------------
-8. habilitar Google
-9. Google Sign-In
-10. probar ambos mecanismos
+```mermaid
+flowchart TD
+    A[1 · Configurar Firebase] --> B[2 · Register Email/Password]
+    B --> C[3 · Login Email/Password]
+    C --> D[4 · Observar sesión]
+    D --> E[5 · Zona privada]
+    E --> F[6 · Logout]
+    F --> G[7 · Password Reset]
+    G --> H{Gate Email/Password completo}
+    H -- No --> B
+    H -- Sí --> I[8 · Habilitar Google]
+    I --> J[9 · Google Sign-In]
+    J --> K[10 · Probar ambos mecanismos]
 ```
 
 No adelantes Google porque ocultaría parte del aprendizaje sobre el ciclo tradicional de credenciales.
@@ -142,13 +132,13 @@ No adelantes Google porque ocultaría parte del aprendizaje sobre el ciclo tradi
 
 Una aplicación real puede extender el flujo:
 
-```text
-Firebase Authentication
-→ frontend obtiene ID token
-→ API/backend
-→ backend valida token
-→ consulta perfiles/permisos
-→ aplica reglas de negocio
+```mermaid
+flowchart LR
+    F[Firebase Authentication] --> T[Frontend obtiene ID token]
+    T --> API[API / backend]
+    API --> V[Backend valida token]
+    V --> P[Consulta perfiles / permisos]
+    P --> R[Aplica reglas de negocio]
 ```
 
 Este laboratorio termina antes de esa frontera.
