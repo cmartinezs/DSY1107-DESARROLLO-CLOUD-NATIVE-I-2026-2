@@ -65,13 +65,13 @@ flowchart LR
 
 Esta parte **no modifica retroactivamente el orden de la Parte I**. Extiende un sistema que ya funciona.
 
-9. [Etapa 8 · Introducción al self-service sign-up](./04a-self-service-introduccion.md)
-10. [Etapa 9 · Habilitar self-service en el workforce tenant](./04b-self-service-habilitar-tenant.md)
-11. [Etapa 10 · Preparar Identity Providers](./04b1-self-service-identity-providers.md)
-12. [Etapa 11 · Definir atributos built-in/custom](./04b2-self-service-atributos.md)
-13. [Etapa 12 · Crear el user flow](./04c-self-service-crear-user-flow.md)
-14. [Etapa 13 · Asociar la SPA y ejecutar el primer auto-registro](./04d-self-service-asociar-aplicacion.md)
-15. [Etapa 14 · Segunda pasada integral: pruebas, troubleshooting y evidencia](./04e-self-service-pruebas-troubleshooting.md)
+9. [Etapa 8 · Introducción al self-service sign-up](./08-self-service-introduccion.md)
+10. [Etapa 9 · Habilitar self-service en el workforce tenant](./09-self-service-habilitar-tenant.md)
+11. [Etapa 10 · Preparar Identity Providers](./10-self-service-identity-providers.md)
+12. [Etapa 11 · Definir atributos built-in/custom](./11-self-service-atributos.md)
+13. [Etapa 12 · Crear el user flow](./12-self-service-crear-user-flow.md)
+14. [Etapa 13 · Asociar la SPA y ejecutar el primer auto-registro](./13-self-service-asociar-aplicacion.md)
+15. [Etapa 14 · Segunda pasada integral: pruebas, troubleshooting y evidencia](./14-self-service-pruebas-troubleshooting.md)
 
 ## Qué cambia en la extensión
 
