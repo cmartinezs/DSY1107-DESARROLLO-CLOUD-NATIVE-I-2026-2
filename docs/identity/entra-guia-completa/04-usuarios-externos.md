@@ -4,6 +4,8 @@
 
 Permitir que los compañeros del grupo puedan autenticarse contra la SPA single-tenant sin convertir la aplicación en multitenant.
 
+> Esta es la **primera forma** de incorporar usuarios externos. Debe completarse antes de estudiar auto-registro. La secuencia pedagógica es: `Guest manual → self-service Guest → MSAL/token/API`.
+
 ## Paso 1 · Invitar al compañero
 
 En Microsoft Entra admin center:
@@ -79,4 +81,14 @@ Single-tenant + Guests permite enseñar de forma controlada:
 - [ ] si existe `Assignment required`, el usuario está asignado;
 - [ ] nadie cambió la app a multitenant para resolver un problema de invitación.
 
-→ Continúa con [Etapa 5 · MSAL, PKCE y access token](./05-msal-token.md).
+## Siguiente aprendizaje: eliminar la invitación manual
+
+Una vez que este checkpoint está verde, **no saltar todavía a MSAL**. Primero estudiar cómo Entra External ID puede aprovisionar al Guest mediante un flujo de auto-registro asociado a la aplicación.
+
+```mermaid
+flowchart LR
+    MANUAL[Etapa 4 · Guest manual] --> AUTO[Etapas 4A–4E · Self-service sign-up]
+    AUTO --> MSAL[Etapa 5 · MSAL + access token]
+```
+
+→ Continúa con [Etapa 4A · Evolución: auto-registro de usuarios externos](./04a-self-service-introduccion.md).
