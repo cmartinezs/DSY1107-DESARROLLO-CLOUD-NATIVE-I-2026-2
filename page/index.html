@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
   <header class="hero">
     <div class="container">
       <p class="eyebrow">DSY1107 · 2026-2</p>
@@ -15,6 +16,7 @@
       <p class="lead">Primero entendemos la capacidad y el patrón; después lo llevamos a una implementación reproducible y finalmente al servicio cloud real.</p>
       <div class="actions">
         <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-04">Ver semana actual</a>
+        <a class="button" href="identidad.html">Identidad y acceso</a>
         <a class="button" href="progreso.html">Mi progreso</a>
         <a class="button" href="repositorio-estudiante.html">Repositorio del estudiante</a>
         <a class="button" href="https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing">Material público</a>
@@ -23,7 +25,7 @@
     </div>
   </header>
 
-  <main class="container layout">
+  <main id="main" class="container layout">
     <section class="card current-week">
       <div class="section-heading">
         <div>
@@ -34,18 +36,19 @@
       </div>
 
       <ol class="topics">
-        <li><strong>1 · Cierra el bloque 1.2.</strong> Completa usuarios externos, seguridad en API Manager, JWT/Claims y decodificación de tokens desde el último checkpoint real de tu sección.</li>
-        <li><strong>2 · Practica IDaaS con Firebase.</strong> Construye una mini app con zona pública, Register, Login, recuperación de contraseña, zona privada y Logout usando Email/Password; solo después incorpora Google Sign-In.</li>
-        <li><strong>3 · Conecta el frontend con identidad.</strong> Comprende MSAL, Authorization Code + PKCE, public clients, scopes y la diferencia entre ID token y access token.</li>
-        <li><strong>4 · Protege el backend.</strong> Usa Spring Security como OAuth2 Resource Server y razona sobre issuer, audience, expiración, scopes, 401 y 403.</li>
-        <li><strong>5 · Integra la arquitectura.</strong> Ubica responsabilidades entre SPA, Identity Provider, API Manager/Gateway y backend bajo defensa en profundidad.</li>
-        <li><strong>6 · Prepárate para Parcial 1.</strong> Revisa rúbrica, condiciones de entrega y la aclaración sobre el nombre “Pedidos360”.</li>
+        <li><strong>1 · Configura identidad correctamente.</strong> Verifica Azure for Students, tenant/directorio y permisos antes de registrar aplicaciones.</li>
+        <li><strong>2 · Trabaja usuarios externos.</strong> Comprende Guest/B2B manual y luego evoluciona a self-service sign-up mediante user flows.</li>
+        <li><strong>3 · Practica IDaaS con Firebase.</strong> Construye Email/Password completo y luego Google Sign-In para comparar modelos administrados.</li>
+        <li><strong>4 · Conecta el frontend con identidad.</strong> Usa MSAL, Authorization Code + PKCE, scopes y distingue ID token de access token.</li>
+        <li><strong>5 · Protege la API.</strong> Valida issuer, audience, expiración y scopes en API Gateway/backend y razona sobre 401/403.</li>
+        <li><strong>6 · Integra la arquitectura.</strong> Ubica responsabilidades entre SPA, Identity Provider, Gateway y backend.</li>
       </ol>
 
-      <p><strong>Al terminar deberías poder explicar:</strong> qué significa delegar autenticación a un IDaaS, cómo una sesión autenticada afecta la UI, por qué un proveedor federado puede agregarse sin reemplazar Email/Password y por qué el backend sigue necesitando validar por sí mismo los tokens que protegen recursos reales.</p>
+      <p><strong>Al terminar deberías poder explicar:</strong> quién administra la identidad, cómo se incorpora un usuario externo, cómo se automatiza ese lifecycle, qué token necesita una API propia y qué componente valida cada frontera.</p>
 
       <div class="actions">
-        <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-04">Contenido Semana 4</a>
+        <a class="button primary" href="identidad.html">Guía de identidad</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-04">Contenido Semana 4</a>
         <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/firebase-auth-miniapp">Lab Firebase Auth</a>
         <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/fullstack-seguro">Laboratorio Full Stack</a>
         <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/05-evaluacion-parcial-1.md">Parcial 1</a>
@@ -54,6 +57,13 @@
     </section>
 
     <section class="grid">
+      <article class="card">
+        <p class="eyebrow">Identity as a Service</p>
+        <h2>Microsoft Entra ID</h2>
+        <p>Guía por etapas desde cuenta Duoc + Azure for Students hasta tenant, App Registrations, Guest/B2B, self-service, MSAL, tokens y API Gateway.</p>
+        <a class="text-link" href="identidad.html">Abrir guía navegable →</a>
+      </article>
+
       <article class="card">
         <p class="eyebrow">Seguimiento personal</p>
         <h2>Mi progreso</h2>
@@ -69,9 +79,9 @@
       </article>
 
       <article class="card">
-        <p class="eyebrow">IDaaS real</p>
+        <p class="eyebrow">IDaaS comparativo</p>
         <h2>Firebase Authentication</h2>
-        <p>Lab guiado paso a paso: Email/Password completo primero; Google Sign-In se habilita únicamente después del checkpoint funcional.</p>
+        <p>Lab guiado paso a paso: Email/Password completo primero; Google Sign-In después; Entra/MSAL como comparación posterior.</p>
         <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/firebase-auth-miniapp">Abrir lab Firebase →</a>
       </article>
 
@@ -106,6 +116,8 @@
 
     <section class="card note">
       <h2>¿Dónde encuentro cada cosa?</h2>
+      <p><strong>Documentación canónica de identidad:</strong> <code>docs/identity/</code>.</p>
+      <p><strong>Portal web:</strong> vista derivada y navegable para estudiantes; no reemplaza la fuente canónica.</p>
       <p><strong>Material público:</strong> archivos originales de la asignatura.</p>
       <p><strong>Repositorio docente:</strong> contenido consolidado, ejemplos, laboratorios y material de apoyo.</p>
       <p><strong>Repositorio del estudiante:</strong> estructura personal de trabajo y entrega; no copia la organización semanal del repo docente.</p>
