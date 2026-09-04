@@ -9,7 +9,10 @@
 * { box-sizing: border-box; }
 body { margin: 0; }
 a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
 .container { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+.skip-link { position: absolute; left: 16px; top: -80px; z-index: 1000; padding: 10px 14px; border-radius: 8px; background: #fff; color: #172554; font-weight: 800; text-decoration: none; box-shadow: 0 8px 24px rgba(15,23,42,.18); }
+.skip-link:focus { top: 16px; }
 
 .hero {
   padding: 72px 0 64px;
@@ -18,7 +21,7 @@ a { color: inherit; }
     radial-gradient(circle at 75% 20%, rgba(96, 165, 250, .28), transparent 30%),
     linear-gradient(135deg, #0f172a, #172554 65%, #1e3a8a);
 }
-
+.compact-hero { padding: 56px 0 48px; }
 .hero h1 { margin: 8px 0 12px; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1.02; letter-spacing: -.04em; }
 .lead { max-width: 760px; margin: 0; color: #dbeafe; font-size: 1.12rem; }
 .eyebrow { margin: 0; color: #2563eb; font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .13em; }
@@ -39,6 +42,7 @@ a { color: inherit; }
 .text-link { color: #1d4ed8; font-weight: 800; text-decoration: none; }
 .text-link:hover { text-decoration: underline; }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.mermaid { overflow-x: auto; margin: 22px 0 0; padding: 18px; border: 1px solid #e3e8f1; border-radius: 12px; background: #fbfdff; text-align: center; }
 
 .clone-card { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: center; }
 .command-wrap { display: flex; gap: 8px; padding: 8px; border-radius: 11px; background: #101827; overflow: hidden; }
