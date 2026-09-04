@@ -1,4 +1,4 @@
-# Etapa 4C · Crear el user flow de auto-registro
+# Etapa 12 · Crear el user flow de auto-registro
 
 ## Objetivo
 
@@ -27,13 +27,13 @@ No continuar si falta alguno:
 
 ## 1 · Abrir creación de user flow
 
-Ruta actual documentada por Microsoft:
+Ruta:
 
 `Entra ID → External Identities → User flows → New user flow`
 
 Debe abrirse la pantalla de creación del flujo B2B de self-service.
 
-Si el menú no coincide, vuelve a Etapa 4B antes de buscar código o cambiar la App Registration.
+Si el menú no coincide, vuelve a Etapa 9 antes de buscar código o cambiar la App Registration.
 
 ---
 
@@ -47,19 +47,7 @@ Ejemplo:
 dsy1107-self-service
 ```
 
-Microsoft agrega automáticamente un prefijo del tipo:
-
-```text
-B2X_1_
-```
-
-cuando corresponde al user flow.
-
-Resultado visible esperado:
-
-```text
-B2X_1_dsy1107-self-service
-```
+Microsoft agrega automáticamente un prefijo del tipo `B2X_1_` cuando corresponde al user flow.
 
 No uses nombres de alumnos ni datos personales.
 
@@ -67,7 +55,7 @@ No uses nombres de alumnos ni datos personales.
 
 ## 3 · Seleccionar Identity Providers
 
-En la sección **Identity providers**, seleccionar únicamente los proveedores preparados en 4B.1.
+En **Identity providers**, seleccionar únicamente los proveedores preparados en Etapa 10.
 
 Para el primer recorrido se recomienda:
 
@@ -86,15 +74,13 @@ flowchart TD
     OPTIONAL --> ATTR
 ```
 
-### Gate de simplicidad
-
-Si tienes cuatro IdP marcados y todavía no has demostrado ninguno, vuelve a uno solo.
+Si tienes varios IdP marcados y todavía no has demostrado ninguno, vuelve a uno solo.
 
 ---
 
 ## 4 · Seleccionar atributos del usuario
 
-En **User attributes**, seleccionar lo definido en 4B.2.
+En **User attributes**, seleccionar lo definido en Etapa 11.
 
 Base recomendada:
 
@@ -107,8 +93,6 @@ Opcional:
 - Country/Region;
 - un custom attribute pedagógico.
 
-Usa `Show more` cuando necesites atributos adicionales.
-
 No agregues información personal sensible para “ver qué pasa”.
 
 ---
@@ -117,7 +101,7 @@ No agregues información personal sensible para “ver qué pasa”.
 
 Antes de pulsar Create, deberías poder describir el flujo en una frase:
 
-> “Un usuario externo llega a la SPA, se autentica usando Microsoft Entra account, completa nombre/apellido/display name y Entra aprovisiona un Guest en este workforce tenant.”
+> “Un usuario externo llega a la SPA, se autentica usando Microsoft Entra account, completa los atributos definidos y Entra aprovisiona un Guest en este workforce tenant.”
 
 Si no puedes decir claramente qué ocurre, no avances.
 
@@ -133,15 +117,13 @@ Luego volver a:
 
 El flujo debe aparecer en la lista.
 
-Si no aparece inmediatamente, refrescar la página antes de intentar crearlo otra vez.
-
-No crear duplicados por impaciencia.
+Si no aparece inmediatamente, refrescar antes de intentar crearlo otra vez. No crear duplicados por impaciencia.
 
 ---
 
 ## 7 · Abrir el flujo recién creado
 
-Entrar al user flow y revisar al menos:
+Revisar al menos:
 
 - Properties/configuración general;
 - Identity providers;
@@ -149,7 +131,7 @@ Entrar al user flow y revisar al menos:
 - Page layouts;
 - Applications.
 
-Todavía **Applications puede estar vacío**. La asociación ocurre en 4D.
+Todavía **Applications puede estar vacío**. La asociación ocurre en Etapa 13.
 
 ---
 
@@ -159,8 +141,6 @@ Ruta:
 
 `User flow → Customize → Page layouts`
 
-Microsoft permite ordenar los campos seleccionados.
-
 Orden sugerido:
 
 ```text
@@ -169,8 +149,6 @@ Surname
 Display Name
 atributo opcional
 ```
-
-La finalidad es mantener una experiencia breve y comprensible.
 
 ```mermaid
 flowchart LR
@@ -184,17 +162,7 @@ flowchart LR
 
 Los atributos del formulario se recopilan cuando el usuario se registra por primera vez.
 
-Ejemplo:
-
-```text
-09:00 Usuario A se registra
-10:00 agregas Country/Region al user flow
-10:05 Usuario A vuelve a entrar
-```
-
-No esperes necesariamente que Usuario A vuelva a recibir el formulario de alta.
-
-Para verificar cambios usa un usuario nuevo.
+Para verificar cambios posteriores usa un usuario nuevo.
 
 ---
 
@@ -209,8 +177,6 @@ El user flow no reemplaza:
 - configuración de MSAL;
 - JWT Authorizer.
 
-Sus responsabilidades son distintas:
-
 ```mermaid
 flowchart TB
     APPREG[App Registration] --> CLIENT[Identidad/configuración OAuth de la SPA]
@@ -222,24 +188,7 @@ flowchart TB
 
 ## 11 · No confundir user flow con autorización
 
-Un usuario que completó el user flow:
-
-```text
-se autenticó
-+
-fue aprovisionado como Guest
-```
-
-Pero todavía no significa:
-
-```text
-puede llamar cualquier endpoint
-puede administrar el tenant
-posee todos los scopes
-posee un rol de negocio
-```
-
-La autorización se resuelve después.
+Un usuario que completó el user flow se autenticó y fue aprovisionado como Guest, pero eso no significa que pueda llamar cualquier endpoint, administrar el tenant o poseer todos los scopes/roles de negocio.
 
 ---
 
@@ -257,7 +206,7 @@ No publicar datos personales ni secretos.
 
 ---
 
-## Checkpoint E4C
+## Checkpoint E12
 
 - [ ] user flow creado una sola vez;
 - [ ] nombre identificable;
@@ -268,4 +217,4 @@ No publicar datos personales ni secretos.
 - [ ] sé diferenciar user flow, SPA App Registration y API Registration;
 - [ ] comprendo que sign-up no concede autorización de negocio.
 
-→ Continúa con [Etapa 4D · Asociar la aplicación y ejecutar el auto-registro](./04d-self-service-asociar-aplicacion.md).
+→ Continúa con [Etapa 13 · Asociar la aplicación y ejecutar el auto-registro](./04d-self-service-asociar-aplicacion.md).
