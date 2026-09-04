@@ -1,10 +1,10 @@
-# Etapa 4B.1 · Preparar Identity Providers para self-service B2B
+# Etapa 10 · Preparar Identity Providers para self-service B2B
 
 ## Objetivo
 
 Definir **con qué identidad podrá presentarse un tercero** durante el auto-registro antes de crear el user flow.
 
-Esta parte pertenece al escenario de **B2B collaboration en un workforce tenant**. No confundirla con los user flows de un `external tenant` orientado a CIAM/clientes.
+Esta etapa pertenece al escenario de **B2B collaboration en un workforce tenant**. No confundirla con los user flows de un `external tenant` orientado a CIAM/clientes.
 
 ```mermaid
 flowchart TD
@@ -79,8 +79,6 @@ Para un compañero de DSY1107, este es el caso que primero interesa comprobar cu
 
 No significa que el usuario pase a ser `Member` del tenant dueño de la SPA.
 
-Resultado esperado:
-
 ```mermaid
 sequenceDiagram
     actor U as Usuario de tenant externo
@@ -101,7 +99,7 @@ sequenceDiagram
 
 Puede habilitarse como opción para identidades Microsoft personales cuando esté disponible/configurado para el flujo.
 
-Ejemplo de identidad personal:
+Ejemplos:
 
 ```text
 usuario@outlook.com
@@ -110,15 +108,11 @@ usuario@hotmail.com
 
 No es necesario habilitarlo para demostrar el aprendizaje mínimo de DSY1107.
 
-Primero completa el camino con Entra account.
-
 ---
 
 ## 5 · Email one-time passcode
 
 El modelo OTP permite validar una dirección de correo mediante un código de un solo uso cuando este mecanismo está habilitado para el tenant y el escenario.
-
-Conceptualmente:
 
 ```mermaid
 sequenceDiagram
@@ -142,14 +136,12 @@ No guardar el OTP como evidencia ni incluirlo en commits, screenshots o DevLog.
 
 Microsoft Entra External ID puede incorporar proveedores sociales configurados previamente, como Google o Facebook, dependiendo de la configuración disponible.
 
-Estos proveedores requieren configuración adicional del IdP y aumentan el número de fronteras que pueden fallar.
-
-Por eso **no forman parte del gate mínimo**.
+Estos proveedores requieren configuración adicional y aumentan las fronteras que pueden fallar. Por eso **no forman parte del gate mínimo**.
 
 ```mermaid
 flowchart TD
     G0[Flujo base verde] --> Q{¿Necesitamos comparar federación social?}
-    Q -- No --> NEXT[Continuar al user flow]
+    Q -- No --> NEXT[Continuar]
     Q -- Sí --> CFG[Configurar IdP social]
     CFG --> TEST[Probar por separado]
     TEST --> NEXT
@@ -180,7 +172,7 @@ La autorización de la API responde después:
 
 ## 8 · Registro de decisión para la práctica
 
-Antes de crear el user flow, documenta algo similar a:
+Antes de crear el user flow, documenta:
 
 ```text
 Identity Provider inicial: Microsoft Entra account
@@ -192,7 +184,7 @@ No hace falta incluir Tenant IDs de terceros en documentación pública.
 
 ---
 
-## Checkpoint E4B.1
+## Checkpoint E10
 
 - [ ] sé distinguir Identity Provider de tenant destino;
 - [ ] entiendo que el resultado sigue siendo un Guest del tenant DSY1107;
@@ -201,4 +193,4 @@ No hace falta incluir Tenant IDs de terceros en documentación pública.
 - [ ] no habilité proveedores sociales innecesariamente;
 - [ ] comprendo que IdP no define scopes ni autorización de backend.
 
-→ Continúa con [Etapa 4B.2 · Definir atributos de auto-registro](./04b2-self-service-atributos.md).
+→ Continúa con [Etapa 11 · Definir atributos de auto-registro](./04b2-self-service-atributos.md).
