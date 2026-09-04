@@ -1,4 +1,4 @@
-# Etapa 4B.2 · Definir atributos para el auto-registro
+# Etapa 11 · Definir atributos para el auto-registro
 
 ## Objetivo
 
@@ -10,9 +10,7 @@ El propósito no es construir una ficha completa del usuario. La regla es **mín
 
 ## 1 · Diferenciar identidad de atributos
 
-La identidad demuestra quién controla una cuenta.
-
-Los atributos agregan información sobre esa persona o sobre el contexto de incorporación.
+La identidad demuestra quién controla una cuenta. Los atributos agregan información sobre esa persona o sobre el contexto de incorporación.
 
 ```mermaid
 flowchart LR
@@ -40,8 +38,6 @@ No confundir estos atributos con permisos de negocio.
 
 ## 2 · Atributos built-in
 
-Microsoft Entra External ID dispone de atributos integrados que pueden seleccionarse para el formulario de sign-up.
-
 Para DSY1107 se recomienda comenzar con:
 
 - `Display Name`;
@@ -58,8 +54,6 @@ No agregues más campos si no existe un objetivo pedagógico claro.
 
 ## 3 · Regla de minimización
 
-Antes de seleccionar un atributo, pregunta:
-
 ```mermaid
 flowchart TD
     A[Quiero pedir un dato] --> B{¿Es necesario para el ejercicio?}
@@ -71,18 +65,7 @@ flowchart TD
     E -- Sí --> F[Crear atributo custom]
 ```
 
-Evita datos sensibles o innecesarios.
-
-No utilizar la práctica para recopilar:
-
-- RUT;
-- dirección particular;
-- teléfono personal;
-- fecha de nacimiento;
-- información médica;
-- contraseñas;
-- secretos;
-- datos que no tengan relación con el objetivo del laboratorio.
+Evita datos sensibles o innecesarios. No utilizar la práctica para recopilar RUT, dirección particular, teléfono personal, fecha de nacimiento, información médica, contraseñas, secretos ni datos sin relación con el objetivo del laboratorio.
 
 ---
 
@@ -90,7 +73,7 @@ No utilizar la práctica para recopilar:
 
 Si se desea demostrar extensibilidad, Microsoft Entra permite definir atributos personalizados para los user flows B2B.
 
-Ruta actual documentada por Microsoft:
+Ruta:
 
 `Entra ID → External Identities → Overview → Custom user attributes`
 
@@ -102,37 +85,24 @@ Luego:
 4. agregar descripción interna si corresponde;
 5. crear.
 
-Tipos disponibles documentados:
+Tipos disponibles:
 
 - `String`;
 - `Boolean`;
 - `Int`.
 
-### Ejemplo pedagógico seguro
+Ejemplos pedagógicos seguros:
 
 ```text
-Nombre: CourseSection
-Tipo: String
-Descripción: sección declarada durante ejercicio de self-service
+CourseSection : String
+AcceptLabTerms : Boolean
 ```
-
-O:
-
-```text
-Nombre: AcceptLabTerms
-Tipo: Boolean
-Descripción: atributo de demostración para user flow
-```
-
-Estos ejemplos sirven para comprender extensión de esquema sin recopilar información delicada.
 
 ---
 
 ## 5 · Qué ocurre internamente con un custom attribute
 
 Microsoft almacena estos valores como extension attributes vinculados a la aplicación de extensiones del tenant.
-
-Conceptualmente:
 
 ```mermaid
 flowchart LR
@@ -141,13 +111,13 @@ flowchart LR
     EXTAPP --> USER[Objeto Guest]
 ```
 
-Microsoft Graph expone estos campos con nombres del estilo:
+Microsoft Graph puede exponer estos campos con nombres del estilo:
 
 ```text
 extension_<extensions-app-id>_<attribute-name>
 ```
 
-No necesitas usar Microsoft Graph para aprobar esta etapa. Esta referencia existe para conectar user flows con extensibilidad real del directorio.
+No necesitas usar Microsoft Graph para aprobar esta etapa.
 
 ---
 
@@ -177,7 +147,7 @@ Después de crear el user flow podrás ordenar los atributos mediante:
 
 `User flow → Customize → Page layouts`
 
-El orden debería favorecer comprensión:
+Orden sugerido:
 
 ```text
 Given Name
@@ -192,19 +162,13 @@ No conviertas el formulario en una encuesta extensa.
 
 ## 8 · Evidencia permitida
 
-Puedes evidenciar:
-
-- nombres de atributos configurados;
-- tipos de dato;
-- orden del formulario;
-- resultado general del alta;
-- que el Guest posee el atributo cuando corresponda.
+Puedes evidenciar nombres de atributos configurados, tipos de dato, orden del formulario, resultado general del alta y que el Guest posee el atributo cuando corresponda.
 
 No evidenciar valores personales innecesarios.
 
 ---
 
-## Checkpoint E4B.2
+## Checkpoint E11
 
 - [ ] seleccioné solo atributos necesarios;
 - [ ] entiendo diferencia entre identidad, atributo y permiso;
@@ -213,4 +177,4 @@ No evidenciar valores personales innecesarios.
 - [ ] si agregué un custom attribute, usé un dato pedagógico no sensible;
 - [ ] no estoy usando atributos del user flow como sustituto de autorización de backend.
 
-→ Continúa con [Etapa 4C · Crear el user flow](./04c-self-service-crear-user-flow.md).
+→ Continúa con [Etapa 12 · Crear el user flow](./04c-self-service-crear-user-flow.md).
