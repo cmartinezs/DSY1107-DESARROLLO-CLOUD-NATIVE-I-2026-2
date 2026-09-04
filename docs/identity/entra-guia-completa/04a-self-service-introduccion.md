@@ -1,10 +1,25 @@
-# Etapa 4A · Evolución: auto-registro de usuarios externos
+# Etapa 8 · Extensión: auto-registro de usuarios externos
 
 ## Objetivo
 
-Comprender la diferencia entre **invitar manualmente** a un usuario Guest/B2B y permitir que una persona externa se **auto-registre** en una aplicación mediante un user flow de Microsoft Entra External ID.
+Comprender la diferencia entre **invitar manualmente** a un usuario Guest/B2B y permitir que una persona externa se **auto-registre** mediante un user flow de Microsoft Entra External ID.
 
-> Esta etapa se trabaja **después** de completar la Etapa 4 manual. Primero hay que entender qué es un Guest, cómo entra al tenant y qué controla el directorio. Luego se automatiza ese alta.
+> Esta etapa se trabaja **solo después de cerrar la Etapa 7**. El flujo base de tenant → SPA/API → Guest manual → MSAL → access token → API Gateway → pruebas debe estar comprendido antes de automatizar el alta.
+
+## Prerrequisito de entrada
+
+Antes de continuar debes poder demostrar:
+
+- Guest/B2B manual funcionando;
+- login desde la SPA;
+- access token para la API propia;
+- Gateway aceptando/rechazando según token/scope;
+- troubleshooting base realizado en Etapa 7.
+
+```mermaid
+flowchart LR
+    BASE[Etapas 0–7 cerradas] --> EXT[Etapa 8 · abrir extensión self-service]
+```
 
 ## Qué cambia respecto de la invitación manual
 
@@ -43,23 +58,46 @@ sequenceDiagram
     UF->>U: Pedir identidad + atributos
     U->>UF: Completar registro
     UF->>T: Aprovisionar cuenta Guest
-    E-->>SPA: Emitir token y redirigir
+    E-->>SPA: Emitir resultado y redirigir
 ```
 
 ## Idea clave
 
-En ambos casos el resultado termina siendo una identidad externa gestionada por Entra, pero cambia **quién inicia el alta**:
+En ambos modelos el usuario termina siendo una identidad externa gestionada por Entra. Lo que cambia es **quién inicia el alta**.
 
 ```text
 Invitación manual
 admin conoce al usuario primero
 → lo invita
 → usuario acepta
+→ Guest
 
 Self-service
 usuario llega a la aplicación
 → inicia registro
-→ Entra crea la cuenta Guest al completar el flujo
+→ Entra ejecuta user flow
+→ Guest
+```
+
+## Qué NO cambia
+
+La extensión self-service no reemplaza:
+
+- App Registration de la SPA;
+- App Registration de la API;
+- Authorization Code + PKCE;
+- MSAL;
+- access token;
+- issuer/audience/scopes;
+- API Gateway/JWT Authorizer;
+- autorización de negocio.
+
+```mermaid
+flowchart LR
+    PROV[Provisioning cambia] --> G[Guest]
+    G --> AUTH[Autenticación ya conocida]
+    AUTH --> TOKEN[Access token ya conocido]
+    TOKEN --> GW[Gateway ya conocido]
 ```
 
 ## Qué NO significa self-service
@@ -72,24 +110,28 @@ No significa:
 - que la aplicación tenga que ser multitenant;
 - que la SPA cree usuarios por código propio.
 
-El user flow controla **la experiencia de alta** asociada a aplicaciones concretas.
+## Workforce tenant B2B vs external tenant CIAM
 
-## Cuándo usar cada modelo en DSY1107
+En esta guía usamos **self-service B2B dentro de un workforce tenant**. No estamos creando un external tenant orientado a Customer Identity/CIAM.
 
-| Modelo | Qué enseña | Uso recomendado |
-|---|---|---|
-| Guest manual | tenant, Member/Guest, invitación, aceptación | obligatorio primero |
-| Self-service Guest | lifecycle automatizado, user flow, atributos, IdP | segunda etapa |
-| External tenant / CIAM | identidad orientada a clientes | comparación/avance posterior |
+```mermaid
+flowchart TD
+    W[Workforce tenant] --> B2B[B2B collaboration]
+    B2B --> SSR[Self-service user flow]
+    SSR --> G[Guest]
 
-## Gate E4A
+    X[External tenant] --> CIAM[Customer Identity / CIAM]
+```
 
-Antes de continuar:
+Para DSY1107 seguimos la rama superior.
 
-- [ ] Etapa 4 manual completada;
-- [ ] al menos un Guest manual funciona;
+## Checkpoint E8
+
+- [ ] Etapas 0–7 completadas o defendibles;
+- [ ] Guest manual funciona;
 - [ ] se comprende Member vs Guest;
 - [ ] se comprende que self-service no equivale a multitenant;
-- [ ] se puede explicar quién crea/provisiona la identidad en cada flujo.
+- [ ] se puede explicar qué cambia y qué permanece igual;
+- [ ] se distingue workforce B2B de external tenant/CIAM.
 
-→ Continúa con [Etapa 4B · Habilitar self-service sign-up en el tenant](./04b-self-service-habilitar-tenant.md).
+→ Continúa con [Etapa 9 · Habilitar self-service sign-up en el workforce tenant](./04b-self-service-habilitar-tenant.md).
