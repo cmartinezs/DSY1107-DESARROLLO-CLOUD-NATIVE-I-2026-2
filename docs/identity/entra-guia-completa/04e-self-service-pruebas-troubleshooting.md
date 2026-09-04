@@ -1,23 +1,52 @@
-# Etapa 4E · Comparar, probar y diagnosticar self-service sign-up
+# Etapa 14 · Segunda pasada integral: pruebas, troubleshooting y evidencia self-service
 
 ## Objetivo
 
-Validar que el auto-registro B2B funciona de extremo a extremo y distinguir con precisión problemas de:
+Volver a recorrer el sistema completo **después de incorporar self-service B2B**, para comprobar que la extensión de provisioning funciona y que el flujo base de autenticación, token y API sigue siendo correcto.
 
-- tenant/permisos;
-- self-service habilitado;
-- Identity Provider;
-- atributos;
-- user flow;
-- asociación de aplicación;
-- sign-up/sign-in;
-- MSAL/redirect;
-- token;
-- API Gateway/autorización.
+Esta etapa no sustituye la Etapa 7. Es una **segunda pasada**, con una hipótesis nueva:
+
+> antes el Guest existía porque fue invitado manualmente; ahora debe existir porque un tercero completó el user flow de auto-registro.
+
+```mermaid
+flowchart LR
+    P1[Etapa 7 · pruebas flujo base] --> EXT[Etapas 8–13 · self-service]
+    EXT --> P2[Etapa 14 · volver a probar extremo a extremo]
+```
 
 ---
 
-## 1 · Matriz mínima obligatoria
+## 1 · Qué se vuelve a validar
+
+La segunda pasada cubre dos grupos de fronteras.
+
+### Fronteras nuevas
+
+```text
+self-service habilitado
+→ Identity Provider
+→ atributos
+→ user flow
+→ SPA asociada
+→ provisioning Guest
+→ primer sign-up / segundo sign-in
+```
+
+### Fronteras que ya existían y deben seguir verdes
+
+```text
+SPA / MSAL
+→ access token API propia
+→ issuer / audience / scope
+→ API Gateway
+→ backend
+```
+
+La extensión se considera correcta solo si ambas cadenas funcionan juntas.
+
+---
+
+## 2 · Matriz mínima obligatoria
 
 | Caso | Estado inicial | Acción | Resultado esperado |
 |---|---|---|---|
@@ -30,16 +59,19 @@ Validar que el auto-registro B2B funciona de extremo a extremo y distinguir con 
 | SSR-07 | IdP no preparado | intentar usarlo | flujo falla/no ofrece proveedor esperado |
 | SSR-08 | usuario ya existía | esperar formulario de alta | no debe asumirse nuevo sign-up |
 | SSR-09 | redirect URI incorrecto | completar autenticación | falla retorno a SPA |
-| SSR-10 | login correcto, sin token API | llamar backend protegido | API rechaza |
+| SSR-10 | Guest creado + login correcto, sin token API | llamar backend protegido | API rechaza |
 | SSR-11 | token para recurso incorrecto | llamar API Gateway | rechazo por audience/issuer |
-| SSR-12 | token válido, scope insuficiente | llamar ruta protegida | 403/rechazo de autorización según diseño |
-| SSR-13 | token correcto + scope correcto | llamar ruta protegida | acceso autorizado |
+| SSR-12 | token válido, scope insuficiente | llamar ruta protegida | 403/rechazo según diseño |
+| SSR-13 | Guest self-service + token/scope correcto | llamar ruta protegida | acceso autorizado |
+| SSR-14 | Guest manual del flujo base | repetir acceso conocido | sigue funcionando; no regresión |
+
+El caso `SSR-14` es importante: introducir self-service no debe romper el mecanismo Guest manual previamente probado.
 
 ---
 
-## 2 · Pruebas por capas
+## 3 · Pruebas por capas
 
-No ejecutes todas las pruebas como una sola caja negra.
+No ejecutes todo como una sola caja negra.
 
 ### Capa A · tenant
 
@@ -51,17 +83,18 @@ self-service = Yes
 User flows disponible
 ```
 
-### Capa B · user flow
+### Capa B · configuración self-service
 
 Demuestra:
 
 ```text
 IdP elegido
 atributos definidos
+user flow creado
 SPA asociada
 ```
 
-### Capa C · aprovisionamiento
+### Capa C · provisioning
 
 Demuestra:
 
@@ -71,65 +104,76 @@ usuario no existía
 → Guest creado
 ```
 
-### Capa D · sign-in
+### Capa D · sign-in posterior
 
 Demuestra:
 
 ```text
-Guest existente
+Guest self-service existente
 → segundo acceso
-→ login normal
+→ sign-in normal
 ```
 
-### Capa E · API
+### Capa E · autenticación/token/API
 
-Demuestra:
+Reutiliza lo aprendido en Etapas 5–7:
 
 ```text
-access token correcto
+Guest self-service
+→ MSAL
+→ access token API propia
 → Gateway valida
 → backend responde
 ```
 
+### Capa F · regresión
+
+Confirma que el Guest manual original sigue funcionando.
+
 ```mermaid
 flowchart LR
-    A[Tenant] --> B[User flow]
-    B --> C[Aprovisionamiento]
+    A[Tenant] --> B[Self-service config]
+    B --> C[Provisioning]
     C --> D[Sign-in]
     D --> E[Token + API]
+    E --> F[Regresión Guest manual]
 ```
 
 ---
 
-## 3 · Árbol de diagnóstico principal
+## 4 · Árbol de diagnóstico principal
 
 ```mermaid
 flowchart TD
     A[Usuario intenta auto-registro] --> B{¿Aparece experiencia self-service?}
     B -- No --> C{¿Self-service = Yes?}
-    C -- No --> C1[Etapa 4B]
+    C -- No --> C1[Etapa 9]
     C -- Sí --> D{¿SPA asociada al user flow?}
-    D -- No --> D1[Asociar SPA]
+    D -- No --> D1[Etapa 13]
     D -- Sí --> E{¿IdP esperado disponible?}
-    E -- No --> E1[Etapa 4B.1]
+    E -- No --> E1[Etapa 10]
     E -- Sí --> F{¿Usuario realmente es nuevo?}
     F -- No --> F1[Usar identidad nueva para probar sign-up]
     F -- Sí --> G{¿Completa atributos?}
-    G -- No --> G1[Revisar atributos / Page layouts]
+    G -- No --> G1[Etapa 11/12 · atributos y layout]
     G -- Sí --> H{¿Guest aparece en Users?}
-    H -- No --> H1[Revisar user flow / política / identidad]
+    H -- No --> H1[User flow / política / identidad]
     H -- Sí --> I{¿Vuelve correctamente a SPA?}
     I -- No --> I1[Redirect URI / MSAL]
-    I -- Sí --> J{¿API funciona?}
-    J -- No --> J1[Token / issuer / audience / scope]
-    J -- Sí --> OK[Flujo completo válido]
+    I -- Sí --> J{¿Obtiene access token correcto?}
+    J -- No --> J1[Scopes / resource / consentimiento]
+    J -- Sí --> K{¿API Gateway acepta?}
+    K -- No --> K1[Issuer / audience / scope]
+    K -- Sí --> L{¿Guest manual aún funciona?}
+    L -- No --> L1[Regresión introducida]
+    L -- Sí --> OK[Extensión completa válida]
 ```
 
 ---
 
-## 4 · Diagnóstico: “no aparece Register / Sign up”
+## 5 · Diagnóstico: “no aparece Register / Sign up”
 
-Revisar exactamente en este orden:
+Revisar en este orden:
 
 1. tenant correcto;
 2. workforce tenant;
@@ -140,22 +184,13 @@ Revisar exactamente en este orden:
 7. usuario no existe previamente;
 8. sesión/cookies de otra cuenta no están confundiendo la prueba.
 
-No comenzar cambiando:
-
-```text
-Supported account types
-redirect URI
-clientId
-API Gateway
-```
-
-si todavía no has comprobado los puntos anteriores.
+No comenzar cambiando `Supported account types`, redirect URI, clientId o API Gateway si todavía no has comprobado esos puntos.
 
 ---
 
-## 5 · Diagnóstico: “el usuario se autentica, pero no se crea Guest”
+## 6 · Diagnóstico: “el usuario se autentica, pero no se crea Guest”
 
-Separar dos eventos:
+Separar:
 
 ```mermaid
 flowchart LR
@@ -165,51 +200,28 @@ flowchart LR
 
 Autenticarse con el IdP no basta si el user flow no termina correctamente.
 
-Revisar:
-
-- flujo correcto;
-- atributos requeridos completados;
-- políticas de colaboración;
-- errores visibles antes de la redirección;
-- `Entra ID → Users` después de la prueba.
+Revisar flujo correcto, atributos requeridos, políticas de colaboración, errores visibles y `Entra ID → Users`.
 
 ---
 
-## 6 · Diagnóstico: “Guest creado, pero SPA falla”
+## 7 · Diagnóstico: “Guest creado, pero SPA falla”
 
-Este caso es muy útil pedagógicamente.
-
-Significa que:
+Este caso indica que:
 
 ```text
-self-service/provisioning
-puede estar OK
+self-service/provisioning = posiblemente OK
+redirect/MSAL/frontend = posiblemente KO
 ```
 
-mientras:
-
-```text
-redirect/MSAL/frontend
-puede estar KO
-```
-
-Revisar:
-
-- redirect URI exacto;
-- plataforma SPA;
-- authority/tenant;
-- inicialización MSAL;
-- consola del navegador.
+Revisar redirect URI exacto, plataforma SPA, authority/tenant, inicialización MSAL y consola del navegador.
 
 No borres el Guest antes de entender cuál frontera falló.
 
 ---
 
-## 7 · Diagnóstico: “Guest creado y login funciona, pero API falla”
+## 8 · Diagnóstico: “Guest creado y login funciona, pero API falla”
 
-Self-service ya cumplió su responsabilidad.
-
-Ahora revisar:
+Self-service ya cumplió su responsabilidad. Reutiliza el diagnóstico de Etapa 7.
 
 ```mermaid
 flowchart LR
@@ -232,7 +244,7 @@ Preguntas:
 
 ---
 
-## 8 · Diagnóstico: “cambié atributos y no aparecen”
+## 9 · Diagnóstico: “cambié atributos y no aparecen”
 
 Primero preguntar:
 
@@ -240,19 +252,11 @@ Primero preguntar:
 
 Si sí, el comportamiento puede ser correcto: los atributos de sign-up se recopilan durante el primer alta.
 
-Prueba con una identidad nueva antes de concluir que el Page layout está roto.
+Prueba con una identidad nueva.
 
 ---
 
-## 9 · Diagnóstico: múltiples cuentas Microsoft en el navegador
-
-Síntoma típico:
-
-```text
-entra automáticamente con otra cuenta
-no aparece el usuario que quiero probar
-parece ignorar el sign-up
-```
+## 10 · Diagnóstico: múltiples cuentas Microsoft en el navegador
 
 Para laboratorio:
 
@@ -263,45 +267,32 @@ Para laboratorio:
 
 ---
 
-## 10 · Comparación final: manual vs self-service
+## 11 · Comparación final: manual vs self-service
 
 ```mermaid
 flowchart LR
-    subgraph MANUAL[Guest manual]
+    subgraph MANUAL[Guest manual · flujo base]
         A1[Admin conoce usuario] --> A2[Invita]
         A2 --> A3[Usuario acepta]
         A3 --> A4[Guest]
     end
 
-    subgraph SELF[Guest self-service]
+    subgraph SELF[Guest self-service · extensión]
         B1[Usuario llega a app] --> B2[User flow]
         B2 --> B3[IdP + atributos]
         B3 --> B4[Guest]
     end
 
-    A4 --> TOKEN[Autenticación + access token]
+    A4 --> TOKEN[MSAL + access token]
     B4 --> TOKEN
     TOKEN --> GW[API Gateway]
 ```
 
-### Lo que se mantiene
-
-- existe un tenant destino;
-- el usuario externo termina administrado en el directorio;
-- la aplicación sigue teniendo su App Registration;
-- la API sigue validando tokens/scopes;
-- Guest no equivale a rol de negocio.
-
-### Lo que cambia
-
-- quién inicia el alta;
-- necesidad de invitación previa;
-- existencia de user flow;
-- posibilidad de recopilar atributos durante primer registro.
+Lo que cambia es el **provisioning**. Lo que permanece es el circuito de autenticación, token y autorización posterior.
 
 ---
 
-## 11 · Comparación con Firebase Register
+## 12 · Comparación con Firebase Register
 
 ```mermaid
 flowchart TB
@@ -316,39 +307,51 @@ flowchart TB
     E1 --> E2[Guest en workforce tenant]
 ```
 
-La similitud útil es:
-
-> la aplicación delega el lifecycle de identidad al IDaaS.
-
-La diferencia importante es:
-
-> Entra opera explícitamente con tenant/directorio, B2B, App Registrations, user flows y objetos Guest.
+La similitud útil es que la aplicación delega el lifecycle de identidad al IDaaS. La diferencia es el modelo explícito de tenant, B2B, App Registrations, user flows y Guest en Entra.
 
 ---
 
-## 12 · Evidencia mínima recomendada
+## 13 · Evidencia final de la extensión
 
-Una evidencia completa debería contar una historia verificable:
+La evidencia debe contar una historia verificable y evitar capturar cada click sin propósito.
+
+### Evidencia administrativa
 
 1. self-service habilitado;
 2. IdP inicial definido;
 3. atributos definidos;
 4. user flow creado;
-5. SPA asociada;
+5. SPA asociada.
+
+### Evidencia de provisioning
+
 6. usuario no existente antes;
 7. ejecución del sign-up;
 8. Guest existente después;
-9. segundo login;
-10. al menos un caso negativo;
-11. si se llega a backend: evidencia 401/403/éxito sin publicar token.
+9. segundo acceso como sign-in.
 
-No necesitas capturar cada click. Captura **checkpoints con significado**.
+### Evidencia de integración
+
+10. access token para API propia explicado mediante claims sanitizados;
+11. llamada sin token/recurso incorrecto rechazada;
+12. scope insuficiente rechazado;
+13. token + scope correcto aceptado.
+
+### Evidencia de no regresión
+
+14. Guest manual del flujo base sigue pudiendo autenticarse y usar el circuito autorizado esperado.
+
+### Evidencia de aprendizaje
+
+15. DevLog con al menos un fallo, frontera identificada, corrección y resultado;
+16. Mermaid final manual vs self-service;
+17. explicación de qué cambió y qué permaneció igual.
 
 ---
 
-## 13 · Checklist de seguridad
+## 14 · Checklist de seguridad
 
-Nunca incluir en evidencia:
+Nunca incluir:
 
 - access token completo;
 - refresh token;
@@ -363,30 +366,18 @@ Si necesitas explicar un JWT, usa claims sanitizados o valores ficticios.
 
 ---
 
-## 14 · Qué debe poder explicar el estudiante
+## 15 · Gate final E14
 
-1. por qué estamos usando self-service B2B en un workforce tenant;
-2. por qué no es lo mismo que un external tenant CIAM;
-3. qué rol cumple el Identity Provider;
-4. qué rol cumple el user flow;
-5. qué significa asociar una aplicación al flujo;
-6. por qué el usuario termina como Guest;
-7. qué diferencia existe entre primer sign-up y sign-in posterior;
-8. por qué atributos no equivalen a permisos;
-9. por qué auto-registro no reemplaza scopes/autorización;
-10. cómo distinguir un fallo de provisioning de un fallo MSAL/API.
-
----
-
-## Gate E4E
-
-- [ ] Guest manual demostrado;
+- [ ] flujo base de Etapa 7 estaba cerrado antes de la extensión;
 - [ ] Guest self-service demostrado con identidad nueva;
 - [ ] IdP y atributos explicados;
 - [ ] segundo acceso demostrado como sign-in;
+- [ ] access token/API probados nuevamente con el Guest self-service;
 - [ ] al menos un caso negativo diagnosticado por frontera;
-- [ ] flujo de API separado conceptualmente del alta;
-- [ ] evidencia sanitizada;
+- [ ] Guest manual anterior sigue funcionando;
+- [ ] evidencia sanitizada y completa;
 - [ ] diferencias con Firebase y CIAM explicadas.
 
-→ Con este gate aprobado, continúa con [Etapa 5 · MSAL, PKCE y access token](./05-msal-token.md).
+Con este gate aprobado, la extensión self-service B2B queda cerrada.
+
+← [Volver al índice de la guía](./README.md).
