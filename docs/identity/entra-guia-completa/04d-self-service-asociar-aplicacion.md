@@ -1,4 +1,4 @@
-# Etapa 4D · Asociar la SPA y ejecutar el primer auto-registro
+# Etapa 13 · Asociar la SPA y ejecutar el primer auto-registro
 
 ## Objetivo
 
@@ -25,9 +25,7 @@ Antes de probar:
 1. ir a `Entra ID → Users`;
 2. buscar el correo de prueba;
 3. confirmar que no existe;
-4. no reutilizar el Guest manual usado en Etapa 4 para la primera evidencia self-service.
-
-### Por qué
+4. no reutilizar el Guest manual de Etapa 4 para la primera evidencia self-service.
 
 Si el usuario ya existe, estarás probando **sign-in**, no el alta.
 
@@ -46,7 +44,7 @@ Ruta:
 
 `Entra ID → External Identities → User flows → <user flow>`
 
-Comprueba que estás abriendo exactamente el flujo creado en 4C.
+Comprueba que estás abriendo exactamente el flujo creado en Etapa 12.
 
 ---
 
@@ -57,8 +55,6 @@ Dentro del user flow:
 `Use → Applications → Add application`
 
 Seleccionar la aplicación que representa la SPA de DSY1107.
-
-### Antes de seleccionar
 
 Compara el nombre y, cuando sea necesario, el `Application (client) ID` con el guardado en Etapa 2.
 
@@ -85,21 +81,13 @@ Después de agregarla, vuelve a `Applications` dentro del user flow.
 
 La SPA debe aparecer en la lista.
 
-La asociación significa:
-
-> esta aplicación puede utilizar este user flow de self-service.
-
-No significa:
-
-> cualquier aplicación del tenant usa este flujo.
-
-Microsoft permite asociar aplicaciones creadas por la organización a estos user flows; un mismo flujo puede servir a más de una aplicación.
+La asociación significa que **esta aplicación puede utilizar este user flow de self-service**. No significa que cualquier aplicación del tenant use este flujo.
 
 ---
 
 ## 4 · Volver a comprobar la App Registration
 
-Antes de ejecutar el flujo, revisar la SPA:
+Ruta:
 
 `Entra ID → App registrations → <SPA>`
 
@@ -111,19 +99,11 @@ Confirmar:
 - redirect URI exacto del entorno de prueba;
 - sin client secret en el frontend.
 
-### Regla
-
 No cambies `Supported account types` como intento genérico de hacer aparecer el sign-up.
-
-En esta práctica el auto-registro B2B se resuelve mediante External ID/user flow, no convirtiendo a ciegas la arquitectura en multitenant.
 
 ---
 
 ## 5 · Entender cómo llega el usuario al flujo
-
-La aplicación inicia la solicitud de autorización y Microsoft Entra aplica la experiencia de sign-up correspondiente a la aplicación/user flow asociado.
-
-Modelo conceptual:
 
 ```mermaid
 sequenceDiagram
@@ -163,9 +143,7 @@ Para reducir sesiones heredadas:
 7. completar atributos;
 8. finalizar el flujo.
 
-### Por qué incógnito
-
-No es un requisito de producción. Es una técnica de laboratorio para reducir confusión por cookies/sesiones de otras cuentas Microsoft.
+Incógnito es una técnica de laboratorio, no un requisito de producción.
 
 ---
 
@@ -190,8 +168,6 @@ Si no aparecen los atributos:
 
 El usuario debe completar el proceso sin intervención manual del administrador.
 
-Esto es precisamente lo que diferencia el flujo de Etapa 4:
-
 ```mermaid
 flowchart LR
     MAN[Manual] --> INV[Admin invita]
@@ -204,11 +180,9 @@ flowchart LR
 
 ## 9 · Verificar el Guest en el directorio
 
-Después del alta:
+Ir a:
 
 `Entra ID → Users`
-
-Buscar el usuario.
 
 Verificar:
 
@@ -217,20 +191,18 @@ Verificar:
 - la identidad corresponde al usuario de prueba;
 - los atributos seleccionados están presentes cuando aplique.
 
-No uses una captura que exponga datos de otros estudiantes.
+No uses capturas que expongan datos de otros estudiantes.
 
 ---
 
 ## 10 · Registrar estado antes/después
 
-La evidencia más clara es:
-
 ```text
 ANTES
-usuario@example no existe en Entra Users
+usuario de prueba no existe en Entra Users
 
 DESPUÉS
-usuario@example existe como Guest
+usuario de prueba existe como Guest
 ```
 
 No necesitas publicar identificadores internos completos.
@@ -247,8 +219,6 @@ Resultado esperado:
 primer acceso = sign-up + aprovisionamiento
 segundo acceso = sign-in
 ```
-
-No debería repetirse el formulario completo de atributos de primer alta.
 
 ```mermaid
 stateDiagram-v2
@@ -273,9 +243,7 @@ login correcto
 API todavía rechaza
 ```
 
-Eso no invalida el self-service.
-
-La siguiente frontera es token/autorización.
+Eso no invalida el self-service. La siguiente frontera es token/autorización.
 
 ```mermaid
 flowchart LR
@@ -291,42 +259,19 @@ flowchart LR
 
 ### “No aparece opción de registro”
 
-Revisar:
-
-1. self-service habilitado;
-2. user flow creado;
-3. SPA asociada al flujo;
-4. aplicación correcta;
-5. Identity Provider disponible;
-6. identidad realmente nueva.
+Revisar self-service habilitado, user flow creado, SPA asociada, aplicación correcta, Identity Provider disponible e identidad realmente nueva.
 
 ### “Veo login pero no formulario de atributos”
 
-Probable causa:
-
-```text
-usuario ya aprovisionado
-```
-
-Prueba con una identidad nueva.
+Probable causa: usuario ya aprovisionado. Prueba con una identidad nueva.
 
 ### “Se crea el Guest, pero vuelve con error a localhost”
 
-Revisar:
-
-```text
-redirect URI
-→ plataforma SPA
-→ configuración MSAL
-```
-
-El aprovisionamiento pudo haber funcionado aunque la redirección falle después.
+Revisar redirect URI, plataforma SPA y configuración MSAL. El aprovisionamiento pudo funcionar aunque la redirección falle después.
 
 ### “El Guest aparece pero API da 401”
 
-Ir a Etapa 5/6.
-
-No borrar/recrear el usuario repetidamente antes de revisar el token.
+No borres/recrees el usuario repetidamente. La Etapa 14 reutiliza las pruebas de token/Gateway del flujo base para aislar la nueva frontera.
 
 ---
 
@@ -341,7 +286,7 @@ No borrar/recrear el usuario repetidamente antes de revisar el token.
 
 ---
 
-## Checkpoint E4D
+## Checkpoint E13
 
 - [ ] asocié la **SPA**, no la API;
 - [ ] utilicé un usuario que no existía previamente;
@@ -350,6 +295,6 @@ No borrar/recrear el usuario repetidamente antes de revisar el token.
 - [ ] se recopilaron atributos de primer alta;
 - [ ] se creó un Guest sin invitación manual;
 - [ ] segundo acceso funciona como sign-in;
-- [ ] sé separar fallo de sign-up de fallo de API.
+- [ ] sé separar fallo de provisioning, frontend y API.
 
-→ Continúa con [Etapa 4E · Comparación, pruebas y troubleshooting](./04e-self-service-pruebas-troubleshooting.md).
+→ Continúa con [Etapa 14 · Segunda pasada integral de pruebas, troubleshooting y evidencia](./04e-self-service-pruebas-troubleshooting.md).
