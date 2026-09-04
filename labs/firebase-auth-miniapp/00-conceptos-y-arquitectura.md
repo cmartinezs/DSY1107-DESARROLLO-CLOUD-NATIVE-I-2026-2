@@ -128,6 +128,62 @@ No adelantes Google porque ocultaría parte del aprendizaje sobre el ciclo tradi
 
 ---
 
+## Relación con Microsoft Entra ID
+
+Este laboratorio usa Firebase para aislar la capacidad **Identity as a Service**. En el proyecto cloud de DSY1107, la misma capacidad se estudia con Microsoft Entra ID, pero el modelo operativo cambia.
+
+### Firebase
+
+El estudiante habilita mecanismos de autenticación como:
+
+- Email/Password;
+- Google Sign-In.
+
+Firebase administra las identidades y el estado de sesión de la miniapp.
+
+### Microsoft Entra ID en la primera etapa del proyecto
+
+El escenario inicial es:
+
+- tenant propio del grupo;
+- SPA registrada como **single-tenant**;
+- integrantes del tenant como `Member`;
+- compañeros externos incorporados como `Guest/B2B`;
+- Authorization Code + PKCE mediante MSAL;
+- access token destinado a la API propia;
+- validación del JWT en AWS API Gateway.
+
+```mermaid
+flowchart TB
+    CAP[Capacidad: Identity as a Service]
+    CAP --> FIREBASE[Firebase Authentication]
+    CAP --> ENTRA[Microsoft Entra ID]
+
+    FIREBASE --> F1[Email/Password]
+    FIREBASE --> F2[Google Sign-In]
+    FIREBASE --> F3[Sesión administrada por SDK]
+
+    ENTRA --> E1[Tenant + Member/Guest]
+    ENTRA --> E2[MSAL + Authorization Code + PKCE]
+    ENTRA --> E3[Access token + scopes]
+    E3 --> GW[AWS API Gateway]
+```
+
+La competencia importante no es memorizar pantallas de cada proveedor, sino reconocer:
+
+1. quién administra la identidad;
+2. quién puede autenticarse;
+3. qué token se obtiene;
+4. para qué recurso fue emitido;
+5. qué componente valida el token;
+6. dónde comienza la autorización real.
+
+Para el procedimiento completo de usuarios externos en Entra:
+
+→ [Microsoft Entra ID · usuarios externos en una SPA con API protegida](../../docs/identity/entra-usuarios-externos-spa-api-gateway.md)
+
+---
+
 ## Relación con una aplicación productiva
 
 Una aplicación real puede extender el flujo:
@@ -154,6 +210,8 @@ Deberías poder responder al terminar:
 3. ¿Por qué una API no debería confiar únicamente en que el frontend muestre una zona privada?
 4. ¿Qué tienen en común Email/Password y Google una vez autenticados?
 5. ¿Por qué no necesitamos `localStorage.isLoggedIn`?
+6. ¿Qué diferencia existe entre crear un usuario Firebase y agregar un usuario Guest/B2B a un tenant Entra?
+7. ¿Por qué una SPA Entra debe pedir un access token para su API y no reutilizar un token emitido para Microsoft Graph?
 
 ---
 
