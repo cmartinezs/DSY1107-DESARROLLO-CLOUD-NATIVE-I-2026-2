@@ -4,7 +4,7 @@
 
 Permitir que los compañeros del grupo puedan autenticarse contra la SPA single-tenant sin convertir la aplicación en multitenant.
 
-> Esta es la **primera forma** de incorporar usuarios externos. Debe completarse antes de estudiar auto-registro. La secuencia pedagógica es: `Guest manual → self-service Guest → MSAL/token/API`.
+> Esta es la **forma base** de incorporar usuarios externos. En esta primera parte de la guía se utiliza invitación manual para que el alumno comprenda tenant, Guest y lifecycle antes de integrar MSAL/token/API. El auto-registro se estudia recién después de cerrar la Etapa 7.
 
 ## Paso 1 · Invitar al compañero
 
@@ -81,14 +81,18 @@ Single-tenant + Guests permite enseñar de forma controlada:
 - [ ] si existe `Assignment required`, el usuario está asignado;
 - [ ] nadie cambió la app a multitenant para resolver un problema de invitación.
 
-## Siguiente aprendizaje: eliminar la invitación manual
+## Qué sigue ahora
 
-Una vez que este checkpoint está verde, **no saltar todavía a MSAL**. Primero estudiar cómo Entra External ID puede aprovisionar al Guest mediante un flujo de auto-registro asociado a la aplicación.
+Todavía **no** automatizamos el alta. Primero completamos el circuito técnico completo con este Guest manual:
 
 ```mermaid
 flowchart LR
-    MANUAL[Etapa 4 · Guest manual] --> AUTO[Etapas 4A–4E · Self-service sign-up]
-    AUTO --> MSAL[Etapa 5 · MSAL + access token]
+    MANUAL[Etapa 4 · Guest manual] --> MSAL[Etapa 5 · MSAL + PKCE]
+    MSAL --> GW[Etapa 6 · API Gateway]
+    GW --> TEST[Etapa 7 · pruebas + troubleshooting + evidencia]
+    TEST --> EXT[Etapa 8 · recién abrir extensión self-service]
 ```
 
-→ Continúa con [Etapa 4A · Evolución: auto-registro de usuarios externos](./04a-self-service-introduccion.md).
+La intención es que, cuando lleguemos a self-service, el único concepto nuevo sea **cómo se aprovisiona el Guest**, no volver a diagnosticar simultáneamente OAuth, tokens y Gateway.
+
+→ Continúa con [Etapa 5 · MSAL, PKCE y access token](./05-msal-token.md).
