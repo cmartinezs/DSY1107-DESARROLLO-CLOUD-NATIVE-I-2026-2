@@ -10,8 +10,10 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 - [`examples/`](examples/) — ejemplos demostrativos independientes del proyecto transversal.
 - [`labs/`](labs/) — laboratorios locales, autocontenidos e independientes del proyecto formativo.
 - [`proyecto-formativo/`](proyecto-formativo/) — **RegistrApp**, vertical transversal independiente que evoluciona clase a clase.
-- [`docs/`](docs/) — conocimientos y guías transversales.
-- [`page/`](page/) — portal web del curso.
+- [`docs/identity/`](docs/identity/) — dominio canónico de identidad y acceso: Azure for Students, Entra ID, Guest/B2B, self-service, MSAL, tokens y API Gateway.
+- [`page/`](page/) — portal web del curso, superficie derivada y navegable.
+- [**Guía completa de Microsoft Entra ID**](docs/identity/entra-guia-completa/README.md) — ruta por etapas desde la cuenta hasta la API protegida.
+- [**Versión web · Identidad y acceso**](page/identidad.html) — read model para estudiantes con navegación progresiva y diagramas Mermaid.
 - [**Estrategia de laboratorios y relación con AVA**](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md) — labs locales en el repo; ejercicios/labs cloud institucionales en AVA.
 - [**Estándar de repositorio del estudiante**](docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — nombre, estructura, packages, Markdown, labs Cloud Native y entregas colaborativas.
 - [**Material público del curso**](https://drive.google.com/drive/folders/1UOZMZcEbtfKFq4ygWKj3Yi8VEHkW7hx1?usp=sharing) — biblioteca pública organizada semana a semana.
@@ -48,16 +50,20 @@ RegistrApp es el desafío transversal del semestre; **no es el ejemplo conductor
 
 ## Cómo se organiza el material
 
-La semana curricular dice **qué corresponde aprender ahora**. Las raíces transversales dicen **dónde vive cada tipo de artefacto**.
+La semana curricular dice **qué corresponde aprender ahora**. Las raíces transversales dicen **dónde vive cada artefacto**, mientras `docs/` conserva conocimiento transversal organizado por dominio.
 
-```text
-semanas/            → qué se aprende y cuándo
-examples/           → ejemplos
-labs/               → laboratorios locales y autocontenidos
-proyecto-formativo/ → RegistrApp y sus checkpoints
+```mermaid
+flowchart LR
+    W[semanas · qué se aprende y cuándo] --> E[examples · ejemplos]
+    W --> L[labs · práctica autocontenida]
+    W --> P[proyecto-formativo · RegistrApp]
+    D[docs/identity · conocimiento canónico de identidad] --> W
+    D --> L
+    D --> P
+    D --> WEB[page · vista derivada]
 ```
 
-Una semana puede enlazar al checkpoint vigente de RegistrApp, pero no mantiene una segunda copia dentro de `semanas/`.
+Una semana puede enlazar al checkpoint vigente de RegistrApp y a documentación transversal, pero no mantiene copias paralelas del mismo conocimiento.
 
 ## Material original
 
@@ -65,17 +71,16 @@ Los archivos originales de la asignatura utilizados durante cada semana se manti
 
 ## Filosofía de laboratorios
 
-Los laboratorios de este repositorio deben poder ejecutarse **sin infraestructura cloud real**. Su función es hacer observable el concepto con recursos locales, neutrales o simulados y con la menor complejidad accidental posible.
+Los laboratorios de este repositorio deben poder ejecutarse **sin infraestructura cloud real** cuando el objetivo sea aislar un concepto. Cuando el proveedor administrado forma parte esencial de la competencia, el material puede ser provider-backed y debe separar claramente configuración, código, evidencia y troubleshooting.
 
-```text
-contenido semanal
-→ comprender el concepto
-→ practicarlo en un lab local/autocontenido
-→ observar flujos, errores y responsabilidades
-→ evidenciar comprensión
+```mermaid
+flowchart LR
+    C[Contenido semanal] --> U[Comprender concepto]
+    U --> LAB[Práctica local o provider-backed]
+    LAB --> O[Observar flujos y errores]
+    O --> E[Evidenciar comprensión]
+    E --> T[Transferir a RegistrApp cuando corresponda]
 ```
-
-Los ejercicios, guías o laboratorios que requieran AWS, Azure u otro proveedor pertenecen al **contenido institucional del AVA**. El repo puede referenciar la correspondencia conceptual, pero no convierte esa actividad institucional en una segunda fase de `labs/`.
 
 El laboratorio de contenido debe ser entendible por sí mismo. Si después la misma competencia se aplica a RegistrApp, esa aplicación pertenece al proyecto formativo y se documenta por separado.
 
@@ -132,25 +137,39 @@ No se sincronizan artificialmente: cada sección registra su último checkpoint 
 Esta semana debe:
 
 - cerrar **1.2.5–1.2.8**: usuarios externos, seguridad en API Manager, JWT/Claims y decodificación de tokens;
+- trabajar la ruta operativa **Azure for Students → tenant/permisos → SPA/API registrations → Guest/B2B → self-service sign-up**;
 - continuar con **1.3.1–1.3.4**: MSAL, MSAL en frontend, Spring Security en backend y arquitecturas seguras en la nube;
+- comparar Microsoft Entra ID con Firebase Authentication como implementaciones de la capacidad IDaaS;
 - revisar con los estudiantes la **Evaluación Parcial 1**, su rúbrica, condiciones de entrega y la ventana planificada de semanas 6–7;
 - aclarar que **Pedidos360** es el nombre de referencia usado en el documento institucional, mientras que cada grupo aplica los requisitos a su proyecto real.
 
 Ruta técnica:
 
-```text
-usuarios externos + API Manager
-→ JWT / claims / decode vs verify
-→ Authorization Code + PKCE
-→ MSAL
-→ access token
-→ Gateway
-→ Spring Security Resource Server
-→ scopes / 401 / 403
-→ arquitectura segura
+```mermaid
+flowchart TD
+    A[Azure for Students] --> B[Tenant / directorio / permisos]
+    B --> C[SPA + API registrations]
+    C --> D[Guest/B2B manual]
+    D --> E[Self-service sign-up]
+    E --> F[Authorization Code + PKCE / MSAL]
+    F --> G[Access token para API propia]
+    G --> H[API Gateway]
+    H --> I[Spring Security Resource Server]
+    I --> J[Scopes / 401 / 403 / arquitectura segura]
 ```
 
-Consulta [`semanas/semana-04/`](semanas/semana-04/) para el contenido, [`labs/fullstack-seguro/`](labs/fullstack-seguro/) para el laboratorio local canónico y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
+Consulta [`docs/identity/`](docs/identity/) para la fuente canónica del dominio, [`page/identidad.html`](page/identidad.html) para la vista web derivada, [`semanas/semana-04/`](semanas/semana-04/) para el contexto curricular, [`labs/`](labs/) para práctica y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
+
+## Documentación y publicación
+
+Este repositorio consume el estándar transversal de documentación/publicación y el estándar de diagramación de ADÜMÜN. En particular:
+
+- la documentación se descompone por fronteras semánticas y dominios, no por tamaño arbitrario;
+- `docs/identity/` es la fuente mantenida del dominio de identidad;
+- `page/identidad.html` es una vista derivada, no una fuente normativa paralela;
+- los cambios materiales de conocimiento público deben mantener documentación y web en paridad semántica;
+- los diagramas técnicos nuevos o modificados usan Mermaid cuando es viable;
+- nunca se publican secretos, passwords, access/refresh tokens reutilizables, client secrets, claves privadas ni credenciales cloud.
 
 ---
 
