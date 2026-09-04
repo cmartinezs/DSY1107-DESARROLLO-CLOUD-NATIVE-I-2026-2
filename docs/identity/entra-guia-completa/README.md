@@ -16,8 +16,13 @@ flowchart TD
     FIX --> B
     C -- Sí --> D[2 · Registrar SPA]
     D --> E[3 · Registrar/exponer API + scopes]
-    E --> F[4 · Habilitar usuarios externos Guest/B2B]
-    F --> G[5 · Configurar MSAL + obtener access token]
+    E --> F[4 · Guest/B2B manual]
+    F --> A1[4A · Comprender self-service]
+    A1 --> A2[4B · Habilitar self-service en tenant]
+    A2 --> A3[4C · Crear user flow]
+    A3 --> A4[4D · Asociar app + ejecutar registro]
+    A4 --> A5[4E · Probar + comparar + diagnosticar]
+    A5 --> G[5 · Configurar MSAL + obtener access token]
     G --> H[6 · Proteger AWS API Gateway]
     H --> I[7 · Pruebas + troubleshooting + evidencia]
 ```
@@ -30,10 +35,26 @@ No avanzar de etapa si el checkpoint de la etapa anterior falla.
 2. [Etapa 1 · Directorio, tenant y permisos](./01-tenant-directorio-permisos.md)
 3. [Etapa 2 · App Registration de la SPA](./02-app-registration-spa.md)
 4. [Etapa 3 · API propia, scopes y permisos](./03-api-scopes.md)
-5. [Etapa 4 · Usuarios externos Guest/B2B](./04-usuarios-externos.md)
-6. [Etapa 5 · MSAL, PKCE y access token](./05-msal-token.md)
-7. [Etapa 6 · AWS API Gateway + JWT Authorizer](./06-api-gateway.md)
-8. [Etapa 7 · Matriz de pruebas y troubleshooting](./07-pruebas-troubleshooting.md)
+5. [Etapa 4 · Usuarios externos Guest/B2B manual](./04-usuarios-externos.md)
+6. [Etapa 4A · Introducción al self-service sign-up](./04a-self-service-introduccion.md)
+7. [Etapa 4B · Habilitar self-service en el tenant](./04b-self-service-habilitar-tenant.md)
+8. [Etapa 4C · Crear el user flow](./04c-self-service-crear-user-flow.md)
+9. [Etapa 4D · Asociar la aplicación y ejecutar el auto-registro](./04d-self-service-asociar-aplicacion.md)
+10. [Etapa 4E · Comparar, probar y diagnosticar](./04e-self-service-pruebas-troubleshooting.md)
+11. [Etapa 5 · MSAL, PKCE y access token](./05-msal-token.md)
+12. [Etapa 6 · AWS API Gateway + JWT Authorizer](./06-api-gateway.md)
+13. [Etapa 7 · Matriz de pruebas y troubleshooting](./07-pruebas-troubleshooting.md)
+
+## Por qué Guest manual va antes de self-service
+
+```mermaid
+flowchart LR
+    MANUAL[Admin invita Guest] --> UNDERSTAND[Comprender tenant + Guest + aceptación]
+    UNDERSTAND --> SELF[Usuario se auto-registra]
+    SELF --> LIFE[Comprender lifecycle administrado por IDaaS]
+```
+
+Primero el alumno observa explícitamente qué identidad entra al tenant. Después automatiza ese mismo lifecycle mediante un user flow. Así el auto-registro se entiende como una **evolución del modelo**, no como una pantalla mágica de login.
 
 ## Regla de diagnóstico
 
@@ -44,7 +65,10 @@ cuenta/suscripción
 → directorio/tenant
 → permisos Entra
 → App Registration
-→ usuario/invitación
+→ Guest manual / invitación
+→ self-service habilitado
+→ user flow
+→ aplicación asociada al user flow
 → redirect URI / MSAL
 → emisión de token
 → issuer/audience/scope
