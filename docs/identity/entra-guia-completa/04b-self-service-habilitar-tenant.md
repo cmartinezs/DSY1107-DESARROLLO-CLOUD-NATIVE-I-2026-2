@@ -1,4 +1,4 @@
-# Etapa 4B · Habilitar self-service sign-up en el workforce tenant
+# Etapa 9 · Habilitar self-service sign-up en el workforce tenant
 
 ## Objetivo
 
@@ -12,17 +12,13 @@ Habilitar en el tenant de Microsoft Entra ID la capacidad de crear **user flows 
 
 Debes haber completado:
 
-- Etapa 0: cuenta Duoc + Azure for Students;
-- Etapa 1: tenant/directorio y permisos;
-- Etapa 2: App Registration de la SPA;
-- Etapa 3: API/scopes, si el ejercicio llegará al backend;
-- Etapa 4: al menos un Guest manual probado;
-- Etapa 4A: comprensión de manual vs self-service.
+- Etapas 0–7 del flujo base;
+- Etapa 8: comprensión de manual vs self-service.
 
 ```mermaid
 flowchart TD
-    A[Guest manual funciona] --> B{¿Comprendo workforce B2B?}
-    B -- No --> BACK[Volver a 4A]
+    A[Flujo base 0–7 cerrado] --> B{¿Comprendo workforce B2B?}
+    B -- No --> BACK[Volver a Etapa 8]
     B -- Sí --> C[Habilitar self-service]
 ```
 
@@ -86,17 +82,7 @@ Antes de continuar, revisa tu propio usuario en:
 
 `Entra ID → Users`
 
-Para el tenant que el grupo controla, identifica si eres:
-
-```text
-Member
-```
-
-o
-
-```text
-Guest
-```
+Para el tenant que el grupo controla, identifica si eres `Member` o `Guest`.
 
 Si eres Guest y las opciones administrativas están bloqueadas, no intentes resolverlo desde MSAL o JavaScript.
 
@@ -104,19 +90,17 @@ Si eres Guest y las opciones administrativas están bloqueadas, no intentes reso
 
 ## 4 · Abrir External collaboration settings
 
-Ruta actual:
+Ruta:
 
 `Entra ID → External Identities → External collaboration settings`
 
-Busca la opción:
+Busca:
 
 `Enable guest self-service sign up via user flows`
 
 ### Si la opción no existe
 
-No avances.
-
-Revisa:
+No avances. Revisa:
 
 1. estás en un **workforce tenant** correcto;
 2. tienes rol suficiente;
@@ -144,15 +128,7 @@ Seleccionar **Save**.
 
 No cierres inmediatamente la pantalla. Espera a que la operación confirme guardado y vuelve a leer el valor.
 
-### Checkpoint visual
-
-Debe permanecer:
-
-```text
-Yes
-```
-
-al refrescar/reingresar.
+Debe permanecer `Yes` al refrescar/reingresar.
 
 ---
 
@@ -166,8 +142,6 @@ En la misma zona de External Identities pueden existir controles que condicionen
 - configuraciones cross-tenant cuando la identidad proviene de otra organización Entra.
 
 No cambies estas políticas indiscriminadamente para aprobar el lab.
-
-### Regla
 
 ```mermaid
 flowchart TD
@@ -188,19 +162,15 @@ Ir a:
 
 `Entra ID → External Identities → User flows`
 
-Debe existir la opción:
+Debe existir `New user flow`.
 
-`New user flow`
-
-No crees todavía el flujo si no preparaste Identity Providers y atributos.
-
-La secuencia correcta ahora es:
+No crees todavía el flujo. Primero se preparan Identity Providers y atributos.
 
 ```mermaid
 flowchart LR
-    ENABLE[Self-service = Yes] --> IDP[4B.1 · Identity Providers]
-    IDP --> ATTR[4B.2 · Atributos]
-    ATTR --> UF[4C · Crear user flow]
+    ENABLE[Self-service = Yes] --> IDP[Etapa 10 · Identity Providers]
+    IDP --> ATTR[Etapa 11 · Atributos]
+    ATTR --> UF[Etapa 12 · Crear user flow]
 ```
 
 ---
@@ -209,11 +179,7 @@ flowchart LR
 
 ### “Veo External Identities, pero no puedo guardar”
 
-Probable frontera:
-
-```text
-rol / permisos administrativos
-```
+Probable frontera: `rol / permisos administrativos`.
 
 ### “No veo User flows”
 
@@ -228,20 +194,11 @@ tenant correcto
 
 ### “Soy dueño de la suscripción Azure”
 
-Eso no demuestra que tengas el rol Entra requerido.
-
-Azure RBAC y roles Microsoft Entra son modelos relacionados pero distintos.
+Eso no demuestra que tengas el rol Entra requerido. Azure RBAC y roles Microsoft Entra son modelos relacionados pero distintos.
 
 ### “Con otra cuenta sí aparece”
 
-Comparar:
-
-- tenant activo;
-- `User type`;
-- roles asignados;
-- directorio de origen.
-
-No asumir que es un problema del navegador.
+Comparar tenant activo, `User type`, roles asignados y directorio de origen.
 
 ---
 
@@ -252,19 +209,13 @@ Captura o registro sanitizado que demuestre:
 - nombre del tenant, sin datos personales innecesarios;
 - self-service habilitado;
 - menú User flows disponible;
-- rol/permisos comprendidos, aunque no sea necesario publicar el listado completo de roles.
+- rol/permisos comprendidos.
 
-No publicar:
-
-- tokens;
-- claves;
-- passwords;
-- códigos OTP;
-- credenciales cloud.
+No publicar tokens, claves, passwords, códigos OTP ni credenciales cloud.
 
 ---
 
-## Checkpoint E4B
+## Checkpoint E9
 
 - [ ] estoy en un workforce tenant;
 - [ ] Tenant ID coincide con la SPA;
@@ -275,4 +226,4 @@ No publicar:
 - [ ] `External Identities → User flows` está disponible;
 - [ ] no flexibilicé políticas de colaboración sin necesidad.
 
-→ Continúa con [Etapa 4B.1 · Preparar Identity Providers](./04b1-self-service-identity-providers.md).
+→ Continúa con [Etapa 10 · Preparar Identity Providers](./04b1-self-service-identity-providers.md).
