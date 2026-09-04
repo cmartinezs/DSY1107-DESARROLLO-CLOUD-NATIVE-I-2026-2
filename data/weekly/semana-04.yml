@@ -8,12 +8,42 @@ period:
 
 sections:
   - id: 002D
+    scheduled_session:
+      date: 2026-09-04
+      weekday: friday
+      room: SJ-L4
+      start: "12:11"
+      end: "13:40"
+      module_count: 2
+      modules:
+        - number: 6
+          start: "12:11"
+          end: "12:50"
+        - number: 7
+          start: "13:01"
+          end: "13:40"
+      plan: semanas/semana-04/DSY1107-002D.md
+      primary_lab: labs/firebase-auth-miniapp/README.md
+      start_policy: "checkpoint verificable de semana 3; no presumir contenidos ejecutados"
+      session_focus:
+        - "recuperar/cerrar OAuth2 OIDC y JWT según evidencia"
+        - "iniciar práctica IDaaS real con Firebase"
+        - "configurar Firebase y Email/Password"
+      gates:
+        - "OAuth2/OIDC actores + PKCE + access token vs ID token + 401/403"
+        - "Google Sign-In solo después de Email/Password completo"
+      explicitly_not_forced:
+        - "Google Sign-In si Email/Password sigue incompleto"
+        - "MSAL"
+        - "Spring Security Resource Server"
+        - "integración Full Stack completa"
     curricular_progress:
       planned_topics:
         - "1.2.5 usuarios externos"
         - "1.2.6 seguridad en API Manager"
         - "1.2.7 JWT y Claims"
         - "1.2.8 decodificación de JWT"
+        - "práctica IDaaS con Firebase Email/Password"
         - "1.3.1 MSAL"
         - "1.3.2 MSAL en frontend"
         - "1.3.3 Spring Security Resource Server"
@@ -34,11 +64,31 @@ sections:
     scheduled_session:
       date: 2026-09-04
       weekday: friday
+      room: SJ-L9
       start: "14:31"
       end: "17:20"
+      module_count: 4
+      modules:
+        - number: 9
+          start: "14:31"
+          end: "15:10"
+        - number: 10
+          start: "15:11"
+          end: "15:50"
+        - number: 11
+          start: "16:01"
+          end: "16:40"
+        - number: 12
+          start: "16:41"
+          end: "17:20"
       plan: semanas/semana-04/DSY1107-003D.md
       primary_lab: labs/firebase-auth-miniapp/README.md
       start_policy: "checkpoint verificable de semana 3; no presumir contenidos ejecutados"
+      session_focus:
+        - "cerrar deuda OAuth2 OIDC JWT según evidencia"
+        - "Firebase Email/Password completo"
+        - "Google Sign-In después del gate Email/Password"
+        - "puente conceptual hacia Full Stack seguro"
       gates:
         - "OAuth2/OIDC actores + PKCE + access token vs ID token + 401/403"
         - "Firebase Email/Password completo antes de Google Sign-In"
@@ -71,6 +121,7 @@ sections:
 
 course_specific:
   official_scope_reconciled: true
+  friday_timetable_reconciled: true
   closes_activity_1_2:
     - "1.2.5"
     - "1.2.6"
