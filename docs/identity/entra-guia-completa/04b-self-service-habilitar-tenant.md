@@ -1,78 +1,278 @@
-# Etapa 4B · Habilitar self-service sign-up en el tenant
+# Etapa 4B · Habilitar self-service sign-up en el workforce tenant
 
 ## Objetivo
 
-Habilitar en el tenant la capacidad de crear **user flows de auto-registro para usuarios externos**.
+Habilitar en el tenant de Microsoft Entra ID la capacidad de crear **user flows de auto-registro B2B para usuarios externos**.
 
-## Prerrequisito de permisos
+> Esta guía usa un **workforce tenant**. El resultado del auto-registro será un usuario externo/Guest dentro del mismo directorio. No estamos creando un `external tenant` de CIAM.
 
-Para esta configuración, el usuario debe tener permisos suficientes en Microsoft Entra ID. La documentación actual de Microsoft indica usar una cuenta con al menos rol **User Administrator** para crear/configurar el flujo de self-service sign-up.
+---
 
-Si la opción no aparece, está deshabilitada o no se puede guardar, **no continuar con MSAL ni con código**. El problema está en tenant/permisos.
+## 0 · Antes de tocar la configuración
 
-## Paso 1 · Confirmar directorio correcto
+Debes haber completado:
 
-1. Abrir Microsoft Entra admin center.
-2. Revisar el directorio/tenant activo.
-3. Confirmar que coincide con el tenant usado por la App Registration de DSY1107.
-4. Anotar nuevamente:
-   - `Directory (tenant) ID`;
-   - nombre del tenant.
+- Etapa 0: cuenta Duoc + Azure for Students;
+- Etapa 1: tenant/directorio y permisos;
+- Etapa 2: App Registration de la SPA;
+- Etapa 3: API/scopes, si el ejercicio llegará al backend;
+- Etapa 4: al menos un Guest manual probado;
+- Etapa 4A: comprensión de manual vs self-service.
 
 ```mermaid
 flowchart TD
-    LOGIN[Entrar a Entra admin center] --> DIR{¿Tenant correcto?}
-    DIR -- No --> SWITCH[Cambiar directorio]
-    SWITCH --> DIR
-    DIR -- Sí --> PERM{¿Tengo permisos?}
-    PERM -- No --> STOP[Resolver permisos]
-    PERM -- Sí --> CONFIG[Continuar]
+    A[Guest manual funciona] --> B{¿Comprendo workforce B2B?}
+    B -- No --> BACK[Volver a 4A]
+    B -- Sí --> C[Habilitar self-service]
 ```
 
-## Paso 2 · Ir a configuración de colaboración externa
+---
 
-Ruta:
+## 1 · Roles y permisos: no confundir dos operaciones
+
+Microsoft documenta al menos **User Administrator** para crear/configurar el user flow de self-service.
+
+Sin embargo, la configuración de **External collaboration settings** puede requerir un rol con capacidad para modificar la política de colaboración externa, por ejemplo roles administrativos apropiados como `Global Administrator` o `External Identity Provider Administrator`, según la configuración y permisos efectivos del tenant.
+
+Por eso, no uses la frase “tengo Azure for Students, entonces tengo permiso”. Son capas distintas.
+
+```mermaid
+flowchart LR
+    SUB[Azure for Students] --> RES[Recursos Azure]
+    TENANT[Microsoft Entra tenant] --> RBAC[Roles Entra]
+    RBAC --> EXT[External collaboration settings]
+    RBAC --> UF[User flows]
+```
+
+### Check rápido
+
+Si puedes crear recursos Azure pero no puedes modificar External Identities, **eso no implica que Azure for Students esté malo**. Probablemente estás ante un problema de tenant/rol.
+
+---
+
+## 2 · Confirmar directorio correcto
+
+1. Abrir Microsoft Entra admin center.
+2. Revisar el directorio activo en la parte superior/datos de cuenta.
+3. Confirmar que coincide con el tenant de la App Registration de DSY1107.
+4. Abrir `Entra ID → Overview`.
+5. comparar `Tenant ID` con el `Directory (tenant) ID` guardado anteriormente.
+
+Resultado esperado:
+
+```text
+Tenant de Entra actual
+=
+Tenant usado por la SPA
+```
+
+Si no coincide, detenerse y cambiar de directorio.
+
+```mermaid
+flowchart TD
+    LOGIN[Entrar a Entra admin center] --> DIR{¿Tenant ID coincide?}
+    DIR -- No --> SWITCH[Cambiar directorio]
+    SWITCH --> DIR
+    DIR -- Sí --> PERM[Revisar permisos]
+```
+
+---
+
+## 3 · Confirmar que no estás operando como Guest en el tenant equivocado
+
+Un alumno puede ver más de un directorio y terminar administrando la aplicación desde un contexto donde aparece como `Guest`.
+
+Antes de continuar, revisa tu propio usuario en:
+
+`Entra ID → Users`
+
+Para el tenant que el grupo controla, identifica si eres:
+
+```text
+Member
+```
+
+o
+
+```text
+Guest
+```
+
+Si eres Guest y las opciones administrativas están bloqueadas, no intentes resolverlo desde MSAL o JavaScript.
+
+---
+
+## 4 · Abrir External collaboration settings
+
+Ruta actual:
 
 `Entra ID → External Identities → External collaboration settings`
 
-Buscar:
+Busca la opción:
 
 `Enable guest self-service sign up via user flows`
 
-## Paso 3 · Habilitar
+### Si la opción no existe
 
-Cambiar a:
+No avances.
 
-`Yes`
+Revisa:
 
-Luego seleccionar **Save**.
+1. estás en un **workforce tenant** correcto;
+2. tienes rol suficiente;
+3. no estás confundiendo el menú de un external tenant/CIAM;
+4. no estás en otro directorio asociado a la cuenta;
+5. la política del tenant no está bajo control de otro administrador.
 
-## Paso 4 · Verificar que la capacidad quedó disponible
+---
+
+## 5 · Habilitar self-service
+
+Cambiar:
+
+```text
+Enable guest self-service sign up via user flows
+```
+
+A:
+
+```text
+Yes
+```
+
+Seleccionar **Save**.
+
+No cierres inmediatamente la pantalla. Espera a que la operación confirme guardado y vuelve a leer el valor.
+
+### Checkpoint visual
+
+Debe permanecer:
+
+```text
+Yes
+```
+
+al refrescar/reingresar.
+
+---
+
+## 6 · Revisar restricciones de colaboración externa
+
+En la misma zona de External Identities pueden existir controles que condicionen colaboración, por ejemplo:
+
+- quién puede invitar invitados;
+- restricciones por dominio;
+- políticas B2B;
+- configuraciones cross-tenant cuando la identidad proviene de otra organización Entra.
+
+No cambies estas políticas indiscriminadamente para aprobar el lab.
+
+### Regla
+
+```mermaid
+flowchart TD
+    FAIL[Self-service falla] --> Q{¿La política bloquea el escenario?}
+    Q -- No --> KEEP[Mantener política]
+    Q -- Sí --> R{¿Tengo autoridad y objetivo pedagógico para cambiarla?}
+    R -- No --> DOC[Documentar limitación]
+    R -- Sí --> MIN[Cambio mínimo + evidencia]
+```
+
+Evita `allow all` como método de troubleshooting.
+
+---
+
+## 7 · Verificar que User flows está disponible
 
 Ir a:
 
 `Entra ID → External Identities → User flows`
 
-Debe aparecer la posibilidad de crear un nuevo user flow.
+Debe existir la opción:
 
-## Si no aparece la opción
+`New user flow`
 
-Revisar en este orden:
+No crees todavía el flujo si no preparaste Identity Providers y atributos.
 
-1. tenant equivocado;
-2. usuario sin rol suficiente;
-3. cuenta operando como Guest dentro de otro directorio;
-4. política del tenant que restringe colaboración externa;
-5. configuración de external collaboration más restrictiva de lo esperado.
+La secuencia correcta ahora es:
 
-No intentar arreglarlo cambiando la SPA a multitenant.
+```mermaid
+flowchart LR
+    ENABLE[Self-service = Yes] --> IDP[4B.1 · Identity Providers]
+    IDP --> ATTR[4B.2 · Atributos]
+    ATTR --> UF[4C · Crear user flow]
+```
+
+---
+
+## 8 · Troubleshooting por síntoma
+
+### “Veo External Identities, pero no puedo guardar”
+
+Probable frontera:
+
+```text
+rol / permisos administrativos
+```
+
+### “No veo User flows”
+
+Revisar:
+
+```text
+tenant correcto
+→ workforce tenant
+→ self-service habilitado
+→ permisos
+```
+
+### “Soy dueño de la suscripción Azure”
+
+Eso no demuestra que tengas el rol Entra requerido.
+
+Azure RBAC y roles Microsoft Entra son modelos relacionados pero distintos.
+
+### “Con otra cuenta sí aparece”
+
+Comparar:
+
+- tenant activo;
+- `User type`;
+- roles asignados;
+- directorio de origen.
+
+No asumir que es un problema del navegador.
+
+---
+
+## 9 · Evidencia mínima de esta etapa
+
+Captura o registro sanitizado que demuestre:
+
+- nombre del tenant, sin datos personales innecesarios;
+- self-service habilitado;
+- menú User flows disponible;
+- rol/permisos comprendidos, aunque no sea necesario publicar el listado completo de roles.
+
+No publicar:
+
+- tokens;
+- claves;
+- passwords;
+- códigos OTP;
+- credenciales cloud.
+
+---
 
 ## Checkpoint E4B
 
-- [ ] tenant correcto seleccionado;
-- [ ] permiso suficiente validado;
+- [ ] estoy en un workforce tenant;
+- [ ] Tenant ID coincide con la SPA;
+- [ ] sé si mi usuario es Member o Guest;
+- [ ] comprendo que Azure for Students no equivale a rol administrativo Entra;
 - [ ] `Enable guest self-service sign up via user flows = Yes`;
-- [ ] configuración guardada;
-- [ ] menú `External Identities → User flows` disponible.
+- [ ] el valor persiste al refrescar;
+- [ ] `External Identities → User flows` está disponible;
+- [ ] no flexibilicé políticas de colaboración sin necesidad.
 
-→ Continúa con [Etapa 4C · Crear el user flow](./04c-self-service-crear-user-flow.md).
+→ Continúa con [Etapa 4B.1 · Preparar Identity Providers](./04b1-self-service-identity-providers.md).
