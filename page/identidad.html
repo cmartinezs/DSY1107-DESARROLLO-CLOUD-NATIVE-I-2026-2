@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Guía navegable de identidad y acceso para DSY1107: Azure for Students, Microsoft Entra ID, Guest/B2B, self-service, MSAL, tokens y API Gateway." />
+  <title>Identidad y acceso · DSY1107</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="hero compact-hero">
+    <div class="container">
+      <p class="eyebrow">DSY1107 · Identity as a Service</p>
+      <h1>Identidad y acceso</h1>
+      <p class="lead">Ruta guiada desde Azure for Students y Microsoft Entra ID hasta usuarios externos, self-service sign-up, MSAL, access tokens y protección del backend.</p>
+      <div class="actions">
+        <a class="button primary" href="index.html">Inicio del curso</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/docs/identity">Documentación canónica</a>
+        <a class="button" href="progreso.html">Mi progreso</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="container layout">
+    <section class="card note">
+      <p class="eyebrow">Cómo usar esta guía</p>
+      <h2>Avanza por checkpoints, no por pantallas</h2>
+      <p>Si una etapa falla, no continúes con la siguiente. Primero identifica si el problema pertenece a cuenta/suscripción, tenant, permisos, App Registration, usuario externo, user flow, MSAL, token o API Gateway.</p>
+      <p><strong>Autoridad:</strong> esta página es una vista derivada. El detalle técnico mantenido vive en <code>docs/identity/</code>.</p>
+    </section>
+
+    <section class="card current-week">
+      <p class="eyebrow">Ruta completa</p>
+      <h2>De la cuenta al backend protegido</h2>
+      <pre class="mermaid">
+flowchart TD
+    A[0 · Cuenta Duoc + Azure for Students] --> B[1 · Tenant / directorio / permisos]
+    B --> C[2 · App Registration SPA]
+    C --> D[3 · API propia + scopes]
+    D --> E[4 · Guest/B2B manual]
+    E --> F[4A–4E · Self-service sign-up]
+    F --> G[5 · MSAL + PKCE]
+    G --> H[Access token para API propia]
+    H --> I[6 · AWS API Gateway]
+    I --> J[7 · Pruebas 401/403 + evidencia]
+      </pre>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <p class="eyebrow">Etapas 0–1</p>
+        <h2>Cuenta, suscripción y tenant</h2>
+        <p>Verifica que Azure for Students esté activo, distingue suscripción Azure de directorio Entra y confirma que estás en el tenant correcto con permisos suficientes antes de registrar aplicaciones.</p>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/docs/identity/entra-guia-completa">Abrir guía desde el inicio →</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Etapas 2–3</p>
+        <h2>SPA, API y scopes</h2>
+        <p>Registra la SPA como public client, configura redirect URI y registra/exhibe la API propia con scopes. No uses client secret en el navegador.</p>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/02-app-registration-spa.md">Ir a App Registration →</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Etapa 4</p>
+        <h2>Guest/B2B manual</h2>
+        <p>Primero incorpora explícitamente un compañero como Guest, completa la invitación y comprueba que un usuario externo puede autenticarse sin convertir la SPA a multitenant.</p>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/04-usuarios-externos.md">Abrir Guest/B2B →</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Etapas 4A–4E</p>
+        <h2>Self-service sign-up</h2>
+        <p>Después del Guest manual, evoluciona al auto-registro: habilita self-service, crea el user flow, asocia la aplicación y comprueba el aprovisionamiento del usuario externo.</p>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/04a-self-service-introduccion.md">Comenzar self-service →</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Etapa 5</p>
+        <h2>MSAL + Authorization Code + PKCE</h2>
+        <p>Con el entorno administrativo ya validado, integra MSAL en la SPA, autentica al usuario y solicita un access token destinado a la API propia.</p>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/05-msal-token.md">Abrir MSAL y token →</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Etapas 6–7</p>
+        <h2>API Gateway y pruebas</h2>
+        <p>Configura JWT Authorizer con issuer, audience y scopes coherentes. Demuestra casos sin token, token incorrecto, scope insuficiente y acceso autorizado.</p>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/06-api-gateway.md">Abrir API Gateway →</a>
+      </article>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow">Modelo mental</p>
+      <h2>Guest manual antes de self-service</h2>
+      <pre class="mermaid">
+flowchart LR
+    M[Admin invita Guest] --> U[Comprender tenant + Guest + aceptación]
+    U --> S[Usuario se auto-registra]
+    S --> L[Lifecycle administrado por IDaaS]
+      </pre>
+      <p>El auto-registro no reemplaza el concepto de usuario externo; automatiza su incorporación al lifecycle del directorio.</p>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow">Arquitectura</p>
+      <h2>Qué circula en el flujo completo</h2>
+      <pre class="mermaid">
+sequenceDiagram
+    actor U as Usuario
+    participant SPA as SPA
+    participant E as Microsoft Entra ID
+    participant GW as AWS API Gateway
+    participant API as Backend
+    U->>SPA: Abrir aplicación
+    SPA->>E: Authorization Code + PKCE
+    E-->>SPA: Access token para API propia
+    SPA->>GW: Authorization: Bearer token
+    GW->>GW: Validar firma + iss + aud + scope
+    GW->>API: Request autorizado
+    API-->>SPA: Respuesta
+      </pre>
+    </section>
+
+    <section class="card note">
+      <p class="eyebrow">Diagnóstico</p>
+      <h2>Primero identifica la frontera que falló</h2>
+      <ol class="topics">
+        <li><strong>No aparece Azure for Students:</strong> cuenta o suscripción.</li>
+        <li><strong>No aparece el tenant esperado:</strong> contexto de directorio.</li>
+        <li><strong>No puedo registrar app:</strong> permisos o política del tenant.</li>
+        <li><strong>El dueño entra y el compañero no:</strong> Guest, aceptación, assignment o tenant incorrecto.</li>
+        <li><strong>No aparece self-service/user flows:</strong> configuración o permisos administrativos.</li>
+        <li><strong>Login funciona pero API devuelve 401/403:</strong> token, issuer, audience o scope.</li>
+      </ol>
+      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/07-pruebas-troubleshooting.md">Abrir troubleshooting completo →</a>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow">Comparación IDaaS</p>
+      <h2>Entra y Firebase</h2>
+      <pre class="mermaid">
+flowchart TB
+    C[Capacidad: Identity as a Service]
+    C --> E[Microsoft Entra ID]
+    C --> F[Firebase Authentication]
+    E --> E1[Tenant + Member/Guest + user flows]
+    E --> E2[MSAL + OAuth2/OIDC + scopes]
+    F --> F1[Usuarios Firebase]
+    F --> F2[Email/Password + Google]
+      </pre>
+      <p>La meta no es memorizar proveedores: es comprender quién administra la identidad, cómo se obtiene el token y dónde se valida la autorización.</p>
+      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/firebase-auth-miniapp">Abrir laboratorio Firebase →</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <span>DSY1107 · Identidad y acceso · vista derivada de documentación canónica</span>
+      <a href="index.html">Inicio</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, securityLevel: 'strict' });
+  </script>
+</body>
+</html>
