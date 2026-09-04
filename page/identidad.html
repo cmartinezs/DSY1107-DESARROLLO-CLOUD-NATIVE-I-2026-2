@@ -23,16 +23,9 @@
   </header>
 
   <main id="main" class="container layout">
-    <section class="card note">
-      <p class="eyebrow">Regla de orden</p>
-      <h2>No mezclar provisioning avanzado con OAuth/API antes de tiempo</h2>
-      <p>La guía tiene dos partes. La extensión self-service comienza solo después de cerrar las pruebas y el troubleshooting del flujo base.</p>
-    </section>
+    <section class="card note"><p class="eyebrow">Regla de orden</p><h2>No mezclar provisioning avanzado con OAuth/API antes de tiempo</h2><p>La guía tiene dos partes. La extensión self-service comienza solo después de cerrar las pruebas y el troubleshooting del flujo base.</p></section>
 
-    <section class="card current-week">
-      <p class="eyebrow">Parte I · Flujo base</p>
-      <h2>Etapas 0–7</h2>
-      <pre class="mermaid">
+    <section class="card current-week"><p class="eyebrow">Parte I · Flujo base</p><h2>Etapas 0–7</h2><pre class="mermaid">
 flowchart TD
     A[0 · Cuenta + Azure for Students] --> B[1 · Tenant / permisos]
     B --> C[2 · SPA App Registration]
@@ -41,9 +34,7 @@ flowchart TD
     E --> F[5 · MSAL + PKCE + access token]
     F --> G[6 · API Gateway]
     G --> H[7 · Pruebas + troubleshooting + evidencia base]
-      </pre>
-      <p>Al terminar esta parte, el alumno ya debe poder distinguir tenant, Guest, login, access token, issuer, audience, scope, 401 y 403.</p>
-    </section>
+      </pre><p>Al terminar esta parte, el alumno ya debe poder distinguir tenant, Guest, login, access token, issuer, audience, scope, 401 y 403.</p></section>
 
     <section class="grid">
       <article class="card"><p class="eyebrow">Etapas 0–1</p><h2>Cuenta, suscripción y tenant</h2><p>Verifica Azure for Students, distingue suscripción Azure de directorio Entra y confirma tenant y permisos.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/docs/identity/entra-guia-completa">Abrir guía desde el inicio →</a></article>
@@ -52,10 +43,7 @@ flowchart TD
       <article class="card"><p class="eyebrow">Etapas 5–7</p><h2>MSAL, token, Gateway y pruebas</h2><p>Completa Authorization Code + PKCE, access token para la API propia, validación en Gateway y la primera matriz integral de troubleshooting/evidencia.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/05-msal-token.md">Continuar con MSAL →</a></article>
     </section>
 
-    <section class="card current-week">
-      <p class="eyebrow">Parte II · Extensión self-service B2B</p>
-      <h2>Etapas 8–14</h2>
-      <pre class="mermaid">
+    <section class="card current-week"><p class="eyebrow">Parte II · Extensión self-service B2B</p><h2>Etapas 8–14</h2><pre class="mermaid">
 flowchart TD
     A[8 · Comprender self-service] --> B[9 · Habilitar workforce tenant]
     B --> C[10 · Identity Providers]
@@ -63,17 +51,15 @@ flowchart TD
     D --> E[12 · Crear user flow]
     E --> F[13 · Asociar SPA + primer auto-registro]
     F --> G[14 · Segunda pasada integral de pruebas + troubleshooting + evidencia]
-      </pre>
-      <p>La extensión cambia el mecanismo de provisioning del Guest. MSAL, access token y Gateway se reutilizan y se prueban otra vez al final.</p>
-    </section>
+      </pre><p>La extensión cambia el mecanismo de provisioning del Guest. MSAL, access token y Gateway se reutilizan y se prueban otra vez al final.</p></section>
 
     <section class="grid">
-      <article class="card"><p class="eyebrow">Etapas 8–9</p><h2>Comprender y habilitar self-service</h2><p>Separa workforce B2B de CIAM y habilita <code>Enable guest self-service sign up via user flows</code> en el tenant correcto.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/04a-self-service-introduccion.md">Abrir extensión →</a></article>
-      <article class="card"><p class="eyebrow">Etapa 10</p><h2>Identity Providers</h2><p>Define con qué identidad se presentará el tercero. Empieza con un proveedor controlado antes de sumar alternativas.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/04b1-self-service-identity-providers.md">Preparar IdP →</a></article>
-      <article class="card"><p class="eyebrow">Etapa 11</p><h2>Atributos del primer alta</h2><p>Selecciona atributos built-in mínimos y usa custom attributes solo con un objetivo pedagógico explícito.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/04b2-self-service-atributos.md">Definir atributos →</a></article>
-      <article class="card"><p class="eyebrow">Etapa 12</p><h2>User flow</h2><p>Crea el flujo B2B, selecciona IdP y atributos, y revisa Page layouts sin confundir user flow con App Registration.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/04c-self-service-crear-user-flow.md">Crear user flow →</a></article>
-      <article class="card"><p class="eyebrow">Etapa 13</p><h2>Primer auto-registro real</h2><p>Asocia la SPA, usa una identidad inexistente y comprueba el estado antes/después: inexistente → sign-up → Guest → sign-in posterior.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/04d-self-service-asociar-aplicacion.md">Ejecutar sign-up →</a></article>
-      <article class="card"><p class="eyebrow">Etapa 14</p><h2>Segunda pasada integral</h2><p>Vuelve a probar provisioning, MSAL, token, Gateway y backend; además confirma que el Guest manual anterior no sufrió regresión.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/04e-self-service-pruebas-troubleshooting.md">Abrir pruebas finales →</a></article>
+      <article class="card"><p class="eyebrow">Etapas 8–9</p><h2>Comprender y habilitar self-service</h2><p>Separa workforce B2B de CIAM y habilita <code>Enable guest self-service sign up via user flows</code> en el tenant correcto.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/08-self-service-introduccion.md">Abrir extensión →</a></article>
+      <article class="card"><p class="eyebrow">Etapa 10</p><h2>Identity Providers</h2><p>Define con qué identidad se presentará el tercero. Empieza con un proveedor controlado antes de sumar alternativas.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/10-self-service-identity-providers.md">Preparar IdP →</a></article>
+      <article class="card"><p class="eyebrow">Etapa 11</p><h2>Atributos del primer alta</h2><p>Selecciona atributos built-in mínimos y usa custom attributes solo con un objetivo pedagógico explícito.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/11-self-service-atributos.md">Definir atributos →</a></article>
+      <article class="card"><p class="eyebrow">Etapa 12</p><h2>User flow</h2><p>Crea el flujo B2B, selecciona IdP y atributos, y revisa Page layouts sin confundir user flow con App Registration.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/12-self-service-crear-user-flow.md">Crear user flow →</a></article>
+      <article class="card"><p class="eyebrow">Etapa 13</p><h2>Primer auto-registro real</h2><p>Asocia la SPA, usa una identidad inexistente y comprueba el estado antes/después: inexistente → sign-up → Guest → sign-in posterior.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/13-self-service-asociar-aplicacion.md">Ejecutar sign-up →</a></article>
+      <article class="card"><p class="eyebrow">Etapa 14</p><h2>Segunda pasada integral</h2><p>Vuelve a probar provisioning, MSAL, token, Gateway y backend; además confirma que el Guest manual anterior no sufrió regresión.</p><a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/docs/identity/entra-guia-completa/14-self-service-pruebas-troubleshooting.md">Abrir pruebas finales →</a></article>
     </section>
 
     <section class="card"><p class="eyebrow">Modelo mental</p><h2>Qué cambia y qué permanece</h2><pre class="mermaid">
