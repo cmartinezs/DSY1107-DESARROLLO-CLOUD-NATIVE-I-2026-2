@@ -1,8 +1,10 @@
-# Etapa 7 · Matriz de pruebas, troubleshooting y evidencia
+# Etapa 7 · Matriz de pruebas, troubleshooting y evidencia base
 
 ## Objetivo
 
-Diagnosticar por capas y demostrar que el flujo completo funciona para más de un usuario.
+Diagnosticar por capas y demostrar que el **flujo base completo** funciona para más de un usuario antes de incorporar self-service sign-up.
+
+> Esta etapa cierra la Parte I de la guía. No se inicia la extensión de auto-registro mientras el circuito `Guest manual → MSAL → access token → Gateway → backend` no esté razonablemente estable y explicado.
 
 ## Matriz mínima
 
@@ -85,7 +87,7 @@ No reemplazar access token por ID token.
 
 Eso no prueba que la API deba confiar en él. Decodificar solo permite leer claims; el gateway debe verificar firma y contexto.
 
-## Evidencia requerida
+## Evidencia requerida de la Parte I
 
 El grupo debe conservar evidencia sanitizada de:
 
@@ -112,17 +114,40 @@ El grupo debe conservar evidencia sanitizada de:
 - AWS credentials;
 - certificados/keys privadas.
 
-## Criterio de término
+## Gate de cierre de la Parte I
 
-El flujo no se considera terminado porque el dueño del tenant pueda iniciar sesión. Debe demostrarse el circuito completo:
+El flujo base no se considera terminado porque el dueño del tenant pueda iniciar sesión. Debe demostrarse el circuito completo:
 
-```text
-Member + Guest
-→ SPA
-→ Entra ID
-→ access token para API propia
-→ API Gateway valida
-→ backend recibe request autorizado
+```mermaid
+flowchart LR
+    M[Member] --> SPA[SPA]
+    G[Guest manual] --> SPA
+    SPA --> ENTRA[Entra ID]
+    ENTRA --> TOKEN[Access token API propia]
+    TOKEN --> GW[API Gateway]
+    GW --> API[Backend autorizado]
 ```
 
-← [Volver al índice](./README.md).
+Antes de abrir self-service, el estudiante debería poder responder sin adivinar:
+
+- dónde vive el tenant;
+- qué representa el Guest;
+- qué hace MSAL;
+- qué token se envía a la API;
+- qué valida el Gateway;
+- por qué una falla produce 401/403;
+- en qué capa buscar primero cada síntoma.
+
+## Qué ocurre después
+
+Una vez cerrado este gate se abre una **extensión separada**. No se vuelve atrás a reordenar la Parte I.
+
+```mermaid
+flowchart LR
+    BASE[Etapas 0–7 · flujo base cerrado] --> EXT[Etapas 8–13 · incorporar self-service]
+    EXT --> RETEST[Etapa 14 · segunda pasada completa de pruebas]
+```
+
+La Etapa 14 volverá a comprobar token, Gateway y backend, pero ahora con un Guest aprovisionado por self-service, además de verificar que el Guest manual anterior siga funcionando.
+
+→ Continúa con [Etapa 8 · Extensión: auto-registro de usuarios externos](./04a-self-service-introduccion.md).
