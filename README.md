@@ -10,9 +10,9 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 - [`examples/`](examples/) — ejemplos demostrativos independientes del proyecto transversal.
 - [`labs/`](labs/) — laboratorios locales, autocontenidos e independientes del proyecto formativo.
 - [`proyecto-formativo/`](proyecto-formativo/) — **RegistrApp**, vertical transversal independiente que evoluciona clase a clase.
-- [`docs/identity/`](docs/identity/) — dominio canónico de identidad y acceso: Azure for Students, Entra ID, Guest/B2B, self-service, MSAL, tokens y API Gateway.
+- [`docs/identity/`](docs/identity/) — dominio canónico de identidad y acceso: Azure for Students, Entra ID, Guest/B2B, MSAL, tokens, API Gateway y extensión self-service B2B.
 - [`page/`](page/) — portal web del curso, superficie derivada y navegable.
-- [**Guía completa de Microsoft Entra ID**](docs/identity/entra-guia-completa/README.md) — ruta por etapas desde la cuenta hasta la API protegida.
+- [**Guía completa de Microsoft Entra ID**](docs/identity/entra-guia-completa/README.md) — flujo base 0–7 y extensión self-service 8–14.
 - [**Versión web · Identidad y acceso**](page/identidad.html) — read model para estudiantes con navegación progresiva y diagramas Mermaid.
 - [**Estrategia de laboratorios y relación con AVA**](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md) — labs locales en el repo; ejercicios/labs cloud institucionales en AVA.
 - [**Estándar de repositorio del estudiante**](docs/ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — nombre, estructura, packages, Markdown, labs Cloud Native y entregas colaborativas.
@@ -137,8 +137,9 @@ No se sincronizan artificialmente: cada sección registra su último checkpoint 
 Esta semana debe:
 
 - cerrar **1.2.5–1.2.8**: usuarios externos, seguridad en API Manager, JWT/Claims y decodificación de tokens;
-- trabajar la ruta operativa **Azure for Students → tenant/permisos → SPA/API registrations → Guest/B2B → self-service sign-up**;
-- continuar con **1.3.1–1.3.4**: MSAL, MSAL en frontend, Spring Security en backend y arquitecturas seguras en la nube;
+- trabajar primero el flujo base **Azure for Students → tenant/permisos → SPA/API registrations → Guest/B2B manual → MSAL/PKCE → access token → Gateway → pruebas 401/403**;
+- estudiar **self-service sign-up B2B como extensión posterior**, una vez cerrado y diagnosticable el circuito base;
+- ejecutar una segunda pasada integral de pruebas/evidencia después de incorporar self-service;
 - comparar Microsoft Entra ID con Firebase Authentication como implementaciones de la capacidad IDaaS;
 - revisar con los estudiantes la **Evaluación Parcial 1**, su rúbrica, condiciones de entrega y la ventana planificada de semanas 6–7;
 - aclarar que **Pedidos360** es el nombre de referencia usado en el documento institucional, mientras que cada grupo aplica los requisitos a su proyecto real.
@@ -150,12 +151,14 @@ flowchart TD
     A[Azure for Students] --> B[Tenant / directorio / permisos]
     B --> C[SPA + API registrations]
     C --> D[Guest/B2B manual]
-    D --> E[Self-service sign-up]
-    E --> F[Authorization Code + PKCE / MSAL]
-    F --> G[Access token para API propia]
-    G --> H[API Gateway]
-    H --> I[Spring Security Resource Server]
-    I --> J[Scopes / 401 / 403 / arquitectura segura]
+    D --> E[Authorization Code + PKCE / MSAL]
+    E --> F[Access token para API propia]
+    F --> G[API Gateway]
+    G --> H[Spring Security / backend]
+    H --> I[Pruebas base / 401 / 403 / evidencia]
+    I --> J[Extensión self-service B2B]
+    J --> K[IdP + atributos + user flow + provisioning]
+    K --> L[Segunda pasada integral de pruebas + no regresión]
 ```
 
 Consulta [`docs/identity/`](docs/identity/) para la fuente canónica del dominio, [`page/identidad.html`](page/identidad.html) para la vista web derivada, [`semanas/semana-04/`](semanas/semana-04/) para el contexto curricular, [`labs/`](labs/) para práctica y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
