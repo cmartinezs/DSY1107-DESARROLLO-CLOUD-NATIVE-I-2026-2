@@ -150,4 +150,4 @@ flowchart LR
 
 La Etapa 14 volverá a comprobar token, Gateway y backend, pero ahora con un Guest aprovisionado por self-service, además de verificar que el Guest manual anterior siga funcionando.
 
-→ Continúa con [Etapa 8 · Extensión: auto-registro de usuarios externos](./04a-self-service-introduccion.md).
+→ Continúa con [Etapa 8 · Extensión: auto-registro de usuarios externos](./08-self-service-introduccion.md).
