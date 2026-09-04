@@ -1,6 +1,6 @@
 # Identidad y acceso · DSY1107
 
-Este dominio concentra la documentación canónica relacionada con **Identity as a Service**, Microsoft Entra ID, usuarios internos/externos, OAuth2/OIDC, MSAL, emisión de tokens y protección de APIs.
+Este dominio concentra la documentación canónica relacionada con **Identity as a Service**, Microsoft Entra ID, usuarios internos/externos, OAuth2/OIDC, MSAL, emisión de tokens, protección de APIs y extensiones de lifecycle como self-service B2B.
 
 > La documentación de este dominio es canónica para el detalle técnico. La web del curso es una vista derivada y navegable; si difiere de estos documentos, debe considerarse desactualizada y corregirse.
 
@@ -10,20 +10,24 @@ Este dominio concentra la documentación canónica relacionada con **Identity as
 
 → [Guía completa por etapas](./entra-guia-completa/README.md)
 
-La ruta parte desde cuenta Duoc + Azure for Students y avanza por checkpoints verificables:
+La guía se divide en dos partes.
 
 ```mermaid
 flowchart TD
-    A[Cuenta + Azure for Students] --> B[Tenant / directorio / permisos]
-    B --> C[SPA App Registration]
-    C --> D[API + scopes]
+    A[PARTE I · Flujo base] --> B[Cuenta + Azure for Students]
+    B --> C[Tenant / directorio / permisos]
+    C --> D[SPA + API registrations]
     D --> E[Guest/B2B manual]
-    E --> F[Self-service sign-up]
-    F --> G[MSAL + Authorization Code + PKCE]
-    G --> H[Access token API propia]
-    H --> I[AWS API Gateway]
-    I --> J[Pruebas 401/403 + evidencia]
+    E --> F[MSAL + PKCE + access token]
+    F --> G[AWS API Gateway]
+    G --> H[Pruebas + troubleshooting + evidencia base]
+    H --> I[PARTE II · Extensión self-service B2B]
+    I --> J[Habilitar tenant + IdP + atributos]
+    J --> K[User flow + asociar SPA + provisioning]
+    K --> L[Segunda pasada integral de pruebas + evidencia]
 ```
+
+La extensión self-service **no se intercala antes de MSAL**. Se trabaja después de cerrar el flujo base para que el alumno pueda aislar provisioning de autenticación/token/API.
 
 ### Caso específico · usuarios externos + SPA + API Gateway
 
