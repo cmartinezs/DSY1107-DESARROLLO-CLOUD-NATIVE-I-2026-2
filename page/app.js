@@ -23,13 +23,15 @@ if (currentWeek) {
   const selector = document.createElement('section');
   selector.className = 'card';
   selector.innerHTML = `
-    <p class="eyebrow">Avance real por sección</p>
-    <h2>Selecciona tu sección</h2>
-    <p>El horizonte curricular de Semana 4 es común, pero 002D y 003D deben continuar desde su último checkpoint demostrable. Que un contenido esté publicado no significa que ya se haya ejecutado en aula.</p>
+    <p class="eyebrow">Cierre real por sección</p>
+    <h2>002D y 003D se reconcilian por evidencia</h2>
+    <p>La planificación de Semana 4 no equivale a ejecución. Ambas secciones están actualmente en <strong>PENDING_EVIDENCE</strong> hasta registrar qué gate quedó realmente verde.</p>
     <p>
       <a class="text-link" href="?seccion=002D">Ver DSY1107-002D →</a>
       &nbsp;&nbsp;·&nbsp;&nbsp;
       <a class="text-link" href="?seccion=003D">Ver DSY1107-003D →</a>
+      &nbsp;&nbsp;·&nbsp;&nbsp;
+      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-05/00-entrada-desde-semana-04.md">Entrada Semana 5 →</a>
     </p>
   `;
 
@@ -38,20 +40,20 @@ if (currentWeek) {
   if (selectedSection === '002D') {
     detail.innerHTML = `
       <hr />
-      <p class="eyebrow">DSY1107-002D</p>
-      <h2>Semana 4 · planificación</h2>
-      <p>Consulta el plan de la sección y actualízalo únicamente con evidencia real de clase.</p>
-      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/DSY1107-002D.md">Abrir planificación Semana 4 →</a>
+      <p class="eyebrow">DSY1107-002D · 2 módulos</p>
+      <h2>Cierre pendiente de evidencia</h2>
+      <p>El plan priorizó checkpoint OAuth2/OIDC + JWT e inicio de Firebase Email/Password. No se asume Google, MSAL, Full Stack ni transferencia a RegistrApp.</p>
+      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/DSY1107-002D.md">Abrir cierre/plan 002D →</a>
     `;
   }
 
   if (selectedSection === '003D') {
     detail.innerHTML = `
       <hr />
-      <p class="eyebrow">DSY1107-003D</p>
-      <h2>Semana 4 · planificación</h2>
-      <p>Consulta el plan de la sección y actualízalo únicamente con evidencia real de clase.</p>
-      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/DSY1107-003D.md">Abrir planificación Semana 4 →</a>
+      <p class="eyebrow">DSY1107-003D · 4 módulos</p>
+      <h2>Cierre pendiente de evidencia</h2>
+      <p>El plan permitía avanzar desde Firebase hacia Google y Entra/MSAL, pero el mayor tiempo disponible no se transforma en avance declarado sin evidencia.</p>
+      <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/DSY1107-003D.md">Abrir cierre/plan 003D →</a>
     `;
   }
 
