@@ -30,27 +30,28 @@
       <div class="section-heading">
         <div>
           <p class="eyebrow">Esta semana · Semana 4 · 31 agosto–5 septiembre</p>
-          <h2>Identity as a Service → Full Stack seguro</h2>
+          <h2>Identity as a Service → Full Stack seguro → transferencia a RegistrApp</h2>
         </div>
         <span class="badge">Semana 4</span>
       </div>
 
       <ol class="topics">
         <li><strong>1 · Configura identidad correctamente.</strong> Verifica Azure for Students, tenant/directorio y permisos antes de registrar aplicaciones.</li>
-        <li><strong>2 · Trabaja usuarios externos.</strong> Comprende Guest/B2B manual y luego evoluciona a self-service sign-up mediante user flows.</li>
+        <li><strong>2 · Trabaja usuarios externos.</strong> Comprende Guest/B2B manual y trata self-service como extensión posterior.</li>
         <li><strong>3 · Practica IDaaS con Firebase.</strong> Construye Email/Password completo y luego Google Sign-In para comparar modelos administrados.</li>
         <li><strong>4 · Conecta el frontend con identidad.</strong> Usa MSAL, Authorization Code + PKCE, scopes y distingue ID token de access token.</li>
-        <li><strong>5 · Protege la API.</strong> Valida issuer, audience, expiración y scopes en API Gateway/backend y razona sobre 401/403.</li>
-        <li><strong>6 · Integra la arquitectura.</strong> Ubica responsabilidades entre SPA, Identity Provider, Gateway y backend.</li>
+        <li><strong>5 · Protege la API.</strong> Usa dos App Registrations, valida issuer, audience y scope en Gateway y backend, y razona sobre 401/403.</li>
+        <li><strong>6 · Transfiere solo después del gate.</strong> Lleva el patrón a RegistrApp de forma incremental; self-service no bloquea la integración base.</li>
       </ol>
 
-      <p><strong>Al terminar deberías poder explicar:</strong> quién administra la identidad, cómo se incorpora un usuario externo, cómo se automatiza ese lifecycle, qué token necesita una API propia y qué componente valida cada frontera.</p>
+      <p><strong>Al terminar deberías poder explicar:</strong> qué pertenece al dominio Identity, qué valida el laboratorio Full Stack y qué cambios se transfirieron realmente al proyecto formativo.</p>
 
       <div class="actions">
         <a class="button primary" href="identidad.html">Guía de identidad</a>
         <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-04">Contenido Semana 4</a>
         <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/firebase-auth-miniapp">Lab Firebase Auth</a>
         <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/fullstack-seguro">Laboratorio Full Stack</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/proyecto-formativo/semana-04">Transferencia RegistrApp</a>
         <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/blob/master/semanas/semana-04/05-evaluacion-parcial-1.md">Parcial 1</a>
         <a class="button" href="progreso.html">✓ Ver mi progreso</a>
       </div>
@@ -62,6 +63,13 @@
         <h2>Microsoft Entra ID</h2>
         <p>Guía por etapas desde cuenta Duoc + Azure for Students hasta tenant, App Registrations, Guest/B2B, self-service, MSAL, tokens y API Gateway.</p>
         <a class="text-link" href="identidad.html">Abrir guía navegable →</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Proyecto formativo</p>
+        <h2>RegistrApp · transferencia Semana 4</h2>
+        <p>Consume Identity y Full Stack seguro. La integración base exige dos App Registrations, token para API propia y pruebas 401/403/2xx; self-service queda como extensión posterior.</p>
+        <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/proyecto-formativo/semana-04">Abrir checkpoint RegistrApp →</a>
       </article>
 
       <article class="card">
@@ -117,9 +125,10 @@
     <section class="card note">
       <h2>¿Dónde encuentro cada cosa?</h2>
       <p><strong>Documentación canónica de identidad:</strong> <code>docs/identity/</code>.</p>
-      <p><strong>Portal web:</strong> vista derivada y navegable para estudiantes; no reemplaza la fuente canónica.</p>
+      <p><strong>Laboratorio Full Stack:</strong> <code>labs/fullstack-seguro/</code>; integra y prueba el patrón.</p>
+      <p><strong>RegistrApp:</strong> <code>proyecto-formativo/semana-04/</code>; adapta únicamente competencias ya validadas.</p>
+      <p><strong>Portal web:</strong> vista derivada y navegable para estudiantes; no reemplaza las fuentes canónicas.</p>
       <p><strong>Material público:</strong> archivos originales de la asignatura.</p>
-      <p><strong>Repositorio docente:</strong> contenido consolidado, ejemplos, laboratorios y material de apoyo.</p>
       <p><strong>Repositorio del estudiante:</strong> estructura personal de trabajo y entrega; no copia la organización semanal del repo docente.</p>
       <p><strong>AVA:</strong> actividades y comunicaciones institucionales.</p>
     </section>
