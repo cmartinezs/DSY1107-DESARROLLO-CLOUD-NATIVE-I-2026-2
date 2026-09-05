@@ -1,82 +1,109 @@
 # RegistrApp · Checkpoint Semana 4
 
-## Entrada
+## Propósito
 
-Estado acumulado y verificable de Semana 3. Este checkpoint no autoriza a asumir que todos los contenidos curriculares fueron cubiertos: cada sección parte desde su último estado real.
-
-## Competencias potencialmente transferibles
-
-Cuando hayan sido comprendidas fuera de RegistrApp, pueden transferirse:
-
-- Authorization Code + PKCE;
-- configuración de cliente frontend con MSAL;
-- obtención y uso correcto de access token;
-- usuarios externos Guest/B2B en Microsoft Entra ID para una aplicación single-tenant;
-- protección de API con Spring Security Resource Server;
-- scopes/claims y decisiones 401/403;
-- separación de responsabilidades frontend / IdP / gateway / backend;
-- controles básicos de arquitectura segura.
-
-## Checkpoint específico · acceso de integrantes del grupo
-
-Si el tenant y la App Registration fueron creados por un integrante y los demás compañeros no pertenecen al directorio, el escenario inicial esperado es:
+Semana 4 no vuelve a enseñar identidad ni seguridad Full Stack dentro de RegistrApp. El proyecto formativo **recibe competencias ya validadas** en los dominios y laboratorios canónicos del repositorio y las adapta al contexto real del grupo.
 
 ```mermaid
 flowchart LR
-    OWNER[Integrante dueño\nMember] --> TENANT[Entra tenant]
-    G1[Compañero 1\nGuest/B2B] --> TENANT
-    G2[Compañero 2\nGuest/B2B] --> TENANT
-    TENANT --> SPA[SPA single-tenant]
-    SPA --> TOKEN[Access token para API propia]
-    TOKEN --> GW[AWS API Gateway]
-    GW --> API[Backend]
+    ID[docs/identity · autoridad de identidad] --> LAB[labs/fullstack-seguro · práctica integrada]
+    LAB --> GATE{¿Patrón comprendido y probado?}
+    GATE -- No --> BACK[Volver a guía/lab]
+    GATE -- Sí --> REG[Transferir a RegistrApp]
 ```
 
-No se debe cambiar automáticamente la aplicación a multitenant para resolver el acceso de compañeros. En esta etapa, el objetivo es evidenciar que el tenant controla qué usuarios externos incorpora.
+## Autoridades que consume este checkpoint
 
-Procedimiento, troubleshooting y validación completa:
+- [Identity & Access · dominio canónico](../../docs/identity/README.md)
+- [Guía Entra completa · Parte I 0–7 y Parte II 8–14](../../docs/identity/entra-guia-completa/README.md)
+- [Laboratorio Full Stack seguro](../../labs/fullstack-seguro/README.md)
+- [Semana 4 · horizonte curricular](../../semanas/semana-04/README.md)
 
-→ [Guía · Microsoft Entra ID, usuarios externos, SPA y API Gateway](../../docs/identity/entra-usuarios-externos-spa-api-gateway.md)
+RegistrApp no redefine esas fuentes.
 
-### Evidencia mínima del checkpoint de identidad
+---
 
-1. App Registration de la SPA configurada como single-tenant;
-2. integrante dueño visible como Member;
-3. al menos un compañero visible como Guest;
-4. invitación aceptada;
-5. login exitoso del Member y del Guest;
-6. access token solicitado para la API propia, no para Microsoft Graph;
-7. request con `Authorization: Bearer ...` hacia API Gateway;
-8. evidencia de un caso autorizado y uno rechazado;
-9. explicación breve de `issuer`, `audience` y scope usado.
+# Gate A · Transferencia base
 
-## Incremento esperado
+Este gate corresponde al aprendizaje obligatorio antes de integrar el patrón en RegistrApp.
 
-No existe un incremento obligatorio único. El estudiante debe seleccionar solo los cambios habilitados por lo realmente aprendido y justificar su incorporación al proyecto.
+Debe existir evidencia defendible de:
 
-Ejemplos válidos de incremento, si corresponde:
+1. tenant/directorio correcto y permisos conocidos;
+2. **dos App Registrations**: SPA client y API resource;
+3. SPA single-tenant configurada como public client, sin `client_secret`;
+4. API propia con scope explícito;
+5. al menos un integrante externo incorporado como Guest/B2B manual cuando aplique;
+6. MSAL + Authorization Code + PKCE funcionando;
+7. access token solicitado para la **API propia**, no para Microsoft Graph;
+8. API Gateway/JWT Authorizer validando issuer, audience y scope;
+9. Spring Security Resource Server validando el token y aplicando autorización;
+10. casos reproducibles 401, 403 y 2xx;
+11. evidencia sanitizada y DevLog.
 
-- proteger un endpoint previamente público;
-- incorporar autenticación de usuario en frontend;
-- permitir que los integrantes reales del grupo accedan mediante Guest/B2B;
-- definir y aplicar un scope mínimo;
-- corregir una frontera de seguridad detectada en el diseño;
-- documentar el flujo completo de acceso a una capacidad existente.
+```mermaid
+flowchart LR
+    MEMBER[Member] --> SPA[RegistrApp SPA]
+    GUEST[Guest manual] --> SPA
+    SPA --> ENTRA[Microsoft Entra ID]
+    ENTRA --> TOKEN[Access token API RegistrApp]
+    TOKEN --> GW[API Gateway]
+    GW --> API[RegistrApp API · Spring Security]
+```
 
-## Evidencia
+**Solo después de cerrar este gate se considera válida la transferencia base.**
 
-Registrar:
+---
 
-1. estado antes del cambio;
-2. competencia nueva que habilitó el cambio;
-3. archivos/commits modificados;
-4. prueba funcional o técnica;
-5. comportamiento 401/403 cuando aplique;
-6. decisión técnica y deuda pendiente;
-7. DevLog.
+# Gate B · Extensión self-service B2B
 
-## Salida
+El auto-registro de terceros pertenece a una **extensión posterior** y no bloquea la transferencia base.
 
-El estado final de Semana 4 se convierte en la entrada de Semana 5. Si no hubo incremento, se conserva el último estado válido y se documenta la razón.
+Se trabaja solo si:
 
-> RegistrApp es transferencia del aprendizaje; no es el dominio usado para enseñar por primera vez MSAL, Spring Security o arquitectura segura.
+- el Gate A está cerrado;
+- el tenant y los roles permiten configurar External Identities/User flows;
+- existe tiempo/objetivo pedagógico para extender el lifecycle.
+
+Puede incorporar:
+
+- self-service habilitado;
+- Identity Provider deliberadamente seleccionado;
+- atributos mínimos;
+- user flow;
+- SPA asociada;
+- usuario nuevo → sign-up → Guest;
+- segundo acceso → sign-in;
+- segunda batería integral de pruebas;
+- no regresión del Guest manual.
+
+Si el tenant no permite self-service, el grupo **documenta la limitación** y mantiene el Gate A como estado válido.
+
+---
+
+## Ruta de transferencia
+
+1. [Guía operativa de identidad para RegistrApp](./guia-operativa-identidad-entra.md)
+2. [Mapeo de arquitectura Full Stack a RegistrApp](./01-mapeo-transferencia-fullstack.md)
+3. [Plan de integración incremental](./02-plan-integracion-registrapp.md)
+4. [Pruebas y evidencia del incremento](./03-pruebas-evidencia.md)
+
+## Regla de cambio mínimo
+
+No migrar simultáneamente identidad, gateway, backend y reglas de negocio sin checkpoints intermedios.
+
+```mermaid
+flowchart TD
+    A[Estado RegistrApp conocido] --> B[Agregar/validar SPA + identidad]
+    B --> C[Obtener token de API propia]
+    C --> D[Proteger Gateway]
+    D --> E[Proteger backend]
+    E --> F[Ejecutar matriz]
+    F --> G[Conservar incremento válido]
+```
+
+## Salida de Semana 4
+
+El estado final se convierte en entrada de Semana 5. Si una capacidad no alcanzó gate, se conserva el último estado válido y se documentan causa, evidencia y deuda pendiente.
+
+> RegistrApp es transferencia del aprendizaje; no es el lugar donde se explica por primera vez MSAL, Entra, JWT Authorizer o Spring Security Resource Server.
