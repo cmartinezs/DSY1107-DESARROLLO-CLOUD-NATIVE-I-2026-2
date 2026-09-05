@@ -37,6 +37,18 @@ sections:
         - "MSAL"
         - "Spring Security Resource Server"
         - "integración Full Stack completa"
+    closure:
+      status: pending_evidence
+      execution_claimed: false
+      lab_checkpoint: unknown_until_evidence
+      next_entry: semanas/semana-05/00-entrada-desde-semana-04.md
+      claimed_capabilities: []
+      not_claimed:
+        - "Google Sign-In"
+        - "Entra/MSAL"
+        - "access token para API propia"
+        - "Full Stack seguro"
+        - "transferencia RegistrApp"
     curricular_progress:
       planned_topics:
         - "1.2.5 usuarios externos"
@@ -54,6 +66,7 @@ sections:
     evidence:
       class_practice_available: true
       labs_available: true
+      post_class_evidence_recorded: false
     formative_project:
       name: RegistrApp
       status: in_progress
@@ -103,6 +116,21 @@ sections:
         - "MSAL Login completo si setup queda verde"
         - "access token para API propia"
         - "Spring Security Resource Server"
+    closure:
+      status: pending_evidence
+      execution_claimed: false
+      lab_checkpoint: unknown_until_evidence
+      next_entry: semanas/semana-05/00-entrada-desde-semana-04.md
+      claimed_capabilities: []
+      not_claimed:
+        - "Firebase Email/Password end-to-end"
+        - "Google Sign-In"
+        - "Guest/B2B funcional"
+        - "MSAL login"
+        - "access token para API propia"
+        - "Full Stack seguro"
+        - "transferencia RegistrApp"
+        - "self-service B2B"
     curricular_progress:
       planned_topics:
         - "1.2.5 usuarios externos"
@@ -125,6 +153,7 @@ sections:
       labs_available: true
       msal_step_by_step_available: true
       external_guest_troubleshooting_available: true
+      post_class_evidence_recorded: false
     formative_project:
       name: RegistrApp
       status: in_progress
@@ -136,6 +165,7 @@ sections:
 course_specific:
   official_scope_reconciled: true
   friday_timetable_reconciled: true
+  week5_entry_checkpoint: semanas/semana-05/00-entrada-desde-semana-04.md
   closes_activity_1_2:
     - "1.2.5"
     - "1.2.6"
