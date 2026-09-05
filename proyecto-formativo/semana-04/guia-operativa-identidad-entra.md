@@ -1,61 +1,114 @@
-# RegistrApp · guía operativa de identidad Microsoft Entra
+# RegistrApp · guía operativa de transferencia de identidad
 
-Antes de implementar autenticación o protección de endpoints en RegistrApp, completar la guía canónica:
+Esta guía **no reemplaza** la documentación canónica de Microsoft Entra ID. Su función es indicar cuándo y cómo una competencia ya validada puede trasladarse a RegistrApp.
 
-→ **[Microsoft Entra ID · guía completa por etapas](../../docs/identity/entra-guia-completa/README.md)**
+→ [Identity & Access · dominio canónico](../../docs/identity/README.md)  
+→ [Guía completa por etapas](../../docs/identity/entra-guia-completa/README.md)
 
-## Gates para transferir al proyecto
+## Regla principal
 
-El grupo no debe copiar directamente configuración a RegistrApp hasta demostrar:
-
-1. Azure for Students y cuenta correctos;
-2. tenant/directorio correcto y permisos suficientes;
-3. SPA single-tenant registrada;
-4. API propia registrada y scope expuesto;
-5. integrantes externos incorporados primero como Guest/B2B manual;
-6. Member y Guest manual pueden autenticarse;
-7. self-service sign-up habilitado cuando el tenant/permisos lo permiten;
-8. user flow creado y asociado a la SPA;
-9. un usuario externo nuevo puede auto-registrarse y aparece como Guest;
-10. el mismo usuario puede volver a entrar posteriormente mediante sign-in;
-11. SPA obtiene access token para la API propia;
-12. API Gateway rechaza request sin token;
-13. API Gateway acepta token correcto;
-14. existe al menos un caso negativo de audience/scope/token.
+RegistrApp puede transferir el **flujo base** cuando la Parte I de la guía Identity (`0–7`) esté cerrada. La Parte II (`8–14`, self-service B2B) es una extensión posterior y **no es requisito para considerar válida la integración base**.
 
 ```mermaid
 flowchart TD
-    LAB[Competencia validada fuera de RegistrApp] --> M[Guest manual]
-    M --> S[Self-service Guest]
-    S --> G{Gates de identidad completos}
-    G -- No --> FIX[Corregir guía/lab]
-    G -- Sí --> REG[Transferir patrón a RegistrApp]
+    P1[Identity Parte I · 0–7] --> G1{Gate base cerrado}
+    G1 -- No --> FIX[Volver a Identity/lab]
+    G1 -- Sí --> REG[Transferencia base a RegistrApp]
+    REG --> P2{¿Se trabajará extensión self-service?}
+    P2 -- No --> DONE[Estado base válido]
+    P2 -- Sí --> EXT[Identity Parte II · 8–14]
+    EXT --> REG2[Transferir extensión y repetir pruebas]
 ```
 
-## Qué se transfiere realmente
+---
 
-RegistrApp no necesita copiar todas las pantallas administrativas de Entra. Lo transferible es el **patrón arquitectónico y la configuración correspondiente**:
+## Gate base de identidad
+
+Antes de transferir al proyecto deben estar defendibles:
+
+- tenant/directorio correcto;
+- SPA App Registration;
+- API App Registration separada;
+- scope de API propia;
+- Guest/B2B manual cuando sea necesario para los integrantes;
+- MSAL + Authorization Code + PKCE;
+- access token para la API propia;
+- issuer, audience y scope comprendidos;
+- API Gateway/JWT Authorizer probado;
+- 401/403/2xx explicables.
+
+### Dos App Registrations
+
+RegistrApp debe preservar esta separación:
 
 ```mermaid
 flowchart LR
-    U[Usuario externo] --> IDP[Entra External ID]
-    IDP -->|manual o self-service| G[Guest en tenant]
-    G --> SPA[SPA]
-    SPA --> TOKEN[Access token para API]
-    TOKEN --> GW[AWS API Gateway]
-    GW --> API[Backend RegistrApp]
+    SPAAPP[App Registration · RegistrApp SPA] --> MSAL[MSAL public client]
+    APIAPP[App Registration · RegistrApp API] --> SCOPE[Scope API]
+    MSAL --> TOKEN[Solicita token para APIAPP]
+    TOKEN --> GW[API Gateway]
+    GW --> API[RegistrApp Backend]
+```
+
+No reutilizar la SPA como si fuera también el recurso API por conveniencia.
+
+---
+
+## Acceso de compañeros
+
+Para una app single-tenant, el mecanismo base esperado sigue siendo Guest/B2B manual si otros integrantes no son Members del tenant.
+
+```mermaid
+flowchart LR
+    OWNER[Member] --> T[Tenant]
+    G1[Guest integrante 1] --> T
+    G2[Guest integrante 2] --> T
+    T --> SPA[RegistrApp SPA]
+```
+
+No cambiar a multitenant solo para resolver el acceso del equipo.
+
+---
+
+## Extensión self-service
+
+Solo después del flujo base puede agregarse:
+
+- self-service B2B;
+- Identity Provider;
+- atributos;
+- user flow;
+- asociación de la SPA;
+- alta automática de un Guest;
+- segunda pasada completa de pruebas.
+
+Si el tenant o los roles no permiten esta configuración, registrar la restricción. **No degrada el Gate base**.
+
+## Qué se transfiere realmente
+
+No se copian pantallas administrativas. Se transfieren decisiones y configuración del patrón:
+
+```mermaid
+flowchart LR
+    U[Usuario RegistrApp] --> SPA[SPA]
+    SPA --> IDP[Entra ID]
+    IDP --> TOKEN[Access token RegistrApp API]
+    TOKEN --> GW[API Gateway]
+    GW --> API[Spring Resource Server]
+    API --> DOMAIN[Autorización de negocio]
 ```
 
 ## Evidencia en RegistrApp
 
-Registrar en DevLog:
+La evidencia del proyecto debe mostrar:
 
-- qué mecanismo de incorporación de usuarios se utilizó;
-- si se probó Guest manual y self-service;
-- qué App Registrations/scopes se utilizan, sin secretos;
-- evidencia sanitizada del Guest aprovisionado;
-- pruebas 401/403;
-- diferencias observadas entre sign-up inicial y sign-in posterior;
-- cualquier deuda pendiente.
+- qué App Registration representa SPA y cuál API;
+- scope utilizado;
+- mecanismo de incorporación de integrantes;
+- flujo MSAL funcionando;
+- claims sanitizados suficientes para explicar `iss`, `aud`, `scp`;
+- request sin token, sin scope y autorizado;
+- responsabilidad del Gateway y del backend;
+- deuda/limitación si self-service no está disponible.
 
-La configuración administrativa del tenant no es una tarea aislada: forma parte de la evidencia de que el grupo comprende quién puede autenticarse, cómo se incorpora una identidad externa, para qué recurso se emite el token y quién valida la autorización técnica.
+→ Continúa con [Mapeo de arquitectura Full Stack a RegistrApp](./01-mapeo-transferencia-fullstack.md).
