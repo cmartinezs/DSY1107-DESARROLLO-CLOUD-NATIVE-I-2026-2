@@ -2,32 +2,24 @@
 
 ## Objetivo
 
-Relacionar las piezas estudiadas —frontend, proveedor de identidad, API Gateway y backend— en una arquitectura segura y explicable.
+Relacionar frontend, proveedor de identidad, API Gateway y backend en una arquitectura segura, explicable y alineada con el laboratorio Full Stack canónico.
+
+## Fuentes relacionadas
+
+→ [Dominio Identity & Access](../../docs/identity/README.md)  
+→ [Laboratorio Full Stack protegido](../../labs/fullstack-seguro/README.md)  
+→ [Threat sketch del laboratorio](../../labs/fullstack-seguro/05-arquitectura-threat-sketch.md)
 
 ## Arquitectura de referencia
 
-```text
-[Usuario]
-   |
-   v
-[SPA / Frontend]
-   |  Authorization Code + PKCE
-   v
-[Identity Provider]
-   |
-   | access token
-   v
-[SPA]
-   |
-   | HTTPS + Bearer token
-   v
-[API Gateway]
-   |
-   v
-[Spring Boot Resource Server]
-   |
-   v
-[Datos / servicios internos]
+```mermaid
+flowchart LR
+    U[Usuario] --> SPA[SPA / Frontend]
+    SPA -->|Authorization Code + PKCE| IDP[Identity Provider]
+    IDP -->|Access token| SPA
+    SPA -->|HTTPS + Bearer token| GW[API Gateway]
+    GW --> RS[Spring Boot Resource Server]
+    RS --> DATA[(Datos / servicios internos)]
 ```
 
 ## Responsabilidades
@@ -50,15 +42,17 @@ Relacionar las piezas estudiadas —frontend, proveedor de identidad, API Gatewa
 ### API Gateway
 
 - exponer una entrada controlada;
+- validar JWT tempranamente cuando corresponde;
 - aplicar políticas técnicas comunes;
-- rate limiting, observabilidad y controles tempranos cuando corresponda;
-- no reemplazar la autorización de negocio del backend.
+- rate limiting, routing y observabilidad;
+- no reemplazar autorización de negocio.
 
 ### Backend / Resource Server
 
 - validar token y contexto;
-- aplicar autorización;
-- proteger reglas de negocio y datos;
+- validar audience del recurso;
+- mapear scopes/authorities;
+- aplicar autorización de endpoint y negocio;
 - no confiar en parámetros del cliente para identidad/permisos.
 
 ## Controles fundamentales
@@ -66,23 +60,25 @@ Relacionar las piezas estudiadas —frontend, proveedor de identidad, API Gatewa
 1. HTTPS en tránsito.
 2. Authorization Code + PKCE para SPA.
 3. No usar client secret en frontend.
-4. Validación de firma, `iss`, `aud`, `exp` y permisos.
-5. Mínimo privilegio para scopes y roles.
-6. CORS limitado a orígenes requeridos.
-7. Secretos en mecanismos de configuración seguros, no en Git.
-8. Logs sin tokens ni credenciales completas.
-9. Separación clara entre autenticación y autorización.
-10. Observabilidad de fallos 401/403 sin filtrar información sensible.
+4. Dos App Registrations separadas: SPA client y API resource.
+5. Validación de firma, `iss`, `aud`, vigencia y permisos.
+6. Mínimo privilegio para scopes y roles.
+7. CORS limitado a orígenes requeridos.
+8. Secretos fuera de Git.
+9. Logs sin tokens ni credenciales completas.
+10. Separación clara entre autenticación y autorización.
+11. Defensa en profundidad entre Gateway y backend.
 
 ## CORS no es autenticación
 
-CORS controla qué navegadores pueden leer respuestas desde determinados orígenes. No protege una API contra clientes no navegador y no reemplaza OAuth2/OIDC.
-
-```text
-CORS → política del navegador
-OAuth2/OIDC → identidad/delegación
-Spring Security → protección del recurso
+```mermaid
+flowchart LR
+    CORS[CORS] --> BROWSER[Política del navegador]
+    OAUTH[OAuth2/OIDC] --> ID[Identidad y delegación]
+    SPRING[Spring Security] --> RESOURCE[Protección del recurso]
 ```
+
+CORS no protege la API contra clientes no navegador y no reemplaza OAuth2/OIDC.
 
 ## Threat sketch
 
@@ -92,23 +88,36 @@ Spring Security → protección del recurso
 | token emitido para otra API | validación de audience |
 | token de otro tenant/emisor | validación de issuer |
 | permisos excesivos | scopes/roles mínimos |
-| secret expuesto en JavaScript | arquitectura public client sin secret |
+| secret expuesto en JavaScript | public client sin secret |
 | XSS roba token accesible | reducir exposición + CSP/buenas prácticas frontend |
 | credenciales en repositorio | secret management + `.gitignore` + rotación |
 | bypass del gateway | backend validando autenticación/autorización |
 
 ## Principio de defensa en profundidad
 
-La arquitectura no debe depender de una única barrera. Gateway, backend, IdP y cliente tienen responsabilidades complementarias.
+```mermaid
+flowchart LR
+    IDP[Identity Provider] --> GW[Gateway]
+    GW --> RS[Resource Server]
+    RS --> BIZ[Reglas de negocio]
+```
+
+Cada capa tiene una frontera distinta. Que una request supere el Gateway no elimina las responsabilidades del backend.
 
 ## Ejercicio
 
-Dibuje un flujo completo de una operación `GET /api/orders` e indique:
+Dibuja un flujo completo de `GET /api/books` e indica:
 
 - dónde ocurre autenticación;
-- dónde se obtiene el token;
+- cuál App Registration representa la SPA;
+- cuál representa la API;
 - qué audience se espera;
 - qué scope se exige;
-- qué componente puede responder 401;
-- qué componente puede responder 403;
+- qué puede rechazar el Gateway;
+- qué puede rechazar Spring;
+- qué componente puede producir 401 o 403;
 - qué datos nunca deben aparecer en logs.
+
+## Cierre
+
+La arquitectura se considera comprendida cuando puedes explicar **qué valida cada componente y por qué**, no solo enumerar tecnologías.
