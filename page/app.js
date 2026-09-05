@@ -14,7 +14,7 @@ button?.addEventListener('click', async () => {
 const currentWeek = document.querySelector('.current-week');
 if (currentWeek) {
   const lab = document.createElement('p');
-  lab.innerHTML = '<strong>Laboratorio de Semana 4:</strong> flujo Full Stack protegido con Authorization Code + PKCE, MSAL, API Manager/Gateway y Spring Security Resource Server. <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/fullstack-seguro">Abrir laboratorio →</a>';
+  lab.innerHTML = '<strong>Laboratorio Full Stack seguro:</strong> recorrido provider-backed por etapas con dos App Registrations, MSAL + PKCE, access token para API propia, JWT Authorizer, Spring Security, audience explícita y matriz 401/403/2xx. <a class="text-link" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/fullstack-seguro">Abrir laboratorio →</a>';
   currentWeek.appendChild(lab);
 
   const params = new URLSearchParams(window.location.search);
