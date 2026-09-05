@@ -2,27 +2,35 @@
 
 ## Objetivo
 
-Proteger una API Spring Boot para que acepte únicamente access tokens válidos y autorice operaciones según claims/scopes.
+Proteger una API Spring Boot para que acepte únicamente **access tokens válidos destinados a esa API** y autorice operaciones según scopes/claims.
+
+## Autoridad y práctica
+
+El modelo de tenant, API registration, issuer, audience y scopes se define en:
+
+→ [Dominio Identity & Access](../../docs/identity/README.md)
+
+La aplicación práctica vive en:
+
+→ [Full Stack · Spring Security Resource Server](../../labs/fullstack-seguro/03-spring-security-resource-server.md)
+
+---
 
 ## Rol del backend
 
-Cuando el frontend obtiene un access token, el backend no debe confiar en él por haber llegado desde un cliente autenticado. Debe validarlo como **Resource Server**.
+El backend no confía en un request porque venga desde una SPA autenticada ni porque haya pasado por un Gateway.
 
-```text
-request + Bearer token
-→ validar firma
-→ validar issuer
-→ validar audience
-→ validar expiración
-→ mapear claims/scopes
-→ autorizar endpoint
+```mermaid
+flowchart TD
+    REQ[Request + Bearer token] --> SIG[Firma]
+    SIG --> ISS[Issuer]
+    ISS --> AUD[Audience]
+    AUD --> TIME[Expiración / vigencia]
+    TIME --> CLAIMS[Scopes / claims]
+    CLAIMS --> AUTHZ[Autorización endpoint/negocio]
 ```
 
-## Dependencia conceptual
-
-En Spring Boot moderno, el patrón habitual utiliza Spring Security OAuth2 Resource Server con JWT.
-
-Configuración representativa:
+## Configuración base
 
 ```yaml
 spring:
@@ -33,11 +41,25 @@ spring:
           issuer-uri: https://login.microsoftonline.com/<tenant-id>/v2.0
 ```
 
-La configuración real debe corresponder al proveedor de identidad y tenant utilizados en laboratorio.
+`issuer-uri` configura la confianza en el issuer y permite obtener metadata/JWKs. **No se debe enseñar como si por sí solo expresara el audience que BookShelf API acepta.**
+
+## Audience explícita
+
+El token debe estar destinado a la API propia. El laboratorio exige una validación explícita de `aud` en el `JwtDecoder`/validator.
+
+Conceptualmente:
+
+```text
+firma válida
++ issuer esperado
++ token vigente
++ audience BookShelf API
+= autenticación aceptable
+```
+
+Después se evalúan los permisos.
 
 ## SecurityFilterChain
-
-Ejemplo conceptual:
 
 ```java
 @Bean
@@ -45,7 +67,7 @@ SecurityFilterChain security(HttpSecurity http) throws Exception {
     return http
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/public/**").permitAll()
-            .requestMatchers("/api/read/**").hasAuthority("SCOPE_read")
+            .requestMatchers("/api/books").hasAuthority("SCOPE_books.read")
             .anyRequest().authenticated())
         .oauth2ResourceServer(oauth -> oauth.jwt())
         .build();
@@ -54,43 +76,54 @@ SecurityFilterChain security(HttpSecurity http) throws Exception {
 
 ## 401 vs 403
 
-- **401 Unauthorized:** no existe autenticación válida para procesar la operación.
-- **403 Forbidden:** existe una identidad autenticada, pero no posee permiso suficiente.
-
-Ejemplos:
-
 | Situación | Resultado esperado |
 |---|---:|
 | sin token | 401 |
-| token expirado | 401 |
-| firma inválida | 401 |
-| issuer/audience inválidos | 401 |
-| token válido sin scope requerido | 403 |
-| token válido con scope requerido | 2xx |
+| token expirado/firma inválida | 401 |
+| issuer incorrecto | 401 |
+| audience incorrecta | 401 |
+| token válido sin `books.read` | 403 |
+| token válido con `books.read` | 2xx |
 
 ## Claims y authorities
 
-Spring puede convertir scopes del token en authorities como `SCOPE_read`. Para roles o claims personalizados puede ser necesario un `JwtAuthenticationConverter`.
+Scopes delegados pueden mapearse a authorities con prefijo `SCOPE_`, por ejemplo:
 
-No se debe autorizar una operación simplemente porque el JWT tenga un campo con un nombre esperado: el token debe haber pasado primero las validaciones criptográficas y contextuales.
+```text
+scp = books.read
+→
+SCOPE_books.read
+```
 
-## Audience
-
-El token debe haber sido emitido **para esta API**. Validar solo la firma no basta: un token válido para otro recurso no debería ser aceptado.
+Para claims/roles personalizados puede requerirse un converter específico.
 
 ## Gateway y backend
 
-El gateway puede ejecutar controles tempranos, pero el backend conserva responsabilidad sobre la autorización de negocio y sobre las reglas que no deben depender de un único perímetro externo.
+```mermaid
+flowchart LR
+    GW[API Gateway] -->|control perimetral| RS[Spring Resource Server]
+    RS -->|autorización recurso| BIZ[Reglas de negocio]
+```
+
+Gateway puede rechazar temprano, pero Spring conserva defensa en profundidad y autorización del recurso/negocio.
 
 ## Errores frecuentes
 
-- desactivar seguridad para “hacer funcionar” la demo;
-- aceptar cualquier token firmado por el proveedor sin validar audiencia;
-- autorizar por datos controlados por el cliente;
-- registrar tokens completos en logs;
+- desactivar seguridad para hacer funcionar la demo;
+- aceptar cualquier JWT del proveedor sin validar audience;
+- creer que `issuer-uri` sustituye toda validación contextual;
+- autorizar por valores enviados por el cliente;
+- registrar tokens completos;
 - mezclar CORS con autenticación;
-- devolver 403 cuando el request ni siquiera está autenticado.
+- devolver 403 cuando no existe autenticación válida.
 
 ## Evidencia sugerida
 
-Probar al menos cuatro requests reproducibles: sin token, token inválido/expirado, token válido sin permiso y token válido con permiso.
+Demostrar al menos:
+
+1. sin token → 401;
+2. audience incorrecta → 401;
+3. token válido sin scope → 403;
+4. token válido con `books.read` → 2xx.
+
+→ [Ejecutar laboratorio Full Stack](../../labs/fullstack-seguro/README.md)
