@@ -2,41 +2,43 @@
 
 ## Objetivo
 
-Comprender qué resuelve **MSAL (Microsoft Authentication Library)** y cómo participa en una aplicación frontend que autentica usuarios mediante Microsoft Entra ID / Microsoft Identity Platform.
+Comprender qué resuelve **MSAL (Microsoft Authentication Library)** y cómo participa en una SPA que autentica usuarios mediante Microsoft Entra ID y solicita un **access token para una API propia**.
 
-Esta guía explica el concepto. La implementación paso a paso en la miniapp de la semana vive en:
+## Autoridad técnica
 
-→ [Firebase miniapp · Parte 9: Microsoft Entra ID + MSAL](../../labs/firebase-auth-miniapp/09-microsoft-entra-msal.md)
+Esta guía semanal explica el foco curricular. La configuración canónica y paso a paso de Entra vive en:
 
-Para el caso grupal en que el dueño del tenant entra pero sus compañeros no:
+→ [Dominio Identity & Access](../../docs/identity/README.md)  
+→ [Guía completa de Microsoft Entra ID](../../docs/identity/entra-guia-completa/README.md)
 
-→ [Entra ID · usuarios externos en SPA + API Gateway](../../docs/identity/entra-usuarios-externos-spa-api-gateway.md)
+La práctica Full Stack que consume ese conocimiento vive en:
+
+→ [Laboratorio Full Stack protegido](../../labs/fullstack-seguro/README.md)
+
+No mantener aquí una segunda copia de tenant, Guest, App Registration o API Gateway.
 
 ---
 
-## Qué problema resuelve
+## Qué problema resuelve MSAL
 
-Una SPA no debe implementar OAuth2/OIDC manualmente. MSAL encapsula gran parte de la interacción con el proveedor de identidad:
+Una SPA no debe implementar OAuth2/OIDC manualmente. MSAL gestiona gran parte del flujo cliente:
 
-```text
-SPA
-→ inicia login
-→ redirige/abre interacción con Microsoft Entra ID
-→ usuario se autentica
-→ vuelve con authorization code
-→ PKCE protege el intercambio
-→ MSAL obtiene tokens
-→ SPA mantiene contexto de cuenta
-→ SPA puede solicitar access token para una API
+```mermaid
+flowchart LR
+    SPA[SPA] --> LOGIN[Iniciar login]
+    LOGIN --> ENTRA[Microsoft Entra ID]
+    ENTRA --> CODE[Authorization Code]
+    CODE --> PKCE[Intercambio protegido por PKCE]
+    PKCE --> TOKENS[MSAL obtiene tokens]
+    TOKENS --> ACCOUNT[Contexto de cuenta]
+    ACCOUNT --> API[Solicitar access token para API propia]
 ```
 
 ## Authorization Code + PKCE
 
-Para aplicaciones públicas como SPA se utiliza Authorization Code Flow con PKCE.
+La SPA es un **public client**. No puede custodiar un `client_secret` de forma segura.
 
-PKCE agrega un `code_verifier` y un `code_challenge`. Aunque un atacante intercepte el authorization code, no puede intercambiarlo sin el verifier original.
-
-La SPA sigue siendo un **public client**: no puede guardar de forma segura un `client_secret`.
+PKCE utiliza `code_verifier` y `code_challenge` para impedir que un authorization code interceptado sea útil sin el verifier original.
 
 ---
 
@@ -44,25 +46,31 @@ La SPA sigue siendo un **public client**: no puede guardar de forma segura un `c
 
 | Token | Propósito principal | Destinatario |
 |---|---|---|
-| ID token | informar al cliente sobre la autenticación del usuario | aplicación cliente |
-| Access token | autorizar acceso a una API | API / Resource Server |
+| ID token | informar al cliente sobre la autenticación del usuario | SPA/client |
+| Access token | autorizar acceso a un recurso | API / Resource Server |
 
-**No se debe enviar un ID token a una API como sustituto del access token.**
+**No enviar un ID token a la API como sustituto del access token.**
 
 ---
 
-## Configuración de MSAL
+## Dos App Registrations
 
-Una SPA normalmente necesita:
+Para el flujo Full Stack usamos dos responsabilidades distintas:
 
-- `clientId` público de la aplicación registrada;
-- `authority` o tenant esperado;
-- `redirectUri`;
-- scopes requeridos por la API cuando corresponda.
+```mermaid
+flowchart LR
+    SPAAPP[App Registration · SPA client] -->|solicita scope| APIAPP[App Registration · API resource]
+    APIAPP --> SCOPE[api://<api-client-id>/books.read]
+```
 
-No necesita un `client_secret` embebido en JavaScript.
+- SPA: `clientId`, plataforma SPA, redirect URI, public client.
+- API: recurso protegido, audience esperado, scopes.
 
-Para DSY1107 usamos inicialmente un tenant específico:
+Una confusión frecuente es pedir un token para Microsoft Graph y enviarlo al backend propio. Ese token corresponde a otro recurso/audience.
+
+---
+
+## Configuración mínima de MSAL
 
 ```javascript
 const config = {
@@ -74,151 +82,78 @@ const config = {
 };
 ```
 
-### Nota importante para el stack actual
-
-En la miniapp Vite utilizamos una página de redirect dedicada:
-
-```text
-http://localhost:5173/redirect.html
-```
-
-La guía práctica crea esa página con el **MSAL redirect bridge**. No reemplazarla por una página con router o lógica principal de la aplicación.
-
----
-
-## Inicialización
-
-En MSAL Browser actual, la instancia debe inicializarse antes de utilizar APIs interactivas:
+La instancia debe inicializarse antes de usar APIs interactivas:
 
 ```javascript
 const msalInstance = new PublicClientApplication(config);
 await msalInstance.initialize();
 ```
 
-Después se puede recuperar/seleccionar una cuenta activa y ejecutar Login/Logout.
+---
+
+## Scope de la API propia
+
+Ejemplo:
+
+```javascript
+const tokenRequest = {
+  scopes: ["api://<api-client-id>/books.read"]
+};
+```
+
+El access token resultante debe ser enviado como:
+
+```text
+Authorization: Bearer <access-token>
+```
+
+Nunca versionar ni publicar el token completo.
 
 ---
 
 ## Usuarios del tenant
 
-Una App Registration configurada como:
+En una App Registration single-tenant pueden autenticarse Members y Guests/B2B representados en el tenant.
 
-```text
-Accounts in this organizational directory only
-```
-
-es **single-tenant**.
-
-Eso no significa "solo el alumno que creó el tenant". Pueden autenticarse:
-
-- Members del tenant;
-- usuarios externos invitados como Guest/B2B.
-
-Por eso, cuando al dueño le funciona y al compañero no, primero se revisan:
-
-```text
-tenant
-→ Guest
-→ invitación aceptada
-→ authority
-→ redirect URI
-→ Assignment required?
-```
-
-No se cambia automáticamente a multitenant para ocultar el problema.
-
----
-
-## Login de identidad vs access token para API propia
-
-Primera etapa:
-
-```text
-usuario
-→ Entra ID
-→ MSAL
-→ cuenta autenticada en SPA
-```
-
-Segunda etapa, cuando existe API protegida:
-
-```text
-SPA
-→ solicita scope de API propia
-→ obtiene access token para esa API
-→ Authorization: Bearer <token>
-→ API Gateway / Resource Server
-```
-
-Una confusión frecuente es solicitar un token para Microsoft Graph y enviarlo al backend propio. Ese token tiene otro recurso/audience.
-
----
-
-## Solicitud de scopes de API
-
-Para una API propia que expone:
-
-```text
-api://<api-client-id>/api.read
-```
-
-la SPA solicita:
-
-```javascript
-const tokenRequest = {
-  scopes: ["api://<api-client-id>/api.read"]
-};
-```
-
-El backend/gateway debe validar que el access token corresponde a la API esperada y contiene el permiso requerido.
+Cuando al dueño le funciona y al compañero no, la ruta canónica de diagnóstico está en la guía Identity. No convertir la app a multitenant como workaround genérico.
 
 ---
 
 ## Ciclo mínimo
 
-1. registrar SPA en Entra ID;
-2. configurar plataforma SPA y redirect URI;
-3. invitar Guest si el grupo usa single-tenant;
-4. instalar `@azure/msal-browser`;
-5. inicializar `PublicClientApplication`;
-6. autenticar usuario;
-7. seleccionar cuenta activa;
-8. si existe API, solicitar access token para la API propia;
-9. enviar `Authorization: Bearer <token>`;
-10. interpretar correctamente errores de autenticación y autorización.
-
----
+```mermaid
+flowchart TD
+    A[SPA registrada] --> B[Redirect URI]
+    B --> C[MSAL inicializado]
+    C --> D[Login]
+    D --> E[Cuenta activa]
+    E --> F[Solicitar scope API propia]
+    F --> G[Access token]
+    G --> H[Bearer token hacia Gateway/API]
+```
 
 ## Errores frecuentes
 
-- guardar secretos en el frontend;
-- usar MSAL antes de `await initialize()`;
-- redirect URI diferente del registrado;
-- usar `common` cuando el ejercicio exige tenant concreto;
-- olvidar invitar/activar al compañero Guest;
-- pedir scopes que la API no reconoce;
+- secret en JavaScript;
+- MSAL usado antes de `initialize()`;
+- redirect URI distinto del registrado;
+- pedir scope de Microsoft Graph en vez del de la API propia;
 - confundir ID token con access token;
-- obtener un token para Graph y enviarlo a la API propia;
-- asumir que decodificar un token significa que es válido;
+- ignorar `aud`;
+- asumir que login exitoso implica autorización de API;
 - almacenar tokens manualmente sin necesidad;
-- ignorar expiración y renovación silenciosa;
-- mezclar autenticación con autorización.
-
----
+- confundir autenticación con autorización.
 
 ## Preguntas de comprobación
 
-1. ¿Por qué una SPA es un public client?
+1. ¿Por qué una SPA es public client?
 2. ¿Qué amenaza mitiga PKCE?
-3. ¿Qué diferencia hay entre la cuenta MSAL y el access token para una API?
-4. ¿Por qué el frontend no debe tener un client secret?
-5. ¿Qué ocurre si la API recibe un token con audience incorrecta?
-6. ¿Por qué un compañero puede necesitar ser Guest aun usando su propio correo?
-7. ¿Por qué no usamos `common` en el ejercicio single-tenant?
-8. ¿Por qué Microsoft Entra/MSAL no es simplemente "otro botón Firebase" en esta práctica?
-
----
+3. ¿Qué diferencia existe entre la App Registration de la SPA y la de la API?
+4. ¿Por qué `clientId` puede ser público y `client_secret` no?
+5. ¿Qué ocurre si el access token tiene audience de Microsoft Graph?
+6. ¿Por qué login exitoso no prueba que `/api/books` esté autorizado?
+7. ¿Qué scope solicita BookShelf UI?
 
 ## Ruta práctica
 
-→ [Implementar Microsoft Entra ID + MSAL en la miniapp](../../labs/firebase-auth-miniapp/09-microsoft-entra-msal.md)
+→ [Full Stack · Etapa 01: SPA, MSAL y token para API propia](../../labs/fullstack-seguro/01-spa-msal-token-api.md)
