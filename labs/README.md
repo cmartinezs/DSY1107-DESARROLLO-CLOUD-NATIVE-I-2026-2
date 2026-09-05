@@ -10,23 +10,23 @@ Los laboratorios del repositorio se clasifican explícitamente en dos tipos:
 
 Son la opción preferida cuando la competencia puede practicarse sin depender de infraestructura cloud real.
 
-```text
-contenido semanal
-→ ejemplo / explicación
-→ laboratorio local del repo
-→ checkpoints de comprensión
+```mermaid
+flowchart LR
+    W[Contenido semanal] --> E[Ejemplo / explicación]
+    E --> L[Laboratorio local]
+    L --> C[Checkpoints de comprensión]
 ```
 
 ### 2. Labs provider-backed
 
-Se permiten cuando **el proveedor cloud es parte esencial de la competencia**, por ejemplo Identity as a Service, autenticación federada o una capacidad administrada que perdería sentido si se simulase localmente.
+Se permiten cuando **el proveedor cloud es parte esencial de la competencia**, por ejemplo Identity as a Service, autenticación federada, JWT Authorizers o una capacidad administrada que perdería sentido si se simulase por completo.
 
-```text
-contenido semanal
-→ concepto
-→ configuración guiada de proveedor real
-→ implementación mínima
-→ checkpoints verificables
+```mermaid
+flowchart LR
+    W[Contenido semanal] --> C[Concepto]
+    C --> P[Configuración guiada de proveedor real]
+    P --> I[Implementación mínima]
+    I --> E[Checkpoints verificables]
 ```
 
 Un lab provider-backed debe:
@@ -47,11 +47,11 @@ Los ejercicios institucionales publicados en AVA siguen siendo material oficial 
 - [`api-gateway-local/`](api-gateway-local/) — routing, integración, versionado, políticas y CORS mediante Spring Cloud Gateway + backend público.
 - [`identidad-local/`](identidad-local/) — laboratorio histórico de OAuth2/OIDC, PKCE, tokens, scopes, roles, 401/403, tenant y app registration.
 - [`jwt-forense/`](jwt-forense/) — Semana 3: JWT, claims, audience/issuer/expiración, scopes, 401/403 y frontera gateway/backend con dominio neutral.
-- [`fullstack-seguro/`](fullstack-seguro/) — Semana 4: flujo SPA + Authorization Code/PKCE + MSAL + API Manager/Gateway + Spring Security Resource Server, con checkpoints y matriz 401/403/2xx, explicado sin depender de infraestructura cloud real.
 
 ### Provider-backed
 
 - [`firebase-auth-miniapp/`](firebase-auth-miniapp/) — Semana 4: mini app web con Firebase Authentication. Implementa zona pública/privada, Register, Login, Password Reset y Logout con Email/Password; solo después agrega Google Sign-In como proveedor federado.
+- [`fullstack-seguro/`](fullstack-seguro/) — Semana 4: laboratorio por etapas que consume la guía canónica de Identity y aplica **dos App Registrations**, MSAL + PKCE, access token para API propia, AWS API Gateway/JWT Authorizer, Spring Security Resource Server, validación explícita de audience, matriz 401/403/2xx, troubleshooting y threat sketch.
 
 ## Relación con AVA
 
