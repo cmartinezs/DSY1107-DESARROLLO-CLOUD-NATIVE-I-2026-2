@@ -58,6 +58,8 @@ sections:
       name: RegistrApp
       status: in_progress
       checkpoint: proyecto-formativo/semana-04/README.md
+      transfer_base_gate: "Identity Parte I 0-7 + Full Stack seguro validado"
+      self_service_extension_required: false
     blockers: []
 
   - id: 003D
@@ -127,6 +129,8 @@ sections:
       name: RegistrApp
       status: in_progress
       checkpoint: proyecto-formativo/semana-04/README.md
+      transfer_base_gate: "Identity Parte I 0-7 + Full Stack seguro validado"
+      self_service_extension_required: false
     blockers: []
 
 course_specific:
@@ -149,6 +153,15 @@ course_specific:
   provider_backed_practice_lab: labs/firebase-auth-miniapp/README.md
   msal_practical_guide: labs/firebase-auth-miniapp/09-microsoft-entra-msal.md
   external_users_support: docs/identity/entra-usuarios-externos-spa-api-gateway.md
+  identity_canonical: docs/identity/entra-guia-completa/README.md
+  registrapp_transfer:
+    checkpoint: proyecto-formativo/semana-04/README.md
+    identity_transfer: proyecto-formativo/semana-04/guia-operativa-identidad-entra.md
+    fullstack_mapping: proyecto-formativo/semana-04/01-mapeo-transferencia-fullstack.md
+    integration_plan: proyecto-formativo/semana-04/02-plan-integracion-registrapp.md
+    evidence_matrix: proyecto-formativo/semana-04/03-pruebas-evidencia.md
+    base_required: true
+    self_service_extension_required: false
   identity_comparison_policy: "Firebase Email/Password -> Firebase Google -> Entra/MSAL; MSAL no se modela como provider Firebase"
   strategy: "concepto -> ejemplo independiente -> lab -> cloud -> transferencia opcional a RegistrApp"
   sections_must_remain_independent: true
