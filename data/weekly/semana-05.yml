@@ -24,7 +24,16 @@ official_scope:
 
 week_policy:
   primary_goal: "cerrar flujo de autenticación/autorización end-to-end"
+  expected_entry_baseline:
+    - "IDaaS configurado durante Semana 4"
+    - "laboratorios de Semana 4 realizados hasta el checkpoint indicado"
+    - "guías de Semana 4 trabajadas"
+    - "autenticación reproducible"
+    - "tokens obtenibles/inspeccionables"
+  baseline_is_expectation_not_execution_claim: true
+  recovery_policy: "verificación breve; deuda puntual se recupera de forma acotada sin repetir Semana 4 completa"
   do_not_prioritize:
+    - "repetir desde cero configuración IDaaS ya trabajada"
     - "alcance funcional adicional de microservicios"
     - "reglas de negocio adicionales"
     - "CRUD adicional sin relación con el flujo seguro"
@@ -37,11 +46,14 @@ week_policy:
 sections:
   - id: 002D
     plan: semanas/semana-05/DSY1107-002D.md
-    entry_status: pending_evidence
+    entry_status: expected_baseline_pending_verification
     execution_claimed: false
+    expected_entry:
+      - "IDaaS configurado"
+      - "labs y guías Semana 4 realizados"
+      - "autenticación reproducible"
     priority_path:
-      - "checkpoint Semana 4"
-      - "login funcional"
+      - "checkpoint breve baseline Semana 4"
       - "access token correcto"
       - "API Gateway / API Manager"
       - "microservicio protegido"
@@ -57,11 +69,15 @@ sections:
 
   - id: 003D
     plan: semanas/semana-05/DSY1107-003D.md
-    entry_status: pending_evidence
+    entry_status: expected_baseline_pending_verification
     execution_claimed: false
+    expected_entry:
+      - "IDaaS configurado"
+      - "labs y guías Semana 4 realizados"
+      - "autenticación reproducible"
+      - "Entra/MSAL avanzado según camino del grupo"
     priority_path:
-      - "checkpoint Semana 4"
-      - "SPA + IDaaS"
+      - "checkpoint breve baseline Semana 4"
       - "access token para API propia"
       - "API Gateway / JWT Authorizer"
       - "Spring Security Resource Server"
@@ -77,7 +93,7 @@ sections:
       registrapp_increment: null
 
 definition_of_done:
-  - "usuario autenticado"
+  - "baseline IDaaS Semana 4 reproducible"
   - "frontend obtiene access token"
   - "token destinado a API propia"
   - "Bearer token enviado al Gateway"
@@ -97,6 +113,6 @@ technical_defense_preparation:
     - "pregunta hipotética"
   grade_delivery: "individual_confidential_via_AVA"
 
-strategy: "concepto -> evidencia -> lab -> gateway -> backend -> prueba -> transferencia opcional RegistrApp"
+strategy: "baseline S4 -> evidencia breve -> access token API propia -> gateway -> backend -> prueba -> transferencia opcional RegistrApp"
 sections_must_remain_independent: true
 execution_claimed: false
