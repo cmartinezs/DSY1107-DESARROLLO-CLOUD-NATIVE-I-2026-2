@@ -26,23 +26,34 @@ flowchart LR
 - **1.3.7** Integrando el IDaaS con el API Manager en la solución Full Stack.
 - **Evaluación Formativa 1:** Integrando el Aplicativo al API Manager.
 
-## Regla de entrada
+## Baseline esperado de entrada
 
-Semana 5 no parte desde supuestos. Cada sección debe verificar el último gate realmente demostrable de Semana 4.
+Al comenzar Semana 5, los estudiantes **ya debieron haber avanzado hasta la configuración del IDaaS y realizado los laboratorios y guías indicados en Semana 4**. Por tanto, esta semana no debe reiniciar la configuración del proveedor de identidad ni repetir los laboratorios completos como contenido principal.
+
+La apertura de clase se usa sólo como **checkpoint breve de evidencia** para confirmar que el baseline esperado es reproducible:
+
+- proyecto/tenant del IDaaS configurado;
+- cliente/frontend registrado o configurado según el proveedor;
+- autenticación funcional alcanzada en los labs/guías previos;
+- capacidad de obtener e inspeccionar tokens;
+- comprensión mínima de ID token vs access token;
+- último checkpoint reproducible de los laboratorios de Semana 4.
+
+Si un estudiante o grupo no puede demostrar ese baseline, se registra como deuda y se recupera de manera acotada sin convertir toda la clase en repetición de Semana 4.
 
 → [Checkpoint de entrada desde Semana 4](./00-entrada-desde-semana-04.md)
 
-No avanzar al Gateway si todavía no se puede demostrar, según el proveedor utilizado:
+## Foco nuevo de Semana 5
 
-- tenant/proyecto correcto;
-- cliente SPA configurado;
-- recurso/API propia registrada cuando corresponda;
-- login funcional;
-- access token disponible;
-- comprensión de ID token vs access token;
-- token destinado a la API que se intenta consumir.
+Desde ese baseline, el avance principal debe comenzar en la **integración**:
 
-## Arquitectura canónica de trabajo
+```mermaid
+flowchart LR
+    BASE[IDaaS configurado + labs S4] --> TOKEN[Access token para API propia]
+    TOKEN --> GW[API Gateway / API Manager]
+    GW --> API[Microservicio protegido]
+    API --> TEST[Pruebas 401 / 403 / 2xx]
+```
 
 La implementación de referencia usa Microsoft Entra ID + MSAL + AWS API Gateway JWT Authorizer + Spring Security Resource Server:
 
@@ -86,14 +97,13 @@ El Gateway y el backend no tienen responsabilidades idénticas: el primero prote
 
 ## Secuencia recomendada de clase
 
-1. **Checkpoint conceptual y técnico:** OAuth2/OIDC, JWT, PKCE, ID token vs access token, `iss`, `aud`, `exp`, `scp`.
-2. **Login funcional:** verificar proveedor IDaaS y obtención de credencial.
-3. **Access token correcto:** inspeccionar que esté destinado a la API propia.
-4. **API Gateway:** configurar integración con el microservicio y JWT Authorizer/seguridad equivalente.
-5. **Frontend → Gateway:** enviar `Authorization: Bearer <token>`.
-6. **Backend protegido:** validar request y contexto de seguridad.
-7. **Pruebas controladas:** sin token, token incorrecto, token correcto.
-8. **Evaluación Formativa 1:** realizar en clase y revisar colectivamente las alternativas.
+1. **Checkpoint breve del baseline:** verificar IDaaS configurado, autenticación reproducible y labs/guías de Semana 4; no repetirlos completos.
+2. **Access token correcto:** obtener/inspeccionar un token destinado a la API propia.
+3. **API Gateway:** configurar integración con el microservicio y JWT Authorizer/seguridad equivalente.
+4. **Frontend → Gateway:** enviar `Authorization: Bearer <token>`.
+5. **Backend protegido:** validar request y contexto de seguridad.
+6. **Pruebas controladas:** sin token, token incorrecto, token correcto.
+7. **Evaluación Formativa 1:** realizar en clase y revisar colectivamente las alternativas.
 
 ## Diagnóstico por fronteras
 
@@ -101,7 +111,7 @@ No cambiar cinco capas simultáneamente. Diagnosticar en orden:
 
 ```mermaid
 flowchart LR
-    A{¿Login?} --> B{¿Access token?}
+    A{¿IDaaS/login baseline?} --> B{¿Access token?}
     B --> C{¿aud/iss correctos?}
     C --> D{¿Gateway acepta?}
     D --> E{¿Backend autoriza?}
@@ -117,7 +127,7 @@ Interpretación mínima:
 
 El cierre técnico mínimo es demostrable cuando:
 
-- [ ] el usuario puede autenticarse;
+- [ ] el baseline IDaaS de Semana 4 es reproducible;
 - [ ] el frontend obtiene un access token;
 - [ ] el token está destinado a la API propia;
 - [ ] el frontend envía el Bearer token;
