@@ -1,0 +1,102 @@
+schema_version: 1
+course: DSY1107
+term: 2026-2
+week: 5
+period:
+  start: 2026-09-07
+  end: 2026-09-12
+
+official_scope:
+  title: "Integrando una API Manager con un Identity as a Service en una solución Full Stack"
+  topics:
+    - id: "1.3.5"
+      title: "Integrando Frontend y Backend utilizando un API Manager"
+    - id: "1.3.6"
+      title: "Configurando e Integrando un API Gateway con un microservicio"
+    - id: "1.3.7"
+      title: "Integrando el IDaaS con el API Manager en la solución Fullstack"
+  formative_assessment:
+    name: "Evaluación Formativa 1: Integrando el Aplicativo al API Manager"
+    graded: false
+    execution: "in_class"
+    preferred_gate: "flujo de autenticación/autorización operativo según avance de la sección"
+    review_required: true
+
+week_policy:
+  primary_goal: "cerrar flujo de autenticación/autorización end-to-end"
+  do_not_prioritize:
+    - "alcance funcional adicional de microservicios"
+    - "reglas de negocio adicionales"
+    - "CRUD adicional sin relación con el flujo seguro"
+  canonical_plan: semanas/semana-05/README.md
+  entry_checkpoint: semanas/semana-05/00-entrada-desde-semana-04.md
+  canonical_lab: labs/fullstack-seguro/README.md
+  identity_canonical: docs/identity/entra-guia-completa/README.md
+  formative_project: proyecto-formativo/semana-05/README.md
+
+sections:
+  - id: 002D
+    plan: semanas/semana-05/DSY1107-002D.md
+    entry_status: pending_evidence
+    execution_claimed: false
+    priority_path:
+      - "checkpoint Semana 4"
+      - "login funcional"
+      - "access token correcto"
+      - "API Gateway / API Manager"
+      - "microservicio protegido"
+      - "pruebas 401 / 2xx"
+      - "Evaluación Formativa 1"
+    closure:
+      status: pending_evidence
+      covered_topics: []
+      pending_topics: []
+      lab_checkpoint: unknown_until_evidence
+      blockers: []
+      registrapp_increment: null
+
+  - id: 003D
+    plan: semanas/semana-05/DSY1107-003D.md
+    entry_status: pending_evidence
+    execution_claimed: false
+    priority_path:
+      - "checkpoint Semana 4"
+      - "SPA + IDaaS"
+      - "access token para API propia"
+      - "API Gateway / JWT Authorizer"
+      - "Spring Security Resource Server"
+      - "pruebas 401 / 403 / 2xx"
+      - "transferencia incremental RegistrApp"
+      - "Evaluación Formativa 1"
+    closure:
+      status: pending_evidence
+      covered_topics: []
+      pending_topics: []
+      lab_checkpoint: unknown_until_evidence
+      blockers: []
+      registrapp_increment: null
+
+definition_of_done:
+  - "usuario autenticado"
+  - "frontend obtiene access token"
+  - "token destinado a API propia"
+  - "Bearer token enviado al Gateway"
+  - "Gateway aplica validación/política de seguridad"
+  - "Gateway enruta al microservicio"
+  - "request sin credencial válida rechazada"
+  - "request autorizada retorna 2xx"
+  - "estudiante explica fronteras y 401/403"
+  - "Evaluación Formativa 1 realizada y revisada"
+
+technical_defense_preparation:
+  group_defense: true
+  individual_performance: true
+  question_pattern:
+    - "pregunta base"
+    - "pregunta de profundización"
+    - "pregunta hipotética"
+  grade_delivery: "individual_confidential_via_AVA"
+
+strategy: "concepto -> evidencia -> lab -> gateway -> backend -> prueba -> transferencia opcional RegistrApp"
+sections_must_remain_independent: true
+execution_claimed: false
