@@ -1,8 +1,9 @@
 # Semana 5 · checkpoint de entrada desde Semana 4
 
-> Este archivo **no define todavía el contenido curricular de Semana 5**. Su única función es conservar una entrada verificable y distinta por sección a partir del cierre real de Semana 4.
+> Este archivo conserva la entrada verificable y distinta por sección desde el cierre real de Semana 4. El contenido curricular oficial de Semana 5 ya está formalizado en [README de Semana 5](./README.md).
 
-← [Volver a Semana 4](../semana-04/README.md)
+← [Volver a Semana 4](../semana-04/README.md)  
+→ [Ir a Semana 5](./README.md)
 
 ## Regla de continuidad
 
@@ -16,7 +17,7 @@ flowchart LR
     EVID --> GATE{¿Gate demostrable?}
     GATE -- Sí --> GREEN[Capacidad disponible para continuidad]
     GATE -- No --> DEBT[Deuda explícita]
-    GREEN --> W5[Entrada Semana 5]
+    GREEN --> W5[Semana 5]
     DEBT --> W5
 ```
 
@@ -32,7 +33,7 @@ No se debe asumir por planificación que alcanzó Google Sign-In, MSAL, API Gate
 
 ### Entrada provisional
 
-Hasta incorporar evidencia posterior a clase, Semana 5 debe iniciar preguntando y verificando:
+Semana 5 debe iniciar preguntando y verificando:
 
 - ¿qué conceptos OAuth2/OIDC + JWT quedaron realmente verdes?;
 - ¿Vite + Firebase quedaron operativos?;
@@ -56,7 +57,7 @@ La mayor disponibilidad horaria **no constituye evidencia** de que esos gates ha
 
 ### Entrada provisional
 
-Hasta incorporar evidencia posterior a clase, Semana 5 debe verificar:
+Semana 5 debe verificar:
 
 - estado real del gate Firebase Email/Password;
 - si Google Sign-In se ejecutó o quedó pendiente;
@@ -72,9 +73,10 @@ Hasta incorporar evidencia posterior a clase, Semana 5 debe verificar:
 
 La continuidad no vuelve a explicar desde cero lo ya validado. Las fuentes siguen siendo:
 
+- [Semana 5 oficial del curso](./README.md)
 - [Identity & Access canónico](../../docs/identity/README.md)
 - [Laboratorio Full Stack seguro](../../labs/fullstack-seguro/README.md)
-- [Transferencia RegistrApp · Semana 4](../../proyecto-formativo/semana-04/README.md)
+- [Transferencia RegistrApp · Semana 5](../../proyecto-formativo/semana-05/README.md)
 
 ## Gate para reemplazar el estado provisional
 
