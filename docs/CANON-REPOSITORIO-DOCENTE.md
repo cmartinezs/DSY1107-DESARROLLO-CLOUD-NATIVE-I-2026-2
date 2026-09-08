@@ -1,253 +1,367 @@
 # Canon transversal de repositorios docentes · 2026-2
 
-Este documento define la **estructura y reglas comunes** de los repositorios docentes activos del semestre. La organización específica de cada asignatura puede extender este canon, pero no debe contradecirlo sin una razón pedagógica explícita.
+Este documento define la estructura, responsabilidades y reglas comunes de los repositorios docentes activos del semestre 2026-2.
 
-> Este archivo debe mantenerse homologado entre DSY1102, DSY1105 y DSY1107. El contenido específico de cada asignatura vive en sus propios README, guías y documentos de dominio.
+Aplica a:
 
-## 1. Principios
+- DSY1102 · Desarrollo Orientado a Objetos;
+- DSY1105 · Desarrollo de Aplicaciones Móviles;
+- DSY1107 · Desarrollo Cloud Native I;
+- BDY1101 · Base de Datos Aplicada I.
 
-1. **Una fuente canónica por artefacto.** Evitar dos copias activas del mismo contenido.
-2. **La semana organiza la experiencia curricular; las carpetas transversales organizan el tipo de recurso.**
-3. **El repositorio docente y el repositorio del estudiante son arquitecturas distintas.**
-4. **GitHub contiene material consolidado y reproducible; Drive conserva material público/original y referencias; AVA mantiene su rol institucional.**
-5. **La web prioriza navegación y experiencia del estudiante, no duplica innecesariamente el contenido.**
-6. **Todo recurso que evoluciona durante el semestre debe tener un punto de entrada README o página equivalente.**
-7. **La estructura debe seguir siendo comprensible en Semana 18.** Si una decisión funciona solo porque el docente recuerda dónde dejó algo, debe corregirse.
-8. **El estado semanal debe ser medible con un contrato común.** Los agregados operacionales viven en `data/weekly/` y separan siempre plan de avance real.
-9. **Los diagramas técnicos consumen el estándar corporativo vigente.** Este repositorio aplica `STD-ENG-DIAG-001 — Diagramming & Visual Representation Standard` de ADÜMÜN; no redefine localmente su orden de herramientas ni sus reglas de visualización.
+La organización específica de cada asignatura puede extender este canon, pero no debe contradecirlo sin una razón pedagógica explícita y documentada.
 
-## 2. Estructura base
+> Este archivo es una copia homologada del canon transversal. Mientras no exista un repositorio neutral dedicado exclusivamente a estándares docentes, las cuatro copias deben mantener paridad semántica y no pueden redefinir localmente las reglas comunes.
+
+## 1. Principio rector: separar capas
+
+Todo repositorio docente debe distinguir cuatro capas:
+
+1. **Base académica estable**: qué es la asignatura institucionalmente.
+2. **Planificación temporal**: cuándo se enseña cada parte.
+3. **Ejecución docente**: cómo se enseña efectivamente durante el semestre.
+4. **Práctica e integración**: ejemplos, ejercicios, labs y proyecto formativo.
+
+```mermaid
+flowchart TD
+    PDA[PDA / programa institucional] --> BASE[Base académica estable]
+    BASE --> RA[Resultados de aprendizaje e indicadores]
+    BASE --> EA[Experiencias / unidades]
+    BASE --> EV[Evaluaciones]
+    BASE --> RUTA[Ruta de aprendizaje]
+    CR[cronograma] --> SEM[semanas]
+    RUTA --> SEM
+    SEM --> CONT[contenido docente]
+    SEM --> EX[examples / ejercicios]
+    SEM --> LAB[labs]
+    SEM --> PF[proyecto formativo]
+    BASE --> WEB[portal]
+    SEM --> WEB
+```
+
+Regla: **el PDA define qué; el cronograma define cuándo; las semanas registran la ejecución; los recursos prácticos materializan cómo se aprende.**
+
+## 2. Principios transversales
+
+1. Una fuente canónica por artefacto; no mantener copias activas divergentes.
+2. La semana organiza el momento curricular; las raíces transversales organizan el tipo de recurso.
+3. La base académica estable no debe mezclarse con el estado de la semana actual.
+4. El repositorio docente y el repositorio del estudiante son arquitecturas distintas.
+5. GitHub contiene conocimiento consolidado, material reproducible y documentación docente derivada.
+6. Drive conserva material institucional/original y bibliotecas públicas de archivos; AVA mantiene su rol oficial.
+7. La web es una superficie de navegación y lectura derivada, no una segunda fuente normativa.
+8. Todo recurso evolutivo debe tener un README o punto de entrada equivalente.
+9. La estructura debe seguir siendo comprensible al final del semestre sin depender de memoria tácita del docente.
+10. Plan y avance real deben mantenerse separados.
+11. Diagramas técnicos usan Mermaid cuando es viable y consumen el estándar transversal vigente de diagramación.
+12. Los cronogramas, fechas y ponderaciones no se infieren cuando falta fuente institucional: se registran como pendientes hasta disponer de evidencia.
+
+## 3. Estructura base
 
 ```text
 /
 ├── README.md
-├── .github/
-│   └── workflows/
 ├── docs/
-│   └── README.md
+│   ├── README.md
+│   ├── PDA-RESUMEN.md
+│   ├── RESULTADOS-DE-APRENDIZAJE.md
+│   ├── RUTA-DE-APRENDIZAJE.md
+│   ├── CRONOGRAMA.md                 # cuando exista fuente oficial
+│   └── ... documentación transversal
 ├── data/
 │   └── weekly/
 │       ├── README.md
 │       └── semana-XX.yml
 ├── semanas/
 │   ├── README.md
-│   ├── semana-01/
-│   ├── semana-02/
-│   └── ...
-├── examples/
+│   └── semana-XX/
+├── examples/ | ejemplos/
+│   └── README.md
+├── ejercicios/                       # cuando la asignatura lo requiera
 │   └── README.md
 ├── labs/
 │   └── README.md
-├── proyecto-formativo/
+├── evaluaciones/
 │   └── README.md
-└── page/
+├── proyecto-formativo/               # cuando aplique
+│   └── README.md
+└── page/ | site/
 ```
 
-Carpetas como `practica/`, `desafios/`, `assets/`, `scripts/` u otras se agregan **cuando la naturaleza de la asignatura las necesita**.
+`examples/` y `ejemplos/`, así como `page/` y `site/`, son alias estructurales permitidos por legado. Cada repositorio elige uno y no mantiene ambos con contenido duplicado.
 
-## 3. Responsabilidad de cada carpeta
+## 4. Base académica estable
 
-### `semanas/`
+La capa estable debe existir independientemente de cuánto contenido semanal se haya publicado.
 
-Es el **mapa curricular**. Cada `semana-XX/` indica qué corresponde estudiar/hacer esa semana y enlaza los recursos canónicos.
+### `docs/PDA-RESUMEN.md`
 
-Una semana puede contener:
+Debe registrar, desde fuente institucional:
 
-- guías propias de esa semana;
-- resúmenes por sección;
-- enlaces a ejemplos;
-- enlaces a práctica;
-- enlaces a labs;
-- checkpoint del proyecto formativo;
-- material complementario estrictamente semanal.
+- sigla y nombre;
+- formato;
+- créditos/horas cuando estén disponibles;
+- línea formativa;
+- prerrequisitos;
+- descripción de la asignatura;
+- experiencias/unidades;
+- sistema general de evaluación;
+- fuente institucional utilizada;
+- información pendiente o no conciliada.
 
-**No debe convertirse en el único lugar físico de recursos que después necesitan consultarse transversalmente.**
+### `docs/RESULTADOS-DE-APRENDIZAJE.md`
 
-### `examples/`
+Debe registrar todos los RA e indicadores de logro, preservando su trazabilidad institucional.
 
-Contiene o indexa **ejemplos demostrativos reutilizables**. Si el código es un ejemplo y no una entrega/laboratorio, su hogar canónico es `examples/`.
+### `docs/RUTA-DE-APRENDIZAJE.md`
 
-Puede organizarse por semana cuando ayude a localizar el momento curricular:
+Debe mapear:
 
 ```text
-examples/
-├── README.md
-├── semana-01/
-├── semana-02/
-└── ...
+RA / IL
+→ experiencia de aprendizaje
+→ actividad institucional
+→ horas
+→ evaluación asociada
 ```
 
-### `labs/`
-
-Contiene **laboratorios integradores** con identidad propia. Cada lab debe tener su `README.md` y todos los archivos necesarios para reproducirlo.
+Cuando exista cronograma oficial, se extiende con:
 
 ```text
-labs/
-├── README.md
-├── nombre-lab-1/
-└── nombre-lab-2/
+→ semana / fecha
 ```
 
-La semana correspondiente **enlaza** al lab; no se mantiene una segunda copia del mismo laboratorio dentro de `semanas/`.
+### `evaluaciones/README.md`
 
-### `proyecto-formativo/`
+Debe consolidar:
 
-Contiene el software o dominio longitudinal de la asignatura.
+- evaluaciones formativas;
+- evaluaciones parciales;
+- evaluación final/transversal;
+- ponderaciones;
+- modalidad;
+- semanas o fechas solo cuando estén respaldadas por fuente institucional.
 
-Regla general:
+## 5. `README.md` raíz
+
+El README raíz debe permitir entender la asignatura antes de explicar la arquitectura del repo.
+
+Debe incluir como mínimo:
+
+- sigla y nombre;
+- sección o secciones;
+- período;
+- sede;
+- docente;
+- descripción breve institucional;
+- resultados de aprendizaje resumidos;
+- experiencias/unidades resumidas;
+- esquema de evaluación;
+- horario cuando corresponda;
+- enlaces al PDA resumido, RA, ruta, evaluaciones y cronograma;
+- enlaces a semanas, labs, ejemplos, proyecto formativo y portal;
+- enlace al Drive institucional/material público;
+- estado de información pendiente de conciliación.
+
+La sección “semana actual” puede existir, pero nunca sustituye la ficha académica base.
+
+## 6. `semanas/`
+
+Es el mapa temporal y curricular.
+
+Cada `semana-XX/` debe indicar:
+
+- qué corresponde aprender;
+- qué RA/IL y actividad institucional se están trabajando;
+- qué material docente se utiliza;
+- qué ejemplos, ejercicios o labs corresponden;
+- qué incremento del proyecto formativo aplica, si existe;
+- evidencias o checkpoints esperados;
+- diferencias de avance por sección cuando correspondan.
+
+La semana enlaza recursos canónicos; no duplica labs, ejemplos ni proyecto formativo.
+
+## 7. `examples/` / `ejemplos/`
+
+Contiene ejemplos demostrativos, breves e independientes.
+
+Reglas:
+
+- un objetivo principal por ejemplo;
+- reproducibles;
+- independientes del proyecto formativo salvo que se declare lo contrario;
+- organizables por semana o materia;
+- README general como índice.
+
+## 8. `ejercicios/`
+
+Se usa cuando la asignatura necesita práctica no guiada o desafíos que no califican como laboratorio.
+
+Puede contener:
+
+- mini ejercicios;
+- bancos de práctica;
+- desafíos;
+- ejercicios de refuerzo;
+- material de preparación no sumativo.
+
+No debe convertirse en depósito de evaluaciones oficiales.
+
+## 9. `labs/`
+
+Contiene laboratorios guiados con identidad propia.
+
+Cada lab debe declarar al menos:
+
+- objetivo;
+- RA/IL o contenido asociado;
+- prerrequisitos;
+- instrucciones paso a paso sin omitir pasos relevantes;
+- artefactos/scripts necesarios;
+- checkpoints verificables;
+- resultado esperado;
+- troubleshooting cuando corresponda.
+
+La semana correspondiente enlaza al lab; no mantiene otra copia.
+
+## 10. `proyecto-formativo/`
+
+Es longitudinal e incremental cuando la asignatura lo requiera.
+
+Debe distinguir:
 
 ```text
 proyecto-formativo/
 ├── README.md
-├── ROADMAP-SEMANAL.md        # cuando corresponda
-├── <proyecto-vivo>/          # estado actual reutilizable
-├── checkpoints/              # snapshots/hitos cuando aporten valor
-└── guias/                    # instrucciones históricas por semana, si son necesarias
+├── REQUERIMIENTOS.md          # cuando aplique
+├── ROADMAP-SEMANAL.md         # cuando aplique
+├── <proyecto-vivo>/           # una única base de código viva
+├── guias/ o semana-XX/        # instrucciones incrementales
+└── historicos/                # referencias a tags/commits/checkpoints
 ```
-
-No usar simultáneamente nombres ambiguos como `semana-02/` y `checkpoint-semana-02/` para representar cosas distintas sin explicitar su función. Las rutas históricas pueden mantenerse solo como **compatibilidad de navegación**, nunca con una segunda copia activa del código o guía canónica.
-
-### `docs/`
-
-Documentación transversal: decisiones pedagógicas/técnicas, estrategias, glosarios, referencias a estándares externos aplicados y conocimiento que no pertenece a una única semana.
-
-Los estándares corporativos consumidos por el curso deben **referenciarse**, no copiarse ni redefinirse como fuente normativa local.
-
-### `data/weekly/`
-
-Contiene el **estado agregado y procesable de cada semana**, bajo el contrato definido en `docs/ESTANDAR-ESTADISTICAS-SEMANALES.md`.
 
 Reglas:
 
-- mismo esquema en DSY1102, DSY1105 y DSY1107;
+- reutilizar lo ya construido;
+- evitar reinicios artificiales cada semana;
+- separar proyecto vivo, guía incremental e histórico;
+- usar Git para reconstruir estados previos cuando sea suficiente;
+- mantenerse separado de soluciones de evaluaciones sumativas.
+
+## 11. `data/weekly/`
+
+Contiene estado agregado y procesable de cada semana.
+
+Reglas:
+
 - un `semana-XX.yml` por semana curricular;
-- múltiples secciones se registran dentro del mismo archivo;
-- plan y avance real se mantienen separados;
-- valores desconocidos se registran como `null`;
-- no se guardan nombres, notas individuales ni datos personales;
-- las particularidades viven en `course_specific`.
+- plan y avance real separados;
+- múltiples secciones dentro del mismo archivo cuando corresponda;
+- desconocidos como `null`;
+- sin nombres, notas individuales ni datos personales;
+- particularidades en `course_specific`.
 
-Esta carpeta es la fuente para estadísticas, dashboards y análisis longitudinales. No reemplaza la bitácora docente ni los DevLogs individuales.
+Sirve para estadísticas, dashboards, tendencias y reconciliación; no reemplaza la interpretación docente.
 
-### `page/`
+## 12. Web del curso
 
-Portal web para estudiantes. Debe responder primero:
+La fuente editable vive en `page/` o `site/` según el repositorio.
 
-1. ¿Qué corresponde esta semana?
-2. ¿Dónde estudio?
-3. ¿Dónde practico?
-4. ¿Qué lab/proyecto corresponde?
-5. ¿Qué es opcional o de profundización?
-
-La web puede presentar enunciados canónicos cuando esa experiencia sea superior a Markdown, pero entonces los Markdown deben actuar como índice/enlace, no como una segunda copia divergente.
-
-## 4. Liberación curricular
-
-El material se libera por **semana curricular**, no por el minuto exacto alcanzado en una sesión.
-
-Si la semana actual es `N`, debe existir acceso coherente al material correspondiente hasta `N`, aunque una sección vaya algunas horas detrás.
-
-Las diferencias reales entre secciones se registran en resúmenes/planificación específicos, sin fragmentar el material común.
-
-## 5. Separación entre fuente y navegación
-
-Un mismo recurso puede aparecer en varias rutas de navegación, pero debe tener **un único hogar canónico**.
-
-Ejemplo:
-
-```mermaid
-flowchart LR
-    W[semanas/semana-04/README.md] --> L[labs/mensajeria-local/README.md]
-    R[README.md] --> L
-    P[page/index.html] --> L
-```
-
-Tres accesos; un solo laboratorio.
-
-## 6. Proyecto formativo
-
-Cada asignatura puede tener un proyecto o dominio longitudinal. Debe:
-
-- reutilizar lo construido previamente;
-- evolucionar cuando aparece una nueva necesidad curricular;
-- evitar reinicios artificiales semana a semana;
-- diferenciar el **proyecto vivo**, las **guías de trabajo** y los **checkpoints históricos**;
-- mantenerse separado de las soluciones de evaluaciones sumativas.
-
-## 7. Web y experiencia del estudiante
-
-La portada debe privilegiar **“Esta semana”** sobre el catálogo completo.
-
-Patrón recomendado:
+La publicación estática estándar para estos repositorios es:
 
 ```text
-Esta semana
-1. Aprende
-2. Observa ejemplos
-3. Practica
-4. Realiza el lab / checkpoint
-5. Profundiza (opcional)
+fuente editable en master
+→ artefacto estático en gh-pages
+→ GitHub Pages · Deploy from a branch
+→ gh-pages / (root)
 ```
 
-El roadmap completo puede existir, pero no debe competir visualmente con lo que el alumno necesita hacer hoy.
+No se requiere GitHub Actions para publicar el sitio.
 
-## 8. Reconciliación semanal
+La portada debe tener dos niveles visibles:
 
-Antes de abrir una nueva semana se revisa, como mínimo:
+1. **Identidad académica estable**: qué es la asignatura, RA, experiencias, evaluaciones y fuentes.
+2. **Acción inmediata**: qué corresponde esta semana y dónde estudiar/practicar.
 
-- [ ] `README.md` raíz y semana actual correctos;
-- [ ] `semanas/semana-XX/` creado y enlazado;
-- [ ] `examples/` reconciliado si hubo ejemplos nuevos;
-- [ ] `labs/` reconciliado si hubo laboratorio nuevo;
-- [ ] `proyecto-formativo/` actualizado si hubo checkpoint/incremento;
-- [ ] `practica/` o desafíos actualizados cuando la asignatura los use;
-- [ ] portal web actualizado;
-- [ ] Material Público/Drive actualizado cuando corresponda;
-- [ ] enlaces internos sin apuntar a ubicaciones obsoletas;
-- [ ] material liberado hasta la semana curricular vigente;
-- [ ] `data/weekly/semana-XX.yml` reconciliado con planificación, avance real, evidencias, DevLog agregado, proyecto formativo y deuda siguiente.
+La web puede resumir o presentar mejor la información, pero debe enlazar a la fuente mantenida y no divergir semánticamente de ella.
 
-## 9. Regla de no duplicación
+## 13. Drive y AVA
 
-Antes de crear un archivo nuevo, responder:
+### Drive
 
-> ¿Esto es una nueva fuente o solamente otra forma de acceder a una fuente existente?
+Se usa para:
 
-Si es acceso, se crea un enlace/índice. Si es fuente, se define explícitamente su hogar canónico.
+- PDA, PA, PIA, EFT y otros archivos institucionales originales;
+- PPTX, DOCX, PDF y recursos binarios oficiales;
+- biblioteca pública de material cuando corresponda;
+- cronogramas y documentos de coordinación recibidos.
 
-## 10. Estadísticas y trazabilidad
+El repo no copia indiscriminadamente esos archivos. Extrae y documenta conocimiento estable, trazable y útil para la operación docente.
 
-El contrato estadístico común permite comparar cursos sin borrar sus diferencias pedagógicas.
+### AVA
 
-```mermaid
-flowchart TD
-    P[Planificación] --> W[data/weekly/semana-XX.yml]
-    A[Avance real] --> W
-    E[Evidencias] --> W
-    D[DevLog agregado] --> W
-    F[Proyecto formativo] --> W
-    W --> O[Dashboard / tendencias / alertas]
-```
+Sigue siendo la plataforma institucional para comunicaciones, evaluaciones, actividades o recursos que deban gestionarse oficialmente allí.
 
-Las estadísticas nunca sustituyen la interpretación docente: sirven para detectar diferencias de avance, deuda acumulada, participación y bloqueos que merecen revisión.
+## 14. No duplicación y autoridad documental
 
-## 11. Extensiones por asignatura
+Antes de crear un archivo nuevo:
 
-Este canon admite especializaciones:
+> ¿Es una nueva fuente canónica o solo otra forma de acceder/presentar una fuente existente?
 
-- **DSY1102:** práctica de clase, laboratorios, PetCare y grandes desafíos progresivos.
-- **DSY1105:** Kotlin/Android, PocketLog y evolución de consola → app móvil → persistencia/REST.
-- **DSY1107:** labs del repositorio locales, autocontenidos e independientes; los ejercicios/labs cloud oficiales permanecen en AVA; RegistrApp recibe por separado la transferencia al proyecto formativo.
+Si es acceso o presentación, enlazar o derivar. Si es nueva fuente, definir explícitamente su hogar y autoridad.
 
-Estas especializaciones complementan el canon; las reglas generales anteriores se mantienen.
+## 15. Reconciliación inicial de una asignatura
 
-## 12. Conformidad con estándares externos
+Para llevar un repo al canon:
 
-Este canon puede declarar qué estándares externos aplica, pero no se convierte por ello en su fuente normativa.
+1. inventariar estructura y documentación actual;
+2. localizar PDA/programa, cronograma, evaluaciones y material de coordinación;
+3. crear la capa académica estable sin inventar datos faltantes;
+4. mapear RA → IL → experiencias → actividades → evaluaciones;
+5. conciliar cronograma → semanas cuando exista fuente;
+6. conservar material docente existente en su hogar correcto;
+7. separar ejemplos, ejercicios, labs y proyecto formativo;
+8. actualizar README raíz y portal;
+9. validar enlaces, no duplicación y paridad semántica;
+10. registrar pendientes explícitos.
 
-Para diagramas y representación visual, este repositorio consume:
+## 16. DoR / DoD de conformidad
 
-- `STD-ENG-DIAG-001@0.1.0-draft — Diagramming & Visual Representation Standard`
-- fuente normativa: `adumun/platform-standards/engineering/STD-ENG-DIAG-001-DIAGRAMMING-AND-VISUAL-REPRESENTATION-STANDARD.md`
+### Definition of Ready
 
-Los artefactos del curso deben aplicar el estándar vigente o documentar una desviación concreta cuando exista una razón pedagógica/técnica para ello.
+Una conciliación puede comenzar cuando existen al menos:
+
+- repo accesible;
+- una fuente institucional base (PDA/programa o equivalente);
+- inventario de la estructura actual.
+
+Cronograma y coordinación pueden faltar, pero deben quedar como pendientes explícitos.
+
+### Definition of Done
+
+Una asignatura se considera conciliada cuando:
+
+- [ ] README raíz contiene ficha académica estable;
+- [ ] `docs/PDA-RESUMEN.md` existe;
+- [ ] `docs/RESULTADOS-DE-APRENDIZAJE.md` existe;
+- [ ] `docs/RUTA-DE-APRENDIZAJE.md` existe;
+- [ ] `evaluaciones/README.md` refleja la fuente institucional disponible;
+- [ ] cronograma está integrado o marcado como pendiente;
+- [ ] `semanas/` enlaza correctamente la ruta temporal;
+- [ ] examples/ejemplos, ejercicios, labs y proyecto formativo tienen fronteras claras;
+- [ ] Drive/AVA/repositorio tienen roles explícitos;
+- [ ] portal web refleja base académica y semana actual;
+- [ ] publicación `gh-pages` funciona cuando existe portal;
+- [ ] no existen copias activas divergentes del mismo artefacto;
+- [ ] pendientes de conciliación están documentados.
+
+## 17. Extensiones por asignatura
+
+Este canon admite especializaciones sin cambiar las reglas comunes.
+
+- **DSY1102**: POO, ejemplos Java, labs, PetCare, ejercicios/desafíos progresivos.
+- **DSY1105**: Kotlin/Android, PocketLog, evolución consola → Android → persistencia/REST.
+- **DSY1107**: concepto → ejemplo/lab → transferencia a RegistrApp; labs cloud institucionales pueden permanecer en AVA cuando corresponda.
+- **BDY1101**: modelamiento conceptual → normalización/modelo relacional → SQL/APEX; fuerte trazabilidad entre EA, actividades, RA/IL y evaluaciones.
+
+Las particularidades complementan el canon; no redefinen la base académica, la autoridad documental ni las reglas de no duplicación.
