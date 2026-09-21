@@ -10,6 +10,9 @@ Este directorio organiza el contenido consolidado del curso y mantiene separado 
 | **02** | 17–22 agosto 2026 | Cierre gestión APIs + Identity as a Service | [Abrir Semana 02](semana-02/) |
 | **03** | 24–29 agosto 2026 | Usuarios externos, seguridad de APIs, JWT y claims | [Abrir Semana 03](semana-03/) |
 | **04** | 31 agosto–5 septiembre 2026 | **Cierre Identity as a Service + MSAL, Spring Security y arquitectura Full Stack segura + orientación Parcial 1** | [Abrir Semana 04](semana-04/) |
+| **05** | 7–12 septiembre 2026 | Integración Full Stack segura con API Manager e IDaaS | Material consolidado en documentación de identidad |
+| **06** | 14–19 septiembre 2026 | Evaluación Parcial 1 · defensas técnicas | Continuidad evaluativa |
+| **07** | 21–26 septiembre 2026 | **Cierre Evaluación Parcial 1 + baseline arquitectónico** | [Abrir Semana 07](semana-07/) |
 
 ## Regla de uso
 
