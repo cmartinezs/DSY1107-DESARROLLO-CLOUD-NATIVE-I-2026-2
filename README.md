@@ -130,38 +130,36 @@ No se sincronizan artificialmente: cada sección registra su último checkpoint 
 
 ## Semana actual
 
-**Semana 4 · 31 de agosto al 5 de septiembre de 2026**
+**Semana 8 · 28 de septiembre al 3 de octubre de 2026**
 
-**Cierre de Identity as a Service + integración Full Stack segura.**
+**Mensajería asíncrona y RabbitMQ.**
 
-Esta semana debe:
+Esta semana se trabaja:
 
-- cerrar **1.2.5–1.2.8**: usuarios externos, seguridad en API Manager, JWT/Claims y decodificación de tokens;
-- trabajar primero el flujo base **Azure for Students → tenant/permisos → SPA/API registrations → Guest/B2B manual → MSAL/PKCE → access token → Gateway → pruebas 401/403**;
-- estudiar **self-service sign-up B2B como extensión posterior**, una vez cerrado y diagnosticable el circuito base;
-- ejecutar una segunda pasada integral de pruebas/evidencia después de incorporar self-service;
-- comparar Microsoft Entra ID con Firebase Authentication como implementaciones de la capacidad IDaaS;
-- revisar con los estudiantes la **Evaluación Parcial 1**, su rúbrica, condiciones de entrega y la ventana planificada de semanas 6–7;
-- aclarar que **Pedidos360** es el nombre de referencia usado en el documento institucional, mientras que cada grupo aplica los requisitos a su proyecto real.
+- diferencias entre comunicación síncrona y asíncrona;
+- RabbitMQ contenerizado con Docker;
+- Producer y Consumer con Spring AMQP;
+- `DirectExchange`, bindings y routing keys;
+- observación del recorrido desde Management UI;
+- separación entre infraestructura de mensajería y lógica de aplicación;
+- transferencia controlada de una capacidad asíncrona a RegistrApp.
 
-Ruta técnica:
+Ruta pedagógica:
 
-```mermaid
-flowchart TD
-    A[Azure for Students] --> B[Tenant / directorio / permisos]
-    B --> C[SPA + API registrations]
-    C --> D[Guest/B2B manual]
-    D --> E[Authorization Code + PKCE / MSAL]
-    E --> F[Access token para API propia]
-    F --> G[API Gateway]
-    G --> H[Spring Security / backend]
-    H --> I[Pruebas base / 401 / 403 / evidencia]
-    I --> J[Extensión self-service B2B]
-    J --> K[IdP + atributos + user flow + provisioning]
-    K --> L[Segunda pasada integral de pruebas + no regresión]
+```text
+problema de acoplamiento
+→ Hello World
+→ observar broker
+→ exchange + binding + routing key
+→ ejercicio
+→ laboratorio
+→ transferencia formativa
 ```
 
-Consulta [`docs/identity/`](docs/identity/) para la fuente canónica del dominio, [`page/identidad.html`](page/identidad.html) para la vista web derivada, [`semanas/semana-04/`](semanas/semana-04/) para el contexto curricular, [`labs/`](labs/) para práctica y [`proyecto-formativo/`](proyecto-formativo/) para RegistrApp.
+→ [Semana 08](semanas/semana-08/)  
+→ [Ejemplo Semana 08](examples/semana-08/)  
+→ [Lab RabbitMQ + Spring AMQP](labs/rabbitmq-spring-amqp/)  
+→ [RegistrApp · Semana 08](proyecto-formativo/semana-08/)
 
 ## Documentación y publicación
 
