@@ -184,8 +184,8 @@ python3 scripts/validate_ev1.py --require-projects
 
 ```text
 DSY1107-00XD-nombre-apellido/
-└── guia/
-    └── ev1/
+└── labs/
+    └── cloudtasks-ev1-integrado/
         ├── README.md
         ├── frontend/
         ├── backend/
