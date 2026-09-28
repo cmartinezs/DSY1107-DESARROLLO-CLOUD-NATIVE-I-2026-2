@@ -1,0 +1,36 @@
+schema_version: 1
+course: DSY1107
+term: 2026-2
+week: 8
+period:
+  start: "2026-09-28"
+  end: "2026-10-03"
+plan:
+  type: learning
+  title: "Introducción a las colas de mensajería"
+  learning_outcomes:
+    - RA2
+  indicators:
+    - IL2.1
+  contents:
+    - "2.1.1 Introducción a mensajería asíncrona y RabbitMQ"
+    - "2.1.2 Queue, producer y consumer básicos"
+    - "2.1.3 Exchanges, bindings y routing keys"
+  canonical_week: semanas/semana-08/README.md
+  example: examples/semana-08/README.md
+  exercises: ejercicios/semana-08/README.md
+  lab: labs/rabbitmq-spring-amqp/README.md
+sections:
+  - id: 002D
+    execution_status: planned
+    actual_summary: null
+    blockers: null
+  - id: 003D
+    execution_status: planned
+    actual_summary: null
+    blockers: null
+project_formative:
+  checkpoint: proyecto-formativo/semana-08/README.md
+  increment_expected: true
+notes:
+  - "No declarar ejecución hasta disponer de evidencia de aula."
