@@ -109,8 +109,8 @@ Este es el **entry point canónico** de validación local. Ejecuta en orden:
 preflight de herramientas
 → estado Git
 → validación estática de guías
-→ Maven clean verify, si existe guia/ev1/backend
-→ npm ci + npm run build, si existe guia/ev1/frontend
+→ Maven clean verify, si existe .work/cloudtasks-ev1/backend
+→ npm ci + npm run build, si existe .work/cloudtasks-ev1/frontend
 → resumen único PASS/WARN/SKIP/FAIL
 ```
 
@@ -171,7 +171,7 @@ PASS: enlaces relativos, fences, Mermaid básico y reglas semánticas.
 
 ## Backend
 
-Desde `guia/ev1/backend/` el validador integral utiliza Maven Wrapper:
+Desde `.work/cloudtasks-ev1/backend/` el validador integral utiliza Maven Wrapper:
 
 ```bash
 ./mvnw -B clean verify
@@ -198,7 +198,7 @@ GET /api/admin/stats con ROLE_Admin → 200
 
 ## Frontend
 
-Desde `guia/ev1/frontend/` el validador exige instalación reproducible:
+Desde `.work/cloudtasks-ev1/frontend/` el validador exige instalación reproducible:
 
 ```bash
 npm ci
