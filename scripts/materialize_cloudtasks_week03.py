@@ -160,7 +160,7 @@ def materialize_frontend() -> None:
         [
             "npx",
             "-y",
-            "@angular/cli@22",
+            "@angular/cli@22.2.0",
             "new",
             "frontend",
             "--directory",
@@ -179,8 +179,8 @@ def materialize_frontend() -> None:
         [
             "npm",
             "install",
-            "@azure/msal-angular@^6",
-            "@azure/msal-browser@^5",
+            "@azure/msal-angular@6.2.1",
+            "@azure/msal-browser@5.23.0",
         ],
         FRONTEND,
     )
