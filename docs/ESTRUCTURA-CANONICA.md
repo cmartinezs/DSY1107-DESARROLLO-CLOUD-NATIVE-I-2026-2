@@ -110,16 +110,13 @@ Cada `semana-XX/` debe incluir:
 
 Cuando el incremento tiene más de una decisión relevante, se divide en varios `.md` y el README actúa como índice.
 
-## 8. `guias-integradas/`
+## 8. Prácticas integradas end-to-end
 
-El material rescatado de EV1 se conserva durante la conciliación. Su rol definitivo se evalúa por intención:
+Las prácticas integradas no constituyen una raíz pedagógica propia. Cuando una experiencia combina varias competencias mediante una secuencia guiada y evidencia reproducible, vive en `labs/`.
 
-- conocimiento transversal → `docs/`;
-- práctica guiada sustancial → `labs/`;
-- ejemplo acotado → `examples/`;
-- práctica breve → `ejercicios/`.
+El material EV1 rescatado se concilió como `labs/cloudtasks-ev1-integrado/`. El workspace técnico materializable vive localmente bajo `.work/` y no se versiona.
 
-No se reconoce automáticamente como una quinta vertical permanente.
+No existen raíces activas `guias-integradas/` ni `guia/`.
 
 ## 9. Criterio de completitud
 
