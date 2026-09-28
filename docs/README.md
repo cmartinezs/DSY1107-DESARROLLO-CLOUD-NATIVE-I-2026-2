@@ -18,6 +18,7 @@ Esta carpeta contiene conocimiento que debe seguir siendo válido más allá de 
 - [Auditoría estructural 2026-09-28](./AUDITORIA-ESTRUCTURA-2026-09-28.md)
 - [Estándar de estadísticas semanales](./ESTANDAR-ESTADISTICAS-SEMANALES.md)
 - [Datos semanales](../data/weekly/)
+- [Governance declarativa](../governance/)
 
 ## Estrategias propias de Cloud Native
 
