@@ -1,10 +1,10 @@
 # Etapa 5 · Separación de responsabilidades
 
-## Meta
+## Objetivo
 
-Evitar que RabbitMQ se convierta en la arquitectura completa de la aplicación.
+Evitar que RabbitMQ se convierta en la lógica de negocio de la aplicación.
 
-Estructura sugerida:
+## Estructura recomendada
 
 ```text
 config/
@@ -18,16 +18,43 @@ web/
   PedidoController
 ```
 
-## Regla
+## Regla central
 
-El listener transforma el mensaje en una llamada a una capacidad.
+El Controller y el Listener son **adaptadores de entrada**. Ambos pueden activar una misma capacidad de aplicación.
 
 ```mermaid
 flowchart LR
-    HTTP["REST Controller"] --> UC["Caso de uso"]
+    HTTP["REST Controller"] --> UC["ProcesarPedidoUseCase"]
     MQ["Rabbit Listener"] --> UC
+    UC --> DOM["Reglas / dominio"]
 ```
 
-## Checkpoint
+## Ejemplo de caso de uso
 
-El caso de uso debe poder probarse sin necesitar que el código de negocio “sepa” qué es RabbitMQ.
+```java
+public interface ProcesarPedidoUseCase {
+    void procesar(ProcesarPedidoCommand command);
+}
+```
+
+El controller traduce HTTP → command. El listener traduce mensaje → command. Ninguno debe copiar la regla central.
+
+## Anti-patrón
+
+```text
+@RabbitListener
+  ├─ valida reglas de negocio
+  ├─ calcula totales
+  ├─ guarda directamente
+  └─ envía respuestas
+```
+
+Si el listener concentra todo eso, la capacidad queda atada al transporte.
+
+## Checkpoint 5
+
+- [ ] `RabbitMQConfig` solo configura infraestructura;
+- [ ] publisher conoce exchange/routing;
+- [ ] listener adapta el mensaje;
+- [ ] caso de uso no depende de RabbitMQ;
+- [ ] la capacidad podría invocarse desde REST o un test directo.
