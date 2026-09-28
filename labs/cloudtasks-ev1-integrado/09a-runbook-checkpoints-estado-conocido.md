@@ -63,7 +63,7 @@ git rev-parse --show-toplevel
 Comprobar:
 
 ```text
-guia/ev1/ existe
+labs/cloudtasks-ev1-integrado/ existe
 no hay .git anidado
 working tree entendido
 ```
