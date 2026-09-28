@@ -26,3 +26,8 @@ Semana 06 está dedicada a la Evaluación Parcial 1. No corresponde inventar un 
 ## Estado de salida
 
 El mismo sistema defendido, con cualquier corrección debidamente trazada. Semana 07 recibe este estado.
+
+## Ruta de cierre evaluativo
+
+1. [Freeze del baseline](./01-freeze-baseline.md)
+2. [Evidencia para defensa](./02-evidencia-defensa.md)
