@@ -1,0 +1,130 @@
+schema_version: 1
+repository:
+  name: DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2
+  owner: cmartinezs
+  canonical_url: https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2
+  type: EDUCATIONAL
+  secondary_types: []
+  facets:
+    - COURSE_REPOSITORY
+    - LEARNER_FIRST
+  purpose: >-
+    Provide a learner-first, reproducible support repository for DSY1107 Desarrollo Cloud Native I
+    2026-2, separating curricular weeks, examples, short exercises, guided laboratories,
+    evaluation guidance, the incremental RegistrApp project and stable Cloud Native reference
+    documentation while preserving AVA and institutional Drive sources as authorities where applicable.
+  status:
+    lifecycle: ACTIVE
+  canonical_branch: master
+
+audiences:
+  primary:
+    - USER
+  secondary:
+    - DEVELOPER
+    - GOVERNANCE
+
+knowledge:
+  - id: course-orientation
+    source: README.md
+    type: [CONCEPT, STRUCTURE, GUIDE, REFERENCE]
+    intent: [DESCRIPTIVE, SUMMARY, EXPLANATORY, REFERENCE]
+    audiences: [USER, DEVELOPER, GOVERNANCE]
+    authority: CANONICAL_INFORMATIVE
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+  - id: academic-base
+    source: docs/PDA-RESUMEN.md
+    type: [CONCEPT, REFERENCE]
+    intent: [DESCRIPTIVE, SUMMARY, REFERENCE]
+    audiences: [USER, DEVELOPER, GOVERNANCE]
+    authority: DERIVED_FROM_INSTITUTIONAL
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+  - id: learning-outcomes
+    source: docs/RESULTADOS-DE-APRENDIZAJE.md
+    type: [CONCEPT, REFERENCE]
+    intent: [DESCRIPTIVE, REFERENCE]
+    audiences: [USER, DEVELOPER, GOVERNANCE]
+    authority: DERIVED_FROM_INSTITUTIONAL
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+  - id: weekly-learning-path
+    source: semanas/README.md
+    type: [STRUCTURE, GUIDE, REFERENCE]
+    intent: [EXPLANATORY, PROCEDURAL, REFERENCE]
+    audiences: [USER, DEVELOPER]
+    authority: CANONICAL_INFORMATIVE
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+  - id: worked-examples
+    source: examples/README.md
+    type: [GUIDE, REFERENCE]
+    intent: [EXPLANATORY, PROCEDURAL, REFERENCE]
+    audiences: [USER, DEVELOPER]
+    authority: CANONICAL_INFORMATIVE
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+  - id: exercises
+    source: ejercicios/README.md
+    type: [GUIDE, REFERENCE]
+    intent: [PROCEDURAL, EXPLANATORY, REFERENCE]
+    audiences: [USER, DEVELOPER]
+    authority: CANONICAL_INFORMATIVE
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+  - id: guided-laboratories
+    source: labs/README.md
+    type: [PROCEDURE, GUIDE, REFERENCE]
+    intent: [PROCEDURAL, EXPLANATORY, REFERENCE]
+    audiences: [USER, DEVELOPER]
+    authority: CANONICAL_INFORMATIVE
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+  - id: evaluation-guidance
+    source: evaluaciones/README.md
+    type: [GUIDE, REFERENCE]
+    intent: [EXPLANATORY, REFERENCE]
+    audiences: [USER, DEVELOPER, GOVERNANCE]
+    authority: CANONICAL_INFORMATIVE
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+  - id: formative-project
+    source: proyecto-formativo/README.md
+    type: [GUIDE, STRUCTURE, REFERENCE]
+    intent: [PROCEDURAL, EXPLANATORY, REFERENCE]
+    audiences: [USER, DEVELOPER]
+    authority: CANONICAL_INFORMATIVE
+    confidentiality: PUBLIC
+    publication: REQUIRED
+
+publication:
+  enabled: true
+  derived_read_model: true
+  visibility: PUBLIC
+  target: GH_PAGES
+  source_folder: page/
+  github_actions_deployment:
+    allowed: false
+  freshness:
+    same_change_expected: true
+  completeness_mode: ACTIVE_DECLARED_GAPS_ALLOWED
+
+conformance:
+  target: FULL
+  current: STRUCTURAL_RECONCILIATION_IN_PROGRESS
+  declared_gaps:
+    - portal must be reconciled with the stable academic base and new exercises surface
+    - historical monolithic labs can be decomposed further when pedagogically useful
+    - weeks after the current curricular week remain intentionally unmaterialized
+    - provider-level publication replay has not been executed in this reconciliation branch
+  closure_evidence:
+    reconciliation: governance/reconciliations/2026-09-28-STRUCTURE-RECONCILIATION.md
