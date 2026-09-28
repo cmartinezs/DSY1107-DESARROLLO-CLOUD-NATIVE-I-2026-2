@@ -31,7 +31,7 @@ Los snippets completos de las etapas son la fuente canónica:
 
 ## Gate curricular asociado · Semana 3
 
-El avance pedagógico actual de CloudTasks termina en `03B`, no en la arquitectura E2E final.
+El checkpoint curricular asociado a Semana 3 termina en `03B`; la ruta completa continúa después hasta la arquitectura E2E.
 
 Debe quedar demostrable:
 
@@ -136,7 +136,7 @@ python3 scripts/validate_ev1.py \
   --json-report /tmp/dsy1107-ev1-validation.json
 ```
 
-El script informa versión de Python, Git, Java, Node y npm; exige Java 21; informa branch/HEAD; comprueba si `origin` usa SSH; y delega la auditoría documental al validador estático especializado.
+El script informa versión de Python, Git, Java, Node y npm; exige Java 21; informa branch/HEAD; comprueba que `origin` apunte a GitHub mediante SSH o HTTPS; y delega la auditoría documental al validador estático especializado.
 
 ## Validador estático especializado
 
@@ -262,7 +262,7 @@ Orden hasta el gate vigente:
 
 ```text
 00A herramientas
-00B repo/guia/ev1
+00B repo/labs/cloudtasks-ev1-integrado
 00C valores
 00D responsabilidades
 00 mapa
