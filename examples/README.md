@@ -19,3 +19,7 @@ Esta carpeta indexa **ejemplos demostrativos reutilizables** del curso. Los labo
 → [`semana-04/`](semana-04/) — MSAL, PKCE y Resource Server con dominio neutral.
 
 > Si un ejemplo crece hasta convertirse en una experiencia integradora con instrucciones, evidencia y entrega, debe reclasificarse como laboratorio en `labs/`.
+
+## Semana 8
+
+→ [`semana-08/`](semana-08/) — Producer, DirectExchange, binding, queue y consumer con dominio de reservas.
