@@ -35,3 +35,9 @@ RegistrApp queda definido como una solución mínima consumidora de una API y pr
 ## Deuda / siguiente paso
 
 Aplicar las capacidades de gestión de APIs cuando sean comprendidas en clase.
+
+## Ruta del incremento
+
+1. [Modelo inicial](./01-modelo-inicial.md)
+2. [Arquitectura y decisiones](./02-arquitectura-y-decisiones.md)
+3. [Checkpoint de salida](./03-checkpoint-salida.md)
