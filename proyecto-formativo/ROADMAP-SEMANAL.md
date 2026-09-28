@@ -12,12 +12,12 @@ RegistrApp es **un único proyecto vivo**. Cada semana recibe el estado anterior
 |---|---|---|---|---|
 | [01](./semana-01/) | definido | proyecto no iniciado | API y arquitectura mínima | base inicial de RegistrApp |
 | [02](./semana-02/) | definido | estado Semana 1 | gateway, versionado, CORS e identidad según avance real | arquitectura extendida |
-| [03](./semana-03/) | actual | estado Semana 2 | JWT, claims y seguridad según avance real | solución protegida progresivamente |
-| [04](./semana-04/) | reservado | estado Semana 3 | por definir según contenido aprendido | entrada Semana 5 |
-| [05](./semana-05/) | reservado | estado Semana 4 | por definir según contenido aprendido | entrada Semana 6 |
-| [06](./semana-06/) | reservado | estado Semana 5 | por definir según contenido aprendido | entrada Semana 7 |
-| [07](./semana-07/) | reservado | estado Semana 6 | por definir según contenido aprendido | entrada Semana 8 |
-| [08](./semana-08/) | reservado | estado Semana 7 | por definir según contenido aprendido | entrada Semana 9 |
+| [03](./semana-03/) | definido | estado Semana 2 | JWT, claims, matriz 401/403 y responsabilidades | contrato de seguridad progresivo |
+| [04](./semana-04/) | definido | estado Semana 3 | MSAL, Spring Security y arquitectura segura | baseline Full Stack seguro |
+| [05](./semana-05/) | definido | estado Semana 4 | integración end-to-end protegida | baseline evaluable EA1 |
+| [06](./semana-06/) | evaluativo | estado Semana 5 | freeze, evidencia y defensa EP1 | baseline sin expansión funcional |
+| [07](./semana-07/) | evaluativo | estado Semana 6 | cierre de deudas y transición de experiencia | baseline EA2 |
+| [08](./semana-08/) | actual | estado Semana 7 | capacidad asíncrona mínima con RabbitMQ | entrada Semana 9 |
 | [09](./semana-09/) | reservado | estado Semana 8 | por definir según contenido aprendido | entrada Semana 10 |
 | [10](./semana-10/) | reservado | estado Semana 9 | por definir según contenido aprendido | entrada Semana 11 |
 | [11](./semana-11/) | reservado | estado Semana 10 | por definir según contenido aprendido | entrada Semana 12 |

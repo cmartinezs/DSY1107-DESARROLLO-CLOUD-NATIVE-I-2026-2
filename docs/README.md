@@ -1,41 +1,46 @@
-# Material de apoyo · DSY1107
+# Documentación transversal · DSY1107
 
-Esta carpeta reúne documentación transversal y guías de consulta que deben seguir siendo útiles durante más de una semana.
+Esta carpeta contiene conocimiento que debe seguir siendo válido más allá de una semana puntual.
 
-## Canon y operación
+## Base académica estable
 
-- [**Canon transversal de repositorios docentes**](./CANON-REPOSITORIO-DOCENTE.md) — estructura común, hogares canónicos y reconciliación semanal.
-- [**Checklist operativo semanal**](./CHECKLIST-OPERACION-SEMANAL.md) — ciclo mínimo para preparar, ejecutar y cerrar cada semana manteniendo separado el avance real de 002D/003D.
-- [**Desafío transversal RegistrApp**](./DESAFIO-TRANSVERSAL-REGISTRAPP.md) — regla canónica para transferir lo aprendido semana a semana sin convertir el desafío en el ejemplo conductor del contenido.
-- [**Estándar de estadísticas semanales**](./ESTANDAR-ESTADISTICAS-SEMANALES.md) — contrato común de datos agregados para análisis y dashboards entre cursos.
-- [**Banco de dinámicas vivas**](./BANCO-DINAMICAS-VIVAS.md) — actividades reutilizables para reforzar conceptos, responsabilidades y transferencia.
-- [**Estándar de repositorio del estudiante**](./ESTANDAR-REPOSITORIO-ESTUDIANTE.md) — estructura de entregas, Markdown, Git y particularidades Cloud Native.
-- [**DevLog del estudiante**](./DEVLOG-ESTUDIANTE.md) — manual, propósito, formato, ejemplos y reglas de la bitácora técnica semanal.
-- [**Datos semanales**](../data/weekly/) — archivos YAML agregados y procesables por semana y sección.
+- [PDA / PA · resumen](./PDA-RESUMEN.md)
+- [Resultados de aprendizaje e indicadores](./RESULTADOS-DE-APRENDIZAJE.md)
+- [Ruta de aprendizaje](./RUTA-DE-APRENDIZAJE.md)
+- [Cronograma institucional reconciliado](./CRONOGRAMA.md)
+- [Evaluaciones](../evaluaciones/)
 
-> El repo docente contiene el **manual**. El DevLog real vive en `docs/devlog/` dentro del repositorio público de cada estudiante, incluso cuando una actividad técnica se resuelve en equipo.
+## Estructura y operación
+
+- [Estructura canónica DSY1107](./ESTRUCTURA-CANONICA.md)
+- [Canon transversal de repositorios docentes](./CANON-REPOSITORIO-DOCENTE.md)
+- [Checklist operativo semanal](./CHECKLIST-OPERACION-SEMANAL.md)
+- [Auditoría estructural 2026-09-28](./AUDITORIA-ESTRUCTURA-2026-09-28.md)
+- [Estándar de estadísticas semanales](./ESTANDAR-ESTADISTICAS-SEMANALES.md)
+- [Datos semanales](../data/weekly/)
+- [Governance declarativa](../governance/)
 
 ## Estrategias propias de Cloud Native
 
-- [**Laboratorios · concepto → local/neutral → cloud real**](./ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md)
-- [**RegistrApp · desafío transversal**](./DESAFIO-TRANSVERSAL-REGISTRAPP.md)
+- [Laboratorios · concepto → local/neutral → cloud real](./ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md)
+- [RegistrApp · desafío transversal](./DESAFIO-TRANSVERSAL-REGISTRAPP.md)
+- [Identity & Access](./identity/)
 
-El archivo [`DOMINIO-FORMATIVO-TRANSVERSAL.md`](./DOMINIO-FORMATIVO-TRANSVERSAL.md) se conserva únicamente como compatibilidad histórica y redirige a la definición vigente.
+## Estándares del estudiante
+
+- [Repositorio del estudiante](./ESTANDAR-REPOSITORIO-ESTUDIANTE.md)
+- [DevLog](./DEVLOG-ESTUDIANTE.md)
+- [Banco de dinámicas](./BANCO-DINAMICAS-VIVAS.md)
 
 ## Regla pedagógica
 
 ```text
-CONTENIDO
-concepto → ejemplo independiente → práctica independiente → evidencia
-
-REGISTRAPP
-contenido comprendido → transferencia → incremento → checkpoint
+contenido semanal
+→ ejemplo
+→ ejercicio
+→ laboratorio
+→ evidencia
+→ transferencia a RegistrApp
 ```
 
-## Recursos canónicos
-
-- [Laboratorios](../labs/)
-- [Ejemplos](../examples/)
-- [Semanas](../semanas/)
-
-El DevLog registra el proceso personal; los README de labs/proyectos documentan la solución reproducible.
+El README de una carpeta es un índice. El contenido real debe vivir en archivos separados cuando la materia, lab o checkpoint requiere profundidad.

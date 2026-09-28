@@ -1,24 +1,35 @@
-# RegistrApp · Semana 7
-
-## Estado
-Checkpoint reservado. El contenido específico se define cuando la planificación de Semana 7 esté confirmada.
+# RegistrApp · Semana 07 · Cierre de la Experiencia 1
 
 ## Estado de entrada
-Recibe todo el estado de salida de Semana 6, incluidas sus deudas explícitas.
 
-## Contenido transferible
-Por definir según el contenido efectivamente trabajado en clases. No incorporar capacidades no aprendidas.
+Recibe el estado evaluado/defendido durante Semana 06.
 
-## Incremento
-Debe extender el estado anterior; no reiniciar RegistrApp.
+## Propósito
 
-## Evidencia obligatoria
-- comparación antes/después;
-- artefactos modificados;
-- decisión técnica;
-- referencia a commits/archivos cuando corresponda;
-- DevLog;
-- deuda pendiente.
+Cerrar la primera experiencia de aprendizaje sin adelantar RabbitMQ.
+
+## Acciones
+
+1. reconciliar el estado real del proyecto después de la defensa;
+2. registrar decisiones que cambiaron;
+3. identificar deuda técnica;
+4. dejar una línea base reproducible para iniciar RA2;
+5. no incorporar mensajería asíncrona hasta trabajarla en contenido/lab.
+
+## Evidencia de cierre
+
+- estado base reproducible;
+- arquitectura vigente;
+- dependencias/servicios utilizados;
+- riesgos/deuda;
+- commits relevantes;
+- DevLog.
 
 ## Estado de salida
-El estado completo resultante será la entrada de Semana 8.
+
+Baseline de RegistrApp para Semana 08.
+
+## Ruta de cierre de EA1
+
+1. [Cierre de deudas](./01-cierre-deudas.md)
+2. [Baseline de entrada a EA2](./02-baseline-ea2.md)

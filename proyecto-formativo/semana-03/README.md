@@ -67,3 +67,9 @@ Registrar explícitamente qué capacidad de Semanas 1–3 sigue pendiente y desd
 ## Refuerzo clase a clase
 
 Dentro de esta misma semana pueden existir varios incrementos pequeños. Cada uno debe indicar qué competencia recién aprendida habilitó el cambio y qué parte del estado anterior fue modificada.
+
+## Ruta del incremento
+
+1. [Contrato de seguridad](./01-contrato-seguridad.md)
+2. [Matriz de acceso](./02-matriz-acceso.md)
+3. [Evidencia y deuda](./03-evidencia-y-deuda.md)

@@ -53,6 +53,7 @@ Los ejercicios institucionales publicados en AVA siguen siendo material oficial 
 
 - [`firebase-auth-miniapp/`](firebase-auth-miniapp/) — Semana 4: mini app web con Firebase Authentication. Implementa zona pública/privada, Register, Login, Password Reset y Logout con Email/Password; solo después agrega Google Sign-In como proveedor federado.
 - [`fullstack-seguro/`](fullstack-seguro/) — Semana 4: laboratorio por etapas que consume la guía canónica de Identity y aplica **dos App Registrations**, MSAL + PKCE, access token para API propia, AWS API Gateway/JWT Authorizer, Spring Security Resource Server, validación explícita de audience, matriz 401/403/2xx, troubleshooting y threat sketch.
+- [`cloudtasks-ev1-integrado/`](cloudtasks-ev1-integrado/) — práctica end-to-end de preparación para EV1 rescatada y conciliada: Angular, Entra External ID, JWT, Spring Security, EC2, API Gateway, CORS, frontend cloud, troubleshooting y cleanup. No sustituye la evaluación oficial.
 
 ## Relación con AVA
 

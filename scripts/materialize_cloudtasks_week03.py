@@ -2,7 +2,7 @@
 """Materializa un workspace local reproducible de CloudTasks hasta Semana 3.
 
 Este script es para validación docente/técnica. No reemplaza el recorrido pedagógico
-por IntelliJ + Spring Initializr + Angular CLI descrito en `guias-integradas/ev1/`.
+por IntelliJ + Spring Initializr + Angular CLI descrito en `labs/cloudtasks-ev1-integrado/`.
 
 Requiere acceso de red a start.spring.io y npm registry.
 
@@ -27,7 +27,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKSPACE = ROOT / "guia" / "ev1"
+WORKSPACE = ROOT / ".work" / "cloudtasks-ev1"
 BACKEND = WORKSPACE / "backend"
 FRONTEND = WORKSPACE / "frontend"
 
@@ -160,7 +160,7 @@ def materialize_frontend() -> None:
         [
             "npx",
             "-y",
-            "@angular/cli@22",
+            "@angular/cli@22.2.0",
             "new",
             "frontend",
             "--directory",
@@ -179,8 +179,8 @@ def materialize_frontend() -> None:
         [
             "npm",
             "install",
-            "@azure/msal-angular@^6",
-            "@azure/msal-browser@^5",
+            "@azure/msal-angular@6.2.1",
+            "@azure/msal-browser@5.23.0",
         ],
         FRONTEND,
     )
@@ -410,19 +410,19 @@ def print_next_steps() -> None:
     print("\n" + "=" * 72)
     print("CLOUDTASKS WEEK 03 MATERIALIZADO")
     print("=" * 72)
-    print("Backend : guia/ev1/backend")
-    print("Frontend: guia/ev1/frontend")
+    print("Backend : .work/cloudtasks-ev1/backend")
+    print("Frontend: .work/cloudtasks-ev1/frontend")
     print()
     print("Siguiente gate local:")
     print("  python3 scripts/validate_ev1.py --require-projects --strict")
     print()
     print("Después del PASS de build, configure valores reales en:")
-    print("  guia/ev1/frontend/src/app/auth-config.ts")
+    print("  .work/cloudtasks-ev1/frontend/src/app/auth-config.ts")
     print()
     print("Luego siga:")
-    print("  guias-integradas/ev1/02-entra-external-id.md")
-    print("  guias-integradas/ev1/03-angular-msal.md")
-    print("  guias-integradas/ev1/03b-checkpoint-semana-03-idaas-jwt-api-manager.md")
+    print("  labs/cloudtasks-ev1-integrado/02-entra-external-id.md")
+    print("  labs/cloudtasks-ev1-integrado/03-angular-msal.md")
+    print("  labs/cloudtasks-ev1-integrado/03b-checkpoint-semana-03-idaas-jwt-api-manager.md")
 
 
 def main() -> int:

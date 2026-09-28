@@ -77,6 +77,7 @@ La página principal debe responder:
 - [ ] Actualizar checkpoint de RegistrApp **por separado** cuando corresponda.
 - [ ] Comprobar que no existan secretos o credenciales versionadas.
 - [ ] Revisar enlaces públicos y documentación reproducible.
+- [ ] Ejecutar `python3 scripts/validate_repository_structure.py` para evitar regresiones de estructura/completitud.
 - [ ] Registrar deuda pedagógica/técnica para la semana siguiente.
 - [ ] Actualizar `data/weekly/semana-XX.yml` por sección con plan vs avance real, evidencias, DevLog agregado, estado de RegistrApp, bloqueos y foco siguiente.
 - [ ] Mantener en `null` cualquier métrica sin evidencia confiable; no estimar ni completar datos personales.

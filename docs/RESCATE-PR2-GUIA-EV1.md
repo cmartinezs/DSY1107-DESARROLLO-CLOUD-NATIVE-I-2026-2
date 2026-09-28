@@ -52,9 +52,20 @@ la semana vigente del curso.
 - [x] tooling de validación recuperado;
 - [x] referencias temporales principales normalizadas;
 - [x] material enlazado desde README sin reescribir todavía la arquitectura canónica;
-- [ ] conciliación arquitectónica ejecutada en rama separada;
-- [ ] rescate integrado a `master`.
+- [x] conciliación arquitectónica ejecutada en rama separada;
+- [x] rescate integrado a `master`.
 
 El PR #2 puede cerrarse como superseded una vez abierto el PR de rescate. La rama histórica
 se debe eliminar después de confirmar que el rescate quedó disponible; la eliminación de
 rama se realiza mediante GitHub cuando el conector disponible permita borrar refs.
+
+
+## Resultado de la conciliación
+
+El contenido rescatado quedó reclasificado como:
+
+```text
+labs/cloudtasks-ev1-integrado/
+```
+
+y el workspace técnico pasó a `.work/cloudtasks-ev1/`, ignorado por Git. Las rutas `guia/` y `guias-integradas/` dejan de formar parte de la estructura activa del repositorio.

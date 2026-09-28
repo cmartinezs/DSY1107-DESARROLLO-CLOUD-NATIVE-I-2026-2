@@ -1,6 +1,5 @@
-# Local validation workspace generated from the rescued EV1 integrated guide
-guia/ev1/backend/
-guia/ev1/frontend/
+# Local validation workspaces
+.work/
 
 # Python local artifacts
 __pycache__/

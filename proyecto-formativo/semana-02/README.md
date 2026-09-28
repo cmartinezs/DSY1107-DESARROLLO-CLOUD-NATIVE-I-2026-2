@@ -42,3 +42,9 @@ RegistrApp conserva la API inicial y suma las capacidades efectivamente comprend
 ## Deuda / siguiente paso
 
 Todo elemento no alcanzado por la sección permanece explícitamente como deuda. Semana 3 no debe asumirlo terminado sin evidencia.
+
+## Ruta del incremento
+
+1. [Gateway, versionado y CORS](./01-gateway-versionado-cors.md)
+2. [Identidad y scopes](./02-identidad-y-scopes.md)
+3. [Checkpoint de salida](./03-checkpoint-salida.md)

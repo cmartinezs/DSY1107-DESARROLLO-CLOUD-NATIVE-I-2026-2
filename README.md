@@ -8,11 +8,14 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 
 - [`semanas/`](semanas/) — índice y contenido curricular consolidado de cada semana.
 - [`examples/`](examples/) — ejemplos demostrativos independientes del proyecto transversal.
-- [`labs/`](labs/) — laboratorios locales, autocontenidos e independientes del proyecto formativo.
+- [`labs/`](labs/) — laboratorios guiados locales o provider-backed, independientes del proyecto formativo.
+- [`ejercicios/`](ejercicios/) — práctica breve y focalizada entre contenido y laboratorio.
 - [`proyecto-formativo/`](proyecto-formativo/) — **RegistrApp**, vertical transversal independiente que evoluciona clase a clase.
+- [`evaluaciones/`](evaluaciones/) — mapa y orientaciones evaluativas; AVA/Drive conservan la autoridad institucional.
 - [`docs/identity/`](docs/identity/) — dominio canónico de identidad y acceso: Azure for Students, Entra ID, Guest/B2B, MSAL, tokens, API Gateway y extensión self-service B2B.
-- [`guias-integradas/ev1/`](guias-integradas/ev1/) — guía integrada de preparación para EV1 rescatada del PR histórico #2; conserva la ruta end-to-end y queda pendiente de conciliación arquitectónica en una rama separada.
 - [`page/`](page/) — portal web del curso, superficie derivada y navegable.
+- [**Base académica**](docs/PDA-RESUMEN.md) — síntesis trazable del PDA/PA, resultados y experiencias.
+- [**Resultados de aprendizaje**](docs/RESULTADOS-DE-APRENDIZAJE.md) · [**Ruta de aprendizaje**](docs/RUTA-DE-APRENDIZAJE.md) · [**Cronograma**](docs/CRONOGRAMA.md)
 - [**Guía completa de Microsoft Entra ID**](docs/identity/entra-guia-completa/README.md) — flujo base 0–7 y extensión self-service 8–14.
 - [**Versión web · Identidad y acceso**](page/identidad.html) — read model para estudiantes con navegación progresiva y diagramas Mermaid.
 - [**Estrategia de laboratorios y relación con AVA**](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md) — labs locales en el repo; ejercicios/labs cloud institucionales en AVA.
@@ -23,13 +26,14 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 
 DSY1107 mantiene **dos verticales distintas, con raíces distintas**.
 
-### Vertical de contenido · `semanas/`, `examples/`, `labs/`
+### Vertical de contenido · `semanas/`, `examples/`, `ejercicios/`, `labs/`
 
 ```text
 concepto
 → explicación
 → ejemplo pequeño y autocontenido
-→ mini ejercicio/laboratorio local e independiente
+→ ejercicio breve
+→ laboratorio guiado
 → evidencia de comprensión
 ```
 
@@ -56,7 +60,8 @@ La semana curricular dice **qué corresponde aprender ahora**. Las raíces trans
 ```mermaid
 flowchart LR
     W[semanas · qué se aprende y cuándo] --> E[examples · ejemplos]
-    W --> L[labs · práctica autocontenida]
+    W --> X[ejercicios · práctica breve]
+    W --> L[labs · práctica guiada]
     W --> P[proyecto-formativo · RegistrApp]
     D[docs/identity · conocimiento canónico de identidad] --> W
     D --> L
@@ -86,6 +91,8 @@ flowchart LR
 El laboratorio de contenido debe ser entendible por sí mismo. Si después la misma competencia se aplica a RegistrApp, esa aplicación pertenece al proyecto formativo y se documenta por separado.
 
 → [Ver estrategia completa](docs/ESTRATEGIA-LABORATORIOS-CONCEPTO-A-CLOUD.md)
+
+El material end-to-end rescatado de EV1 quedó conciliado como [**Lab integrado CloudTasks**](labs/cloudtasks-ev1-integrado/): es una práctica provider-backed de preparación, no una evaluación ni una tercera raíz pedagógica.
 
 ## Repositorio personal del estudiante
 
@@ -161,6 +168,22 @@ problema de acoplamiento
 → [Ejemplo Semana 08](examples/semana-08/)  
 → [Lab RabbitMQ + Spring AMQP](labs/rabbitmq-spring-amqp/)  
 → [RegistrApp · Semana 08](proyecto-formativo/semana-08/)
+
+## Governance y estructura
+
+- [Estructura canónica DSY1107](docs/ESTRUCTURA-CANONICA.md)
+- [Auditoría estructural 2026-09-28](docs/AUDITORIA-ESTRUCTURA-2026-09-28.md)
+- [Governance declarativa](governance/)
+
+## Validación estructural
+
+Desde la raíz del repositorio:
+
+```bash
+python3 scripts/validate_repository_structure.py
+```
+
+Este gate comprueba la base académica, continuidad semanal hasta Semana 08 y que las superficies activas tengan contenido real más allá de un README.
 
 ## Documentación y publicación
 

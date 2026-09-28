@@ -1,46 +1,31 @@
-# RegistrApp · Semana 8
-
-## Estado
-
-Transferencia de la competencia de mensajería asíncrona trabajada en Semana 08.
+# RegistrApp · Semana 08 · Primer incremento asíncrono
 
 ## Estado de entrada
 
-Recibe el estado real de salida de Semana 7. No reiniciar el proyecto ni agregar alcance funcional ajeno al contenido aprendido.
+Recibe el baseline cerrado en Semana 07.
 
 ## Contenido transferible
 
-- identificación de una capacidad candidata a procesamiento asíncrono;
-- Producer;
+Solo las capacidades trabajadas en Semana 08:
+
+- producer/consumer;
 - DirectExchange;
+- binding;
 - routing key;
-- Queue;
-- Consumer;
-- separación entre infraestructura de mensajería y lógica de aplicación.
+- queue;
+- separación mensajería/negocio.
 
-## Incremento esperado
+## Ruta
 
-Seleccionar **una sola capacidad** del proyecto para demostrar el patrón. Ejemplos razonables: notificación, auditoría o procesamiento posterior.
+1. [Seleccionar capacidad](./01-seleccion-capacidad.md)
+2. [Diseñar topología](./02-diseno-topologia.md)
+3. [Integrar incrementalmente](./03-integracion-incremental.md)
+4. [Pruebas y evidencia](./04-pruebas-evidencia.md)
 
-La capacidad debe conservar una frontera propia y poder ser llamada desde un caso de uso común.
+## Regla
 
-```mermaid
-flowchart LR
-    R[REST] --> U[Caso de uso]
-    L[Rabbit Listener] --> U
-    U --> D[Dominio / persistencia]
-```
-
-## Evidencia obligatoria
-
-- diagrama de la topología;
-- exchange, queue, binding y routing key visibles;
-- mensaje publicado y consumido;
-- código con responsabilidades separadas;
-- decisión técnica;
-- DevLog;
-- referencia a commits/archivos.
+No agregar RabbitMQ como decoración. Debe existir una capacidad cuya ejecución pueda desacoplarse de forma defendible.
 
 ## Estado de salida
 
-El incremento asíncrono demostrable pasa a ser entrada de Semana 9. Cualquier deuda queda explícita; no se asume completitud por haber creado la infraestructura.
+Un incremento pequeño, reproducible y explicable que queda disponible para Semana 09.

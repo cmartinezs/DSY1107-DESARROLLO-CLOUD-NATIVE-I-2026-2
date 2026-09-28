@@ -9,13 +9,13 @@ El comando ejecuta, en orden:
 
 1. preflight del entorno (Python, Git, Java, Node y npm);
 2. comprobaciones básicas del repositorio Git;
-3. validador estático de `guias-integradas/`;
-4. build/test del backend si existe `guia/ev1/backend/`;
-5. instalación reproducible + build del frontend si existe `guia/ev1/frontend/`;
+3. validador estático de `labs/cloudtasks-ev1-integrado/`;
+4. build/test del backend si existe `.work/cloudtasks-ev1/backend/`;
+5. instalación reproducible + build del frontend si existe `.work/cloudtasks-ev1/frontend/`;
 6. resumen único PASS/WARN/FAIL con tiempos.
 
-Por defecto, la ausencia de los proyectos materializados `guia/ev1/backend` y
-`guia/ev1/frontend` se informa como SKIP, porque este repositorio docente contiene
+Por defecto, la ausencia de los proyectos materializados `.work/cloudtasks-ev1/backend` y
+`.work/cloudtasks-ev1/frontend` se informa como SKIP, porque este repositorio docente contiene
 la guía que enseña a crearlos. Use `--require-projects` para exigirlos como parte
 de una validación funcional completa.
 
@@ -42,8 +42,8 @@ from typing import Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC_VALIDATOR = ROOT / "scripts" / "validate_integrated_guides.py"
-DEFAULT_BACKEND = ROOT / "guia" / "ev1" / "backend"
-DEFAULT_FRONTEND = ROOT / "guia" / "ev1" / "frontend"
+DEFAULT_BACKEND = ROOT / ".work" / "cloudtasks-ev1" / "backend"
+DEFAULT_FRONTEND = ROOT / ".work" / "cloudtasks-ev1" / "frontend"
 
 
 @dataclass
@@ -89,7 +89,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--require-projects",
         action="store_true",
-        help="Falla si no existen guia/ev1/backend y guia/ev1/frontend.",
+        help="Falla si no existen .work/cloudtasks-ev1/backend y .work/cloudtasks-ev1/frontend.",
     )
     parser.add_argument(
         "--strict",
@@ -105,13 +105,13 @@ def parse_args() -> argparse.Namespace:
         "--backend",
         type=Path,
         default=DEFAULT_BACKEND,
-        help="Ruta del backend a validar (default: guia/ev1/backend).",
+        help="Ruta del backend a validar (default: .work/cloudtasks-ev1/backend).",
     )
     parser.add_argument(
         "--frontend",
         type=Path,
         default=DEFAULT_FRONTEND,
-        help="Ruta del frontend a validar (default: guia/ev1/frontend).",
+        help="Ruta del frontend a validar (default: .work/cloudtasks-ev1/frontend).",
     )
     parser.add_argument(
         "--json-report",
@@ -256,7 +256,7 @@ def git_checks(ui: Ui, results: list[Result], strict: bool) -> None:
 
 
 def static_validation(ui: Ui, results: list[Result]) -> None:
-    ui.title("3/5 · Guías integradas")
+    ui.title("3/5 · Lab integrado CloudTasks")
     started = time.monotonic()
 
     if not STATIC_VALIDATOR.exists():

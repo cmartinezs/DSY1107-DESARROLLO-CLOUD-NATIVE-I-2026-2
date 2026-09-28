@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Validación estática local de guías integradas DSY1107.
+"""Validación estática local del laboratorio integrado CloudTasks EV1.
 
 No usa red ni GitHub Actions. Ejecutar desde la raíz del repositorio:
 
     python scripts/validate_integrated_guides.py
 
 Comprueba enlaces Markdown relativos, fences de código, bloques Mermaid básicos y
-regresiones semánticas que no deben volver a introducirse en la guía EV1.
+regresiones semánticas que no deben volver a introducirse en el laboratorio integrado EV1.
 """
 
 from __future__ import annotations
@@ -17,11 +17,11 @@ from pathlib import Path
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
-GUIDES = ROOT / "guias-integradas"
-EV1 = GUIDES / "ev1"
+GUIDES = ROOT / "labs" / "cloudtasks-ev1-integrado"
+EV1 = GUIDES
 
 FORBIDDEN_TEXT = {
-    "evaluaciones/ep1/": "La práctica integrada debe vivir en guia/ev1/, no evaluaciones/ep1/.",
+    "evaluaciones/ep1/": "La práctica integrada no debe vivir dentro de evaluaciones; su hogar canónico es labs/cloudtasks-ev1-integrado/.",
     "00b-git-github-flujo-evaluacion.md": "Se renombró a flujo-guia.",
     "10-evidencias-y-defensa.md": "Se reemplazó por verificación integrada.",
     "10a-plan-evidencias-ev1.md": "Se reemplazó por mapa de cobertura.",
@@ -167,7 +167,7 @@ def main() -> int:
     errors: list[str] = []
 
     if not GUIDES.exists():
-        print("ERROR: no existe guias-integradas/", file=sys.stderr)
+        print("ERROR: no existe labs/cloudtasks-ev1-integrado/", file=sys.stderr)
         return 2
 
     validate_required_files(errors)
@@ -181,7 +181,7 @@ def main() -> int:
         validate_semantics(path, text, errors)
         validate_commands(path, text, errors)
 
-    print(f"Guías revisadas: {len(files)}")
+    print(f"Archivos del lab integrado revisados: {len(files)}")
 
     if errors:
         print(f"Errores: {len(errors)}")

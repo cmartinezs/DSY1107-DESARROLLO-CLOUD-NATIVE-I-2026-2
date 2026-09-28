@@ -1,25 +1,26 @@
 # Ejemplos · DSY1107
 
-Esta carpeta indexa **ejemplos demostrativos reutilizables** del curso. Los laboratorios completos viven en [`../labs/`](../labs/); aquí solo se mantiene material cuyo propósito principal sea mostrar un concepto de forma acotada.
+Ejemplos demostrativos breves, independientes de RegistrApp y orientados a una idea principal.
 
-## Semana 1
+## Índice
 
-→ [`semana-01/`](semana-01/)
+- [Semana 01 · Routing, versionado y CORS](./semana-01/)
+- [Semana 02 · OAuth2/OIDC, scopes y tokens](./semana-02/)
+- [Semana 03 · JWT, claims y autorización](./semana-03/)
+- [Semana 04 · SPA + Resource Server](./semana-04/)
+- [Semana 05 · Flujo Full Stack seguro](./semana-05/)
+- [Semana 08 · Mensajería asíncrona y routing](./semana-08/)
 
-## Semana 2
+Semanas 06–07 son evaluativas y no requieren ejemplos artificiales.
 
-→ [`semana-02/`](semana-02/)
+## Regla
 
-## Semana 3
+Un ejemplo:
 
-→ [`semana-03/`](semana-03/) — JWT, claims, scopes y autorización con dominio neutral.
+- tiene un objetivo principal;
+- es pequeño;
+- es ejecutable o demostrable;
+- no requiere completar un lab entero;
+- no usa RegistrApp como dominio por defecto.
 
-## Semana 4
-
-→ [`semana-04/`](semana-04/) — MSAL, PKCE y Resource Server con dominio neutral.
-
-> Si un ejemplo crece hasta convertirse en una experiencia integradora con instrucciones, evidencia y entrega, debe reclasificarse como laboratorio en `labs/`.
-
-## Semana 8
-
-→ [`semana-08/`](semana-08/) — Producer, DirectExchange, binding, queue y consumer con dominio de reservas.
+Si un ejemplo necesita múltiples etapas, entregables y checkpoints, pasa a `labs/`.

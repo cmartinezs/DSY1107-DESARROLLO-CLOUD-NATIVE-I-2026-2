@@ -73,3 +73,9 @@ No transferir todavía si no se puede demostrar:
 ## Estado de salida
 
 El estado completo resultante será la entrada de Semana 6. Las capacidades no demostradas continúan como deuda; no se marcan como cubiertas por haber existido en la planificación.
+
+## Ruta del incremento
+
+1. [Gate de entrada](./01-gate-entrada.md)
+2. [Integración end-to-end](./02-integracion-end-to-end.md)
+3. [Pruebas negativas](./03-pruebas-negativas.md)

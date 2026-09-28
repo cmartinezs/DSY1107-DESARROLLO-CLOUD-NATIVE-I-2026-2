@@ -26,6 +26,13 @@ flowchart LR
 - **1.3.7** Integrando el IDaaS con el API Manager en la solución Full Stack.
 - **Evaluación Formativa 1:** Integrando el Aplicativo al API Manager.
 
+## Ruta de contenido
+
+1. [Access Token para la API propia](./01-access-token-api-propia.md)
+2. [Gateway + backend protegido](./02-gateway-backend-seguro.md)
+3. [Pruebas y diagnóstico](./03-pruebas-y-diagnostico.md)
+4. [Formativa 1 y transferencia](./04-formativa-y-transferencia.md)
+
 ## Baseline esperado de entrada
 
 Al comenzar Semana 5, los estudiantes **ya debieron haber avanzado hasta la configuración del IDaaS y realizado los laboratorios y guías indicados en Semana 4**. Por tanto, esta semana no debe reiniciar la configuración del proveedor de identidad ni repetir los laboratorios completos como contenido principal.
