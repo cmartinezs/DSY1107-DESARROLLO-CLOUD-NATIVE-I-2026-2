@@ -1,31 +1,53 @@
 # Etapa 1 · Anatomía de un JWT
 
-## Trabajo
+## Objetivo
 
-Identifica:
+Leer la estructura de un JWT sin confundir lectura con confianza.
+
+Un JWT compacto suele representarse como:
 
 ```text
 header.payload.signature
 ```
 
-En el payload ubica al menos:
+## Header conceptual
 
-- `iss`;
-- `aud`;
-- `sub`;
-- `exp`;
-- `scp` o `scope`.
+```json
+{
+  "alg": "RS256",
+  "typ": "JWT",
+  "kid": "key-01"
+}
+```
+
+`kid` ayuda al validador a seleccionar una clave pública compatible dentro de un JWKS; por sí solo no valida nada.
+
+## Payload de trabajo
+
+```json
+{
+  "iss": "https://identity.example/",
+  "aud": "products-api",
+  "sub": "user-123",
+  "exp": 1790000000,
+  "scp": "products.read"
+}
+```
+
+Completa:
+
+| Claim | Pregunta que responde | Comprobación |
+|---|---|---|
+| `iss` | ¿quién lo emitió? | coincide con issuer confiable |
+| `aud` | ¿para qué recurso? | incluye `products-api` |
+| `sub` | ¿quién es el sujeto? | identificador no vacío |
+| `exp` | ¿hasta cuándo? | instante futuro al validar |
+| `scp` | ¿qué permisos delegados? | contiene scope requerido |
 
 ## Regla
 
-Decodificar Base64URL permite leer. No demuestra que el token sea confiable.
+Base64URL es codificación, no cifrado. Que el payload pueda leerse es normal.
 
-## Checkpoint
+## Checkpoint 1
 
-Explica con tus palabras qué dato responde a:
-
-- quién emitió;
-- para qué recurso;
-- quién es el sujeto;
-- hasta cuándo es válido;
-- qué permisos delegados contiene.
+Explica qué información entrega cada claim y cuáles participan en validación técnica versus autorización.
