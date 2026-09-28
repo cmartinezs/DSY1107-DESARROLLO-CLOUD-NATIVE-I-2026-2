@@ -63,7 +63,7 @@ Semanas 06 y 07 eran placeholders. Semana 08 describía el incremento, pero no l
 
 ### 9. `guias-integradas/` concentraba material de gran profundidad
 
-El rescate de EV1 mostró que parte del conocimiento más completo estaba fuera de las raíces canónicas. La conciliación debe clasificarlo por intención sin perderlo.
+El rescate de EV1 mostró que parte del conocimiento más completo estaba fuera de las raíces canónicas. Se reclasificó como `labs/cloudtasks-ev1-integrado/`, preservando la secuencia completa sin mantener una raíz pedagógica adicional.
 
 ## Por qué ocurrió
 
@@ -91,10 +91,22 @@ base académica
 → evidencia
 ```
 
-## Deuda posterior a esta conciliación
+## Estado después de la conciliación
 
-- descomponer labs históricos monolíticos cuando aporte mantenibilidad;
-- clasificar definitivamente `guias-integradas/`;
-- completar ejemplos/ejercicios retroactivos solo cuando exista valor pedagógico real;
+- base académica estable creada;
+- `ejercicios/` creado y poblado hasta la semana vigente donde aporta valor;
+- examples 01–05 y 08 materializados con artefactos independientes;
+- Semana 06 incorporada y Semanas 07–08 descompuestas;
+- datos semanales reconciliados hasta Semana 08;
+- labs JWT/RabbitMQ descompuestos; RabbitMQ profundizado como experiencia reproducible;
+- CloudTasks reclasificado a `labs/cloudtasks-ev1-integrado/`;
+- `guia/` y `guias-integradas/` retirados como raíces activas;
+- RegistrApp descompuesto incrementalmente hasta Semana 08;
+- governance declarativa incorporada.
+
+## Deuda deliberada
+
+- reconciliar el portal web con toda la nueva base académica;
+- seguir descomponiendo labs históricos monolíticos solo cuando aporte mantenibilidad;
 - mantener semanas futuras sin inventar contenido antes de su preparación;
-- reconciliar portal web con la nueva base académica.
+- ejecutar validación/replay de publicación antes de declarar conformidad FULL.
