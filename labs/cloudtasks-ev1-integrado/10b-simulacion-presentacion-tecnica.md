@@ -24,7 +24,7 @@ git log -5 --oneline
 git push
 ```
 
-Comprobar que `guia/ev1/` está disponible remotamente.
+Comprobar que `labs/cloudtasks-ev1-integrado/` está disponible remotamente.
 
 ### 3. Backend EC2
 
