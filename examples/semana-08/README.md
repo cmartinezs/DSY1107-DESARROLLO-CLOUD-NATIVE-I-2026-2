@@ -1,63 +1,17 @@
-# Ejemplo · Reservas asíncronas
+# Ejemplos · Semana 08
 
-Ejemplo pequeño y autocontenido para visualizar:
+Ejemplos mínimos para demostrar mensajería asíncrona antes del laboratorio.
 
-```text
-Producer -> DirectExchange -> Binding -> Queue -> Consumer
-```
+## Ruta
 
-## Topología
+1. [Producer y Consumer mínimos](./01-producer-consumer-minimo.md)
+2. [DirectExchange y routing](./02-direct-exchange-routing.md)
+3. [REST y Rabbit Listener activan la misma capacidad](./03-rest-y-listener-misma-capacidad.md)
 
-- Exchange: `reservas.exchange`
-- Routing key: `reserva.creada`
-- Queue: `reservas.notificaciones.queue`
+## Regla pedagógica
 
-```mermaid
-flowchart LR
-    API[POST /reservas] --> S[ReservaService]
-    S --> P[ReservaEventPublisher]
-    P --> X[reservas.exchange]
-    X -->|reserva.creada| Q[reservas.notificaciones.queue]
-    Q --> C[NotificacionConsumer]
-```
+Los ejemplos muestran una idea. El laboratorio agrega secuencia, evidencia, diagnóstico y cierre.
 
-Payload sugerido:
-
-```json
-{
-  "reservaId": 101,
-  "usuarioId": 42,
-  "estado": "CREADA"
-}
-```
-
-## Separación de responsabilidades
-
-```text
-config/
-  RabbitMQConfig
-messaging/
-  ReservaEventPublisher
-  NotificacionConsumer
-application/
-  ReservaService
-web/
-  ReservaController
-```
-
-`ReservaService` contiene la lógica de aplicación. La configuración del broker no pertenece al Controller ni al Service.
-
-## Extensión del ejemplo
-
-Agregar:
-
-- routing key `reserva.cancelada`;
-- queue `reservas.auditoria.queue`;
-- bindings suficientes para demostrar que una cola puede recibir más de un tipo de evento.
-
-## Preguntas
-
-1. ¿El consumer necesita conocer al producer?
-2. ¿Qué responsabilidad tiene el exchange?
-3. ¿Dónde debe vivir la lógica de negocio?
-4. ¿Qué ocurre si el consumer se encuentra detenido temporalmente?
+→ [Semana 08](../../semanas/semana-08/)  
+→ [Ejercicios](../../ejercicios/semana-08/)  
+→ [Lab RabbitMQ](../../labs/rabbitmq-spring-amqp/)
