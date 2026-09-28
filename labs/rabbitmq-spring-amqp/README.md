@@ -1,63 +1,66 @@
 # Laboratorio · RabbitMQ + Spring AMQP
 
-Laboratorio local y autocontenido para Semana 08.
+**Semana:** 08  
+**RA/IL:** RA2 · IL2.1  
+**Modalidad:** local, guiada y reproducible  
+**Foco:** broker, producer/consumer, DirectExchange, bindings, routing keys y observación
 
-## Objetivo
+## Propósito
 
-Construir y verificar un sistema mínimo de mensajería asíncrona con RabbitMQ contenerizado y Spring Boot.
+Construir desde cero un flujo de mensajería asíncrona suficientemente pequeño para comprender cada pieza, pero suficientemente completo para observar routing, desacoplamiento y diagnóstico desde RabbitMQ Management UI.
 
-## Checkpoint 0 · Requisitos
+## Resultado esperado
 
-- Docker Desktop operativo.
-- Java y Maven/Gradle.
-- Spring Boot con Spring AMQP.
-
-## Checkpoint 1 · Broker
-
-Levantar RabbitMQ con Docker Compose.
-
-- `5672`: AMQP.
-- `15672`: Management UI.
-
-## Checkpoint 2 · Hello World
-
-- declarar queue;
-- producer con `RabbitTemplate`;
-- consumer con `@RabbitListener`;
-- publicar mensaje;
-- demostrar recepción.
-
-## Checkpoint 3 · Topología explícita
-
-- `DirectExchange`;
-- dos queues;
-- bindings;
-- routing keys;
-- publicación mediante exchange + routing key.
-
-## Checkpoint 4 · Observación
-
-En Management UI identificar:
-
-- exchange;
-- queues;
-- bindings;
-- consumers;
-- mensajes Ready / Unacked cuando corresponda.
-
-## Checkpoint 5 · Separación
-
-Organizar el código por responsabilidad:
+Al terminar el estudiante debe poder demostrar:
 
 ```text
-config/
-messaging/
-application/
-web/
+Producer
+→ DirectExchange
+→ Binding
+→ Queue
+→ Consumer
 ```
 
-## Evidencia final
+y explicar por qué la lógica de negocio no debe quedar acoplada al listener ni a la configuración del broker.
 
-El estudiante debe poder publicar, consumir y explicar visualmente el recorrido del mensaje.
+## Ruta del laboratorio
 
-> No es objetivo de este laboratorio implementar DLQ, retries avanzados, publisher confirms ni una plataforma distribuida completa.
+1. [00 · Prerrequisitos y línea base](./00-prerrequisitos.md)
+2. [01 · RabbitMQ con Docker Compose](./01-broker-docker.md)
+3. [02 · Hello World Producer → Queue → Consumer](./02-hello-world.md)
+4. [03 · DirectExchange, bindings y routing keys](./03-direct-exchange.md)
+5. [04 · Management UI y diagnóstico](./04-management-ui.md)
+6. [05 · Separación de responsabilidades](./05-separacion-responsabilidades.md)
+7. [06 · Pruebas, evidencia y cierre](./06-pruebas-evidencia.md)
+
+## Prerrequisitos conceptuales
+
+Antes de entrar al lab:
+
+- [mensajería asíncrona](../../semanas/semana-08/01-asincronia-y-colas.md);
+- [Hello World](../../semanas/semana-08/02-hello-world-rabbitmq.md);
+- [Exchange/Binding/Routing Key](../../semanas/semana-08/03-exchange-binding-routing-key.md);
+- [ejercicios breves](../../ejercicios/semana-08/).
+
+## Regla de avance
+
+Cada etapa termina con un checkpoint observable. Si una etapa falla, se vuelve al último checkpoint verde en vez de cambiar producer, broker, consumer y configuración al mismo tiempo.
+
+## Fuera de alcance
+
+Semana 08 no introduce aún:
+
+- acknowledgements manuales avanzados;
+- retries;
+- DLX/DLQ;
+- publisher confirms;
+- cluster RabbitMQ;
+- alta disponibilidad.
+
+Esos temas pertenecen a semanas posteriores según cronograma.
+
+## Transferencia
+
+Solo después de entender el patrón se aplica una capacidad similar en RegistrApp:
+
+→ [RegistrApp · Semana 08](../../proyecto-formativo/semana-08/)
