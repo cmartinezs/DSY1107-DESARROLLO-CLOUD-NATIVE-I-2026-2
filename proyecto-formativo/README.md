@@ -6,7 +6,7 @@ RegistrApp es el **desafío transversal del semestre** de DSY1107. Vive en una r
 
 ```text
 semanas/                  → qué se aprende y practica
-examples/ + labs/         → ejemplos y experiencias del contenido
+examples/ + ejercicios/ + labs/ → observar, practicar y experimentar
 proyecto-formativo/       → qué aplica el estudiante en RegistrApp
 ```
 
@@ -44,10 +44,10 @@ Cada checkpoint debe evidenciar:
 | 02 | [Gateway, gestión de API e identidad según avance](./semana-02/) |
 | 03 | [JWT, claims y seguridad según avance](./semana-03/) |
 | 04 | [MSAL, Spring Security y arquitectura segura según avance](./semana-04/) |
-| 05 | [Checkpoint reservado](./semana-05/) |
-| 06 | [Checkpoint reservado](./semana-06/) |
-| 07 | [Checkpoint reservado](./semana-07/) |
-| 08 | [Checkpoint reservado](./semana-08/) |
+| 05 | [Integración Full Stack segura](./semana-05/) |
+| 06 | [Freeze y evidencia de Evaluación Parcial 1](./semana-06/) |
+| 07 | [Cierre de EA1 y baseline para mensajería](./semana-07/) |
+| 08 | [Primera capacidad asíncrona con RabbitMQ](./semana-08/) |
 | 09 | [Checkpoint reservado](./semana-09/) |
 | 10 | [Checkpoint reservado](./semana-10/) |
 | 11 | [Checkpoint reservado](./semana-11/) |
