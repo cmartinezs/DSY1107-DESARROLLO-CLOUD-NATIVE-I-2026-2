@@ -47,6 +47,7 @@ Los ejercicios institucionales publicados en AVA siguen siendo material oficial 
 - [`api-gateway-local/`](api-gateway-local/) — routing, integración, versionado, políticas y CORS mediante Spring Cloud Gateway + backend público.
 - [`identidad-local/`](identidad-local/) — laboratorio histórico de OAuth2/OIDC, PKCE, tokens, scopes, roles, 401/403, tenant y app registration.
 - [`jwt-forense/`](jwt-forense/) — Semana 3: JWT, claims, audience/issuer/expiración, scopes, 401/403 y frontera gateway/backend con dominio neutral.
+- [`rabbitmq-spring-amqp/`](rabbitmq-spring-amqp/) — Semana 8: RabbitMQ contenerizado, Producer/Consumer con Spring AMQP, DirectExchange, bindings, routing keys y Management UI.
 
 ### Provider-backed
 
