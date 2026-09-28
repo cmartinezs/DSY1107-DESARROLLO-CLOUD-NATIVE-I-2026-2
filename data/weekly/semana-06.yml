@@ -1,0 +1,30 @@
+schema_version: 1
+course: DSY1107
+term: 2026-2
+week: 6
+period:
+  start: "2026-09-14"
+  end: "2026-09-19"
+plan:
+  type: evaluation
+  title: "Evaluación Parcial 1: Arquitectura Base e Integración Cloud del Sistema"
+  learning_outcomes:
+    - RA1
+  indicators:
+    - IL1.1
+    - IL1.2
+    - IL1.3
+sections:
+  - id: 002D
+    execution_status: completed_or_reconciled_later
+    actual_summary: null
+    blockers: null
+  - id: 003D
+    execution_status: completed_or_reconciled_later
+    actual_summary: null
+    blockers: null
+project_formative:
+  checkpoint: proyecto-formativo/semana-06/README.md
+  increment_expected: false
+notes:
+  - "Semana evaluativa; no introducir contenido RA2."
