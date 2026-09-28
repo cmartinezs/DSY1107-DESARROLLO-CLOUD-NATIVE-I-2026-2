@@ -1,0 +1,45 @@
+adel: "0.1"
+kind: artifact
+
+metadata:
+  id: dsy1107-repository-site
+
+extensions:
+  repo:
+    id: adumun.repository-knowledge
+    version: "0.1"
+
+sources:
+  repository:
+    from: ./repository.yaml
+
+artifact:
+  kind: site
+  profile:
+    id: adumun.repository-site
+    version: "0.1"
+
+projection:
+  - kind: repo:orientation
+    value:
+      ref: repository#
+
+  - kind: repo:audience-paths
+    value:
+      ref: repository#/audiences
+
+  - kind: repo:knowledge-catalog
+    value:
+      ref: repository#/knowledge
+
+  - kind: repo:conformance-status
+    value:
+      ref: repository#/conformance
+
+  - kind: repo:provenance
+    value:
+      ref: repository#/repository
+
+  - kind: repo:lifecycle-status
+    value:
+      ref: repository#/repository/status/lifecycle
