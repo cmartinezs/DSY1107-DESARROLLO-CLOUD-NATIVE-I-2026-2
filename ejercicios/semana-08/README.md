@@ -15,3 +15,5 @@ Tiempo objetivo por ejercicio: **10–20 minutos**.
 ## Regla
 
 No convertir estos ejercicios en mini-proyectos. El objetivo es practicar una decisión concreta y llegar al lab con el modelo mental claro.
+
+6. [Integrador · routing con DirectExchange](./06-integrador-routing.md)
