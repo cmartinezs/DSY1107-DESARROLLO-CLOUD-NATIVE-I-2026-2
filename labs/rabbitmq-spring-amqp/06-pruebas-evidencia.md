@@ -2,23 +2,45 @@
 
 ## Matriz mínima
 
-| Caso | Esperado |
-|---|---|
-| broker detenido al iniciar app | error diagnosticable |
-| producer publica evento válido | mensaje llega a queue correcta |
-| routing key desconocida | no llega a queues sin binding |
-| consumer detenido | mensaje queda pendiente |
-| consumer vuelve | mensaje se procesa |
+| Caso | Acción | Evidencia | Esperado |
+|---|---|---|---|
+| broker operativo | iniciar app | conexión/UI | app conecta |
+| `pedido.creado` | publicar | bindings + logs | notificación + auditoría |
+| `pedido.cancelado` | publicar | bindings + logs | solo auditoría |
+| routing desconocido | publicar | queues | no entra a queues sin binding |
+| consumer detenido | publicar | Ready | mensaje pendiente |
+| consumer reiniciado | iniciar | Ready/log | mensaje procesado |
 
-## Evidencia
+## Evidencia reproducible
 
-- `docker compose ps`;
-- topología visible;
-- logs producer/consumer;
-- capturas solo si aportan información no reproducible por texto;
+Guardar:
+
+- `compose.yaml`;
+- configuración Spring sin secretos;
+- clases de topology/publisher/listener;
+- comandos ejecutados;
+- payload usado;
+- tabla de resultados;
 - diagrama final;
-- explicación de responsabilidades.
+- explicación de una falla observada si ocurrió.
 
-## Cierre
+Las capturas ayudan cuando muestran topología visual, pero no reemplazan README, comandos ni resultados textuales.
 
-El lab termina cuando el estudiante puede explicar el recorrido sin depender de memorizar nombres de clases.
+## Preguntas de salida
+
+1. ¿Qué desacopla realmente la mensajería?
+2. ¿Qué diferencia existe entre exchange y queue?
+3. ¿Qué decide una routing key en un DirectExchange?
+4. ¿Por qué una queue puede tener varios bindings?
+5. ¿Por qué una misma capacidad no debería duplicarse entre Controller y Listener?
+
+## Definition of Done
+
+- [ ] broker reproducible;
+- [ ] Hello World demostrado;
+- [ ] routing explícito demostrado;
+- [ ] Management UI interpretada;
+- [ ] separación infraestructura/negocio visible;
+- [ ] pruebas positivas y negativas registradas.
+
+El siguiente incremento pertenece a Semana 9: acknowledgements, durabilidad y patrones publish/subscribe con mayor profundidad.
