@@ -26,13 +26,14 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 
 DSY1107 mantiene **dos verticales distintas, con raíces distintas**.
 
-### Vertical de contenido · `semanas/`, `examples/`, `labs/`
+### Vertical de contenido · `semanas/`, `examples/`, `ejercicios/`, `labs/`
 
 ```text
 concepto
 → explicación
 → ejemplo pequeño y autocontenido
-→ mini ejercicio/laboratorio local e independiente
+→ ejercicio breve
+→ laboratorio guiado
 → evidencia de comprensión
 ```
 
@@ -173,6 +174,16 @@ problema de acoplamiento
 - [Estructura canónica DSY1107](docs/ESTRUCTURA-CANONICA.md)
 - [Auditoría estructural 2026-09-28](docs/AUDITORIA-ESTRUCTURA-2026-09-28.md)
 - [Governance declarativa](governance/)
+
+## Validación estructural
+
+Desde la raíz del repositorio:
+
+```bash
+python3 scripts/validate_repository_structure.py
+```
+
+Este gate comprueba la base académica, continuidad semanal hasta Semana 08 y que las superficies activas tengan contenido real más allá de un README.
 
 ## Documentación y publicación
 
