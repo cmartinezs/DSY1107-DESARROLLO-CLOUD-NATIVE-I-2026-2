@@ -11,6 +11,7 @@ Este repositorio reúne contenido de clases, ejemplos, laboratorios, guías y re
 - [`labs/`](labs/) — laboratorios locales, autocontenidos e independientes del proyecto formativo.
 - [`proyecto-formativo/`](proyecto-formativo/) — **RegistrApp**, vertical transversal independiente que evoluciona clase a clase.
 - [`docs/identity/`](docs/identity/) — dominio canónico de identidad y acceso: Azure for Students, Entra ID, Guest/B2B, MSAL, tokens, API Gateway y extensión self-service B2B.
+- [`guias-integradas/ev1/`](guias-integradas/ev1/) — guía integrada de preparación para EV1 rescatada del PR histórico #2; conserva la ruta end-to-end y queda pendiente de conciliación arquitectónica en una rama separada.
 - [`page/`](page/) — portal web del curso, superficie derivada y navegable.
 - [**Guía completa de Microsoft Entra ID**](docs/identity/entra-guia-completa/README.md) — flujo base 0–7 y extensión self-service 8–14.
 - [**Versión web · Identidad y acceso**](page/identidad.html) — read model para estudiantes con navegación progresiva y diagramas Mermaid.
