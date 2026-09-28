@@ -79,7 +79,7 @@ Esta ejecución confirma en un entorno local real:
 - enlaces relativos, fences, Mermaid básico y reglas semánticas en PASS;
 - el nuevo checkpoint curricular 03B está incorporado y no rompe la validación documental.
 
-Los estados `SKIP` de backend y frontend son esperados en el repositorio docente actual, porque `guia/ev1/backend` y `guia/ev1/frontend` todavía no han sido materializados como proyectos ejecutables.
+Los estados `SKIP` de backend y frontend son esperados en el repositorio docente actual, porque `.work/cloudtasks-ev1/backend` y `.work/cloudtasks-ev1/frontend` todavía no han sido materializados como proyectos ejecutables.
 
 Por tanto, este resultado **no constituye todavía validación funcional de Maven/Angular ni E2E cloud**.
 
@@ -94,8 +94,8 @@ python3 scripts/validate_ev1.py --require-projects --strict
 Ese gate debe pasar solo cuando existan y compilen realmente:
 
 ```text
-guia/ev1/backend
-guia/ev1/frontend
+.work/cloudtasks-ev1/backend
+.work/cloudtasks-ev1/frontend
 ```
 
 Después vendrá el smoke test funcional de Semana 3:
