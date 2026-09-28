@@ -2,27 +2,46 @@
 
 ## Objetivo
 
-No depender solamente de logs de consola.
+Usar el broker como fuente de evidencia y no depender únicamente de `System.out.println`.
 
-## Identificar
+## 1. Exchange
 
-- exchange;
-- tipo de exchange;
-- queues;
-- bindings;
-- routing keys;
-- consumers activos;
-- mensajes Ready;
-- mensajes Unacked cuando corresponda.
+Abrir `pedidos.exchange` y comprobar:
+- tipo `direct`;
+- bindings salientes;
+- routing keys configuradas.
 
-## Prueba controlada
+## 2. Queues
 
-1. Detén temporalmente el consumer.
-2. Publica un mensaje.
-3. Observa el mensaje pendiente.
-4. Levanta nuevamente el consumer.
-5. Confirma que el mensaje se procesa.
+Para cada queue observar:
+- consumers;
+- Ready;
+- Unacked;
+- tasas de entrada/salida cuando existan.
 
-## Checkpoint
+**Ready** representa mensajes disponibles para entrega. **Unacked** representa mensajes entregados a un consumer que aún no han sido confirmados por el flujo de consumo.
 
-Debes ser capaz de explicar la diferencia entre “el producer publicó” y “el consumer procesó”.
+## 3. Experimento controlado
+
+1. detener la aplicación consumer;
+2. publicar `pedido.creado`;
+3. refrescar las queues;
+4. comprobar que existe trabajo pendiente;
+5. iniciar el consumer;
+6. observar cómo disminuye `Ready`;
+7. comprobar el procesamiento en la aplicación.
+
+## 4. Routing incorrecto
+
+Publicar una key que no tenga binding, por ejemplo `pedido.desconocido`.
+
+En un `DirectExchange`, si ninguna binding key coincide, el mensaje no entra mágicamente a otra queue. Esta prueba ayuda a separar **publicación al exchange** de **enrutamiento exitoso a una queue**.
+
+## Checkpoint 4
+
+El estudiante debe poder responder:
+
+- ¿publicar significa procesar?
+- ¿queue vacía significa que nunca hubo mensaje?
+- ¿qué evidencia muestra que existe consumer?
+- ¿dónde se ve la relación exchange → queue?
