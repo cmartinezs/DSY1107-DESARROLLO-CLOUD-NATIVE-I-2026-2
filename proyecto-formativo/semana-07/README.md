@@ -28,3 +28,8 @@ Cerrar la primera experiencia de aprendizaje sin adelantar RabbitMQ.
 ## Estado de salida
 
 Baseline de RegistrApp para Semana 08.
+
+## Ruta de cierre de EA1
+
+1. [Cierre de deudas](./01-cierre-deudas.md)
+2. [Baseline de entrada a EA2](./02-baseline-ea2.md)
