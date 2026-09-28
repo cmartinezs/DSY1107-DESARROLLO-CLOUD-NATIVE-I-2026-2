@@ -8,15 +8,15 @@ Crear un espacio de trabajo propio para desarrollar CloudTasks como práctica gu
 
 ```text
 DSY1107-00XD-nombre-apellido/
-└── guia/
-    └── ev1/
+└── labs/
+    └── cloudtasks-ev1-integrado/
         ├── README.md
         ├── frontend/
         ├── backend/
         └── docs/
 ```
 
-Esta estructura corresponde exclusivamente al desarrollo de esta guía integrada.
+Esta estructura ubica la práctica en la carpeta `labs/` definida por el estándar del repositorio personal.
 
 No ejecutar `git init` dentro de `frontend/` ni `backend/`. Angular se crea con `--skip-git`.
 
@@ -28,7 +28,7 @@ No ejecutar `git init` dentro de `frontend/` ni `backend/`. Angular se crea con 
 2. Seleccionar el repositorio personal DSY1107.
 3. Confirmar una ruta local conocida.
 4. `Fetch origin` y luego `Pull` si corresponde.
-5. Crear `.validation/cloudtasks-ev1/`.
+5. Crear `labs/cloudtasks-ev1-integrado/`.
 
 ### Terminal equivalente
 
@@ -36,12 +36,12 @@ No ejecutar `git init` dentro de `frontend/` ni `backend/`. Angular se crea con 
 git clone <URL_REPO>
 cd DSY1107-00XD-nombre-apellido
 git pull
-mkdir -p .validation/cloudtasks-ev1
+mkdir -p labs/cloudtasks-ev1-integrado
 ```
 
 ## Comprobar que existe un solo repositorio
 
-Desde `.validation/cloudtasks-ev1/`:
+Desde `labs/cloudtasks-ev1-integrado/`:
 
 ```bash
 git rev-parse --show-toplevel
@@ -54,7 +54,7 @@ Debe devolver la raíz del repositorio personal, no `frontend/` ni `backend/`.
 Para practicar un flujo ordenado puede utilizarse una branch dedicada a la guía:
 
 ```bash
-git switch -c .validation/cloudtasks-ev1-cloudtasks
+git switch -c lab/cloudtasks-ev1
 ```
 
 No crear branches por cada archivo. La branch representa una unidad de trabajo coherente.
@@ -65,8 +65,8 @@ Al cerrar una puerta de validación:
 
 ```bash
 git status
-git add .validation/cloudtasks-ev1
-git commit -m "guia-ev1: completar checkpoint <XX>"
+git add labs/cloudtasks-ev1-integrado
+git commit -m "lab-cloudtasks: completar checkpoint <XX>"
 git push
 ```
 
@@ -112,7 +112,7 @@ Si un secreto ya fue committeado, borrarlo del archivo **no lo convierte nuevame
 
 ## Checkpoint 00B
 
-- [ ] `.validation/cloudtasks-ev1/` existe.
+- [ ] `labs/cloudtasks-ev1-integrado/` existe.
 - [ ] `git rev-parse --show-toplevel` apunta al repo personal.
 - [ ] no hay `.git` anidados.
 - [ ] `.gitignore` protege artefactos y secretos.
