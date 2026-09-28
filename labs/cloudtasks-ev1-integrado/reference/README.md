@@ -95,6 +95,21 @@ El mismo par debe llegar al proceso Spring ejecutado mediante IntelliJ/Maven Wra
 
 ---
 
+## Snapshot de tooling reproducible
+
+El materializador docente fija explícitamente las versiones validadas al momento de esta reconciliación:
+
+```text
+Angular CLI 22.2.0
+@azure/msal-angular 6.2.1
+@azure/msal-browser 5.23.0
+Java 21
+```
+
+La guía conceptual no depende de memorizar estas versiones. Cuando se actualice el stack, se debe volver a ejecutar los builds y checkpoints afectados antes de cambiar este snapshot.
+
+---
+
 # Validación local profesional · un solo comando
 
 Desde la raíz del repositorio ejecutar:
