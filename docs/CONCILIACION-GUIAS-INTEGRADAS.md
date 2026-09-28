@@ -2,98 +2,88 @@
 
 ## Contexto
 
-La guía integrada EV1 fue rescatada primero, sin mezclar ese rescate con una decisión
-arquitectónica. Esta rama existe exclusivamente para resolver dónde debe vivir y cómo debe
-relacionarse ese material con las superficies canónicas actuales del curso.
+El PR histórico #2 fue rescatado primero sin decidir el hogar definitivo de su contenido. Esta reconciliación clasifica ese conocimiento usando las superficies canónicas actuales del curso.
 
-## Objetivo
+## Decisión final
 
-Conciliar:
+`guias-integradas/` **no permanece como raíz pedagógica activa**.
+
+CloudTasks es una experiencia práctica, secuencial, provider-backed y con checkpoints. Por intención corresponde a:
 
 ```text
-guias-integradas/
-labs/
-examples/
-docs/
-semanas/
-proyecto-formativo/
-page/
-data/weekly/
+labs/cloudtasks-ev1-integrado/
 ```
 
-sin perder conocimiento, sin duplicar fuentes de verdad y sin convertir una práctica
-integrada en una tercera trayectoria curricular por accidente.
+El workspace generado para validar código no es material curricular y vive localmente en:
 
-## Principios de decisión
+```text
+.work/cloudtasks-ev1/
+```
+
+`.work/` está ignorado por Git.
+
+## Resultado
+
+```text
+antes
+├── guias-integradas/ev1/   contenido pedagógico
+├── guia/ev1/               workspace técnico
+└── labs/                    otros laboratorios
+
+después
+├── labs/cloudtasks-ev1-integrado/   fuente pedagógica única
+├── .work/cloudtasks-ev1/            workspace local no versionado
+└── scripts/                          materialización y validación
+```
+
+## Criterios utilizados
 
 1. `semanas/` responde qué se aprende y cuándo.
-2. `examples/` contiene ejemplos acotados.
-3. `labs/` contiene experiencias reproducibles, locales o provider-backed.
-4. `docs/` conserva conocimiento transversal por dominio.
-5. `proyecto-formativo/` contiene la transferencia a RegistrApp.
-6. `page/` es una vista derivada.
-7. Una guía integrada puede enlazar varias superficies, pero no debe duplicarlas.
-8. CloudTasks es una implementación de referencia para preparar competencias; no es EV1 ni
-   sustituye las instrucciones institucionales.
+2. `examples/` demuestra ideas pequeñas.
+3. `ejercicios/` contiene práctica breve.
+4. `labs/` contiene experiencias secuenciales reproducibles.
+5. `docs/` mantiene conocimiento transversal estable.
+6. `proyecto-formativo/` contiene la transferencia a RegistrApp.
+7. `page/` es una vista derivada.
+8. Las evaluaciones oficiales no se reconstruyen desde labs.
 
-## Preguntas que debe resolver esta rama
+## Contenido preservado
 
-- ¿`guias-integradas/` permanece como superficie canónica propia o se reclasifica?
-- Si se reclasifica, ¿qué parte pertenece a `labs/` y qué parte a `docs/`?
-- ¿Dónde deben vivir starters y materializadores?
-- ¿Cómo se indexa la ruta end-to-end sin romper la regla concepto primero?
-- ¿Qué documentos son fuente canónica y cuáles vistas derivadas?
-- ¿Cómo se mantiene la trazabilidad histórica de Semana 3 sin presentar ese estado como vigente?
-- ¿Qué cambios necesita la web para navegar la guía sin alterar Semana 8?
-- ¿Qué validadores deben quedar transversales y cuáles específicos de una guía?
+El lab CloudTasks conserva:
 
-## Trabajo esperado
+- entorno y Git/GitHub;
+- Spring Boot + Angular;
+- Entra External ID;
+- MSAL + Authorization Code + PKCE;
+- JWT/claims;
+- Spring Security;
+- roles opcionales;
+- EC2;
+- API Gateway + JWT Authorizer;
+- CORS;
+- frontend cloud;
+- troubleshooting;
+- verificación integrada;
+- cleanup;
+- ruta Advanced Developer;
+- referencias de validación.
 
-### Fase 1 · inventario
+No se perdió contenido del rescate: se cambió su clasificación.
 
-Clasificar cada archivo rescatado como:
+## Tooling
 
-```text
-concepto transversal
-ejemplo
-laboratorio
-guía operativa
-starter
-tooling
-checkpoint histórico
-troubleshooting
-vista derivada
-```
+Los scripts ahora apuntan al lab canónico y al workspace `.work/cloudtasks-ev1/`:
 
-### Fase 2 · mapa de destinos
+- `scripts/materialize_cloudtasks_week03.py`;
+- `scripts/validate_ev1.py`;
+- `scripts/validate_integrated_guides.py`.
 
-Definir destino canónico antes de mover archivos.
+## Trazabilidad histórica
 
-### Fase 3 · migración
+El documento [RESCATE-PR2-GUIA-EV1.md](./RESCATE-PR2-GUIA-EV1.md) conserva la historia del PR #2. Las menciones a la antigua rama/ruta allí son históricas y no definen la arquitectura vigente.
 
-Mover o consolidar material preservando enlaces y trazabilidad.
+## Estado
 
-### Fase 4 · deduplicación
+**Decisión arquitectónica: resuelta.**
 
-Eliminar únicamente duplicados cuya fuente canónica esté confirmada.
-
-### Fase 5 · navegación
-
-Actualizar README, índices y web.
-
-### Fase 6 · validación
-
-Comprobar:
-
-- enlaces;
-- Mermaid;
-- ausencia de secretos;
-- ausencia de fuentes paralelas contradictorias;
-- separación contenido / RegistrApp;
-- correspondencia con AVA;
-- vigencia temporal.
-
-## Restricción
-
-Esta rama no debe reabrir ni reconstruir el PR histórico #2. Parte del rescate ya realizado
-en `feat/rescue-ev1-integrated-guide`.
+La deuda restante corresponde a publicación/navegación web y validación final del PR, no a la clasificación de `guias-integradas/`.
