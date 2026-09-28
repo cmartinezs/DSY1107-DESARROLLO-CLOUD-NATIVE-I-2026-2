@@ -1,24 +1,46 @@
 # RegistrApp · Semana 8
 
 ## Estado
-Checkpoint reservado. El contenido específico se define cuando la planificación de Semana 8 esté confirmada.
+
+Transferencia de la competencia de mensajería asíncrona trabajada en Semana 08.
 
 ## Estado de entrada
-Recibe todo el estado de salida de Semana 7, incluidas sus deudas explícitas.
+
+Recibe el estado real de salida de Semana 7. No reiniciar el proyecto ni agregar alcance funcional ajeno al contenido aprendido.
 
 ## Contenido transferible
-Por definir según el contenido efectivamente trabajado en clases. No incorporar capacidades no aprendidas.
 
-## Incremento
-Debe extender el estado anterior; no reiniciar RegistrApp.
+- identificación de una capacidad candidata a procesamiento asíncrono;
+- Producer;
+- DirectExchange;
+- routing key;
+- Queue;
+- Consumer;
+- separación entre infraestructura de mensajería y lógica de aplicación.
+
+## Incremento esperado
+
+Seleccionar **una sola capacidad** del proyecto para demostrar el patrón. Ejemplos razonables: notificación, auditoría o procesamiento posterior.
+
+La capacidad debe conservar una frontera propia y poder ser llamada desde un caso de uso común.
+
+```mermaid
+flowchart LR
+    R[REST] --> U[Caso de uso]
+    L[Rabbit Listener] --> U
+    U --> D[Dominio / persistencia]
+```
 
 ## Evidencia obligatoria
-- comparación antes/después;
-- artefactos modificados;
+
+- diagrama de la topología;
+- exchange, queue, binding y routing key visibles;
+- mensaje publicado y consumido;
+- código con responsabilidades separadas;
 - decisión técnica;
-- referencia a commits/archivos cuando corresponda;
 - DevLog;
-- deuda pendiente.
+- referencia a commits/archivos.
 
 ## Estado de salida
-El estado completo resultante será la entrada de Semana 9.
+
+El incremento asíncrono demostrable pasa a ser entrada de Semana 9. Cualquier deuda queda explícita; no se asume completitud por haber creado la infraestructura.
