@@ -1,24 +1,28 @@
-# RegistrApp · Semana 6
-
-## Estado
-Checkpoint reservado. El contenido específico se define cuando la planificación de Semana 6 esté confirmada.
+# RegistrApp · Semana 06 · Continuidad durante Parcial 1
 
 ## Estado de entrada
-Recibe todo el estado de salida de Semana 5, incluidas sus deudas explícitas.
 
-## Contenido transferible
-Por definir según el contenido efectivamente trabajado en clases. No incorporar capacidades no aprendidas.
+Recibe el estado real de salida de Semana 05, incluidas deudas de integración, documentación y evidencia.
 
-## Incremento
-Debe extender el estado anterior; no reiniciar RegistrApp.
+## Contexto
 
-## Evidencia obligatoria
-- comparación antes/después;
-- artefactos modificados;
-- decisión técnica;
-- referencia a commits/archivos cuando corresponda;
+Semana 06 está dedicada a la Evaluación Parcial 1. No corresponde inventar un incremento funcional para “llenar” la semana.
+
+## Trabajo permitido
+
+- estabilizar el estado que será defendido;
+- corregir fallas reproducibles detectadas antes de la evaluación;
+- mejorar documentación y trazabilidad;
+- registrar deuda sin introducir contenido de RA2 antes de tiempo.
+
+## Evidencia
+
+- commit/tag/checkpoint defendido;
+- diagrama vigente;
+- matriz 401/403/2xx;
 - DevLog;
-- deuda pendiente.
+- lista explícita de deuda.
 
 ## Estado de salida
-El estado completo resultante será la entrada de Semana 7.
+
+El mismo sistema defendido, con cualquier corrección debidamente trazada. Semana 07 recibe este estado.
