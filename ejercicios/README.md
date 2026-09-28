@@ -1,17 +1,30 @@
 # Ejercicios · DSY1107
 
-Esta carpeta contiene práctica breve, focalizada y no sumativa.
+Esta carpeta contiene **práctica breve, focalizada y no sumativa**. Sirve como puente entre comprender un concepto y entrar a un laboratorio guiado.
 
-## Qué vive aquí
+## Organización
 
-- decisiones síncrono vs asíncrono;
-- lectura de arquitectura;
-- interpretación de JWT/claims;
-- diagnóstico HTTP;
-- routing y bindings;
-- diseño de colas;
-- pequeños cambios de configuración o código;
-- ejercicios de preparación previos al laboratorio.
+| Semana | Foco |
+|---|---|
+| [01](./semana-01/) | API, Gateway, versionamiento y CORS |
+| [02](./semana-02/) | OAuth2/OIDC, tokens, scopes y clientes |
+| [03](./semana-03/) | JWT, claims, 401/403 y validación |
+| [04](./semana-04/) | PKCE, MSAL/Security y fronteras |
+| [05](./semana-05/) | integración Full Stack segura |
+| 06–07 | evaluación: no se agrega práctica artificial |
+| [08](./semana-08/) | asincronía, RabbitMQ y routing |
+
+## Regla canónica
+
+Un ejercicio:
+
+- tiene un foco acotado;
+- normalmente se resuelve en 5–20 minutos;
+- puede pedir análisis, diseño, diagnóstico o una modificación pequeña;
+- usa únicamente contenidos ya trabajados;
+- no necesita una secuencia guiada completa.
+
+Si requiere múltiples etapas, infraestructura, checkpoints y evidencia extensa, corresponde a `labs/`.
 
 ## Qué NO vive aquí
 
@@ -20,10 +33,4 @@ Esta carpeta contiene práctica breve, focalizada y no sumativa.
 - laboratorios paso a paso;
 - incrementos de RegistrApp.
 
-## Organización
-
-Los ejercicios se agrupan por semana:
-
-- [Semana 08 · Mensajería asíncrona y RabbitMQ](./semana-08/)
-
-Las semanas anteriores mantienen prácticas en sus materiales históricos; se migrarán a esta vertical solo cuando exista una fuente real que consolidar, evitando inventar contenido retroactivo.
+Las semanas futuras se agregan al llegar a su preparación curricular; no se crean ejercicios especulativos.
