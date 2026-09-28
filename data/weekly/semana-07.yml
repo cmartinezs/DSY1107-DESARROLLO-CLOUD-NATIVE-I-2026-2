@@ -1,0 +1,30 @@
+schema_version: 1
+course: DSY1107
+term: 2026-2
+week: 7
+period:
+  start: "2026-09-21"
+  end: "2026-09-26"
+plan:
+  type: evaluation
+  title: "Cierre Evaluación Parcial 1"
+  learning_outcomes:
+    - RA1
+  indicators:
+    - IL1.1
+    - IL1.2
+    - IL1.3
+sections:
+  - id: 002D
+    execution_status: completed_or_reconciled_later
+    actual_summary: null
+    blockers: null
+  - id: 003D
+    execution_status: completed
+    actual_summary: "Defensas técnicas de cierre EV1 realizadas por grupos según planificación de la sección."
+    blockers: null
+project_formative:
+  checkpoint: proyecto-formativo/semana-07/README.md
+  increment_expected: false
+notes:
+  - "Cerrar baseline de Experiencia 1 antes de iniciar mensajería."
