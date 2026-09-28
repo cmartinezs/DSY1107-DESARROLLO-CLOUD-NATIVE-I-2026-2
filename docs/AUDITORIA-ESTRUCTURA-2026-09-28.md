@@ -102,11 +102,11 @@ base académica
 - CloudTasks reclasificado a `labs/cloudtasks-ev1-integrado/`;
 - `guia/` y `guias-integradas/` retirados como raíces activas;
 - RegistrApp descompuesto incrementalmente hasta Semana 08;
-- governance declarativa incorporada.
+- governance declarativa incorporada;
+- portal web reconciliado con Semana 08 y las superficies canónicas.
 
 ## Deuda deliberada
 
-- reconciliar el portal web con toda la nueva base académica;
 - seguir descomponiendo labs históricos monolíticos solo cuando aporte mantenibilidad;
 - mantener semanas futuras sin inventar contenido antes de su preparación;
 - ejecutar validación/replay de publicación antes de declarar conformidad FULL.
