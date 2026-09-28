@@ -1,6 +1,6 @@
 > **Clasificación canónica:** laboratorio integrado y acumulativo de preparación para las competencias de la Evaluación Parcial 1. No es la evaluación ni sustituye el encargo institucional.
 
-# Lab integrado · EV1 · Guía integrada de preparación
+# Lab integrado · CloudTasks · Preparación para competencias de EP1
 
 > **Importante:** esta guía **no es la evaluación E1**, no reemplaza sus instrucciones oficiales y no define una estructura de entrega. Es una práctica integrada para comprender, relacionar y ejercitar los conocimientos que se medirán en E1 mediante una aplicación técnica mínima llamada **CloudTasks**.
 
