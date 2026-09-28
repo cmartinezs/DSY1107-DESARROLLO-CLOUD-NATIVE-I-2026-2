@@ -227,7 +227,7 @@ con Admin → 200
 El trabajo debe poder entenderse desde:
 
 ```text
-guia/ev1/
+labs/cloudtasks-ev1-integrado/
 ├── README.md
 ├── frontend/
 ├── backend/
