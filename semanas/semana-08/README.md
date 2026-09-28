@@ -1,121 +1,73 @@
 # Semana 08 · Mensajería asíncrona y RabbitMQ
 
 **Periodo:** 28 de septiembre al 3 de octubre de 2026  
-**Experiencia de aprendizaje 2**
+**Experiencia de aprendizaje:** Desarrollando colas de mensajes  
+**RA/IL:** RA2 · IL2.1
 
-## Contenidos oficiales
+## Contenidos institucionales
 
 - **2.1.1** Introducción a mensajería asíncrona y RabbitMQ.
-- **2.1.2** Crear cola, productor y consumidor básicos (Hello World).
+- **2.1.2** Crear cola, productor y consumidor básicos.
 - **2.1.3** Exchanges, bindings y routing keys aplicados al caso.
 
-## Resultado de la semana
+## Ruta de aprendizaje
 
-Al finalizar, el estudiante debe poder:
+1. [Asincronía, colas y RabbitMQ](./01-asincronia-y-colas.md)
+2. [Hello World · Queue, Producer y Consumer](./02-hello-world-rabbitmq.md)
+3. [Exchange, Binding y Routing Key](./03-exchange-binding-routing-key.md)
+4. [Separación de responsabilidades](./04-separacion-responsabilidades.md)
+5. [Evidencia y criterio de salida](./05-evidencia-y-salida.md)
 
-- distinguir una necesidad síncrona de una asíncrona;
-- explicar qué problema resuelve una cola de mensajes;
-- levantar RabbitMQ con Docker;
-- publicar y consumir mensajes con Spring AMQP;
-- declarar un `DirectExchange`, bindings y routing keys;
-- verificar el recorrido en RabbitMQ Management UI;
-- separar configuración de mensajería de lógica de negocio.
+## Capas de práctica
 
-## Modelo mental
+### Ejemplos
 
-```mermaid
-flowchart LR
-    P[Producer] --> X[Exchange]
-    X -->|routing key| B[Binding]
-    B --> Q[Queue]
-    Q --> C[Consumer]
-```
+→ [Examples · Semana 08](../../examples/semana-08/)
 
-> La cola no existe porque “queremos usar RabbitMQ”. Se incorpora cuando una capacidad puede procesar trabajo sin obligar al solicitante a esperar su ejecución inmediata.
+### Ejercicios breves
 
-## Contexto arquitectónico
+→ [Ejercicios · Semana 08](../../ejercicios/semana-08/)
 
-La mensajería asíncrona aparece naturalmente en sistemas distribuidos y microservicios, pero también puede utilizarse dentro de un monolito modular si las capacidades están correctamente separadas.
+### Laboratorio guiado
 
-Una misma capacidad puede ser activada desde diferentes adaptadores:
+→ [RabbitMQ + Spring AMQP](../../labs/rabbitmq-spring-amqp/)
 
-```mermaid
-flowchart LR
-    R[REST Controller] --> U[Caso de uso / servicio de aplicación]
-    L[Rabbit Listener] --> U
-```
+### Transferencia
 
-REST y RabbitMQ son mecanismos de entrada; la lógica de negocio no debe duplicarse entre ellos.
+→ [RegistrApp · Semana 08](../../proyecto-formativo/semana-08/)
 
----
+## Dos clases · 4 bloques cada una
 
-## Clase 1 · Fundamentos + Hello World · 4 bloques de 40 min
-
-### Bloque 1 · Problema antes que herramienta
-
-- síncrono vs. asíncrono;
-- dependencia temporal;
-- desacoplamiento;
-- buffering;
-- procesamiento en segundo plano;
-- cuándo una llamada síncrona sigue siendo la opción correcta.
-
-### Bloque 2 · Producer, Broker, Queue y Consumer
+### Clase 1
 
 ```text
-Producer -> RabbitMQ -> Queue -> Consumer
+problema de acoplamiento
+→ síncrono vs asíncrono
+→ Producer / Broker / Queue / Consumer
+→ RabbitMQ Docker
+→ Hello World
 ```
 
-Se estudia el ciclo básico antes de introducir routing.
+### Clase 2
 
-### Bloque 3 · RabbitMQ con Docker
-
-- Docker Compose;
-- puerto `5672` para AMQP;
-- puerto `15672` para Management UI;
-- exchanges, queues, connections y consumers.
-
-### Bloque 4 · Hello World con Spring AMQP
-
-- `spring-boot-starter-amqp`;
-- `RabbitTemplate`;
-- `@RabbitListener`;
-- publicación y consumo;
-- verificación por consola y Management UI.
-
-**Evidencia de cierre:** broker operativo, queue visible, mensaje publicado y consumido, explicación del desacoplamiento logrado.
-
----
-
-## Clase 2 · Routing + aplicación · 4 bloques de 40 min
-
-### Bloque 1 · Exchange, Binding y Routing Key
-
-Un `DirectExchange` enruta por coincidencia exacta de routing key.
-
-### Bloque 2 · Ejemplo guiado
-
-→ [Ejemplo Semana 08](../../examples/semana-08/)
-
-### Bloque 3 · Ejercicio y laboratorio
-
-→ [Ejercicio de routing](./ejercicio.md)  
-→ [Laboratorio RabbitMQ + Spring AMQP](../../labs/rabbitmq-spring-amqp/)
-
-### Bloque 4 · Trabajo formativo
-
-→ [Trabajo formativo](./trabajo-formativo.md)  
-→ [Transferencia a RegistrApp](../../proyecto-formativo/semana-08/)
+```text
+Exchange / Binding / Routing Key
+→ ejemplos
+→ ejercicios
+→ lab
+→ transferencia formativa
+```
 
 ## Trabajo autónomo AVA
 
-Revisar:
+- guía Hello World;
+- instalación/uso de Docker Desktop;
+- material Spring AMQP producer/consumer.
 
-- guía **Crear cola, productor y consumidor básicos (Hello World)**;
-- video **2.1.4 · Instalar Docker Desktop**;
-- video **2.1.5 · Uso de Docker Desktop**;
-- video **2.1.6 · Productores-Consumidores con Spring AMQP**.
+## Fuera de alcance
 
-## Fuera de alcance por ahora
+Aún no se profundiza en acknowledgements avanzados, durabilidad, DLX/DLQ, cluster o retry. Esos temas aparecen en semanas 09–10.
 
-Esta semana no necesita introducir todavía DLQ, retries avanzados, publisher confirms, idempotencia distribuida ni observabilidad compleja. Primero debe quedar sólido el recorrido básico del mensaje.
+## Criterio de salida
+
+El estudiante debe publicar y consumir un mensaje, observar la topología en Management UI y explicar por qué el flujo fue desacoplado.
