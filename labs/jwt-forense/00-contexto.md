@@ -2,9 +2,11 @@
 
 ## Objetivo
 
-Trabajar con una API ficticia `products-api` para aislar JWT, claims y decisiones de acceso.
+Aislar autenticación, validación de credenciales y autorización utilizando una API ficticia `products-api`, sin depender de un proveedor cloud real.
 
-## Contrato
+## Escenario
+
+Una SPA consulta y modifica productos. El proveedor de identidad emite Access Tokens para `products-api`.
 
 Scopes:
 
@@ -13,17 +15,31 @@ products.read
 products.write
 ```
 
-Pipeline conceptual:
+Pipeline:
 
-```text
-cliente → identidad → access token → gateway → products-api
+```mermaid
+flowchart LR
+    U[Usuario] --> C[SPA]
+    C --> IDP[Proveedor de identidad]
+    IDP -->|Access Token| C
+    C -->|Bearer| GW[Gateway]
+    GW --> API[products-api]
 ```
 
-## Checkpoint
+## Tres preguntas distintas
 
-Antes de analizar tokens, el estudiante debe distinguir:
+1. **Autenticación:** ¿existe una identidad/credencial aceptable?
+2. **Validación técnica:** ¿firma, issuer, audience y tiempo son aceptables para este recurso?
+3. **Autorización:** ¿los permisos y reglas permiten esta operación?
 
-- autenticación;
-- validación técnica;
-- autorización;
-- regla de negocio.
+## Contrato HTTP de laboratorio
+
+| Operación | Requisito |
+|---|---|
+| `GET /products` | `products.read` |
+| `POST /products` | `products.write` |
+| `DELETE /products/{id}` | `products.write` + regla de negocio |
+
+## Checkpoint 0
+
+El estudiante puede explicar por qué “usuario autenticado” no significa “puede ejecutar cualquier endpoint”.
