@@ -127,3 +127,10 @@ Demostrar al menos:
 4. token válido con `books.read` → 2xx.
 
 → [Ejecutar laboratorio Full Stack](../../labs/fullstack-seguro/README.md)
+
+
+## Profundización
+
+Para revisar Resource Server, validación criptográfica/contextual, scopes, 401/403 y defensa en profundidad:
+
+→ [Contenido extendido · Spring Security como Resource Server](./02-spring-security-backend/)
