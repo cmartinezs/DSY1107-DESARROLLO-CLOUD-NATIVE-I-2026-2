@@ -157,3 +157,10 @@ flowchart TD
 ## Ruta práctica
 
 → [Full Stack · Etapa 01: SPA, MSAL y token para API propia](../../labs/fullstack-seguro/01-spa-msal-token-api.md)
+
+
+## Profundización
+
+Para revisar ciclo de tokens, adquisición silenciosa, scopes, audience y diagnóstico de una SPA:
+
+→ [Contenido extendido · MSAL y autenticación de frontend](./01-msal-frontend/)
