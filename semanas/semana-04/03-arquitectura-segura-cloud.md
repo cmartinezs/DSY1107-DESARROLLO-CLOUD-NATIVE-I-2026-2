@@ -121,3 +121,10 @@ Dibuja un flujo completo de `GET /api/books` e indica:
 ## Cierre
 
 La arquitectura se considera comprendida cuando puedes explicar **qué valida cada componente y por qué**, no solo enumerar tecnologías.
+
+
+## Profundización
+
+Para revisar fronteras, threat modeling básico, CORS, observabilidad segura y responsabilidades:
+
+→ [Contenido extendido · Arquitectura Full Stack segura](./03-arquitectura-segura-cloud/)
