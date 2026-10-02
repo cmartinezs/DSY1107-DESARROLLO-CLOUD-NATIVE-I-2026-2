@@ -23,3 +23,16 @@
 
 → [Semana 08](../semanas/semana-08/)  
 → [Lab RabbitMQ + Spring AMQP](../labs/rabbitmq-spring-amqp/)
+
+
+## Actividad evaluada · Semana 08
+
+Como parte de la preparación y evaluación progresiva de EV2, la Semana 08 incorpora una actividad de diseño e implementación de comunicación síncrona y asíncrona con RabbitMQ.
+
+- **Ponderación:** 10% de la calificación de EV2.
+- **Parte 1 · Diseño:** entrega viernes 2 de octubre de 2026.
+- **Parte 2 · Implementación:** entrega lunes 5 de octubre de 2026.
+- **Modalidad:** informe, sin presentación.
+- **Requisito mínimo:** 1 comunicación síncrona y 2 comunicaciones asíncronas justificadas.
+
+→ [Actividad evaluada · Semana 08](../semanas/semana-08/actividad-evaluada-rabbitmq.md)
