@@ -51,7 +51,7 @@ Cada tema tiene dos niveles:
 | 3 | [Exchange, Binding y Routing Key](./03-exchange-binding-routing-key.md) | [Contenido extendido](./03-exchange-binding-routing-key/) |
 | 4 | [Separación de responsabilidades](./04-separacion-responsabilidades.md) | [Contenido extendido](./04-separacion-responsabilidades/) |
 | 5 | [Evidencia y criterio de salida](./05-evidencia-y-salida.md) | [Contenido extendido](./05-evidencia-y-salida/) |
-| 6 | [Trabajo formativo](./trabajo-formativo.md) | [Guía extendida](./trabajo-formativo/) |
+| 6 | [Trabajo formativo](./trabajo-formativo.md) | [Guía extendida](./trabajo-formativo/) |\n| 7 | [Actividad evaluada · RabbitMQ](./actividad-evaluada-rabbitmq.md) | Diseño + implementación · 10% EV2 |
 
 ## Mapa conceptual de la semana
 
@@ -124,6 +124,18 @@ Exchange
 ```
 
 El énfasis cambia desde “hacer funcionar RabbitMQ” a **entender la topología y tomar decisiones coherentes de diseño**.
+
+## Actividad evaluada · 10% EV2
+
+Durante esta semana comienza una actividad evaluada de diseño e implementación de comunicación distribuida.
+
+- **Parte 1 · Diseño:** viernes 2 de octubre de 2026.
+- **Parte 2 · Implementación:** lunes 5 de octubre de 2026.
+- **Requisito mínimo:** 1 comunicación síncrona y 2 comunicaciones asíncronas mediante RabbitMQ.
+- **Entrega:** informe, sin presentación.
+- **Ponderación:** 10% de la EV2.
+
+→ [Ver enunciado completo de la actividad](./actividad-evaluada-rabbitmq.md)
 
 ## Trabajo autónomo AVA
 
