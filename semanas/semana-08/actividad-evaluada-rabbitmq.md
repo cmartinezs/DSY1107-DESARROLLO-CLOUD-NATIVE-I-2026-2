@@ -188,3 +188,14 @@ Se observará especialmente:
 ## Relación con EV2
 
 Esta actividad corresponde al **10% de la Evaluación Parcial 2 (EV2)** y permite evidenciar tempranamente la capacidad de diseñar e implementar comunicación distribuida utilizando los conceptos trabajados durante la Semana 8.
+
+
+## Ejemplos de capacidades y dominios
+
+Para ampliar las posibilidades de diseño y evitar que todos los equipos resuelvan el mismo caso, existe una colección de ejemplos separados por dominio de negocio.
+
+Cada ejemplo muestra posibles decisiones síncronas y asíncronas, eventos, consumers y preguntas que ayudan a razonar la arquitectura.
+
+> Los ejemplos son referencias de comprensión. No constituyen una solución obligatoria ni una plantilla que deba copiarse.
+
+→ [Explorar ejemplos de capacidades](./actividad-evaluada-rabbitmq-ejemplos/)
