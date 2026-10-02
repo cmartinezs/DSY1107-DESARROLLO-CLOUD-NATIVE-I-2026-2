@@ -136,7 +136,8 @@ Durante esta semana comienza una actividad evaluada de diseño e implementación
 - **Entrega:** informe, sin presentación.
 - **Ponderación:** 10% de la EV2.
 
-→ [Ver enunciado completo de la actividad](./actividad-evaluada-rabbitmq.md)
+→ [Ver enunciado completo de la actividad](./actividad-evaluada-rabbitmq.md)  
+→ [Explorar ejemplos por dominio](./actividad-evaluada-rabbitmq-ejemplos/)
 
 ## Trabajo autónomo AVA
 
