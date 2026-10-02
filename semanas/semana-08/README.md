@@ -51,7 +51,8 @@ Cada tema tiene dos niveles:
 | 3 | [Exchange, Binding y Routing Key](./03-exchange-binding-routing-key.md) | [Contenido extendido](./03-exchange-binding-routing-key/) |
 | 4 | [Separación de responsabilidades](./04-separacion-responsabilidades.md) | [Contenido extendido](./04-separacion-responsabilidades/) |
 | 5 | [Evidencia y criterio de salida](./05-evidencia-y-salida.md) | [Contenido extendido](./05-evidencia-y-salida/) |
-| 6 | [Trabajo formativo](./trabajo-formativo.md) | [Guía extendida](./trabajo-formativo/) |\n| 7 | [Actividad evaluada · RabbitMQ](./actividad-evaluada-rabbitmq.md) | Diseño + implementación · 10% EV2 |
+| 6 | [Trabajo formativo](./trabajo-formativo.md) | [Guía extendida](./trabajo-formativo/) |
+| 7 | [Actividad evaluada · RabbitMQ](./actividad-evaluada-rabbitmq.md) | Diseño + implementación · 10% EV2 |
 
 ## Mapa conceptual de la semana
 
