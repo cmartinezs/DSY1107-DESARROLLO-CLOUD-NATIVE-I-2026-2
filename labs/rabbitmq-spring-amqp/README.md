@@ -1,66 +1,29 @@
 # Laboratorio · RabbitMQ + Spring AMQP
 
-**Semana:** 08  
-**RA/IL:** RA2 · IL2.1  
-**Modalidad:** local, guiada y reproducible  
-**Foco:** broker, producer/consumer, DirectExchange, bindings, routing keys y observación
+**Semanas:** 08–09  
+**RA/IL:** RA2 · IL2.1–IL2.3  
+**Modalidad:** local, guiada y reproducible
 
-## Propósito
-
-Construir desde cero un flujo de mensajería asíncrona suficientemente pequeño para comprender cada pieza, pero suficientemente completo para observar routing, desacoplamiento y diagnóstico desde RabbitMQ Management UI.
-
-## Resultado esperado
-
-Al terminar el estudiante debe poder demostrar:
-
-```text
-Producer
-→ DirectExchange
-→ Binding
-→ Queue
-→ Consumer
-```
-
-y explicar por qué la lógica de negocio no debe quedar acoplada al listener ni a la configuración del broker.
-
-## Ruta del laboratorio
-
-1. [00 · Prerrequisitos y línea base](./00-prerrequisitos.md)
+## Semana 08 · Flujo básico
+1. [00 · Prerrequisitos](./00-prerrequisitos.md)
 2. [01 · RabbitMQ con Docker Compose](./01-broker-docker.md)
-3. [02 · Hello World Producer → Queue → Consumer](./02-hello-world.md)
-4. [03 · DirectExchange, bindings y routing keys](./03-direct-exchange.md)
-5. [04 · Management UI y diagnóstico](./04-management-ui.md)
+3. [02 · Hello World](./02-hello-world.md)
+4. [03 · DirectExchange, bindings y routing](./03-direct-exchange.md)
+5. [04 · Management UI](./04-management-ui.md)
 6. [05 · Separación de responsabilidades](./05-separacion-responsabilidades.md)
-7. [06 · Pruebas, evidencia y cierre](./06-pruebas-evidencia.md)
+7. [06 · Pruebas y evidencia](./06-pruebas-evidencia.md)
 
-## Prerrequisitos conceptuales
-
-Antes de entrar al lab:
-
-- [mensajería asíncrona](../../semanas/semana-08/01-asincronia-y-colas.md);
-- [Hello World](../../semanas/semana-08/02-hello-world-rabbitmq.md);
-- [Exchange/Binding/Routing Key](../../semanas/semana-08/03-exchange-binding-routing-key.md);
-- [ejercicios breves](../../ejercicios/semana-08/).
+## Semana 09 · Confiabilidad
+8. [07 · Work Queue vs Publish/Subscribe](./07-work-queue-vs-pubsub.md)
+9. [08 · ACK manual](./08-manual-ack.md)
+10. [09 · Durabilidad](./09-durabilidad.md)
+11. [10 · DLX/DLQ](./10-dlx-dlq.md)
+12. [11 · TTL y dead-lettering](./11-ttl-y-dead-lettering.md)
+13. [12 · Fallo controlado y diagnóstico](./12-fallo-controlado-y-diagnostico.md)
 
 ## Regla de avance
-
-Cada etapa termina con un checkpoint observable. Si una etapa falla, se vuelve al último checkpoint verde en vez de cambiar producer, broker, consumer y configuración al mismo tiempo.
-
-## Fuera de alcance
-
-Semana 08 no introduce aún:
-
-- acknowledgements manuales avanzados;
-- retries;
-- DLX/DLQ;
-- publisher confirms;
-- cluster RabbitMQ;
-- alta disponibilidad.
-
-Esos temas pertenecen a semanas posteriores según cronograma.
+Cada etapa termina con un checkpoint observable. Si falla, vuelve al último checkpoint verde antes de cambiar varias piezas simultáneamente.
 
 ## Transferencia
-
-Solo después de entender el patrón se aplica una capacidad similar en RegistrApp:
-
-→ [RegistrApp · Semana 08](../../proyecto-formativo/semana-08/)
+- [RegistrApp · Semana 08](../../proyecto-formativo/semana-08/)
+- [RegistrApp · Semana 09](../../proyecto-formativo/semana-09/)
