@@ -1,24 +1,27 @@
-# RegistrApp · Semana 9
+# RegistrApp · Semana 09
 
-## Estado
-Checkpoint reservado. El contenido específico se define cuando la planificación de Semana 9 esté confirmada.
+## Checkpoint
+**Entrega confiable y manejo de fallos de la capacidad asíncrona existente.**
 
 ## Estado de entrada
-Recibe todo el estado de salida de Semana 8, incluidas sus deudas explícitas.
+Recibe íntegramente Semana 08: capacidad, producer, exchange, routing key, queue, consumer, contrato, caso de uso y deuda.
 
-## Contenido transferible
-Por definir según el contenido efectivamente trabajado en clases. No incorporar capacidades no aprendidas.
+No se crea una segunda solución de mensajería.
 
 ## Incremento
-Debe extender el estado anterior; no reiniciar RegistrApp.
+- estrategia ACK/NACK;
+- durabilidad cuando corresponda;
+- DLX;
+- DLQ;
+- prueba de éxito;
+- prueba de fallo definitivo;
+- evidencia observable.
 
-## Evidencia obligatoria
-- comparación antes/después;
-- artefactos modificados;
-- decisión técnica;
-- referencia a commits/archivos cuando corresponda;
-- DevLog;
-- deuda pendiente.
+## Secuencia
+1. [Estado de entrada](./01-estado-de-entrada.md)
+2. [Estrategia de entrega](./02-estrategia-de-entrega.md)
+3. [DLX y DLQ](./03-dlx-dlq.md)
+4. [Pruebas de fallo](./04-pruebas-de-fallo.md)
+5. [Checkpoint y evidencia](./05-checkpoint-y-evidencia.md)
 
-## Estado de salida
-El estado completo resultante será la entrada de Semana 10.
+El estado de salida completo será la entrada de Semana 10.
