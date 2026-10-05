@@ -48,7 +48,7 @@ Cada checkpoint debe evidenciar:
 | 06 | [Freeze y evidencia de Evaluación Parcial 1](./semana-06/) |
 | 07 | [Cierre de EA1 y baseline para mensajería](./semana-07/) |
 | 08 | [Primera capacidad asíncrona con RabbitMQ](./semana-08/) |
-| 09 | [Checkpoint reservado](./semana-09/) |
+| 09 | [ACK, durabilidad y manejo de fallos con DLX/DLQ](./semana-09/) |
 | 10 | [Checkpoint reservado](./semana-10/) |
 | 11 | [Checkpoint reservado](./semana-11/) |
 | 12 | [Checkpoint reservado](./semana-12/) |

@@ -19,11 +19,32 @@
 - resiliencia;
 - justificación técnica.
 
+## Alcance técnico mínimo
+
+En esta iteración del caso semestral se incorpora la capa de mensajería incluyendo:
+
+- configuración centralizada de queues, exchanges y bindings;
+- consumers con ACK y manejo de errores;
+- servicio de administración de colas utilizado;
+- topología coherente con el caso de uso;
+- manejo de mensajes fallidos mediante dead-lettering cuando corresponda;
+- capacidad de explicar la diferencia entre ACK, durabilidad y persistencia.
+
+## Defensa técnica
+
+Se mantienen los mismos lineamientos de la Evaluación Parcial 1:
+
+- defensa presencial;
+- cara a cara con el docente;
+- aun cuando la presentación o solución se realice como grupo, la defensa técnica puede comprobar individualmente a cada estudiante;
+- si el tiempo de Semana 11 no permite completar todas las defensas individuales, estas pueden extenderse a la semana siguiente.
+
 ## Preparación
 
 → [Semana 08](../semanas/semana-08/)  
-→ [Lab RabbitMQ + Spring AMQP](../labs/rabbitmq-spring-amqp/)
-
+→ [Semana 09](../semanas/semana-09/)  
+→ [Lab RabbitMQ + Spring AMQP](../labs/rabbitmq-spring-amqp/)  
+→ [RegistrApp · Semana 09](../proyecto-formativo/semana-09/)
 
 ## Actividad evaluada · Semana 08
 

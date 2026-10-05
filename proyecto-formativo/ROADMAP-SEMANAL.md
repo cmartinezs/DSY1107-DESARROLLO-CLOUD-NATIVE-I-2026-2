@@ -17,10 +17,10 @@ RegistrApp es **un único proyecto vivo**. Cada semana recibe el estado anterior
 | [05](./semana-05/) | definido | estado Semana 4 | integración end-to-end protegida | baseline evaluable EA1 |
 | [06](./semana-06/) | evaluativo | estado Semana 5 | freeze, evidencia y defensa EP1 | baseline sin expansión funcional |
 | [07](./semana-07/) | evaluativo | estado Semana 6 | cierre de deudas y transición de experiencia | baseline EA2 |
-| [08](./semana-08/) | actual | estado Semana 7 | capacidad asíncrona mínima con RabbitMQ | entrada Semana 9 |
-| [09](./semana-09/) | reservado | estado Semana 8 | por definir según contenido aprendido | entrada Semana 10 |
+| [08](./semana-08/) | definido | estado Semana 7 | capacidad asíncrona mínima con RabbitMQ | entrada Semana 9 |
+| [09](./semana-09/) | actual | estado Semana 8 | ACK/NACK, durabilidad y manejo de mensajes fallidos mediante DLX/DLQ | entrada Semana 10 |
 | [10](./semana-10/) | reservado | estado Semana 9 | por definir según contenido aprendido | entrada Semana 11 |
-| [11](./semana-11/) | reservado | estado Semana 10 | por definir según contenido aprendido | entrada Semana 12 |
+| [11](./semana-11/) | evaluativo | estado Semana 10 | Evaluación Parcial 2 y defensa técnica | entrada Semana 12 |
 | [12](./semana-12/) | reservado | estado Semana 11 | por definir según contenido aprendido | entrada Semana 13 |
 | [13](./semana-13/) | reservado | estado Semana 12 | por definir según contenido aprendido | entrada Semana 14 |
 | [14](./semana-14/) | reservado | estado Semana 13 | por definir según contenido aprendido | entrada Semana 15 |
