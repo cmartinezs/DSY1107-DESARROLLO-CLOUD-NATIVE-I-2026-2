@@ -138,36 +138,13 @@ No se sincronizan artificialmente: cada sección registra su último checkpoint 
 
 ## Semana actual
 
-**Semana 8 · 28 de septiembre al 3 de octubre de 2026**
+**Semana 12 · 26 al 31 de octubre de 2026**
 
-**Mensajería asíncrona y RabbitMQ.**
+**Kafka: streaming vs colas, topics, particiones, offsets, grupos de consumidores y fundamentos de Kafka Streams.**
 
-Esta semana se trabaja:
+Ruta: [Semana 12](semanas/semana-12/) → [Ejemplos](examples/semana-12/) → [Ejercicios](ejercicios/semana-12/) → [Lab Kafka local](labs/kafka-streaming/).
 
-- diferencias entre comunicación síncrona y asíncrona;
-- RabbitMQ contenerizado con Docker;
-- Producer y Consumer con Spring AMQP;
-- `DirectExchange`, bindings y routing keys;
-- observación del recorrido desde Management UI;
-- separación entre infraestructura de mensajería y lógica de aplicación;
-- transferencia controlada de una capacidad asíncrona a RegistrApp.
-
-Ruta pedagógica:
-
-```text
-problema de acoplamiento
-→ Hello World
-→ observar broker
-→ exchange + binding + routing key
-→ ejercicio
-→ laboratorio
-→ transferencia formativa
-```
-
-→ [Semana 08](semanas/semana-08/)  
-→ [Ejemplo Semana 08](examples/semana-08/)  
-→ [Lab RabbitMQ + Spring AMQP](labs/rabbitmq-spring-amqp/)  
-→ [RegistrApp · Semana 08](proyecto-formativo/semana-08/)
+**Nota:** el índice curricular mantiene las semanas anteriores registradas; la actualización no afirma ejecución en aula ni inventa contenido de semanas 10 y 11.
 
 ## Governance y estructura
 

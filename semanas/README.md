@@ -15,6 +15,8 @@ Este directorio organiza el contenido consolidado del curso y mantiene separado 
 | **07** | 21–26 septiembre 2026 | **Cierre Evaluación Parcial 1 + baseline arquitectónico** | [Abrir Semana 07](semana-07/) |
 | **08** | 28 septiembre–3 octubre 2026 | **Mensajería asíncrona y RabbitMQ: Hello World, DirectExchange, bindings y routing keys** | [Abrir Semana 08](semana-08/) |
 
+| **12** | 26–31 octubre 2026 | **Streaming vs colas, Kafka, consumer groups y Kafka Streams** | [Abrir Semana 12](semana-12/) |
+
 ## Regla de uso
 
 El README común define el horizonte curricular. Cuando 002D y 003D tengan avances distintos, cada semana mantiene documentos separados por sección y parte desde el último checkpoint demostrable. La disponibilidad de un tema no constituye evidencia de que haya sido ejecutado en aula.
