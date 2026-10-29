@@ -85,3 +85,13 @@ docker exec -it dsy1107-kafka-fundamentos-s12 /opt/kafka/bin/kafka-console-consu
 ## Checkpoint
 
 Tomar capturas de los dos grupos, de la distribución de particiones de `analytics` y de la relectura después del reset. Explicar por qué, si un evento puede reprocesarse, una aplicación con efectos externos debe ser **idempotente**.
+
+## Paso D · Inspeccionar grupos en Kafka UI
+
+1. Abre **http://localhost:8083 → Consumer Groups**.
+2. Busca `analytics` y `notificaciones`. Las pantallas pueden tardar unos segundos en reflejar los cambios.
+3. Compara los offsets confirmados y el **lag** por grupo y partición. **Lag** significa registros pendientes según offsets confirmados, no segundos de retraso ni el número exacto de tareas de negocio.
+4. Mientras hay dos consumidores de `analytics`, observa cómo se asignan particiones. Un cuarto consumidor de un grupo de tres particiones podría quedar sin asignación.
+5. Después del reset del grupo `analytics` (con **todos** sus miembros detenidos), comprueba la relectura de eventos retenidos.
+
+**Checkpoint:** captura de los grupos más un párrafo que diferencie **dos miembros del mismo grupo** de **dos grupos independientes**. Recuerda que `--from-beginning` / `auto-offset-reset=earliest` no sobrescriben offsets ya confirmados por un grupo existente.

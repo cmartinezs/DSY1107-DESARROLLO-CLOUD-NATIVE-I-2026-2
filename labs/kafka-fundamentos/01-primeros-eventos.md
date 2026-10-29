@@ -28,6 +28,8 @@ docker exec dsy1107-kafka-fundamentos-s12 /opt/kafka/bin/kafka-topics.sh --boots
 
 Comprobar **3 particiones** y **replication-factor=1**. La opción `--if-not-exists` permite repetir el comando sin crear un topic duplicado.
 
+**Otra forma de crear el topic (visual, como en AVA):** abre **http://localhost:8083 → Topics → Add a Topic**, crea `compras` con **3 particiones** y **factor de replicación 1**. Si ya creaste el topic por consola, **no lo crees de nuevo**: solo verifica sus propiedades desde Kafka UI. El nombre de cada botón puede variar ligeramente según versión.
+
 ## Paso 2 · Leer y publicar eventos
 
 Abrir **dos ventanas de PowerShell**. En ambas se puede trabajar desde la carpeta del laboratorio, aunque los comandos `docker exec` no dependen de la carpeta.
@@ -65,3 +67,13 @@ La parte anterior a `:` es la **clave** y el JSON posterior es el **valor**. Obs
 ## Checkpoint
 
 Guardar una captura de la descripción del topic y otra con registros y sus campos `key`, `partition` y `offset`. Explicar por qué replicación 1 **no** significa tolerancia a fallos del broker.
+
+## Paso 3 · Ver el resultado en Kafka UI
+
+1. Abre **http://localhost:8083** en Windows.
+2. Entra a **Topics → compras → Messages**.
+3. Busca un evento con clave `cliente-1`; compara **Key, Value, Partition y Offset** con la salida de la consola.
+4. Observa dos eventos con la misma clave. Deben conservar su partición **si se mantiene la configuración y el número de particiones**.
+5. Para el contraste **sin clave**, haz [la guía visual complementaria](./04-kafka-ui-guia-ava.md). Sin clave no hay una garantía de secuencia fija P0→P1→P2.
+
+**Checkpoint visual:** captura de Kafka UI mostrando las tres particiones y un evento. **Explica:** el offset identifica la posición **en su partición**, no un número global del topic.
