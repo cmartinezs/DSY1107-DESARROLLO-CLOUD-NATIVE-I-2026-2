@@ -1,26 +1,45 @@
 # Guía docente · Semana 12
 
-## Inicio: recordar RabbitMQ (15 minutos)
-Caso: se confirma una compra; debemos despachar una tarea de correo, alimentar indicadores y poder recalcular estadísticas históricas. Dibujar dos arquitecturas y justificar necesidad de fanout, retención, replay e idempotencia. Evitar la falsa dicotomía de que Kafka sustituye siempre a RabbitMQ.
+## Intención didáctica
 
-## Bloque 1
-Explicar **producer → topic → partition → broker → consumer group**. Offset es posición relativa a una partición. Key determinista favorece afinidad de cliente. Pide al grupo dibujar un topic de tres particiones y dos grupos independientes.
+El foco es **configurar e integrar** una web React con dos microservicios Spring Boot y Kafka, no desarrollar los tres proyectos desde cero. Presentar el caso como tienda que emite compras y construye un tablero en tiempo real. Utilizar [el laboratorio guiado con checkpoints](../../labs/kafka-streaming/LAB-WEBAPP-PASO-A-PASO.md).
 
-## Bloque 2
-Iniciar Kafka con Docker y hacer el [lab 01](../../labs/kafka-streaming/01-primeros-eventos.md). Preguntar por qué dos eventos con key igual van a la misma partición en la configuración vigente y qué ocurriría si cambia la cantidad de particiones.
+## Preparación del laboratorio (antes de clase)
 
-## Bloque 3
-Hacer el [lab 02](../../labs/kafka-streaming/02-consumer-groups.md). Dos consumidores con el mismo `group.id` comparten particiones; dos grupos independientes pueden observar cada registro. Revisar offset confirmado, lag y reset con grupo inactivo.
+1. Confirmar que Docker Desktop esté operativo y en modo Linux containers en los computadores Windows 10 (WSL2/Hyper-V, de existir, corresponde a soporte TI).
+2. Asegurar conectividad al registro Docker Hub, a Maven Central y a npm: la primera ejecución construye dos servicios Java y una web React **dentro de Docker**.
+3. Si Internet o recursos del laboratorio no permiten compilar, **preparar con antelación las imágenes** en los equipos; no pedir instalaciones de herramientas a los estudiantes.
+4. Verificar que estén libres los puertos 9092, 8081, 8082 y 5173, o ajustar la asignación de puertos con el grupo.
 
-## Bloque 4
-Introducir Kafka Streams: `filter`/ `map` (stateless); `groupByKey`/ `count`/ `aggregate` (stateful); ventanas tumbling, hopping y de sesión, state stores y changelogs. Resolver [diseño de topología](../../labs/kafka-streaming/03-streams-diseno.md). **Este módulo es diseño y pseudocódigo; no declarar una aplicación Java implementada.**
+## Apertura · RabbitMQ vs Kafka
+
+Ejemplo: una compra desencadena una tarea de correo, se refleja en indicadores y debe permitir recuperar el estado después de reiniciar. Comparar cola de trabajo y log de eventos retenidos sin afirmar que Kafka sustituye siempre a RabbitMQ.
+
+## Clase guiada
+
+- **Checkpoint 0–1:** comprobar Docker y crear el topic `compras` con 3 particiones.
+- **Checkpoint 2:** completar `.env`. Preguntar por qué `localhost:9092` no sirve como bootstrap interno entre contenedores y por qué sí `kafka:9094`.
+- **Checkpoint 3:** configurar Nginx para conectar React con las dos APIs a través del mismo origen. Distinguir HTTP de Kafka.
+- **Checkpoint 4–5:** iniciar imágenes y probar REST; emitir 4 compras y pedir que identifiquen clave, partición, offset y los dos procesos separados.
+- **Checkpoint 6:** abrir otro grupo independiente `auditoria-s12`, publicar una compra y ver que ambos grupos consumen el evento.
+- **Checkpoint 7:** detener `resumen-api`, resetear offsets con grupo inactivo y reconstruir el tablero desde el log retenido.
+- **Checkpoint 8:** distinguir el resumen Spring Kafka en memoria de un procesamiento Kafka Streams; diseñar topología y ventanas (no atribuir una implementación Java Streams al ejemplo).
+
+## Alcance por sección
+
+**002D:** priorizar hasta checkpoint 5; el docente puede demostrar grupos y replay si la duración no permite práctica completa.
+
+**003D:** idealmente desarrollar 0–8. Ajustar según ritmo real, registrar checkpoint alcanzado, no simular ejecución por haber publicado la guía.
+
+## Diagnóstico guiado
+
+- Si web devuelve **502**: revisar nombres `compras-api` / `resumen-api` en el proxy.
+- Si productor falla: comprobar `KAFKA_BROKER=kafka:9094`, topic `compras` y Kafka saludable.
+- Si resumen no crece: revisar grupo y offsets mediante comandos Kafka; el consumidor puede haber registrado una compra anterior.
+- Si falla por descarga Maven/npm: problema de entorno/caché, no del código que deba desarrollar el estudiante.
 
 ## Evaluación formativa
-- Justifica cola versus log de eventos ante un escenario nuevo.
-- Demuestra topic con tres particiones y eventos con key.
-- Explica por qué cuatro consumidores de un grupo frente a tres particiones dejan al menos uno sin asignación (si no hay otros topics).
-- Calcula totales por cliente para ventanas de un minuto.
-- Describe una limitación de la configuración local (replicación=1, sin alta disponibilidad).
 
-## Secciones
-002D y 003D conservan checkpoints independientes. Completar evidencia después de cada sesión; no marcar lab hecho sin observación.
+Evidencias: topic de 3 particiones, estado de 4 servicios, compra visible en web, partición/offset, dos grupos independientes, replay y topología conceptual con ventana.
+
+**Advertencia docente:** el estado agregado es volátil y la deduplicación en memoria no reemplaza idempotencia duradera. Después de `docker compose down`, el broker de este ejemplo pierde los eventos porque no usa volumen persistente. No es un sistema de producción.
