@@ -63,6 +63,6 @@ Ejemplo: una compra desencadena una tarea de correo, se refleja en indicadores y
 
 ## Evaluación formativa
 
-Evidencias: topic de 3 particiones, estado de 4 servicios, compra visible en web, partición/offset, dos grupos independientes, replay y topología conceptual con ventana.
+Evidencias: topic de 3 particiones, estado de 5 servicios (incluido Kafka UI), compra visible en web, partición/offset, dos grupos independientes, replay y topología conceptual con ventana.
 
 **Advertencia docente:** el estado agregado es volátil y la deduplicación en memoria no reemplaza idempotencia duradera. Después de `docker compose down`, el broker de este ejemplo pierde los eventos porque no usa volumen persistente. No es un sistema de producción.

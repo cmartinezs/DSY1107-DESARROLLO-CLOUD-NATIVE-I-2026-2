@@ -4,7 +4,7 @@
 
 **Entorno de los estudiantes:** Windows 10, Docker Desktop abierto en modo Linux containers, PowerShell, navegador y editor de texto (Bloc de notas o VS Code). **No instalar Java, Maven, Node, Make, Bash ni abrir WSL.** Docker compila Java y React dentro de sus imágenes. La primera compilación requiere Internet y recursos suficientes; el laboratorio debe tener Docker Desktop habilitado previamente por la institución.
 
-> Este laboratorio es **independiente del laboratorio de fundamentos** y tiene su propio `compose.yaml`. `docker compose up -d` levanta únicamente el Kafka de esta aplicación; `docker compose --profile app up -d --build` añade React y ambos microservicios. **No necesitas ejecutar el otro laboratorio primero.**
+> Este laboratorio es **independiente del laboratorio de fundamentos** y tiene su propio `compose.yaml`. `docker compose up -d` levanta Kafka **y Kafka UI**, sin la webapp; `docker compose --profile app up -d --build` añade React y ambos microservicios. **No necesitas ejecutar el otro laboratorio primero.**
 
 ## El caso: «Compras en tiempo real»
 
@@ -49,14 +49,14 @@ docker compose version
 
 ## Checkpoint 1 · Broker Kafka + topic
 
-**Paso 1.1.** Desde `labs\kafka-compras-webapp`, inicia solo Kafka:
+**Paso 1.1.** Desde `labs\kafka-compras-webapp`, inicia Kafka y su interfaz de inspección:
 
 ```powershell
 docker compose up -d
 docker compose ps
 ```
 
-La primera ejecución descargará `apache/kafka:4.1.2` y la interfaz Kafbat UI. Si Kafka aún está arrancando, aguarda a que el contenedor esté saludable.
+La primera ejecución descargará `apache/kafka:4.1.2` y la interfaz Kafbat UI. Ambos contenedores pueden tardar en estar listos. Si Kafka aún está arrancando, aguarda a que el contenedor esté saludable.
 
 **Paso 1.2.** Comprueba el broker:
 
@@ -157,7 +157,7 @@ docker compose --profile app up -d --build
 
 En la primera ejecución Docker descargará imágenes de Java/Maven/Node y compilará los proyectos. El equipo necesita Internet para descargar dependencias Maven y npm; no hace falta instalarlas en Windows.
 
-**Paso 4.2.** Comprueba los cuatro servicios:
+**Paso 4.2.** Comprueba los **cinco servicios** (Kafka, Kafka UI, dos APIs y web React):
 
 ```powershell
 docker compose --profile app ps

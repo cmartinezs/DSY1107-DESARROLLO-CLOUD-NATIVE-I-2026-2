@@ -7,4 +7,4 @@ Este era el directorio original donde convivían los dos recorridos. **Se separa
 
 **No ejecutes `docker compose` en esta carpeta anterior.** Entra a la carpeta del laboratorio elegido y sigue su README; los dos utilizan el puerto local 9092 y no deben ejecutarse simultáneamente.
 
-Los enlaces antiguos a las guías siguen apuntando a documentos de transición que llevan a su ubicación actual.
+Las guías originales fueron trasladadas y sus rutas antiguas ya no existen. Usa exclusivamente los dos enlaces anteriores para abrir los laboratorios vigentes.
