@@ -24,10 +24,13 @@ Los PDF originales se conservan en la biblioteca institucional, no se duplican a
 | 3 | Consumer groups y replay → laboratorio 02 → evidencia de asignación y relectura |
 | 4 | Streams, estado y ventanas → diseño guiado → topología y cálculos por intervalo |
 
+## Entorno del laboratorio práctico
+**Windows 10 + Docker Desktop + PowerShell** (también sirve CMD). No se solicita instalar Make, Java, Linux ni ejecutar comandos desde WSL. Docker Desktop debe estar configurado previamente por el laboratorio para usar contenedores Linux; los alumnos solo ejecutan `docker compose` y `docker exec` desde Windows.
+
 ## Rutas
 - [Ejemplos](../../examples/semana-12/)
 - [Ejercicios](../../ejercicios/semana-12/)
-- [Laboratorio local Kafka](../../labs/kafka-streaming/)
+- [Laboratorio local Kafka — instrucciones para Windows](../../labs/kafka-streaming/)
 - [Guía docente](./01-guia-docente.md)
 
 ## Checkpoint
