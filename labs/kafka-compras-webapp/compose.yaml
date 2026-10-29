@@ -60,7 +60,7 @@ services:
       - resumen-api
 
   kafka-ui:
-    image: ghcr.io/kafbat/kafka-ui:latest
+    image: ghcr.io/kafbat/kafka-ui:v1.5.0
     ports:
       - "127.0.0.1:8083:8080"
     environment:
