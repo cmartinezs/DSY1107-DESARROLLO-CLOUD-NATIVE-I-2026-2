@@ -56,7 +56,7 @@ docker compose up -d
 docker compose ps
 ```
 
-La primera ejecución descargará `apache/kafka:4.1.2`. Si Kafka aún está arrancando, aguarda a que el contenedor esté saludable.
+La primera ejecución descargará `apache/kafka:4.1.2` y la interfaz Kafbat UI. Si Kafka aún está arrancando, aguarda a que el contenedor esté saludable.
 
 **Paso 1.2.** Comprueba el broker:
 
@@ -77,6 +77,8 @@ docker exec dsy1107-kafka-s12 /opt/kafka/bin/kafka-topics.sh --bootstrap-server 
 ```
 
 **✅ Verificación:** topic `compras` con `PartitionCount: 3` y `ReplicationFactor: 1` (la salida exacta puede variar).
+
+**Verificación visual adicional (AVA 3.2.1):** abre **http://localhost:8083** y entra a **Topics → compras**. Debes ver el topic y las tres particiones. Esta herramienta se llama **Kafbat UI** (Kafka UI); corre como otro contenedor y no requiere instalar nada en Windows.
 
 **💡 Conecta con la teoría:** topic, particiones, retención y replicación. **Una réplica no proporciona alta disponibilidad.**
 
@@ -199,6 +201,8 @@ Invoke-RestMethod -Method Post -Uri http://localhost:8081/api/compras -ContentTy
 
 **✅ Evidencia:** captura de la web mostrando compras, claves, particiones y offsets; explica por qué los eventos de Ana conservan la partición. El orden solo se garantiza **dentro de cada partición**.
 
+**Pausa de observación (AVA 3.2.1):** abre **http://localhost:8083 → Topics → compras → Messages** y busca los eventos. Comprueba **Key (cliente), Value (JSON), Partition y Offset**. Compara los metadatos con la tabla React. Si no ves eventos, revisa los filtros de la vista. [Guía visual complementaria](./01-observar-eventos-kafka-ui.md).
+
 ## Checkpoint 6 · Segundo consumer group independiente
 
 **Paso 6.1.** Abre **otra PowerShell**. Inicia un consumidor adicional, esta vez en el grupo `auditoria-s12`:
@@ -210,6 +214,8 @@ docker exec -it dsy1107-kafka-s12 /opt/kafka/bin/kafka-console-consumer.sh --boo
 **Paso 6.2.** Sin cerrar esa consola, publica desde la web una compra nueva de Ana. Debes observarla tanto en la web (grupo `resumen-app`) como en la consola (grupo `auditoria-s12`). Para detener el consumidor de auditoría, usa **Ctrl+C**.
 
 **✅ Verificación:** dos grupos diferentes pueden leer el **mismo evento**. No se «roban» mensajes entre grupos.
+
+**Kafka UI:** en **Consumer Groups**, compara `resumen-app` con `auditoria-s12`; observa sus offsets y, si existe, el lag. Si la lista aún no se actualiza, espera unos segundos y refresca la vista.
 
 **💡 Reflexión:** ¿qué cambiaría si dos instancias pertenecieran al **mismo** grupo? ¿Cuántas podrían procesar particiones simultáneamente en un topic de tres particiones?
 
@@ -239,13 +245,26 @@ docker compose --profile app start resumen-api
 
 **✅ Evidencia:** captura del resumen reconstruido. Explica qué problema surgiría si cada evento reejecutara un cobro real sin mecanismos de idempotencia.
 
+**Kafka UI:** antes y después del reset, consulta el grupo `resumen-app`; observa su avance en offsets. Kafka guarda los eventos por retención; el progreso del grupo es otra información independiente.
+
 ## Checkpoint 8 · Relación con Kafka Streams (diseño, sin programar)
 
 Abre el [Laboratorio 03 de ventanas](../kafka-fundamentos/03-streams-diseno.md). Con los eventos de compra, dibuja una topología conceptual `filter → groupByKey → windowedBy → aggregate`; calcula montos en ventanas de un minuto.
 
 **✅ Evidencia:** diagrama y cálculo correcto. Nuestro `resumen-api` es un **consumidor Spring Kafka con un agregado en memoria**; **NO es una implementación de Kafka Streams**. La diferencia debe quedar explícita.
 
+**Conexión con AVA 3.2.2:** la guía bancaria propone filtrar transacciones, detectar montos sospechosos, enriquecer y agregar antes de emitir alertas. En nuestro código ya existe **producción, consumo y agregación básica**; filtrado de fraude, enriquecimiento y una topología real de Kafka Streams **no están implementados**. Identifica en el diagrama dónde irían, pero no los programes en esta práctica. [Comparación y preguntas de análisis](./01-observar-eventos-kafka-ui.md).
+
 ---
+
+## Recordatorio · Qué hace cada capa y por qué
+
+- **React** captura una compra: interactúa con el usuario, pero **no** se conecta directamente a Kafka.
+- **compras-api** recibe HTTP y construye un evento JSON; la `key` es el cliente.
+- **Kafka** almacena el evento en una **partición** y le asigna un **offset** local a esa partición.
+- **resumen-api** consume usando el grupo `resumen-app` y acumula compras **en memoria**.
+- **Kafka UI** permite observar el evento y sus metadatos. Es una herramienta de **inspección**, no un tercer microservicio de negocio.
+- **El navegador** consulta el resumen cada 2 segundos. Esa actualización es *polling*, **no** WebSocket ni Kafka Streams.
 
 ## Ayuda rápida para los estudiantes
 
@@ -254,6 +273,7 @@ Abre el [Laboratorio 03 de ventanas](../kafka-fundamentos/03-streams-diseno.md).
 | `docker` no funciona | Docker Desktop abierto, motor listo y contenedores Linux habilitados por el encargado |
 | `PENDIENTE` en `docker compose --profile app config` | Valores no completados en `.env` |
 | API no logra conectar a Kafka | `KAFKA_BROKER=kafka:9094`, nunca `localhost:9092` entre contenedores |
+| Kafka UI no abre en 8083 | Comprueba el servicio `kafka-ui` con `docker compose --profile app ps`; no confundir 8083 con el puerto HTTP interno 8080 |
 | La web devuelve 502 | nombres de los dos servicios en `webapp/web/nginx/default.conf`; servicios arrancados |
 | No se reciben compras | nombre de topic `compras`, tres particiones, estado de `resumen-api` |
 | La compilación falla descargando dependencias | conectividad a Internet del laboratorio, acceso a registros Docker/Maven/npm |
@@ -280,7 +300,7 @@ docker compose --profile app down
 
 1. Captura: topic y tres particiones (checkpoint 1).
 2. Captura: `docker compose --profile app ps` y ambas APIs saludables (checkpoint 4).
-3. Captura: web, totales y columnas de partición/offset (checkpoint 5).
+3. Captura: web, totales y columnas de partición/offset (checkpoint 5), **más Kafka UI mostrando el mismo evento**.
 4. Explicación breve: dos grupos, replay e idempotencia (checkpoints 6 y 7).
 5. Diagrama de ventanas conceptual (checkpoint 8).
 

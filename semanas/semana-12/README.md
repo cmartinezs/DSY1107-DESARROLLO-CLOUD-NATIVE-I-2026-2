@@ -13,11 +13,18 @@ Partir de lo aprendido con RabbitMQ para comprender Kafka mediante **dos laborat
 
 Los PDF oficiales se mantienen en la biblioteca institucional.
 
+## Complemento de guías AVA
+
+- **3.2.1 · Crear topic, productor y consumidor; offsets y particiones:** se refuerza el [laboratorio A con Kafka UI](../../labs/kafka-fundamentos/04-kafka-ui-guia-ava.md).
+- **3.2.2 · Pipeline de eventos del caso end-to-end:** se vincula con el [laboratorio B y el seguimiento visual de eventos](../../labs/kafka-compras-webapp/01-observar-eventos-kafka-ui.md). La detección antifraude de la guía bancaria es un **caso diferente** de nuestra aplicación de compras, no una funcionalidad implementada.
+
+Ambas guías de AVA (2025) usan Kafka/infraestructura anteriores. En el repositorio se mantienen **KRaft + Kafbat UI**, sin ZooKeeper, para Windows 10 + Docker Desktop.
+
 ## Resultados observables (propuestos; no reemplazan IL oficiales)
 
 1. Comparar colas RabbitMQ con log de eventos retenidos Kafka.
 2. Configurar y ejecutar aplicaciones contenerizadas en Windows 10 + Docker Desktop.
-3. Mostrar publicación REST → Kafka y lectura de eventos en Spring Boot, identificando claves, particiones y offsets.
+3. Mostrar publicación REST → Kafka y lectura de eventos en Spring Boot, identificando claves, particiones y offsets **también desde Kafka UI**.
 4. Diferenciar consumer groups independientes y ejecutar replay para reconstruir el tablero.
 5. Diseñar, a nivel conceptual, un pipeline de Kafka Streams con agregaciones por ventanas.
 

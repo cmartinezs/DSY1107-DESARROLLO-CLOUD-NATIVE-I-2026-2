@@ -11,12 +11,19 @@ El foco es **configurar e integrar** una web React con dos microservicios Spring
 
 Cada laboratorio usa **su propio broker y Compose**. No comparten mensajes ni offsets; sus puertos 9092 entrarían en conflicto si se ejecutan a la vez. Detener el primero antes de comenzar el segundo. La guía AVA queda por conciliar cuando se reciba.
 
+## Conciliación con AVA (recibido: 3.2.1 y 3.2.2)
+
+- **3.2.1:** se proponen Kafka UI, creación visual de topic, contraste **sin key / con key**, particiones, offsets y consumer groups. Añadimos Kafka UI **en ambos Compose** (puerto de Windows **8083**) y guía [visual para fundamentos](../../labs/kafka-fundamentos/04-kafka-ui-guia-ava.md). No replicamos Confluent+ZooKeeper de 2025.
+- **Corrección conceptual:** en Kafka moderno, `key=null` no implica rotación estricta P0→P1→P2; se puede usar *sticky batching*. Explicar asociación de key por particionador y orden **dentro de partición**, sin prometer un número de partición específico.
+- **3.2.2:** la guía plantea un pipeline bancario con filtro, enriquecimiento USD, alertas y agregación; el código mostrado materializa **principalmente filtro + alerta** y no toda la descripción. Nuestro laboratorio B sí demuestra entrada HTTP, publicación Kafka, consumo y agregado sencillo, pero **no usa Kafka Streams ni realiza fraude**. Véase el [cuadro de alcance y observación de eventos](../../labs/kafka-compras-webapp/01-observar-eventos-kafka-ui.md).
+- **Reinicio:** detener y reiniciar un consumer group con offsets confirmados no rebobina automáticamente su lectura; se requiere grupo distinto o reset inactivo. `earliest` aplica cuando no existen offsets válidos.
+
 ## Preparación del laboratorio (antes de clase)
 
 1. Confirmar que Docker Desktop esté operativo y en modo Linux containers en los computadores Windows 10 (WSL2/Hyper-V, de existir, corresponde a soporte TI).
 2. Asegurar conectividad al registro Docker Hub, a Maven Central y a npm: la primera ejecución construye dos servicios Java y una web React **dentro de Docker**.
 3. Si Internet o recursos del laboratorio no permiten compilar, **preparar con antelación las imágenes** en los equipos; no pedir instalaciones de herramientas a los estudiantes.
-4. Verificar que estén libres los puertos 9092, 8081, 8082 y 5173, o ajustar la asignación de puertos con el grupo.
+4. Verificar que estén libres los puertos 9092, **8083 (Kafka UI)**, 8081, 8082 y 5173, o ajustar la asignación de puertos con el grupo.
 
 ## Apertura · RabbitMQ vs Kafka
 
@@ -44,6 +51,15 @@ Ejemplo: una compra desencadena una tarea de correo, se refleja en indicadores y
 - Si productor falla: comprobar `KAFKA_BROKER=kafka:9094`, topic `compras` y Kafka saludable.
 - Si resumen no crece: revisar grupo y offsets mediante comandos Kafka; el consumidor puede haber registrado una compra anterior.
 - Si falla por descarga Maven/npm: problema de entorno/caché, no del código que deba desarrollar el estudiante.
+
+## Preguntas de apoyo durante las demostraciones
+
+1. **¿Kafka UI almacena mensajes?** No: los almacena Kafka, la UI los muestra.
+2. **¿El offset es global?** No, es posición relativa a una partición.
+3. **¿Se garantiza alternancia exacta sin key?** No, el particionador puede agrupar mensajes en lotes.
+4. **¿Si otro grupo consume, desaparece el evento para el primero?** No, cada grupo lleva sus propios offsets.
+5. **¿La web React está conectada directamente a Kafka?** No: publica por REST a `compras-api`.
+6. **¿El agregado en memoria equivale a Kafka Streams?** No: Streams incorpora una topología y manejo de estado con garantías configurables.
 
 ## Evaluación formativa
 

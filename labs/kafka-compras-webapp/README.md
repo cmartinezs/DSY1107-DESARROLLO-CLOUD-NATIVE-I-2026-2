@@ -1,6 +1,6 @@
 # Laboratorio B · Compras en tiempo real con React + Spring Boot + Kafka
 
-**Semana 12 · DSY1107.** Proyecto de integración **independiente** del laboratorio de consola. Aquí hay una web React, dos microservicios Spring Boot y un Kafka propio. **El alumno no programa los componentes desde cero:** recibe el código y configura la conexión entre servicios.
+**Semana 12 · DSY1107.** Proyecto de integración **independiente** del laboratorio de consola. Aquí hay una web React, dos microservicios Spring Boot, un Kafka propio y **Kafka UI** para observar mensajes, particiones y offsets. **El alumno no programa los componentes desde cero:** recibe el código y configura la conexión entre servicios.
 
 ## Comienza aquí
 
@@ -28,12 +28,18 @@ cd labs\kafka-compras-webapp
 docker compose --profile app up -d --build
 ```
 
-Abrir `http://localhost:5173` después de verificar los contenedores.
+Abrir la **web React en http://localhost:5173** y **Kafka UI en http://localhost:8083** después de verificar los contenedores.
+
+## Relación con las guías AVA 3.2.1 y 3.2.2
+
+- **AVA 3.2.1:** el topic, particiones, keys, offsets y consumer groups se visualizan con Kafka UI, además de la tabla del propio React.
+- **AVA 3.2.2:** la web representa una entrada de eventos; `compras-api` publica, Kafka los retiene y `resumen-api` mantiene agregaciones. **No implementamos el Kafka Streams de la guía bancaria**, ni detección de fraude ni conversión USD; esos pasos se comparan como extensión **conceptual**, no se hacen pasar por funcionalidades existentes.
+- **[Actividad guiada en Kafka UI y conciliación AVA](./01-observar-eventos-kafka-ui.md)**.
 
 ## Alcance y límites
 
 La web consulta el resumen cada dos segundos; el servicio de resumen es un consumidor Spring Kafka con agregación **en memoria**, **no Kafka Streams**. Se estudia replay para reconstruir el resultado. No hay base de datos ni alta disponibilidad.
 
-Este Kafka es **distinto** del [Laboratorio A · Fundamentos](../kafka-fundamentos/). No comparten mensajes ni consumer groups. Ambos exponen el puerto `9092`; **apaga un laboratorio antes de iniciar el otro**, desde su propia carpeta, con `docker compose down`.
+Este Kafka es **distinto** del [Laboratorio A · Fundamentos](../kafka-fundamentos/). No comparten mensajes ni consumer groups. Ambos exponen los puertos `9092` (Kafka) y `8083` (Kafka UI); **apaga un laboratorio antes de iniciar el otro**, desde su propia carpeta, con `docker compose down`.
 
 **Importante:** este broker no tiene volumen persistente: al ejecutar `docker compose --profile app down` desaparecen los datos del contenedor Kafka. No lo detengas antes de terminar la demostración de replay.
