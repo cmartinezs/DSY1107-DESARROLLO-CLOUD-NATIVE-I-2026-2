@@ -44,8 +44,11 @@ public class ResumenController {
         }
         montos.computeIfAbsent(evento.cliente(), k -> new LongAdder()).add(evento.monto());
         cantidad.incrementAndGet();
+        // Compatible con los eventos de los laboratorios 01/02 (sin fechaEvento).
+        Instant fecha = evento.fechaEvento() != null
+                ? evento.fechaEvento() : Instant.ofEpochMilli(record.timestamp());
         recibidas.add(new CompraRecibida(evento.id(), evento.cliente(), evento.monto(),
-                evento.fechaEvento(), record.partition(), record.offset()));
+                fecha, record.partition(), record.offset()));
         if (recibidas.size() > 30) {
             recibidas.remove(0);
         }
