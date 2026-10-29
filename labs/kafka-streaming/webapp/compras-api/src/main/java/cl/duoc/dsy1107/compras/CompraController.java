@@ -14,7 +14,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 public class CompraController {
@@ -43,15 +45,18 @@ public class CompraController {
         CompraEvento evento = new CompraEvento(UUID.randomUUID().toString(),
                 entrada.cliente().trim(), entrada.monto(), Instant.now());
         try {
-            // Clave = cliente: los eventos de un mismo cliente comparten partición.
             String json = mapper.writeValueAsString(evento);
+            // La key hace que compras del mismo cliente mantengan la misma partición.
             kafka.send(topic, evento.cliente(), json).get(10, TimeUnit.SECONDS);
             return evento;
         } catch (JsonProcessingException ex) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "No se pudo serializar el evento", ex);
-        } catch (Exception ex) {
-            Thread.currentThread().interrupt(); // se preserva señal en caso de interrupción
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Publicación interrumpida", ex);
+        } catch (ExecutionException | TimeoutException ex) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
                     "No fue posible publicar en Kafka", ex);
         }

@@ -29,8 +29,8 @@ services:
     profiles: ["app"]
     build: ./webapp/compras-api
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKER:?Completa KAFKA_BROKER en .env}
-      APP_KAFKA_TOPIC: ${KAFKA_TOPIC:?Completa KAFKA_TOPIC en .env}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKER:-PENDIENTE}
+      APP_KAFKA_TOPIC: ${KAFKA_TOPIC:-PENDIENTE}
     ports:
       - "127.0.0.1:8081:8080"
     depends_on:
@@ -41,9 +41,9 @@ services:
     profiles: ["app"]
     build: ./webapp/resumen-api
     environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKER:?Completa KAFKA_BROKER en .env}
-      APP_KAFKA_TOPIC: ${KAFKA_TOPIC:?Completa KAFKA_TOPIC en .env}
-      SPRING_KAFKA_CONSUMER_GROUP_ID: ${KAFKA_GROUP:?Completa KAFKA_GROUP en .env}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKER:-PENDIENTE}
+      APP_KAFKA_TOPIC: ${KAFKA_TOPIC:-PENDIENTE}
+      SPRING_KAFKA_CONSUMER_GROUP_ID: ${KAFKA_GROUP:-PENDIENTE}
     ports:
       - "127.0.0.1:8082:8080"
     depends_on:
@@ -54,7 +54,7 @@ services:
     profiles: ["app"]
     build: ./webapp/web
     ports:
-      - "127.0.0.1:${WEB_PORT:?Completa WEB_PORT en .env}:80"
+      - "127.0.0.1:${WEB_PORT:-5173}:80"
     depends_on:
       - compras-api
       - resumen-api
