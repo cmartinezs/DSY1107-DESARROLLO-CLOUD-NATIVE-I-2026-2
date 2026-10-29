@@ -6,4 +6,4 @@ Ejemplos independientes de RegistrApp para estudiar Kafka.
 2. [Particiones, claves, grupos y offsets](./02-particiones-grupos.md)
 3. [Topología y ventanas de Kafka Streams](./03-ventanas.md)
 
-→ [Contenido semanal](../../semanas/semana-12/) · [Laboratorio](../../labs/kafka-streaming/)
+→ [Contenido semanal](../../semanas/semana-12/) · [Laboratorio](../../labs/kafka-fundamentos/)

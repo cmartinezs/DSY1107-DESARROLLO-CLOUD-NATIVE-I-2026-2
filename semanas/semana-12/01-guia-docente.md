@@ -2,7 +2,14 @@
 
 ## Intención didáctica
 
-El foco es **configurar e integrar** una web React con dos microservicios Spring Boot y Kafka, no desarrollar los tres proyectos desde cero. Presentar el caso como tienda que emite compras y construye un tablero en tiempo real. Utilizar [el laboratorio guiado con checkpoints](../../labs/kafka-streaming/LAB-WEBAPP-PASO-A-PASO.md).
+El foco es **configurar e integrar** una web React con dos microservicios Spring Boot y Kafka, no desarrollar los tres proyectos desde cero. Presentar el caso como tienda que emite compras y construye un tablero en tiempo real. Utilizar [el laboratorio B guiado con checkpoints](../../labs/kafka-compras-webapp/LAB-WEBAPP-PASO-A-PASO.md).
+
+## Dos recorridos independientes
+
+- **[Laboratorio A · Fundamentos Kafka](../../labs/kafka-fundamentos/):** terminal y broker, sin aplicación React. Apto para explorar comandos, topics, particiones y grupos.
+- **[Laboratorio B · React + Spring Boot + Kafka](../../labs/kafka-compras-webapp/):** configuración de código base ya entregado, publicación REST y análisis de eventos reales.
+
+Cada laboratorio usa **su propio broker y Compose**. No comparten mensajes ni offsets; sus puertos 9092 entrarían en conflicto si se ejecutan a la vez. Detener el primero antes de comenzar el segundo. La guía AVA queda por conciliar cuando se reciba.
 
 ## Preparación del laboratorio (antes de clase)
 

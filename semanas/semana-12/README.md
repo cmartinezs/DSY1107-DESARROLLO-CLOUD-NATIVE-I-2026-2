@@ -4,7 +4,7 @@
 
 ## Propósito
 
-Partir de lo aprendido con RabbitMQ para comprender Kafka y poner en marcha una **aplicación real ya desarrollada**: React + microservicio productor Spring Boot + Kafka + microservicio consumidor Spring Boot. El estudiante integra mediante **configuración guiada y checkpoints**, sin desarrollar la aplicación desde cero. El laboratorio sigue siendo independiente de RegistrApp.
+Partir de lo aprendido con RabbitMQ para comprender Kafka mediante **dos laboratorios separados y autónomos**: (A) fundamentos con Kafka y consola; (B) una **aplicación real ya desarrollada** con React + dos microservicios Spring Boot + Kafka. En el laboratorio B, el estudiante integra mediante **configuración guiada y checkpoints**, sin desarrollar la aplicación desde cero. Ninguno forma parte de RegistrApp.
 
 ## Material curricular oficial
 
@@ -21,6 +21,10 @@ Los PDF oficiales se mantienen en la biblioteca institucional.
 4. Diferenciar consumer groups independientes y ejecutar replay para reconstruir el tablero.
 5. Diseñar, a nivel conceptual, un pipeline de Kafka Streams con agregaciones por ventanas.
 
+## Organización pedagógica
+
+**A** permite practicar topics/particiones/grupos/replay únicamente con Kafka. **B** permite observar esas mismas ideas en un sistema distribuido (React, REST, productor, Kafka, consumidor). **No son etapas técnicas dependientes**; se puede comenzar por B, aunque A es una buena introducción. Para pasar de uno al otro hay que detener el primero: ambos ocupan el puerto `9092` en Windows, pero sus brokers y datos son distintos.
+
 ## Secuencia de clase sugerida
 
 | Etapa | Actividad | Evidencia |
@@ -34,9 +38,9 @@ Los PDF oficiales se mantienen en la biblioteca institucional.
 
 ## Rutas
 
-- **[Laboratorio webapp completo · paso a paso, con rueditas y checkpoints](../../labs/kafka-streaming/LAB-WEBAPP-PASO-A-PASO.md)**
-- [Código base React + dos microservicios](../../labs/kafka-streaming/webapp/)
-- [Prácticas de consola Kafka](../../labs/kafka-streaming/)
+- **[Laboratorio A · Fundamentos y consola Kafka](../../labs/kafka-fundamentos/)** (contenedor propio).
+- **[Laboratorio B · Integración webapp, con checkpoints](../../labs/kafka-compras-webapp/LAB-WEBAPP-PASO-A-PASO.md)** (otro Kafka independiente).
+- [Código base React + dos microservicios](../../labs/kafka-compras-webapp/webapp/)
 - [Ejemplos](../../examples/semana-12/)
 - [Ejercicios](../../ejercicios/semana-12/)
 - [Guía docente](./01-guia-docente.md)

@@ -142,7 +142,7 @@ No se sincronizan artificialmente: cada sección registra su último checkpoint 
 
 **Kafka: streaming vs colas, topics, particiones, offsets, grupos de consumidores y fundamentos de Kafka Streams.**
 
-Ruta: [Semana 12](semanas/semana-12/) → [Ejemplos](examples/semana-12/) → [Ejercicios](ejercicios/semana-12/) → [Lab Kafka local](labs/kafka-streaming/).
+Ruta: [Semana 12](semanas/semana-12/) → [Ejemplos](examples/semana-12/) → [Ejercicios](ejercicios/semana-12/) → [Lab A · Kafka básico](labs/kafka-fundamentos/) · [Lab B · Webapp Kafka](labs/kafka-compras-webapp/).
 
 **Nota:** el índice curricular mantiene las semanas anteriores registradas; la actualización no afirma ejecución en aula ni inventa contenido de semanas 10 y 11.
 

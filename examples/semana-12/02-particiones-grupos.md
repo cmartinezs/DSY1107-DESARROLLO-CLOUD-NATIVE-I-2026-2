@@ -12,4 +12,4 @@ No hay orden global entre P0, P1 y P2. Una misma clave normalmente se asigna a l
 
 Dos grupos `analytics` y `notificaciones` pueden leer independientemente las tres particiones. Dentro de `analytics`, tres instancias pueden repartirse P0, P1 y P2; una cuarta instancia queda sin particiones de ese topic.
 
-**Verificar en terminal:** [laboratorio 02](../../labs/kafka-streaming/02-consumer-groups.md).
+**Verificar en terminal:** [laboratorio 02](../../labs/kafka-fundamentos/02-consumer-groups.md).

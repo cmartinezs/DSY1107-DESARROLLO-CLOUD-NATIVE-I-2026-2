@@ -10,4 +10,4 @@ Práctica breve antes del laboratorio.
 
 **Evidencia:** un diagrama y una explicación técnica por ejercicio; no basta responder solo con nombres de tecnologías.
 
-→ [Semana 12](../../semanas/semana-12/) · [Lab Kafka](../../labs/kafka-streaming/)
+→ [Semana 12](../../semanas/semana-12/) · [Lab Kafka](../../labs/kafka-fundamentos/)
