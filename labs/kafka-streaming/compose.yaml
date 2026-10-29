@@ -7,13 +7,54 @@ services:
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://localhost:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: EXTERNAL://0.0.0.0:9092,INTERNAL://0.0.0.0:9094,CONTROLLER://localhost:9093
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:9092,INTERNAL://kafka:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 8s
+      retries: 15
+      start_period: 25s
+
+  compras-api:
+    profiles: ["app"]
+    build: ./webapp/compras-api
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKER:?Completa KAFKA_BROKER en .env}
+      APP_KAFKA_TOPIC: ${KAFKA_TOPIC:?Completa KAFKA_TOPIC en .env}
+    ports:
+      - "127.0.0.1:8081:8080"
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+  resumen-api:
+    profiles: ["app"]
+    build: ./webapp/resumen-api
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKER:?Completa KAFKA_BROKER en .env}
+      APP_KAFKA_TOPIC: ${KAFKA_TOPIC:?Completa KAFKA_TOPIC en .env}
+      SPRING_KAFKA_CONSUMER_GROUP_ID: ${KAFKA_GROUP:?Completa KAFKA_GROUP en .env}
+    ports:
+      - "127.0.0.1:8082:8080"
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+  web:
+    profiles: ["app"]
+    build: ./webapp/web
+    ports:
+      - "127.0.0.1:${WEB_PORT:?Completa WEB_PORT en .env}:80"
+    depends_on:
+      - compras-api
+      - resumen-api

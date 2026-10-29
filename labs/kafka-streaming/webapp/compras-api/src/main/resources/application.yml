@@ -1,0 +1,13 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: compras-api
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+app:
+  kafka:
+    topic: ${APP_KAFKA_TOPIC}
