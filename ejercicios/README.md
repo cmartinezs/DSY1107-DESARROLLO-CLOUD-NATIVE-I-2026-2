@@ -13,6 +13,8 @@ Esta carpeta contiene **práctica breve, focalizada y no sumativa**. Sirve como 
 | [05](./semana-05/) | integración Full Stack segura |
 | 06–07 | evaluación: no se agrega práctica artificial |
 | [08](./semana-08/) | asincronía, RabbitMQ y routing |
+| [12](./semana-12/) | fundamentos Kafka, particiones y replay |
+| [13](./semana-13/) | productor/consumidor, contrato JSON, validaciones y pipeline |
 
 ## Regla canónica
 
