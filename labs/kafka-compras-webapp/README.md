@@ -37,6 +37,16 @@ docker compose --profile app up -d --build
 
 Abrir la **web React en http://localhost:5173** y **Kafka UI en http://localhost:8083** después de verificar los contenedores.
 
+## Extensión Semana 13
+
+El profile `pipeline` agrega [`procesador-api`](./webapp/procesador-api/) sin alterar el recorrido normal de Semana 12. Tras crear `compras-validas` y `compras-rechazadas`, se levanta con:
+
+```powershell
+docker compose --profile app --profile pipeline up -d --build
+```
+
+La guía canónica de esta extensión vive en [`labs/kafka-pipeline-s13`](../kafka-pipeline-s13/).
+
 ## Relación con las guías AVA 3.2.1 y 3.2.2
 
 - **AVA 3.2.1:** el topic, particiones, keys, offsets y consumer groups se visualizan con Kafka UI, además de la tabla del propio React.
