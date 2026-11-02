@@ -1,6 +1,6 @@
 # Semana 12 · Streaming, arquitectura de Kafka y procesamiento en tiempo real
 
-**Periodo referencial del material:** 26 al 31 de octubre de 2026 (verificar correspondencia con calendario institucional) · **Unidad:** 3 · **Secciones:** 002D y 003D.
+**Periodo:** 26 al 31 de octubre de 2026 (confirmado por el docente) · **Unidad:** 3 · **Secciones:** 002D y 003D.
 
 ## Estado de evaluación y transición curricular
 
