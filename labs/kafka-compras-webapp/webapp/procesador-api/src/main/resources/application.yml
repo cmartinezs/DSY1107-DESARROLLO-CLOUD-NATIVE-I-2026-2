@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: procesador-api
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: ${SPRING_KAFKA_CONSUMER_GROUP_ID}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+app:
+  kafka:
+    input-topic: ${APP_KAFKA_INPUT_TOPIC}
+    output-topic: ${APP_KAFKA_OUTPUT_TOPIC}
+    rejected-topic: ${APP_KAFKA_REJECTED_TOPIC}
