@@ -10,6 +10,8 @@ Ejemplos demostrativos breves, independientes de RegistrApp y orientados a una i
 - [Semana 04 · SPA + Resource Server](./semana-04/)
 - [Semana 05 · Flujo Full Stack seguro](./semana-05/)
 - [Semana 08 · Mensajería asíncrona y routing](./semana-08/)
+- [Semana 12 · Colas vs streaming, particiones y ventanas](./semana-12/)
+- [Semana 13 · DTO JSON, transformación y manejo de errores](./semana-13/)
 
 Semanas 06–07 son evaluativas y no requieren ejemplos artificiales.
 
