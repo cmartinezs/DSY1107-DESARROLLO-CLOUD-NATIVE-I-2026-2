@@ -41,6 +41,20 @@ docker exec dsy1107-kafka-s12 /opt/kafka/bin/kafka-topics.sh --bootstrap-server 
 
 **Checkpoint:** ambos topics aparecen también en Kafka UI. Crear topics no implica que exista un procesador activo.
 
+## 2B. Levantar la extensión de Semana 13
+
+Con los topics creados, desde `labs\kafka-compras-webapp`:
+
+```powershell
+docker compose --profile app --profile pipeline up -d --build
+docker compose --profile app --profile pipeline ps
+docker compose --profile pipeline logs --tail=100 procesador-api
+```
+
+**Checkpoint:** deben verse **seis servicios**: Kafka, Kafka UI, `compras-api`, `resumen-api`, web y `procesador-api`. El log del procesador debe iniciar sin errores de topic inexistente o configuración `PENDIENTE`.
+
+Para ejecutar solo las pruebas del procesador durante el build, Docker ejecuta `mvn package`; si alguna prueba JUnit falla, la imagen no se construye.
+
 ## 3. Identificar y separar responsabilidades
 
 Buscar en `webapp/compras-api/src/main/java/.../CompraController.java`:
