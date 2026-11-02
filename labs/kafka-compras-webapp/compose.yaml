@@ -50,6 +50,19 @@ services:
       kafka:
         condition: service_healthy
 
+  procesador-api:
+    profiles: ["pipeline"]
+    build: ./webapp/procesador-api
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKER:-PENDIENTE}
+      SPRING_KAFKA_CONSUMER_GROUP_ID: procesador-s13
+      APP_KAFKA_INPUT_TOPIC: ${KAFKA_TOPIC:-PENDIENTE}
+      APP_KAFKA_OUTPUT_TOPIC: compras-validas
+      APP_KAFKA_REJECTED_TOPIC: compras-rechazadas
+    depends_on:
+      kafka:
+        condition: service_healthy
+
   web:
     profiles: ["app"]
     build: ./webapp/web
