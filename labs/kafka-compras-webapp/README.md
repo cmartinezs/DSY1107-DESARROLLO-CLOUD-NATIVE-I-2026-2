@@ -1,5 +1,7 @@
 # Laboratorio B · Compras en tiempo real con React + Spring Boot + Kafka
 
+> **ATENCIÓN — RAMA `clase-kafka-starter`:** este código es el **estado INICIAL** de la clase de integración. `compras-api` recibe compras por HTTP pero **NO publica en Kafka**; `resumen-api` expone su resumen y registro manual pero **NO tiene `@KafkaListener`**. Sigue la [guía específica para construir Kafka en vivo](./CLASE-EN-VIVO-INTEGRAR-KAFKA.md). La [guía del laboratorio B de configuración](./LAB-WEBAPP-PASO-A-PASO.md) está escrita para `master`, no para esta rama.
+
 **Semana 12 · DSY1107.** Proyecto de integración **independiente** del laboratorio de consola. Aquí hay una web React, dos microservicios Spring Boot, un Kafka propio y **Kafka UI** para observar mensajes, particiones y offsets. **El alumno no programa los componentes desde cero:** recibe el código y configura la conexión entre servicios.
 
 **RA/IL:** RA3 · 3.1.1–3.1.2, con puente a 3.2.1. **Modalidad:** local, guiada, configuración de código base. **Evidencia final:** [pruebas y cierre](./02-pruebas-evidencia-cierre.md).
