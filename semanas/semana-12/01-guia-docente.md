@@ -1,5 +1,11 @@
 # Guía docente · Semana 12
 
+## Estado y prioridades curriculares
+
+- **Evaluación parcial 2:** ya aplicada a todos los estudiantes de **002D y 003D** (confirmación docente). No asignar nuevamente tiempo de rendición. La revisión y publicación de resultados se gestionan por separado, sin presumir que están finalizadas.
+- **Experiencia de aprendizaje 3 (semanas 12–16):** comenzar por **3.1.1 Streaming vs colas; arquitectura de Kafka**; avanzar a **3.1.2 Particiones, consumer groups y procesamiento en tiempo real** de acuerdo con los bloques disponibles.
+- **Mínimo curricular de entrada:** argumentar la diferencia entre tarea/cola y evento/log, describir broker/topic/partición/grupo y levantar Kafka con una prueba observable si el entorno lo permite.
+
 ## Intención didáctica
 
 El foco es **configurar e integrar** una web React con dos microservicios Spring Boot y Kafka, no desarrollar los tres proyectos desde cero. Presentar el caso como tienda que emite compras y construye un tablero en tiempo real. Utilizar [el laboratorio B guiado con checkpoints](../../labs/kafka-compras-webapp/LAB-WEBAPP-PASO-A-PASO.md).
@@ -9,7 +15,7 @@ El foco es **configurar e integrar** una web React con dos microservicios Spring
 - **[Laboratorio A · Fundamentos Kafka](../../labs/kafka-fundamentos/):** terminal y broker, sin aplicación React. Apto para explorar comandos, topics, particiones y grupos.
 - **[Laboratorio B · React + Spring Boot + Kafka](../../labs/kafka-compras-webapp/):** configuración de código base ya entregado, publicación REST y análisis de eventos reales.
 
-Cada laboratorio usa **su propio broker y Compose**. No comparten mensajes ni offsets; sus puertos 9092 entrarían en conflicto si se ejecutan a la vez. Detener el primero antes de comenzar el segundo. La guía AVA queda por conciliar cuando se reciba.
+Cada laboratorio usa **su propio broker y Compose**. No comparten mensajes ni offsets; sus puertos 9092 entrarían en conflicto si se ejecutan a la vez. Detener el primero antes de comenzar el segundo. Las guías AVA 3.2.1 y 3.2.2 ya fueron recibidas y conciliadas en la sección siguiente.
 
 ## Conciliación con AVA (recibido: 3.2.1 y 3.2.2)
 
@@ -41,9 +47,17 @@ Ejemplo: una compra desencadena una tarea de correo, se refleja en indicadores y
 
 ## Alcance por sección
 
-**002D:** priorizar hasta checkpoint 5; el docente puede demostrar grupos y replay si la duración no permite práctica completa.
+**002D · martes 12:11–15:10 (cuatro bloques):** disponer del tiempo para el contraste RabbitMQ/Kafka, arquitectura y laboratorio A. Si el avance lo permite, iniciar laboratorio B y mostrar consumer groups/replay; no forzar todos los checkpoints en una sesión.
 
-**003D:** idealmente desarrollar 0–8. Ajustar según ritmo real, registrar checkpoint alcanzado, no simular ejecución por haber publicado la guía.
+**003D · viernes 12:11–14:20 (dos bloques):** priorizar 3.1.1, fundamentos de particiones/grupos y laboratorio A hasta la primera publicación/lectura funcional. Reservar la aplicación React, replay y Kafka Streams conceptual para próximas sesiones.
+
+**Seguimiento:** anotar por separado los checkpoints realmente ejecutados en cada sección; no confundir disponibilidad del material con ejecución comprobada.
+
+## Gestión de créditos cloud (aviso de coordinación)
+
+- **AWS:** monitorear saldos y disponer de un curso/entorno de respaldo antes de alcanzar **50 USD**; el acceso de estudiantes podría interrumpirse al agotar el crédito.
+- **Azure:** monitorear el umbral de **100 USD**; estudiantes cercanos al límite deben reportarse con **nombre, sección y sede**.
+- No usar AWS ni Azure como requisito del laboratorio de Kafka local; estas acciones son seguimiento administrativo.
 
 ## Diagnóstico guiado
 
