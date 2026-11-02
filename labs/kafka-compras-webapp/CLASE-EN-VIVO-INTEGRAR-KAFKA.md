@@ -93,7 +93,6 @@ El controlador y su `record CompraEvento` ya existen. **No los reconstruyas**. E
 
 ```java
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import java.util.concurrent.TimeUnit;
