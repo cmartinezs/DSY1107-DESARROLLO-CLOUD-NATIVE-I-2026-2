@@ -1,6 +1,10 @@
 # Semana 12 · Streaming, arquitectura de Kafka y procesamiento en tiempo real
 
-**Periodo:** 26 al 31 de octubre de 2026 · **Unidad:** 3 · **Secciones:** 002D y 003D.
+**Periodo referencial del material:** 26 al 31 de octubre de 2026 (verificar correspondencia con calendario institucional) · **Unidad:** 3 · **Secciones:** 002D y 003D.
+
+## Estado de evaluación y transición curricular
+
+**Evaluación parcial 2:** aplicada a todos los estudiantes de ambas secciones (002D y 003D), según confirmación docente. No reservar bloques de semana 12 para rendirla nuevamente. La experiencia de aprendizaje 3 se desarrolla entre las semanas 12 y 16; priorizar 3.1.1 y avanzar en 3.1.2 según tiempo y resultados observables. La aplicación de la evaluación no implica que su corrección o publicación de notas esté finalizada.
 
 ## Propósito
 
@@ -8,7 +12,7 @@ Partir de lo aprendido con RabbitMQ para comprender Kafka mediante **dos laborat
 
 ## Material curricular oficial
 
-- **3.1.1:** Streaming vs colas; architecture Kafka: producer, broker, topic, partition, offset, consumer groups, retención y replicación.
+- **3.1.1:** Streaming vs colas; arquitectura Kafka: producer, broker, topic, partition, offset, consumer groups, retención y replicación.
 - **3.1.2:** Particiones, consumer groups y procesamiento en tiempo real: Kafka Streams, topologías, operaciones stateless/stateful, windowing y state stores.
 
 Los PDF oficiales se mantienen en la biblioteca institucional.
@@ -41,7 +45,7 @@ Ambas guías de AVA (2025) usan Kafka/infraestructura anteriores. En el reposito
 | 3 | Checkpoints 4–6: levantar React y ambos MS, publicar eventos y comparar grupos | Web con particiones y offsets |
 | 4 | Checkpoints 7–8: replay y diseño de ventanas | Tablero reconstruido y croquis |
 
-**Adaptación por sección:** la sección 002D tiene menos bloques; priorizar checkpoints 0–5 y desarrollar grupos/replay en demostración o sesión posterior. La sección 003D puede recorrer también 6–8. Registrar ejecución real por sección: publicar no significa haberlo realizado.
+**Adaptación por sección:** **002D (martes 12:11–15:10, cuatro bloques)** dispone de mayor tiempo: contraste conceptual, laboratorio A y, si el entorno responde, avance en laboratorio B y consumer groups. **003D (viernes 12:11–14:20, dos bloques)** debe priorizar 3.1.1, arquitectura, particiones y una prueba funcional simple en laboratorio A; dejar laboratorio B, replay y diseño de ventanas para continuidad. El ritmo real y los checkpoints alcanzados se registran por sección; publicar material no implica haberlo ejecutado.
 
 ## Rutas
 
@@ -55,6 +59,12 @@ Ambas guías de AVA (2025) usan Kafka/infraestructura anteriores. En el reposito
 ## Entorno de ejecución
 
 **Windows 10 + Docker Desktop preinstalado + PowerShell + navegador + editor de texto.** La compilación de React y Spring Boot ocurre dentro de Docker. No requerir instalaciones locales de Make, Java, Maven, Node o Bash; no pedir al estudiante abrir una distribución WSL. Docker Desktop debe estar correctamente configurado previamente por la institución y disponer de acceso a Internet para las descargas de imágenes y dependencias.
+
+## Recordatorio administrativo para el docente
+
+- **AWS:** monitorear consumo de créditos y preparar curso/entorno de respaldo antes de alcanzar **50 USD**, pues puede perderse el acceso.
+- **Azure:** vigilar límite de **100 USD**. Si un estudiante se aproxima, reportar **nombre del estudiante, sección y sede** según instrucción de coordinación.
+- Estos límites corresponden al aviso de coordinación; no son prerequisitos técnicos para los laboratorios Kafka locales.
 
 ## Precauciones conceptuales
 
