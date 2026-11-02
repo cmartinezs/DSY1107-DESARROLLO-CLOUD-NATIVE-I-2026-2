@@ -78,7 +78,7 @@ function App() {
             <input id="monto" type="number" min="1" max="1000000" required
                    value={monto} onChange={e => setMonto(e.target.value)} />
             <button type="submit" disabled={enviando || !cliente || Number(monto) <= 0}>
-              {enviando ? "Publicando…" : "Registrar compra"}
+              {enviando ? "Registrando…" : "Registrar compra"}
             </button>
           </form>
           {mensaje && <p className="notice" role="status">{mensaje}</p>}
@@ -94,7 +94,7 @@ function App() {
             : <ul className="totals">{Object.entries(datos.montoPorCliente).map(([nombre, total]) =>
                 <li key={nombre}><span>{nombre}</span><b>$ {formato.format(total)}</b></li>
               )}</ul>}
-          <p className="muted small">El resumen está en memoria: se reconstruye desde Kafka al reiniciar y releer eventos.</p>
+          <p className="muted small">El resumen está en memoria. Después de conectar Kafka, podremos reconstruirlo mediante replay.</p>
         </section>
       </div>
 
