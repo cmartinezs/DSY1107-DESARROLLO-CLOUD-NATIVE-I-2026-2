@@ -1,6 +1,6 @@
 # Laboratorio Semana 13 · Pipeline de eventos estructurados
 
-**Estado:** actividad de extensión **a implementar por los estudiantes/docente** sobre el [laboratorio B](../kafka-compras-webapp/); el código de semana 12 **no trae** este pipeline implementado. Evitar presentar la siguiente propuesta como una función existente.
+**Estado:** extensión implementada en el repositorio mediante el profile `pipeline`, manteniendo intacta la ejecución normal del [laboratorio B](../kafka-compras-webapp/). El código de referencia está en [`webapp/procesador-api`](../kafka-compras-webapp/webapp/procesador-api/). Debe ejecutarse y verificarse en el entorno docente antes de declararlo validado en aula.
 
 ## 0. Prerequisitos y baseline
 
@@ -21,7 +21,7 @@ docker exec dsy1107-kafka-s12 /opt/kafka/bin/kafka-topics.sh --bootstrap-server 
 {"id":"c-001","cliente":"Ana","monto":100,"fechaEvento":"2026-11-02T12:00:00Z"}
 ```
 
-**Salida propuesta** (`compras-validas`; introducir DTO independiente):
+**Salida implementada** (`compras-validas`; DTO independiente):
 
 ```json
 {"idOrigen":"c-001","cliente":"Ana","monto":100,"categoria":"NORMAL","procesadoEn":"2026-11-02T12:00:01Z"}
@@ -29,7 +29,7 @@ docker exec dsy1107-kafka-s12 /opt/kafka/bin/kafka-topics.sh --bootstrap-server 
 
 Regla del ejercicio: `cliente` no vacío, `monto > 0`, `id` presente. Categoría `ALTA` si monto >= 1000; de otro modo `NORMAL`. El procesador transforma con `map` de lógica Java o `mapValues` **solo si se usa realmente Kafka Streams**. Una operación en un listener de Spring Kafka **no** debe llamarse API Streams.
 
-**Rechazo propuesto** (`compras-rechazadas`): `idOrigen` cuando exista, `motivo`, `recibidoEn`; evitar incluir datos sensibles. Un JSON corrupto requiere tratar la falla de deserialización de forma explícita.
+**Rechazo implementado** (`compras-rechazadas`): `idOrigen` cuando exista, `motivo`, `recibidoEn`; evitar incluir datos sensibles. Un JSON corrupto requiere tratar la falla de deserialización de forma explícita.
 
 ## 2. Preparar topics
 
@@ -60,9 +60,9 @@ Buscar en `webapp/resumen-api/src/main/java/.../ResumenController.java`:
 
 ## 4. Extensión de implementación (sin romper semana 12)
 
-Implementar **un procesador independiente** (por ejemplo, tercer microservicio `procesador-api`) suscrito al topic `compras` con **group-id distinto** de `resumen-app`. No cambiar el listener existente para que el laboratorio anterior siga funcionando.
+El repositorio incorpora **un procesador independiente `procesador-api`** suscrito a `compras` mediante el grupo `procesador-s13`, distinto de `resumen-app`. Está aislado por el profile Compose `pipeline`, por lo que el laboratorio de semana 12 conserva su recorrido normal.
 
-Contrato de pseudocódigo (no es código ejecutable):
+Contrato conceptual que corresponde a la implementación de referencia:
 
 ```text
 onMessage(record):
@@ -88,7 +88,7 @@ onMessage(record):
 Invoke-RestMethod -Method Post -Uri http://localhost:8081/api/compras -ContentType "application/json" -Body '{"cliente":"Ana","monto":1500}'
 ```
 
-**Esperado si se implementó el procesador:** evento en `compras`, después evento `categoria=ALTA` en `compras-validas` con el mismo ID origen.
+**Esperado con el profile `pipeline` activo:** evento en `compras`, después evento `categoria=ALTA` en `compras-validas` con el mismo ID origen.
 
 **Negativo de contrato HTTP:** 
 
@@ -98,7 +98,7 @@ try { Invoke-RestMethod -Method Post -Uri http://localhost:8081/api/compras -Con
 
 Debe ser rechazado en el límite HTTP, **sin crear evento Kafka**. Esta prueba **no** verifica por sí sola la ruta de rechazo del consumidor.
 
-**Negativo del consumidor:** insertar directamente un evento sintácticamente válido pero inválido para negocio (ej. `{"id":"invalido-01","cliente":"","monto":-1}`) usando Kafka UI o productor de consola. Cuando la ruta de rechazo esté implementada, debe aparecer una evidencia en `compras-rechazadas` y el grupo debe seguir procesando eventos válidos posteriores.
+**Negativo del consumidor:** insertar directamente un evento sintácticamente válido pero inválido para negocio (ej. `{"id":"invalido-01","cliente":"","monto":-1}`) usando Kafka UI o productor de consola. Debe aparecer una evidencia en `compras-rechazadas` y el grupo debe seguir procesando eventos válidos posteriores.
 
 **Falla de infraestructura:** apagar transitoriamente el procesador y reiniciarlo con eventos retenidos; observar offsets y distinguir replay de procesamiento duplicado. No apagar el broker con `docker compose down` durante la prueba, pues el entorno no declara volumen persistente.
 
@@ -112,7 +112,7 @@ Para las evidencias, diagnóstico, políticas de fallo y cierre del entorno, com
 - Listener, servicio de transformación y publicación en topic derivado identificables por archivo y commit.
 - Caso válido: entrada → salida observada en UI.
 - Caso inválido: motivo y acción explícita; un evento siguiente válido se procesa.
-- Manejo de errores descrito y probado; si no existe retry/DLQ reales, declararlo como limitación.
+- Manejo de errores descrito y probado: JSON/reglas inválidas van a `compras-rechazadas`; errores técnicos no manejados usan 2 reintentos de 1 s y luego recuperación al mismo topic. No presentar este mecanismo didáctico como DLQ de producción.
 - DevLog y capturas sin credenciales.
 
 **Alcance:** puede completarse en más de una sesión; si solo se cubre 3.2.1 y diseño de pipeline, registrar pendiente de 3.2.2, sin reportar implementación completa.
