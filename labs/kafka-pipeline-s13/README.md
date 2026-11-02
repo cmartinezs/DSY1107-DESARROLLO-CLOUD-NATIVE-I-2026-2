@@ -2,6 +2,8 @@
 
 **Tipo:** local/autocontenido, extensión formativa **pendiente de implementar** sobre un baseline existente. **Estado:** guía disponible; no se declara un tercer microservicio compilado, DLQ, retries ni Kafka Streams ejecutables.
 
+**RA/IL:** RA3 · 3.2.1–3.2.2. **Modalidad:** local, incremental sobre la aplicación de semana 12. **Evidencia final:** [gates de validación y cierre](./01-validacion-evidencia-cierre.md).
+
 ## Fuente única de código
 
 La aplicación de partida es [Kafka compras webapp](../kafka-compras-webapp/). Conservar intacto su baseline de semana 12. No duplicar React, Docker Compose ni los microservicios en esta carpeta.
@@ -14,6 +16,10 @@ La aplicación de partida es [Kafka compras webapp](../kafka-compras-webapp/). C
 4. Entregar evidencias diferenciando **baseline ejecutado**, **extensión implementada** y **diseño pendiente**.
 
 **Entorno:** Windows 10 + Docker Desktop + PowerShell. No requerir Make, WSL como terminal ni Java/Node locales. Los dos laboratorios de semana 12 tienen brokers independientes; no deben arrancarse simultáneamente en el mismo host por conflicto de puertos.
+
+## Diagnóstico, validación y cierre
+
+Seguir [01 · Gates, evidencias, errores y cierre](./01-validacion-evidencia-cierre.md). Cada gate debe respaldarse con ejecución y capturas: la guía por sí sola no certifica funcionamiento.
 
 ## Criterios de salida
 
