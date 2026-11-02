@@ -2,7 +2,7 @@
 
 ## Estado y prerrequisitos
 
-Este lab **todavía no tiene procesador implementado**. Su guía especifica implementación incremental sobre [el laboratorio B](../kafka-compras-webapp/). No se considera completo por crear topics. Antes de comenzar, lograr checkpoint 5 de [Semana 12 B](../kafka-compras-webapp/LAB-WEBAPP-PASO-A-PASO.md).
+Este lab **sí incluye una implementación de referencia de `procesador-api`**, integrada mediante el profile `pipeline` sobre [el laboratorio B](../kafka-compras-webapp/). La existencia del código no basta: debe ejecutarse y superar los gates. Antes de comenzar, lograr checkpoint 5 de [Semana 12 B](../kafka-compras-webapp/LAB-WEBAPP-PASO-A-PASO.md).
 
 ## Gates
 
@@ -22,7 +22,7 @@ Este lab **todavía no tiene procesador implementado**. Su guía especifica impl
 - `@Valid` de un controller HTTP no protege contra mensajes publicados directamente en Kafka.
 - `ObjectMapper` + `StringSerializer` no es `JsonSerializer` de Kafka.
 - Un listener Spring Kafka no es un pipeline Kafka Streams.
-- Topic `compras-rechazadas` no equivale automáticamente a DLQ operativa con reintentos y recovery.
+- `compras-rechazadas` recibe rechazos de contrato y también la recuperación didáctica tras 2 reintentos de errores técnicos; sigue sin equivaler a una DLQ de producción con políticas completas.
 - Duplicación posible entre publicación a topic de salida y confirmación de offset; no prometer exactly-once.
 
 ## Diagnóstico
