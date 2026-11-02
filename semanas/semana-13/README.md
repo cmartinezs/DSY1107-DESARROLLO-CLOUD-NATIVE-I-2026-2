@@ -11,7 +11,7 @@
 
 ## Estado técnico real
 
-El [laboratorio B de semana 12](../../labs/kafka-compras-webapp/) ya implementa un productor **KafkaTemplate<String,String>**, serialización explícita con **ObjectMapper** a JSON, consumidor con **@KafkaListener** y resumen en memoria. **No usa JsonSerializer/JsonDeserializer ni Kafka Streams**, y todavía **no contiene** un segundo topic de eventos procesados, un procesador de transformación, estrategia DLQ ni reintentos controlados. No presentarlos como implementados.
+El [laboratorio B de semana 12](../../labs/kafka-compras-webapp/) implementa productor `KafkaTemplate<String,String>`, serialización explícita con `ObjectMapper`, consumidor `@KafkaListener` y resumen en memoria. Para Semana 13, el mismo entorno incorpora por profile `pipeline` un `procesador-api` de referencia que valida, transforma y publica en `compras-validas`, deriva rechazos a `compras-rechazadas` y aplica 2 reintentos a errores técnicos no manejados. **No usa JsonSerializer/JsonDeserializer ni Kafka Streams, y no se presenta `compras-rechazadas` como DLQ de producción.**
 
 El [laboratorio A](../../labs/kafka-fundamentos/) permite comprobar topics, particiones, grupos y offsets sin aplicación Spring. Ambos laboratorios son independientes: no ejecutar sus brokers simultáneamente en el mismo host porque comparten puertos.
 
