@@ -8,10 +8,10 @@ Este lab **sí incluye una implementación de referencia de `procesador-api`**, 
 
 | Gate | Resultado y evidencia |
 |---|---|
-| 0 · Base | Cinco servicios y compra visible en web, topic `compras` en Kafka UI |
+| 0 · Base | Cinco servicios de Semana 12 y compra visible en web, topic `compras` en Kafka UI |
 | 1 · Contratos | DTO de entrada y salida; JSON real, reglas para valores faltantes/inválidos |
 | 2 · Infraestructura | `compras-validas` y `compras-rechazadas` creados, particiones inspeccionadas |
-| 3 · Código | Listener distinto de `resumen-app`, servicio de reglas y productor del topic derivado; archivos y commits |
+| 3 · Código/arranque | Profile `pipeline` construye pruebas y deja **seis servicios** activos; listener `procesador-s13`, reglas y productor derivados identificables por archivos/commits |
 | 4 · Positivo | Evento válido → JSON transformado observable en topic de salida, mismo ID origen |
 | 5 · Negativo | JSON válido con negocio inválido → rechazo documentado y evento válido posterior procesado |
 | 6 · Fallas | Falla de publicación y error de parseo tienen política explícita: retry acotado/recuperación; comprobar ausencia de bloqueo indefinido |
@@ -31,4 +31,10 @@ Si el topic de salida está vacío: comprobar productor de entrada, grupo del pr
 
 ## Cierre
 
-Detener servicios con los comandos **del laboratorio B** desde `labs\kafka-compras-webapp`; tomar evidencias primero. Documentar si se completó solo diseño, creación de topics, implementación o pruebas. Nunca presentar la extensión como funcional sin evidencia de ejecución.
+Detener servicios desde `labs\kafka-compras-webapp` después de tomar evidencias:
+
+```powershell
+docker compose --profile app --profile pipeline down
+```
+
+El broker no tiene volumen persistente; el cierre elimina los eventos locales. Documentar si se completó solo diseño, creación de topics, implementación o pruebas. Nunca presentar la extensión como funcional sin evidencia de ejecución.
