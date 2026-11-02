@@ -39,9 +39,9 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cliente: cliente.trim(), monto: Number(monto) }),
       });
-      if (!respuesta.ok) throw new Error("No se pudo publicar el evento. Revisa compras-api y Kafka.");
+      if (!respuesta.ok) throw new Error("No se pudo registrar la compra. Revisa compras-api.");
       const creada = await respuesta.json();
-      setMensaje("Compra " + creada.id.slice(0, 8) + " publicada en Kafka. El resumen aparecerá en unos segundos.");
+      setMensaje("Compra " + creada.id.slice(0, 8) + " recibida por compras-api. Revisa Kafka UI y el resumen para observar si ya existe integración.");
       await actualizar();
     } catch (error) {
       setMensaje(error.message);
@@ -53,9 +53,9 @@ function App() {
   return (
     <main className="container">
       <header>
-        <div className="eyebrow">DSY1107 · SEMANA 12 · DEMOSTRACIÓN LOCAL</div>
+        <div className="eyebrow">DSY1107 · SEMANA 13 · INTEGRACIÓN EN VIVO</div>
         <h1>Compras en tiempo real</h1>
-        <p>React → Spring Boot → Kafka → Spring Boot. Envía compras y observa cómo llegan a un segundo microservicio.</p>
+        <p>React y dos microservicios ya funcionan. Hoy conectaremos ambos mediante eventos Kafka.</p>
         <div className={"status " + (conectado ? "ok" : "off")} role="status">
           <span className="dot" />
           {conectado ? "Resumen conectado" : "Esperando al servicio de resumen"}
@@ -65,7 +65,7 @@ function App() {
       <div className="layout">
         <section className="panel">
           <h2>1. Publicar una compra</h2>
-          <p className="muted">La API publica un evento JSON en el topic <code>compras</code>; el cliente es la clave del mensaje.</p>
+          <p className="muted">La API recibe la compra. Cuando integramos Kafka, publica un evento en el topic <code>compras</code> usando el cliente como key.</p>
           <form onSubmit={enviar}>
             <label htmlFor="cliente">Cliente (key)</label>
             <select id="cliente" value={cliente} onChange={e => setCliente(e.target.value)}>
@@ -78,11 +78,11 @@ function App() {
             <input id="monto" type="number" min="1" max="1000000" required
                    value={monto} onChange={e => setMonto(e.target.value)} />
             <button type="submit" disabled={enviando || !cliente || Number(monto) <= 0}>
-              {enviando ? "Publicando…" : "Enviar evento a Kafka"}
+              {enviando ? "Publicando…" : "Registrar compra"}
             </button>
           </form>
           {mensaje && <p className="notice" role="status">{mensaje}</p>}
-          <div className="hint"><strong>Experimento:</strong> envía dos compras de Ana y dos de Luis. Compara las particiones y offsets en la tabla.</div>
+          <div className="hint"><strong>Experimento:</strong> primero observa que el resumen no cambia. Después de integrar Kafka, compara las particiones y offsets.</div>
         </section>
 
         <section className="panel">

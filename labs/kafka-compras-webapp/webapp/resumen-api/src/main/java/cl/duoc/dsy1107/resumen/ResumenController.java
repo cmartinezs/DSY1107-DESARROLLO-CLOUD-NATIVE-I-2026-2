@@ -1,10 +1,7 @@
 package cl.duoc.dsy1107.resumen;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -17,17 +14,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 
+/**
+ * Baseline de la clase en vivo: API de resumen y calculo funcionan por HTTP.
+ * Durante la clase se agrega el listener de Kafka que llama a registrar(...).
+ */
 @RestController
 public class ResumenController {
-    private final ObjectMapper mapper;
     private final Map<String, LongAdder> montos = new ConcurrentHashMap<>();
     private final List<CompraRecibida> recibidas = new CopyOnWriteArrayList<>();
     private final java.util.Set<String> ids = ConcurrentHashMap.newKeySet();
     private final AtomicInteger cantidad = new AtomicInteger();
-
-    public ResumenController(ObjectMapper mapper) {
-        this.mapper = mapper;
-    }
 
     public record CompraEvento(String id, String cliente, int monto, Instant fechaEvento) {}
     public record CompraRecibida(String id, String cliente, int monto, Instant fechaEvento,
@@ -35,25 +31,29 @@ public class ResumenController {
     public record Resumen(int cantidad, Map<String, Long> montoPorCliente,
                           List<CompraRecibida> ultimosEventos) {}
 
-    @KafkaListener(topics = "${app.kafka.topic}")
-    public synchronized void consumir(ConsumerRecord<String, String> record) throws Exception {
-        CompraEvento evento = mapper.readValue(record.value(), CompraEvento.class);
-        // Idempotencia demostrativa por ID, solo dentro de la vida de este proceso.
+    // Logica de negocio YA IMPLEMENTADA. El alumno no debe programarla de cero.
+    public synchronized void registrar(CompraEvento evento, int particion, long offset) {
+        if (evento.id() == null || evento.cliente() == null || evento.monto() <= 0) {
+            throw new IllegalArgumentException("Compra incompleta o invalida");
+        }
         if (!ids.add(evento.id())) {
-            return;
+            return; // deduplicacion en memoria, solo durante la vida del proceso
         }
         montos.computeIfAbsent(evento.cliente(), k -> new LongAdder()).add(evento.monto());
         cantidad.incrementAndGet();
-        // Compatible con los eventos de los laboratorios 01/02 (sin fechaEvento).
-        Instant fecha = evento.fechaEvento() != null
-                ? evento.fechaEvento() : Instant.ofEpochMilli(record.timestamp());
+        Instant fecha = evento.fechaEvento() != null ? evento.fechaEvento() : Instant.now();
         recibidas.add(new CompraRecibida(evento.id(), evento.cliente(), evento.monto(),
-                fecha, record.partition(), record.offset()));
+                fecha, particion, offset));
         if (recibidas.size() > 30) {
             recibidas.remove(0);
         }
-        System.out.printf("CONSUMIDO cliente=%s particion=%d offset=%d%n",
-                evento.cliente(), record.partition(), record.offset());
+    }
+
+    // Verificacion aislada PREVIA a Kafka; ruta didactica solo del starter.
+    @PostMapping("/api/resumen/demostracion")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void pruebaManual(@RequestBody CompraEvento evento) {
+        registrar(evento, -1, -1L);
     }
 
     @GetMapping("/api/resumen")
