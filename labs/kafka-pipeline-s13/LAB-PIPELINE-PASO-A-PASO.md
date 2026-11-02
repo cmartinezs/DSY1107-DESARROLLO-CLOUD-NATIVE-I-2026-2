@@ -104,6 +104,9 @@ Debe ser rechazado en el límite HTTP, **sin crear evento Kafka**. Esta prueba *
 
 ## 6. Gate de entrega
 
+Para las evidencias, diagnóstico, políticas de fallo y cierre del entorno, completar la [guía de validación de Semana 13](./01-validacion-evidencia-cierre.md).
+
+
 - Topics verificados, key/partición/offset documentados.
 - DTO JSON de entrada y salida con prueba de serialización.
 - Listener, servicio de transformación y publicación en topic derivado identificables por archivo y commit.
