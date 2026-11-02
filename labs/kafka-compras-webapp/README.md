@@ -2,6 +2,8 @@
 
 **Semana 12 · DSY1107.** Proyecto de integración **independiente** del laboratorio de consola. Aquí hay una web React, dos microservicios Spring Boot, un Kafka propio y **Kafka UI** para observar mensajes, particiones y offsets. **El alumno no programa los componentes desde cero:** recibe el código y configura la conexión entre servicios.
 
+**RA/IL:** RA3 · 3.1.1–3.1.2, con puente a 3.2.1. **Modalidad:** local, guiada, configuración de código base. **Evidencia final:** [pruebas y cierre](./02-pruebas-evidencia-cierre.md).
+
 ## Comienza aquí
 
 **[Abrir guía completa, con pasos y checkpoints 0–8](./LAB-WEBAPP-PASO-A-PASO.md)**
@@ -35,6 +37,10 @@ Abrir la **web React en http://localhost:5173** y **Kafka UI en http://localhost
 - **AVA 3.2.1:** el topic, particiones, keys, offsets y consumer groups se visualizan con Kafka UI, además de la tabla del propio React.
 - **AVA 3.2.2:** la web representa una entrada de eventos; `compras-api` publica, Kafka los retiene y `resumen-api` mantiene agregaciones. **No implementamos el Kafka Streams de la guía bancaria**, ni detección de fraude ni conversión USD; esos pasos se comparan como extensión **conceptual**, no se hacen pasar por funcionalidades existentes.
 - **[Actividad guiada en Kafka UI y conciliación AVA](./01-observar-eventos-kafka-ui.md)**.
+
+## Pruebas y cierre
+
+Antes de detener los contenedores, realizar [02 · Gates por checkpoint, evidencias, pruebas negativas y troubleshooting](./02-pruebas-evidencia-cierre.md). Registrar por separado lo diseñado y lo ejecutado.
 
 ## Alcance y límites
 
