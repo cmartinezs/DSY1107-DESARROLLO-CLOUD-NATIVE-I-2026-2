@@ -42,6 +42,9 @@ El [laboratorio A](../../labs/kafka-fundamentos/) permite comprobar topics, part
 - [Extensión de pipeline con checkpoints](./02-laboratorio-pipeline.md)
 - [Laboratorio Kafka A](../../labs/kafka-fundamentos/)
 - [Laboratorio Kafka B](../../labs/kafka-compras-webapp/)
+- [Laboratorio Semana 13 · Pipeline (entrada canónica)](../../labs/kafka-pipeline-s13/)
+- [Ejemplos Semana 13](../../examples/semana-13/)
+- [Ejercicios Semana 13](../../ejercicios/semana-13/)
 - [RegistrApp · checkpoint semana 13](../../proyecto-formativo/semana-13/README.md)
 
 ## Trabajo autónomo
