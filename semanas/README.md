@@ -14,8 +14,8 @@ Este directorio organiza el contenido consolidado del curso y mantiene separado 
 | **06** | 14–19 septiembre 2026 | Evaluación Parcial 1 · baseline, evidencia y defensa | [Abrir Semana 06](semana-06/) |
 | **07** | 21–26 septiembre 2026 | **Cierre Evaluación Parcial 1 + baseline arquitectónico** | [Abrir Semana 07](semana-07/) |
 | **08** | 28 septiembre–3 octubre 2026 | **Mensajería asíncrona y RabbitMQ: Hello World, DirectExchange, bindings y routing keys** | [Abrir Semana 08](semana-08/) |
-
 | **12** | 26–31 octubre 2026 | **Streaming vs colas, Kafka, consumer groups y Kafka Streams** | [Abrir Semana 12](semana-12/) |
+| **13** | Continuación de EA3 | **Productores, consumidores y pipeline de eventos Kafka** | [Abrir Semana 13](semana-13/) |
 
 ## Regla de uso
 
