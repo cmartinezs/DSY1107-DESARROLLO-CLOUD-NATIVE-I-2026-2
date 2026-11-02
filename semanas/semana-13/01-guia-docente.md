@@ -53,6 +53,8 @@ Windows 10, Docker Desktop, PowerShell y navegador. Java y Node se compilan dent
 
 ## Material
 
+- [Clase en vivo: integración Kafka desde dos microservicios HTTP operativos, con sesiones 2+2+4 y 4+4 bloques](./03-guion-clase-integracion.md).
+
 - [Actividad incremental](./02-laboratorio-pipeline.md)
 - [Material curricular y guías AVA conciliadas en semana 12](../semana-12/README.md)
 - [Profundización Kafka Streams 1](https://www.youtube.com/watch?v=plFbXvuoAR8)

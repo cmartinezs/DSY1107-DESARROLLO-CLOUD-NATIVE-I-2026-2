@@ -4,6 +4,11 @@
 
 **RA/IL:** RA3 · 3.1.1–3.1.2, con puente a 3.2.1. **Modalidad:** local, guiada, configuración de código base. **Evidencia final:** [pruebas y cierre](./02-pruebas-evidencia-cierre.md).
 
+## Modalidades disponibles
+
+- **Laboratorio B de configuración:** el código ya tiene productor/consumidor Kafka; el alumno completa configuración y checkpoints ([guía original](./LAB-WEBAPP-PASO-A-PASO.md)).
+- **Nueva clase de integración en vivo:** código base HTTP funcionando y el profesor incorpora **`KafkaTemplate` y `@KafkaListener`** ([guía de construcción en vivo](./CLASE-EN-VIVO-INTEGRAR-KAFKA.md); rama `clase-kafka-starter`). No son el mismo estado inicial; seleccionar el recorrido antes de descargar código.
+
 ## Comienza aquí
 
 **[Abrir guía completa, con pasos y checkpoints 0–8](./LAB-WEBAPP-PASO-A-PASO.md)**

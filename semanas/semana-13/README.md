@@ -36,6 +36,10 @@ El [laboratorio A](../../labs/kafka-fundamentos/) permite comprobar topics, part
 - **002D (cuatro bloques):** repaso breve, inspección de código, creación de topic de salida, empezar implementación de transformación y pruebas.
 - **003D (dos bloques):** demostrar 3.2.1, explicar productor/listener y diseñar el pipeline con contrato JSON. Dejar implementación profunda y manejo de errores para continuación si no alcanza tiempo.
 
+## Clase magistral/práctica por bloques
+
+Además del pipeline de extensión, existe un **[guion de construcción en vivo de la integración Kafka](./03-guion-clase-integracion.md)**. Su [material práctico](../../labs/kafka-compras-webapp/CLASE-EN-VIVO-INTEGRAR-KAFKA.md) utiliza una rama de inicio con **React + microservicios HTTP ya funcionales**, sin productor ni listener implementados. Se construyen esas dos piezas en clase, con cierres seguros para encuentros 2+2+4 o 4+4 bloques. No sustituye el laboratorio de transformación ni declara Kafka Streams implementado.
+
 ## Rutas
 
 - [Guía docente](./01-guia-docente.md)
