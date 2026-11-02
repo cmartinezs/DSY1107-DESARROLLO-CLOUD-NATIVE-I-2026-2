@@ -4,6 +4,8 @@
 
 Este laboratorio es **autónomo**: no depende de la aplicación React/Spring Boot ni comparte su broker, eventos o estado.
 
+**RA/IL:** RA3 · 3.1.1–3.1.2 (introducción conceptual). **Modalidad:** local, guiada, autónoma. **Evidencia final:** [pruebas y cierre](./05-pruebas-evidencia-cierre.md).
+
 ## Para estudiantes (Windows 10)
 
 **Necesitas:** Docker Desktop funcionando, PowerShell y navegador para leer la guía. No necesitas instalar Kafka, Linux, WSL como terminal, Make, Java, Maven ni Node.
@@ -34,6 +36,10 @@ docker exec dsy1107-kafka-fundamentos-s12 /opt/kafka/bin/kafka-broker-api-versio
 3. **[03 · Diseñar Kafka Streams](./03-streams-diseno.md)**: topologías y ventanas **en papel**, sin aplicación Streams ejecutable.
 
 **Checkpoint final:** describe las tres particiones de `compras`, observa offsets y explica qué sucede con dos consumer groups diferentes.
+
+## Verificación y cierre
+
+Completar [05 · Pruebas, evidencias, diagnóstico y cierre](./05-pruebas-evidencia-cierre.md) antes de eliminar el contenedor. Registrar resultados reales en DevLog.
 
 ## Apagado y relación con el otro laboratorio
 
