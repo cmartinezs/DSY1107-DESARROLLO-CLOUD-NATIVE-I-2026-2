@@ -35,7 +35,7 @@ public class ResumenController {
     public record Resumen(int cantidad, Map<String, Long> montoPorCliente,
                           List<CompraRecibida> ultimosEventos) {}
 
-    @KafkaListener(topics = "\${app.kafka.topic}")
+    @KafkaListener(topics = "${app.kafka.topic}")
     public synchronized void consumir(ConsumerRecord<String, String> record) throws Exception {
         if (record.value() == null || record.value().isBlank()) {
             throw new IllegalArgumentException("El evento de compra no contiene un payload JSON");

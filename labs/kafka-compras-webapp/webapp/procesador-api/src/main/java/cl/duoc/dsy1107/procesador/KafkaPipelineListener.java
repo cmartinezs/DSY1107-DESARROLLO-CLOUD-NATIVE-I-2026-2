@@ -23,8 +23,8 @@ public class KafkaPipelineListener {
             ObjectMapper mapper,
             CompraProcessor processor,
             KafkaTemplate<String, String> kafka,
-            @Value("\${app.kafka.output-topic}") String outputTopic,
-            @Value("\${app.kafka.rejected-topic}") String rejectedTopic) {
+            @Value("${app.kafka.output-topic}") String outputTopic,
+            @Value("${app.kafka.rejected-topic}") String rejectedTopic) {
         this.mapper = mapper;
         this.processor = processor;
         this.kafka = kafka;
@@ -32,7 +32,7 @@ public class KafkaPipelineListener {
         this.rejectedTopic = rejectedTopic;
     }
 
-    @KafkaListener(topics = "\${app.kafka.input-topic}")
+    @KafkaListener(topics = "${app.kafka.input-topic}")
     public void consumir(ConsumerRecord<String, String> record) throws Exception {
         if (record.value() == null) {
             publicarRechazo(record.key(), null, "MENSAJE_SIN_VALOR");

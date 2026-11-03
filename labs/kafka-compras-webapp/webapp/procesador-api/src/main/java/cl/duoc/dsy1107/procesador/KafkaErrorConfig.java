@@ -23,7 +23,7 @@ public class KafkaErrorConfig {
     CommonErrorHandler kafkaErrorHandler(
             KafkaTemplate<String, String> kafka,
             ObjectMapper mapper,
-            @Value("\${app.kafka.rejected-topic}") String rejectedTopic) {
+            @Value("${app.kafka.rejected-topic}") String rejectedTopic) {
         return new DefaultErrorHandler(
                 (record, exception) -> recuperar(kafka, mapper, rejectedTopic, record, exception),
                 new FixedBackOff(1_000L, 2L));
