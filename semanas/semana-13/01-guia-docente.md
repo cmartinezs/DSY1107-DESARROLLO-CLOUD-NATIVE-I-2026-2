@@ -14,7 +14,7 @@ Contrastar:
 - Kafka/log retenido: qué ocurrió, qué grupos necesitan leerlo y posibilidad de replay mientras dure la retención.
 - Ninguna tecnología tiene semántica universal *exactly once* para efectos de negocio externos.
 
-**Problema de referencia:** compras HTTP producen eventos JSON; el procesador valida y transforma; la siguiente etapa solo debe consumir resultados válidos. Un evento malo no puede bloquear indefinidamente la partición.
+**Problema de referencia:** compras HTTP producen eventos JSON; el procesador valida y transforma; la siguiente etapa solo debe consumir resultados válidos. Un evento inválido debe tener una ruta de rechazo; si el topic de rechazo falla, esta implementación conserva el registro para reintento y puede detener esa partición. Ese trade-off debe explicitarse.
 
 ## Ruta práctica
 
