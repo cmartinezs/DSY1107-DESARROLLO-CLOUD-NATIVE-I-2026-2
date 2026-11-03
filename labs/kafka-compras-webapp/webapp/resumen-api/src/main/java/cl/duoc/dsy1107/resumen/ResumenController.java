@@ -33,16 +33,27 @@ public class ResumenController {
 
     // Logica de negocio YA IMPLEMENTADA. El alumno no debe programarla de cero.
     public synchronized void registrar(CompraEvento evento, int particion, long offset) {
-        if (evento.id() == null || evento.cliente() == null || evento.monto() <= 0) {
-            throw new IllegalArgumentException("Compra incompleta o invalida");
+        if (evento == null) {
+            throw new IllegalArgumentException("Compra nula");
+        }
+        if (evento.id() == null || evento.id().isBlank()) {
+            throw new IllegalArgumentException("La compra requiere un ID");
+        }
+        if (evento.cliente() == null || evento.cliente().isBlank()) {
+            throw new IllegalArgumentException("La compra requiere un cliente");
+        }
+        if (evento.monto() <= 0) {
+            throw new IllegalArgumentException("El monto debe ser positivo");
         }
         if (!ids.add(evento.id())) {
             return; // deduplicacion en memoria, solo durante la vida del proceso
         }
-        montos.computeIfAbsent(evento.cliente(), k -> new LongAdder()).add(evento.monto());
+
+        String cliente = evento.cliente().trim();
+        montos.computeIfAbsent(cliente, k -> new LongAdder()).add(evento.monto());
         cantidad.incrementAndGet();
         Instant fecha = evento.fechaEvento() != null ? evento.fechaEvento() : Instant.now();
-        recibidas.add(new CompraRecibida(evento.id(), evento.cliente(), evento.monto(),
+        recibidas.add(new CompraRecibida(evento.id(), cliente, evento.monto(),
                 fecha, particion, offset));
         if (recibidas.size() > 30) {
             recibidas.remove(0);
