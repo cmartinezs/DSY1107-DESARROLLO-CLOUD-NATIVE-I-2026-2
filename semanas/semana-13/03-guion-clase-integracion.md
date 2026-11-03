@@ -59,7 +59,7 @@ Los minutos son **presupuestos de tiempo efectivo** (ajustar a llegadas e instal
 2. **Productor:** una `key=cliente`, un JSON, un topic con tres particiones. Mostrar `KafkaTemplate.send`.
 3. **Broker:** en Kafka UI buscar el registro real. Preguntar «¿qué significan offset y partición?». Offset no es global.
 4. **Consumidor:** `@KafkaListener` y grupo `resumen-app`; conectar a `registrar()`, que **ya existe**.
-5. **Streaming continuo:** mientras el consumidor está detenido, Kafka sigue recibiendo; luego el consumidor se pone al día.
+5. **Streaming continuo:** mientras el consumidor está detenido, Kafka sigue recibiendo. Al reiniciarlo procesa lo pendiente desde el offset confirmado, pero el resumen en memoria parte vacío; para reconstruir el historial se debe restablecer explícitamente el grupo a earliest y hacer replay.
 6. **Límite técnico:** esto usa **Spring Kafka**, no una topología **Kafka Streams** con ventanas/state store. AVA 3.2.2 puede compararse o extenderse; no prometer DLQ ni exactly-once de negocio.
 
 ## Evidencia mínima por encuentro
@@ -85,7 +85,7 @@ Los minutos son **presupuestos de tiempo efectivo** (ajustar a llegadas e instal
 
 **Nivel base (2 bloques):** ¿Quién publica en Kafka: React o `compras-api`? ¿Topic y partición son lo mismo? ¿Dónde vive el offset?
 
-**Nivel integración (4 bloques):** ¿Por qué puede seguir vendiendo el productor aunque el consumidor esté detenido? ¿Qué sucede cuando se reinicia el consumer group? ¿En qué se diferencia Kafka de una llamada REST directa?
+**Nivel integración (4 bloques):** ¿Por qué puede seguir vendiendo el productor aunque el consumidor esté detenido? ¿Por qué reiniciar el servicio no reconstruye por sí solo el resumen? ¿Qué cambia al restablecer offsets y hacer replay? ¿En qué se diferencia Kafka de una llamada REST directa?
 
 **Nivel extensión:** ¿Por qué volver a procesar un evento podría generar dos efectos? ¿Qué harías para procesar una compra inválida sin bloquear todas las siguientes? ¿Por qué nuestro listener no equivale a Kafka Streams?
 

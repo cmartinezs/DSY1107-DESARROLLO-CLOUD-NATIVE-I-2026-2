@@ -35,25 +35,52 @@ public class ResumenController {
     public record Resumen(int cantidad, Map<String, Long> montoPorCliente,
                           List<CompraRecibida> ultimosEventos) {}
 
-    @KafkaListener(topics = "${app.kafka.topic}")
+    @KafkaListener(topics = "\${app.kafka.topic}")
     public synchronized void consumir(ConsumerRecord<String, String> record) throws Exception {
+        if (record.value() == null || record.value().isBlank()) {
+            throw new IllegalArgumentException("El evento de compra no contiene un payload JSON");
+        }
+
         CompraEvento evento = mapper.readValue(record.value(), CompraEvento.class);
+        validar(evento);
+
         // Idempotencia demostrativa por ID, solo dentro de la vida de este proceso.
         if (!ids.add(evento.id())) {
             return;
         }
-        montos.computeIfAbsent(evento.cliente(), k -> new LongAdder()).add(evento.monto());
+
+        String cliente = evento.cliente().trim();
+        montos.computeIfAbsent(cliente, k -> new LongAdder()).add(evento.monto());
         cantidad.incrementAndGet();
+
         // Compatible con los eventos de los laboratorios 01/02 (sin fechaEvento).
+        long timestamp = record.timestamp();
         Instant fecha = evento.fechaEvento() != null
-                ? evento.fechaEvento() : Instant.ofEpochMilli(record.timestamp());
-        recibidas.add(new CompraRecibida(evento.id(), evento.cliente(), evento.monto(),
+                ? evento.fechaEvento()
+                : timestamp >= 0 ? Instant.ofEpochMilli(timestamp) : Instant.now();
+
+        recibidas.add(new CompraRecibida(evento.id(), cliente, evento.monto(),
                 fecha, record.partition(), record.offset()));
         if (recibidas.size() > 30) {
             recibidas.remove(0);
         }
         System.out.printf("CONSUMIDO cliente=%s particion=%d offset=%d%n",
-                evento.cliente(), record.partition(), record.offset());
+                cliente, record.partition(), record.offset());
+    }
+
+    private void validar(CompraEvento evento) {
+        if (evento == null) {
+            throw new IllegalArgumentException("El evento de compra es nulo");
+        }
+        if (evento.id() == null || evento.id().isBlank()) {
+            throw new IllegalArgumentException("El evento no contiene un ID");
+        }
+        if (evento.cliente() == null || evento.cliente().isBlank()) {
+            throw new IllegalArgumentException("El evento no contiene un cliente");
+        }
+        if (evento.monto() <= 0) {
+            throw new IllegalArgumentException("El monto debe ser positivo");
+        }
     }
 
     @GetMapping("/api/resumen")

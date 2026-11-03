@@ -23,7 +23,7 @@ flowchart LR
 - **React**: formulario y tablero, consulta el resumen cada dos segundos.
 - **compras-api**: recibe la compra por REST, publica un JSON en Kafka, usando `cliente` como **key**.
 - **Kafka**: topic `compras`, tres particiones, retiene eventos y conserva offsets por grupo.
-- **resumen-api**: consume eventos en el grupo `resumen-app`, calcula totales **en memoria** y expone el resultado por REST.
+- **resumen-api**: consume eventos en el grupo `resumen-app`, calcula totales **en memoria** y expone el resultado por REST. Si el proceso se reinicia, pierde esos totales; el grupo conserva sus offsets y no reproduce automáticamente los eventos ya confirmados. El checkpoint 7 muestra cómo reconstruir el tablero con replay explícito.
 - **Proxy web**: enruta `/api/compras` y `/api/resumen` a cada servicio. El navegador solo conoce una dirección (`localhost:5173`).
 
 El código fuente ya está entregado en [`webapp/`](./webapp/). **Únicamente se editan dos archivos de configuración:** `.env` y `webapp/web/nginx/default.conf`.

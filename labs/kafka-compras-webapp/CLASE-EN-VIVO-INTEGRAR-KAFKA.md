@@ -144,7 +144,7 @@ docker compose --profile app logs --tail=30 compras-api
 
 `webapp/resumen-api/src/main/java/cl/duoc/dsy1107/resumen/ResumenController.java`
 
-La agregación `registrar(CompraEvento, particion, offset)` ya está implementada y funciona en el starter. **Solo conectamos Kafka a esa lógica existente**.
+La agregación `registrar(CompraEvento, particion, offset)` ya está implementada y funciona en el starter. **Solo conectamos Kafka a esa lógica existente**. La función valida que el evento no sea nulo y que ID, cliente y monto sean válidos; así evitamos contaminar el agregado. El manejo avanzado de mensajes inválidos y DLQ no forma parte de esta clase.
 
 **Paso A:** añade imports:
 
@@ -187,23 +187,33 @@ docker compose --profile app logs --tail=50 resumen-api
 
 **PASS:** el segundo microservicio recibe registros y el tablero cambia; los mismos eventos son inspeccionables en Kafka UI. **Si falla:** grupo `resumen-app`, topic `compras`, logs del listener, JSON válido y offsets ya confirmados.
 
-## Checkpoint 4 · Demostrar desacoplamiento y lag (10–20 min)
+## Checkpoint 4 · Desacoplamiento, lag y replay (15–25 min)
 
-**No hay que escribir más Java.**
+**No hay que escribir más Java.** Este checkpoint permite distinguir tres cosas: eventos retenidos, offsets confirmados y estado en memoria de la aplicación.
 
 1. Detén únicamente el consumidor:
    ```powershell
    docker compose --profile app stop resumen-api
    ```
-2. Publica desde React otra compra, por ejemplo Luis=700. El productor sigue trabajando y Kafka conserva el evento; el resumen no cambia.
+2. Publica desde React otra compra, por ejemplo Luis=700. El productor sigue trabajando y Kafka conserva el evento; el resumen deja de actualizarse.
 3. En **Kafka UI → Consumer Groups → resumen-app**, observa la posición confirmada y el posible **lag**.
 4. Inicia el consumidor:
    ```powershell
    docker compose --profile app start resumen-api
    ```
-5. Observa cómo procesa el evento pendiente.
+5. Observa cómo procesa el evento pendiente. **Importante:** al detener el contenedor también se reinicia el proceso y se pierde el resumen que estaba en memoria. Al volver, el grupo continúa desde sus offsets confirmados; por eso el tablero puede mostrar solo los eventos pendientes, no todo el historial.
 
-**PASS:** sin consumidor el productor continúa publicando; al volver el consumidor, el resumen se actualiza. **Punto clave:** «streaming» aquí significa **flujo continuo de eventos**; todavía no usamos la **biblioteca Kafka Streams** ni topologías DSL.
+**Replay opcional para reconstruir el tablero completo:** detén otra vez el consumidor y restablece los offsets del grupo al inicio del topic:
+
+```powershell
+docker compose --profile app stop resumen-api
+docker exec dsy1107-kafka-s12 /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group resumen-app --topic compras --reset-offsets --to-earliest --execute
+docker compose --profile app start resumen-api
+```
+
+Espera a que procese los eventos retenidos. **No ejecutes el reset con el consumidor activo.** El resumen se reconstruye porque el proceso parte vacío y vuelve a leer desde el inicio; esto no es automático al reiniciar.
+
+**PASS:** sin consumidor el productor continúa publicando; Kafka acumula eventos; al reanudar, se procesan los pendientes; con replay explícito, se reconstruye el agregado completo desde los eventos retenidos. **Punto clave:** «streaming» aquí significa **flujo continuo de eventos**; todavía no usamos la **biblioteca Kafka Streams** ni topologías DSL.
 
 ## Extensión opcional 3.2.2 · Evento derivado (20–35 min extra, SOLO si sobra tiempo)
 
@@ -237,7 +247,7 @@ En la clase de referencia esto **no está implementado**. Si no se programa, reg
 | Evento no aparece | Topic creado, nombre de topic, logs `compras-api` |
 | Evento sí aparece y resumen en 0 | Es correcto **antes de checkpoint 3**; después, revisar consumidor |
 | El resumen no parte en 0 | El grupo puede haber leído eventos previos; los eventos retenidos no se borran al reconstruir un servicio |
-| La web tiene ventas que parecían anteriores | La UI consulta el estado en memoria del consumidor, que puede reconstruirse desde el topic |
+| El resumen queda vacío/parcial tras reiniciar | El agregado vive en memoria. Para reconstruirlo, usa el replay explícito del checkpoint 4: consumidor detenido, offsets a earliest y reinicio. |
 | Compilar tarda mucho | Descargas de Maven/npm; usar caché previamente preparada en los equipos |
 | Los mensajes no rotan P0–P1–P2 | Kafka no garantiza round-robin estricto sin clave; con la misma key, el particionador conserva afinidad mientras no cambien condiciones |
 
@@ -247,6 +257,6 @@ En la clase de referencia esto **no está implementado**. Si no se programa, reg
 - Captura 1: Kafka UI con topic y tres particiones.
 - Captura 2: primer evento publicado desde `compras-api`, **antes de que exista listener**.
 - Captura 3: tabla React + `resumen-api` actualizado después de incorporar `@KafkaListener`.
-- Captura 4: consumidor detenido, lag visible si ya existen offsets confirmados, consumidor reiniciado y evento procesado.
+- Captura 4: consumidor detenido, lag visible si ya existen offsets confirmados, evento pendiente procesado y replay completo (si se alcanza).
 
 **No confundir con el AVA:** 3.2.1 trabaja topic, particiones, producer/consumer y offsets; 3.2.2 presenta un pipeline bancario con Kafka Streams, filtros y alertas. Esta clase **enseña integración de microservicios mediante Spring Kafka y procesamiento continuo de eventos**, con un evento derivado opcional; **no afirma implementar Kafka Streams DSL**.
