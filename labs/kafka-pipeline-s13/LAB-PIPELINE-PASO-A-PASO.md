@@ -29,7 +29,7 @@ docker exec dsy1107-kafka-s12 /opt/kafka/bin/kafka-topics.sh --bootstrap-server 
 
 Regla del ejercicio: `cliente` no vacío, `monto > 0`, `id` presente. Categoría `ALTA` si monto >= 1000; de otro modo `NORMAL`. El procesador transforma con `map` de lógica Java o `mapValues` **solo si se usa realmente Kafka Streams**. Una operación en un listener de Spring Kafka **no** debe llamarse API Streams.
 
-**Rechazo implementado** (`compras-rechazadas`): `idOrigen` cuando exista, `motivo`, `recibidoEn`; evitar incluir datos sensibles. Un JSON corrupto requiere tratar la falla de deserialización de forma explícita.
+**Rechazo implementado** (`compras-rechazadas`): `idOrigen` cuando se puede extraer, `motivo` y `recibidoEn`. Para fallas técnicas, el evento conserva topic, partición, offset y tipo/detalle de error, sin copiar el payload original. Un JSON corrupto requiere tratar la falla de deserialización de forma explícita.
 
 ## 2. Preparar topics
 
@@ -126,7 +126,7 @@ Para las evidencias, diagnóstico, políticas de fallo y cierre del entorno, com
 - Listener, servicio de transformación y publicación en topic derivado identificables por archivo y commit.
 - Caso válido: entrada → salida observada en UI.
 - Caso inválido: motivo y acción explícita; un evento siguiente válido se procesa.
-- Manejo de errores descrito y probado: JSON/reglas inválidas van a `compras-rechazadas`; errores técnicos no manejados usan 2 reintentos de 1 s y luego recuperación al mismo topic. No presentar este mecanismo didáctico como DLQ de producción.
+- Manejo de errores descrito y probado: JSON/reglas inválidas van a `compras-rechazadas`; errores técnicos no manejados usan 2 reintentos de 1 s y luego se intenta publicar allí un registro de rechazo con metadatos de origen. Si el topic de rechazo tampoco está disponible, el recuperador lanza una excepción y el registro original vuelve a intentarse; esa partición puede quedar detenida hasta restaurar el destino. No presentar este mecanismo didáctico como DLQ de producción.
 - DevLog y capturas sin credenciales.
 
 **Alcance:** puede completarse en más de una sesión; si solo se cubre 3.2.1 y diseño de pipeline, registrar pendiente de 3.2.2, sin reportar implementación completa.

@@ -1,5 +1,7 @@
 package cl.duoc.dsy1107.procesador;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ public class KafkaErrorConfig {
     CommonErrorHandler kafkaErrorHandler(
             KafkaTemplate<String, String> kafka,
             ObjectMapper mapper,
-            @Value("${app.kafka.rejected-topic}") String rejectedTopic) {
+            @Value("\${app.kafka.rejected-topic}") String rejectedTopic) {
         return new DefaultErrorHandler(
                 (record, exception) -> recuperar(kafka, mapper, rejectedTopic, record, exception),
                 new FixedBackOff(1_000L, 2L));
@@ -37,18 +39,17 @@ public class KafkaErrorConfig {
             Exception exception) {
         try {
             var rechazo = new EventoTecnicoRechazado(
+                    extraerIdOrigen(mapper, record),
                     "ERROR_TECNICO_AGOTADO",
                     record.topic(),
                     record.partition(),
                     record.offset(),
-                    record.key() == null ? null : record.key().toString(),
-                    record.value() == null ? null : record.value().toString(),
                     exception.getClass().getSimpleName(),
                     exception.getMessage(),
                     Instant.now());
 
             String json = mapper.writeValueAsString(rechazo);
-            kafka.send(rejectedTopic, rechazo.keyOrigen(), json).get(10, TimeUnit.SECONDS);
+            kafka.send(rejectedTopic, rechazo.idOrigen(), json).get(10, TimeUnit.SECONDS);
             log.error("Evento enviado a {} tras agotar reintentos. Origen {}-{}@{}",
                     rejectedTopic, record.topic(), record.partition(), record.offset(), exception);
         } catch (Exception recoveryException) {
@@ -65,13 +66,28 @@ public class KafkaErrorConfig {
         }
     }
 
+    private String extraerIdOrigen(ObjectMapper mapper, ConsumerRecord<?, ?> record) {
+        if (record.value() == null) {
+            return null;
+        }
+        try {
+            JsonNode root = mapper.readTree(record.value().toString());
+            if (root == null || !root.isObject()) {
+                return null;
+            }
+            JsonNode id = root.get("id");
+            return id != null && id.isTextual() ? id.asText() : null;
+        } catch (JsonProcessingException ex) {
+            return null;
+        }
+    }
+
     private record EventoTecnicoRechazado(
+            String idOrigen,
             String motivo,
             String topicOrigen,
             int particionOrigen,
             long offsetOrigen,
-            String keyOrigen,
-            String payloadOriginal,
             String tipoError,
             String detalleError,
             Instant recibidoEn) {}

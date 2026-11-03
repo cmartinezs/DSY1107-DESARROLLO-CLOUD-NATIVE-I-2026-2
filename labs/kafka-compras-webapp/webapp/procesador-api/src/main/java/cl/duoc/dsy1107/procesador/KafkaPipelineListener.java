@@ -23,8 +23,8 @@ public class KafkaPipelineListener {
             ObjectMapper mapper,
             CompraProcessor processor,
             KafkaTemplate<String, String> kafka,
-            @Value("${app.kafka.output-topic}") String outputTopic,
-            @Value("${app.kafka.rejected-topic}") String rejectedTopic) {
+            @Value("\${app.kafka.output-topic}") String outputTopic,
+            @Value("\${app.kafka.rejected-topic}") String rejectedTopic) {
         this.mapper = mapper;
         this.processor = processor;
         this.kafka = kafka;
@@ -32,10 +32,10 @@ public class KafkaPipelineListener {
         this.rejectedTopic = rejectedTopic;
     }
 
-    @KafkaListener(topics = "${app.kafka.input-topic}")
+    @KafkaListener(topics = "\${app.kafka.input-topic}")
     public void consumir(ConsumerRecord<String, String> record) throws Exception {
         if (record.value() == null) {
-            publicarRechazo(record.key(), null, "MENSAJE_SIN_VALOR");
+            publicarRechazo(null, "MENSAJE_SIN_VALOR");
             return;
         }
 
@@ -43,7 +43,7 @@ public class KafkaPipelineListener {
         try {
             evento = mapper.readValue(record.value(), CompraProcessor.CompraEvento.class);
         } catch (JsonProcessingException ex) {
-            publicarRechazo(record.key(), null, "JSON_INVALIDO");
+            publicarRechazo(null, "JSON_INVALIDO");
             return;
         }
 
@@ -55,13 +55,13 @@ public class KafkaPipelineListener {
                     record.partition(), record.offset(), outputTopic);
         } catch (CompraProcessor.EventoInvalidoException ex) {
             String idOrigen = evento == null ? null : evento.id();
-            publicarRechazo(record.key(), idOrigen, ex.getMessage());
+            publicarRechazo(idOrigen, ex.getMessage());
         }
     }
 
-    private void publicarRechazo(String key, String idOrigen, String motivo) throws Exception {
+    private void publicarRechazo(String idOrigen, String motivo) throws Exception {
         var rechazo = new CompraRechazadaEvento(idOrigen, motivo, Instant.now());
-        publicar(rejectedTopic, key, mapper.writeValueAsString(rechazo));
+        publicar(rejectedTopic, idOrigen, mapper.writeValueAsString(rechazo));
         System.out.printf("RECHAZADO id=%s motivo=%s topic=%s%n", idOrigen, motivo, rejectedTopic);
     }
 

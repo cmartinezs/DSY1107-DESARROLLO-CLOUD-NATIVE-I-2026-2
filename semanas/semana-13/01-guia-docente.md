@@ -21,8 +21,10 @@ Contrastar:
 1. **Baseline**: ejecutar únicamente laboratorio B de semana 12 o A según infraestructura. Confirmar que Docker funciona, topic `compras`, evento publicado y observable en Kafbat UI.
 2. **Lectura guiada de código**: `CompraController` usa `KafkaTemplate<String,String>` y `ObjectMapper`; `ResumenController` usa `@KafkaListener` y `ConsumerRecord<String,String>`. El DTO del ejemplo es un `record` local, no un contrato compartido versionado.
 3. **Aislamiento de responsabilidades**: HTTP/controller → servicio de publicación → broker → listener/adaptador → servicio de reglas de negocio. En el ejemplo original, parte de estas responsabilidades están juntas; indicar deuda y refactorización progresiva.
-4. **Diseño de extensión**: `compras` (entrada) → validar → mapear → `compras-validas` (salida). Para inválidos: registrar causa y enviar a `compras-rechazadas` (si se implementa); distinguir rechazo de negocio de falla transitoria.
+4. **Diseño de extensión**: `compras` (entrada) → validar → mapear → `compras-validas` (salida). Para inválidos: registrar causa y enviar a `compras-rechazadas`; distinguir rechazo de negocio de falla transitoria. El rechazo usa el ID del evento como key cuando está disponible, no el nombre del cliente.
 5. **Ejecución**: crear topics, agregar componente consumidor-productor de forma guiada, publicar caso válido y caso inválido, verificar Kafka UI y reinicio. Si no hay tiempo, evidenciar diseño y **no afirmar implementación**.
+
+**Recuperación técnica:** el procesador espera dos reintentos de un segundo y luego intenta enviar metadatos del evento a `compras-rechazadas`. Si tampoco puede publicar allí, no confirma el registro original: el error vuelve a propagarse y la partición puede quedar bloqueada/reintentando hasta que el topic de rechazo esté disponible. Este comportamiento es deliberado para no descartar silenciosamente el evento, pero no equivale a una DLQ de producción.
 
 ## Preguntas que distinguen comprensión de receta
 

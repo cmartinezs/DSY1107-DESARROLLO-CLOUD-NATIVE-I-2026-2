@@ -45,20 +45,20 @@ class KafkaPipelineListenerTest {
 
     @Test
     void publicaRechazoPorReglaDeNegocio() throws Exception {
-        var record = new ConsumerRecord<String, String>("compras", 1, 3L, "x",
+        var record = new ConsumerRecord<String, String>("compras", 1, 3L, "cliente-ana",
                 "{\"id\":\"c-2\",\"cliente\":\"\",\"monto\":10,\"fechaEvento\":null}");
 
         listener.consumir(record);
 
         ArgumentCaptor<String> payload = ArgumentCaptor.forClass(String.class);
-        verify(kafka).send(eq("compras-rechazadas"), eq("x"), payload.capture());
+        verify(kafka).send(eq("compras-rechazadas"), eq("c-2"), payload.capture());
         assertTrue(payload.getValue().contains("CLIENTE_REQUERIDO"));
         verify(kafka, never()).send(eq("compras-validas"), any(), anyString());
     }
 
     @Test
     void publicaRechazoPorJsonMalformado() throws Exception {
-        var record = new ConsumerRecord<String, String>("compras", 2, 8L, null, "{mal-json");
+        var record = new ConsumerRecord<String, String>("compras", 2, 8L, "cliente-ana", "{mal-json");
 
         listener.consumir(record);
 
@@ -69,19 +69,19 @@ class KafkaPipelineListenerTest {
 
     @Test
     void publicaRechazoCuandoElJsonRepresentaNull() throws Exception {
-        var record = new ConsumerRecord<String, String>("compras", 2, 9L, "sin-id", "null");
+        var record = new ConsumerRecord<String, String>("compras", 2, 9L, "cliente-ana", "null");
 
         listener.consumir(record);
 
         ArgumentCaptor<String> payload = ArgumentCaptor.forClass(String.class);
-        verify(kafka).send(eq("compras-rechazadas"), eq("sin-id"), payload.capture());
+        verify(kafka).send(eq("compras-rechazadas"), isNull(), payload.capture());
         assertTrue(payload.getValue().contains("EVENTO_NULO"));
         verify(kafka, never()).send(eq("compras-validas"), any(), anyString());
     }
 
     @Test
     void publicaRechazoCuandoElRegistroEsTombstone() throws Exception {
-        var record = new ConsumerRecord<String, String>("compras", 2, 10L, null, null);
+        var record = new ConsumerRecord<String, String>("compras", 2, 10L, "cliente-ana", null);
 
         listener.consumir(record);
 
