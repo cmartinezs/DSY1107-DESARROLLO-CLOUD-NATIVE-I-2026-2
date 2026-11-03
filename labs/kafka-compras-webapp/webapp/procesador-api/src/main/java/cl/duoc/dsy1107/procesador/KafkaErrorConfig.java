@@ -52,6 +52,9 @@ public class KafkaErrorConfig {
             log.error("Evento enviado a {} tras agotar reintentos. Origen {}-{}@{}",
                     rejectedTopic, record.topic(), record.partition(), record.offset(), exception);
         } catch (Exception recoveryException) {
+            if (recoveryException instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             log.error("No fue posible registrar el evento fallido en {}", rejectedTopic, recoveryException);
             IllegalStateException failure = new IllegalStateException(
                     "Falló la publicación del evento técnico rechazado en " + rejectedTopic,
