@@ -28,7 +28,7 @@ No introducir Kafka para reemplazar una operación síncrona simple ni para dupl
 Si el caso de uso está justificado y existen prerrequisitos:
 
 1. Identificar productor, evento y contrato.
-2. Definir al menos dos topics con propósito diferenciado.
+2. Definir al menos dos topics con propósito diferenciado y documentar sus particiones, replication factor y retención en Compose o en el microservicio administrador.
 3. Justificar particiones, replication factor, retención y cleanup policy.
 4. Identificar al menos dos consumidores y sus consumer groups.
 5. Definir cómo observar lag.
@@ -40,7 +40,7 @@ Si aún no existe un caso de uso válido o no hay tiempo/prerrequisitos, documen
 ## Evidencia obligatoria
 
 - Diagrama antes/después o diseño propuesto con su estado claramente indicado.
-- Dos topics y configuración efectiva o, si la implementación aún no está autorizada, diseño justificable pendiente de validación.
+- Dos topics con configuración efectiva; sus particiones, replication factor, retención y cleanup policy documentadas en Compose o en el microservicio administrador. Si la implementación aún no está autorizada, registrar el diseño como pendiente de validación.
 - Productores, consumidores y grupos.
 - Evidencia de lag cuando exista ejecución.
 - Operación administrativa reproducible.
