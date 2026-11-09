@@ -56,7 +56,7 @@ Para cada topic registra:
 | Retención por tamaño | Valor de retention.bytes y alcance por partición. |
 | Cleanup policy | delete o compact, con justificación. |
 
-La configuración debe existir en Compose, script administrativo o microservicio administrador. Una tabla escrita a mano sin correspondencia con la configuración efectiva no demuestra que el topic esté configurado.
+El proyecto debe documentar la configuración de ambos topics en su Compose o en el microservicio administrador. Un script/comando puede servir como operación administrativa reproducible, pero no reemplaza esa documentación declarativa. Una tabla escrita a mano sin correspondencia con la configuración efectiva no demuestra que el topic esté configurado.
 
 **Replicación:** si el proyecto utiliza un broker local, RF=1 debe documentarse como una limitación, no como alta disponibilidad. Si declara tolerancia a fallos, debe mostrar réplicas reales en brokers distintos y evidencia acorde.
 
