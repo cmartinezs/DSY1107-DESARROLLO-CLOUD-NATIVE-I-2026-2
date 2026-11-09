@@ -30,6 +30,8 @@ La preparación curricular se desarrolla durante semanas 8–10.
 - **Ventana 2026-2:** semana 16.
 - **Foco:** tópicos, publicación/consumo, justificación del diseño e integración con la arquitectura existente.
 
+→ [Orientaciones de preparación y encargo EP3](./ev3/instrucciones-encargo.md). El documento complementa, pero no reemplaza, las instrucciones y rúbrica oficiales de AVA/Drive.
+
 ## Evaluación Final Transversal
 
 - **Ponderación final:** 40%.

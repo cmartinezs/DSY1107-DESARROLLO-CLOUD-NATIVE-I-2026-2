@@ -15,6 +15,7 @@ Esta carpeta contiene **práctica breve, focalizada y no sumativa**. Sirve como 
 | [08](./semana-08/) | asincronía, RabbitMQ y routing |
 | [12](./semana-12/) | fundamentos Kafka, particiones y replay |
 | [13](./semana-13/) | productor/consumidor, contrato JSON, validaciones y pipeline |
+| [14](./semana-14/) | escalamiento, retención, lag y tuning de Kafka |
 
 ## Regla canónica
 

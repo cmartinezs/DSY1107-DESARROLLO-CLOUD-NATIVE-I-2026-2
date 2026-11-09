@@ -53,7 +53,7 @@ Cada checkpoint debe evidenciar:
 | 11 | [Checkpoint reservado](./semana-11/) |
 | 12 | [Checkpoint reservado](./semana-12/) |
 | 13 | [Diseño y transferencia condicionada de pipeline Kafka](./semana-13/) |
-| 14 | [Checkpoint reservado](./semana-14/) |
+| 14 | [Operación Kafka: topics, grupos, lag y tuning](./semana-14/) |
 | 15 | [Checkpoint reservado](./semana-15/) |
 | 16 | [Checkpoint reservado](./semana-16/) |
 | 17 | [Checkpoint reservado](./semana-17/) |

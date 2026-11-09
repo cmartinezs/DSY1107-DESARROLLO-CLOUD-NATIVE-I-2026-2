@@ -16,6 +16,7 @@ Este directorio organiza el contenido consolidado del curso y mantiene separado 
 | **08** | 28 septiembre–3 octubre 2026 | **Mensajería asíncrona y RabbitMQ: Hello World, DirectExchange, bindings y routing keys** | [Abrir Semana 08](semana-08/) |
 | **12** | 26–31 octubre 2026 | **Streaming vs colas, Kafka, consumer groups y Kafka Streams** | [Abrir Semana 12](semana-12/) |
 | **13** | Continuación de EA3 | **Productores, consumidores y pipeline de eventos Kafka** | [Abrir Semana 13](semana-13/) |
+| **14** | 9–14 noviembre 2026 | **Escalamiento, replicación, retención, consumer lag, tuning y pruebas de carga** | [Abrir Semana 14](semana-14/) |
 
 ## Regla de uso
 
