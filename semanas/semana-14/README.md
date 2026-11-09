@@ -43,7 +43,7 @@ No se introduce otra aplicación desde cero. Continuarás sobre los conceptos y 
 
 En el proyecto semestral, cada equipo debe poder mostrar:
 
-- Dos topics configurados y documentados: particiones, factor de replicación y parámetros de retención.
+- Dos topics configurados, con particiones, replication factor y retención documentados en Compose o en el microservicio administrador del proyecto.
 - Al menos dos consumidores con sus consumer groups identificados y responsabilidades explicadas.
 - Consumer lag observable en Kafbat UI o mediante CLI.
 - Una operación administrativa reproducible mediante comando, script o endpoint.
