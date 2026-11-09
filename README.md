@@ -138,13 +138,13 @@ No se sincronizan artificialmente: cada sección registra su último checkpoint 
 
 ## Semana actual
 
-**Semana 12 · 26 al 31 de octubre de 2026**
+**Semana 14 · 9 al 14 de noviembre de 2026**
 
-**Kafka: streaming vs colas, topics, particiones, offsets, grupos de consumidores y fundamentos de Kafka Streams.**
+**Escalamiento, replicación, retención, consumer lag, tuning de buffers y pruebas de carga con Kafka.**
 
-Ruta: [Semana 12](semanas/semana-12/) → [Ejemplos](examples/semana-12/) → [Ejercicios](ejercicios/semana-12/) → [Lab A · Kafka básico](labs/kafka-fundamentos/) · [Lab B · Webapp Kafka](labs/kafka-compras-webapp/).
+Ruta: [Semana 14](semanas/semana-14/) → [Ejemplos](examples/semana-14/) → [Ejercicios](ejercicios/semana-14/) → [Kafka Operations Lab](labs/kafka-operations-s14/) → [Checkpoint RegistrApp](proyecto-formativo/semana-14/).
 
-**Nota:** el índice curricular mantiene las semanas anteriores registradas; la actualización no afirma ejecución en aula ni inventa contenido de semanas 10 y 11.
+La semana continúa la aplicación de compras y el pipeline de las semanas 12 y 13. No se construye otra aplicación: se administran topics, consumer groups y parámetros sobre el entorno existente. La orientación de [Evaluación Parcial 3](evaluaciones/ev3/instrucciones-encargo.md) prepara la integración que se presentará en semana 16.
 
 ## Governance y estructura
 
