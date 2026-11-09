@@ -15,7 +15,7 @@
       <h1>Desarrollo Cloud Native I</h1>
       <p class="lead">Concepto → ejemplo → ejercicio → laboratorio → transferencia a RegistrApp.</p>
       <div class="actions">
-        <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-08">Semana 08</a>
+        <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-14">Semana 14</a>
         <a class="button" href="progreso.html">Mi progreso</a>
         <a class="button" href="repositorio-estudiante.html">Repositorio del estudiante</a>
         <a class="button" href="identidad.html">Identidad y acceso</a>
@@ -28,27 +28,29 @@
     <section class="card current-week">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Semana 08 · 28 septiembre–3 octubre</p>
-          <h2>Mensajería asíncrona y RabbitMQ</h2>
+          <p class="eyebrow">Semana 14 · 9–14 noviembre</p>
+          <h2>Escalamiento, replicación, retención y consumer lag</h2>
         </div>
-        <span class="badge">RA2 · IL2.1</span>
+        <span class="badge">RA3 · IL3.3</span>
       </div>
 
+      <p>En semanas 12 y 13 aprendiste a crear topics, publicar y consumir eventos e integrar un pipeline. Ahora vas a administrar ese flujo, observar su comportamiento bajo carga y justificar su configuración. No necesitas construir otra aplicación: continúa sobre el laboratorio de compras.</p>
+
       <ol class="topics">
-        <li><strong>Problema antes que herramienta.</strong> Distingue cuándo una capacidad requiere respuesta inmediata y cuándo conviene desacoplarla.</li>
-        <li><strong>Modelo básico.</strong> Producer → Broker → Queue → Consumer.</li>
-        <li><strong>RabbitMQ local.</strong> Levanta el broker con Docker y observa 5672/15672.</li>
-        <li><strong>Hello World.</strong> Publica y consume un mensaje con Spring AMQP.</li>
-        <li><strong>Routing explícito.</strong> DirectExchange, bindings y routing keys.</li>
-        <li><strong>Arquitectura.</strong> REST Controller y Rabbit Listener pueden activar la misma capacidad sin duplicar negocio.</li>
+        <li><strong>3.3.1 · Escalamiento.</strong> Particiones, paralelismo, consumer groups y distribución de consumidores.</li>
+        <li><strong>3.3.1 · Replicación y retención.</strong> RF, leader, followers, ISR, retención por tiempo/tamaño y políticas delete/compact.</li>
+        <li><strong>3.3.1 · Consumer lag.</strong> Observar offsets, detectar acumulación y comprobar recuperación del consumidor.</li>
+        <li><strong>3.3.2 · Tuning.</strong> Ajustar batching, buffers y compresión; comparar pruebas de carga con condiciones equivalentes.</li>
+        <li><strong>Evaluación Parcial 3.</strong> Revisar las orientaciones para integrar streaming y analítica con Kafka sin romper los flujos existentes de RabbitMQ.</li>
       </ol>
 
       <div class="actions">
-        <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-08">Contenido</a>
-        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/examples/semana-08">Ejemplos</a>
-        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/ejercicios/semana-08">Ejercicios</a>
-        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/rabbitmq-spring-amqp">Lab RabbitMQ</a>
-        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/proyecto-formativo/semana-08">RegistrApp</a>
+        <a class="button primary" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/semanas/semana-14">Contenido Semana 14</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/examples/semana-14">Ejemplos</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/ejercicios/semana-14">Ejercicios</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/labs/kafka-operations-s14">Kafka Operations Lab</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/proyecto-formativo/semana-14">RegistrApp</a>
+        <a class="button" href="https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2/tree/master/evaluaciones/ev3/instrucciones-encargo.md">Orientaciones EP3</a>
       </div>
     </section>
 
