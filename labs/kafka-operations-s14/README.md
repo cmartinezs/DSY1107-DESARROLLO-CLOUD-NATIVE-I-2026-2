@@ -61,7 +61,7 @@ La extensión de tres brokers es opcional y solo se ejecuta si el equipo dispone
 
 El broker obligatorio tiene una sola instancia: RF=1 es la única configuración replicable en ese entorno. No presentes ese escenario como tolerante a fallos. Para observar RF=3 usa la extensión opcional de tres brokers; al ejecutarla en un solo computador, solo simulas caída de un proceso/broker.
 
-El laboratorio no garantiza que los valores ajustados rindan mejor en todos los equipos. Debes registrar resultados reales y explicar los compromisos.
+El laboratorio no garantiza que los valores ajustados rindan mejor en todos los equipos. Debes registrar resultados reales y explicar los compromisos. El script de este lab demuestra una operación administrativa reproducible; en tu proyecto semestral, documenta la configuración de topics en Compose o en el microservicio administrador, como solicita la actividad.
 
 ## Cierre
 
