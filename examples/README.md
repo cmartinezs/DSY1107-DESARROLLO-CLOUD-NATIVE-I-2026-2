@@ -12,6 +12,7 @@ Ejemplos demostrativos breves, independientes de RegistrApp y orientados a una i
 - [Semana 08 · Mensajería asíncrona y routing](./semana-08/)
 - [Semana 12 · Colas vs streaming, particiones y ventanas](./semana-12/)
 - [Semana 13 · DTO JSON, transformación y manejo de errores](./semana-13/)
+- [Semana 14 · capacidad, retención y tuning de Kafka](./semana-14/)
 
 Semanas 06–07 son evaluativas y no requieren ejemplos artificiales.
 
