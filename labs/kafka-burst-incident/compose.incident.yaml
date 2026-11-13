@@ -1,0 +1,59 @@
+# VARIANTE INCIDENCIA: superpone esta configuracion al compose base de kafka-compras-webapp.
+# NO usar junto a compose.game-day.yaml. No se alteran archivos del laboratorio inicial.
+services:
+  topics-burst-init:
+    image: apache/kafka:4.1.2
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        set -e
+        for topic in compras compras-validas compras-rechazadas; do
+          /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9094 --create --if-not-exists --topic "$$topic" --partitions 3 --replication-factor 1
+        done
+        echo "BURST INCIDENT: topics inicializados"
+    restart: "no"
+
+  compras-api:
+    depends_on:
+      topics-burst-init:
+        condition: service_completed_successfully
+
+  resumen-api:
+    depends_on:
+      topics-burst-init:
+        condition: service_completed_successfully
+
+  procesador-api:
+    environment:
+      APP_CHAOS_ENABLED: "false"
+      APP_INCIDENT_DEPENDENCY_LATENCY_MS: "${DEPENDENCY_LATENCY_MS:-450}"
+      # La ruta de reintentos/DLT del Game Day NO se activa: se espera carga sana con backlog.
+      APP_KAFKA_DLT_TOPIC: ""
+      SPRING_KAFKA_LISTENER_CONCURRENCY: "${LISTENER_CONCURRENCY:-1}"
+    depends_on:
+      topics-burst-init:
+        condition: service_completed_successfully
+
+  jmeter-wave:
+    profiles: ["load-wave"]
+    build:
+      context: ../kafka-resilience-game-day
+      dockerfile: Dockerfile.jmeter
+    volumes:
+      - ../kafka-burst-incident/load:/tests:ro
+      - ../kafka-burst-incident/results:/results
+    entrypoint: ["/opt/jmeter/bin/jmeter", "-n"]
+    command:
+      - -t
+      - /tests/oleada-300s.jmx
+      - -Jhost=compras-api
+      - -Jport=8080
+      - -JclientePrefix=LAB-OK-
+      - -l
+      - /results/oleada.jtl
+    depends_on:
+      compras-api:
+        condition: service_started
