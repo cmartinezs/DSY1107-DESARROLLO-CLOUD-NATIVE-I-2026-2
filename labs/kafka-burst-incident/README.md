@@ -35,7 +35,7 @@ Si la rama ya está creada localmente, usar `git switch lab/kafka-burst-diagnosi
 | --- | --- | --- |
 | Generador | JMeter, POST /api/compras | Mismo POST/payload, perfil progresivo de 5 minutos |
 | Error inducido | Prefijos SIM-RETRY / SIM-DLT | **Ninguno**: `APP_CHAOS_ENABLED=false` |
-| Causa del problema | Errores inyectados determinísticamente | Consumidor limitado por una dependencia externa lenta, inicialmente un solo worker |
+| Causa del problema | Errores inyectados determinísticamente | **A investigar:** degradación al aumentar la tasa de solicitudes |
 | Manifestación | Reintentos y DLT visibles | Crecimiento de backlog / consumer lag durante el pico |
 | ¿Se entrega la solución? | Sí, recuperación ya programada | **No**. Se requiere diagnóstico, propuesta, cambio y nueva medición |
 | Observación | Kafka UI / logs | Kafka UI / consumer group lag + resultados de JMeter por intervalos |
@@ -106,7 +106,7 @@ Se generarán `results\oleada-antes.jtl` y `results\lag-antes.txt` (este último
 
 ## Límites y advertencias
 
-- El entorno simula un consumidor acoplado a una dependencia de negocio lenta. No demuestra que Kafka se caiga por recibir muchos eventos.
+- El entorno representa una limitación controlada de capacidad. **La identificación de la causa y la intervención elegida son parte del trabajo del estudiante.** No demuestra que Kafka se caiga por recibir muchos eventos.
 - El broker es único, factor de replicación 1 y sin volumen persistente; no demuestra alta disponibilidad ni tolerancia a caída del broker.
 - Una reducción de lag no garantiza consistencia ni exactly-once ante errores.
 - No inyectar SIM-RETRY/SIM-DLT: esta versión estudia **capacidad**, no la DLT, que sigue disponible en el primer laboratorio.
