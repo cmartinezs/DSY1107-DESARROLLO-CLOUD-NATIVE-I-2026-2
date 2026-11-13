@@ -1,6 +1,6 @@
 # Operación Avalancha · Kafka bajo presión (300 segundos)
 
-**Variante alternativa, deliberadamente sin solución aplicada.** Reutiliza los componentes y el generador HTTP/JMeter del [Game Day original](../kafka-resilience-game-day/), pero estudia un **cuello de botella bajo carga**, no excepciones inyectadas para practicar retries. La rama padre del Game Day y su PR #11 permanecen intactos.
+**Variante alternativa, deliberadamente sin solución aplicada.** Reutiliza los componentes y el generador HTTP/JMeter del [Game Day original](../kafka-resilience-game-day/), pero estudia un **cuello de botella bajo carga**, no excepciones inyectadas para practicar retries. El Game Day original también está publicado en `master`; ambos laboratorios se pueden clonar desde una sola copia del repositorio.
 
 ## Comienza aquí
 
@@ -12,22 +12,20 @@
 
 ## Primer paso: obtener esta variante
 
-Está en **otra rama** (aún no fusionada), derivada de `lab/kafka-resilience-jmeter-game-day`.
+Esta variante ya está publicada en **`master`**, junto al Game Day original. No necesitas cambiar de rama. Si aún no tienes el repositorio:
 
 ```powershell
-git clone --branch lab/kafka-burst-diagnosis-300s --single-branch https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2.git
+git clone https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2.git
 cd DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2\labs\kafka-burst-incident
 ```
 
-Si ya tienes el repositorio, desde su raíz:
+Si ya tienes una copia, desde su raíz:
 
 ```powershell
-git fetch origin
-git switch --track origin/lab/kafka-burst-diagnosis-300s
+git switch master
+git pull --ff-only origin master
 cd labs\kafka-burst-incident
 ```
-
-Si la rama ya está creada localmente, usar `git switch lab/kafka-burst-diagnosis-300s`.
 
 ## Qué cambia respecto del Game Day anterior
 
@@ -61,10 +59,10 @@ El plan acepta `-JloadScale=0.5` para reducir **las tasas objetivo** a la mitad 
 
 ## Preparación técnica: Windows 10 / Docker Desktop
 
-No instalar Java, Maven ni Node localmente; las aplicaciones se compilan dentro de Docker. JMeter puede ejecutarse de dos maneras:
+No necesitas instalar Maven ni Node localmente: las aplicaciones se compilan dentro de Docker. JMeter puede ejecutarse de dos maneras:
 
 1. **Sin instalar nada más**: ejecutar `scripts\ejecutar-oleada.ps1`, que reutiliza el runner Docker Apache JMeter del laboratorio original.
-2. **JMeter GUI instalado** (Java 17+): abrir `load\oleada-300s.jmx` y ejecutar allí; verificar `host=localhost` y `port=8081` por defecto.
+2. **JMeter GUI instalado** (requiere Java 17+): abrir `load\oleada-300s.jmx` y ejecutar allí; verificar `host=localhost` y `port=8081` por defecto.
 
 No levantar el broker de `kafka-fundamentos` o el Game Day anterior simultáneamente: usan los mismos puertos y nombre de contenedor.
 

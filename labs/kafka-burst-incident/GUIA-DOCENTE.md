@@ -53,4 +53,4 @@ El `procesador-api` comienza con `SPRING_KAFKA_LISTENER_CONCURRENCY=1` y tres pa
 - **JMeter GUI no instalado:** el runner Docker ejecuta el mismo `.jmx` y deja CSV/JTL.
 - **No hay tiempo para dos corridas:** exigir diagnóstico, hipótesis y plan de experimentación; no inventar evidencia DESPUÉS.
 
-**Estado:** publicado en rama derivada. Sin Docker Desktop accesible desde la autoría, todos los gates de runtime quedan **NOT RUN** hasta ejecución real.
+**Estado:** publicado en `master`. Sin Docker Desktop accesible desde la autoría, todos los gates de runtime quedan **NOT RUN** hasta ejecución real.

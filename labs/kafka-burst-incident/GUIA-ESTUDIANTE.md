@@ -48,13 +48,15 @@ En otra PowerShell ejecutar el plan completo:
 .\scripts\ejecutar-oleada.ps1 -RunId antes
 ```
 
-En Kafka UI observar durante la corrida el grupo `procesador-s13` y el avance de `compras` y `compras-validas`. También puedes consultar logs:
+En Kafka UI observar durante la corrida el grupo `procesador-s13` y el avance de `compras` y `compras-validas`. Para consultar los logs del **procesador** (desde la carpeta `labs\kafka-burst-incident`):
 
 ```powershell
-docker logs --tail 100 dsy1107-kafka-s12
+Push-Location ..\kafka-compras-webapp
+docker compose --project-name dsy1107-burst --env-file ..\kafka-burst-incident\.env.incident -f compose.yaml -f ..\kafka-burst-incident\compose.incident.yaml --profile app --profile pipeline logs --tail=100 procesador-api
+Pop-Location
 ```
 
-El comando anterior muestra **el broker**, no el procesador. Para el procesador, consultar su servicio con el Compose de esta variante (ver guía docente o `scripts/iniciar.ps1`), o usar Kafka UI.
+Para consultar el broker, usar `docker logs --tail 100 dsy1107-kafka-s12`.
 
 Cuando termine JMeter (aproximadamente cinco minutos), obtener el reporte:
 

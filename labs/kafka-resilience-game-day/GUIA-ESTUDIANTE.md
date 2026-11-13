@@ -30,7 +30,12 @@ JMeter --HTTP POST--> compras-api --Kafka--> compras (3 particiones)
 ## 3. Checkpoint 0 · Preparar el entorno (15 min)
 
 1. Abrir Docker Desktop y comprobar que está operativo.
-2. Descargar/clonar el repositorio y situarse en `labs\kafka-resilience-game-day`.
+2. Clonar el repositorio oficial desde `master` (si aún no tienes una copia) y situarse en `labs\kafka-resilience-game-day`:
+   ```powershell
+   git clone https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2.git
+   cd DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2\labs\kafka-resilience-game-day
+   ```
+   Si ya tienes el repositorio, actualizar `master` con `git switch master` y `git pull --ff-only origin master`.
 3. Comprobar que NO está encendido otro broker del laboratorio A en los mismos puertos.
 4. Ejecutar en PowerShell:
 

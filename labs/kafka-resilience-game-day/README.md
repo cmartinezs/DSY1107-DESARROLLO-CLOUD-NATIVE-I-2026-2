@@ -10,7 +10,7 @@
 
 ## Contrato y origen
 
-Este laboratorio **reutiliza** `../kafka-compras-webapp/compose.yaml`, su API de compras, Kafka, Kafka UI, React, resumen y el `procesador-api` de semana 13. **No se copia el proyecto ni se modifica su Compose canónico.** El único cambio de código sobre el procesador es una simulación opt-in de fallas, apagada por defecto.
+Este laboratorio **reutiliza** `../kafka-compras-webapp/compose.yaml`, su API de compras, Kafka, Kafka UI, React, resumen y el `procesador-api` de semana 13. **No se copia el proyecto ni se modifica su Compose canónico.** El procesador incorpora comportamientos opt-in: simulación de fallas para este Game Day y latencia de dependencia para Operación Avalancha. Cada overlay activa solo su propio comportamiento; fuera de ellos, ambos permanecen apagados.
 
 | Entrada | Resultado esperado del procesador |
 | --- | --- |
@@ -22,16 +22,22 @@ Este laboratorio **reutiliza** `../kafka-compras-webapp/compose.yaml`, su API de
 
 La API HTTP devuelve **201 al publicar el evento**, no al terminar su procesamiento. El `resumen-api` es **otro grupo de consumidores** y procesa eventos de `compras` independientemente del `procesador-api`; no usar el tablero React como prueba de éxito del procesamiento de resiliencia.
 
-## Obtener el laboratorio mientras el PR siga en revisión
+## Obtener el laboratorio desde `master`
 
-Esta práctica aún vive en una **rama de trabajo**, no en `master`. Para clonar una copia nueva:
+Ambos laboratorios de Kafka (Game Day y Operación Avalancha) están publicados en la rama principal. Para una copia nueva:
 
 ```powershell
-git clone --branch lab/kafka-resilience-jmeter-game-day --single-branch https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2.git
+git clone https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2.git
 cd DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2\labs\kafka-resilience-game-day
 ```
 
-Si ya tienes el repositorio, desde su raíz ejecutar `git fetch origin` y luego `git switch --track origin/lab/kafka-resilience-jmeter-game-day` (solo si la rama local aún no existe). Esta rama se mantiene en PR borrador hasta contar con evidencia de ejecución.
+Si ya tienes el repositorio, desde su raíz:
+
+```powershell
+git switch master
+git pull --ff-only origin master
+cd labs\kafka-resilience-game-day
+```
 
 ## Inicio rápido en Windows / PowerShell
 
@@ -41,6 +47,7 @@ Desde esta carpeta:
 
 ```powershell
 .\scripts\iniciar.ps1
+.\scripts\preflight.ps1
 ```
 
 Alternativa sin script, desde `labs\kafka-compras-webapp`:
@@ -49,11 +56,23 @@ Alternativa sin script, desde `labs\kafka-compras-webapp`:
 docker compose --env-file ..\kafka-resilience-game-day\.env.game-day -f compose.yaml -f ..\kafka-resilience-game-day\compose.game-day.yaml --profile app --profile pipeline up -d --build
 ```
 
-Para revisar el entorno en ejecución, desde esta carpeta, usar ` .\\scripts\\preflight.ps1 ` (sin espacios exteriores). **Puntos de control:** `http://localhost:8081/api/compras/salud`, web `http://localhost:5173`, Kafka UI `http://localhost:8083`. En Kafka UI revisar `compras`, `compras-validas`, `compras-rechazadas` y `compras-dlt` (3 particiones cada uno). Si algo falla, NO ejecutar carga todavía: revisar `docker compose ... ps` y logs.
+Para revisar el entorno en ejecución, desde esta carpeta, ejecutar ` .\\scripts\\preflight.ps1 `. **Puntos de control:** `http://localhost:8081/api/compras/salud`, web `http://localhost:5173`, Kafka UI `http://localhost:8083`. En Kafka UI revisar `compras`, `compras-validas`, `compras-rechazadas` y `compras-dlt` (3 particiones cada uno). Si algo falla, NO ejecutar carga todavía: revisar `docker compose ... ps` y logs.
 
 ## JMeter: dos formas de ejecutar el mismo plan
 
-**Opción A · GUI instalada:** descargar [Apache JMeter 5.6.3](https://jmeter.apache.org/download_jmeter.cgi), instalar Java 17 o superior y abrir `bin\jmeter.bat`. Importar `load\carga-compras.jmx` y ajustar **Test Plan → Variables** (USUARIOS, VUELTAS, RAMPA, PAUSA_MS, PREFIJO, PCT_RETRY, PCT_DLT). El plan usa por defecto cinco usuarios, cinco repeticiones, ramp-up de 10 segundos y 250 ms de pausa por usuario. La carga objetivo es **la API local** en `localhost:8081`, no el broker. Para personalizar desde CLI usar `-Jthreads`, `-Jloops`, `-JrampSec`, `-JdelayMs`, `-JclientePrefix=MIXTO`, `-JpctRetry=10` y `-JpctDlt=5`. En modo MIXTO no asumir porcentajes exactos para pocas muestras.
+**Opción A · GUI instalada:** descargar [Apache JMeter 5.6.3](https://jmeter.apache.org/download_jmeter.cgi), disponer de Java 17 o superior y abrir `bin\jmeter.bat`. Importar `load\carga-compras.jmx`. En **Test Plan → Variables** se pueden ajustar estos nombres exactos:
+
+| Variable en JMeter | Valor inicial | Propiedad CLI equivalente |
+| --- | ---: | --- |
+| `USUARIOS` | 5 | `-Jthreads=5` |
+| `VUELTAS` | 5 | `-Jloops=5` |
+| `RAMPA` | 10 s | `-JrampSec=10` |
+| `PAUSA_MS` | 250 ms | `-JdelayMs=250` |
+| `PREFIJO` | `LAB-OK-` | `-JclientePrefix=SIM-RETRY-` / `SIM-DLT-` / `MIXTO` |
+| `PCT_RETRY` | 10 | `-JpctRetry=10` |
+| `PCT_DLT` | 5 | `-JpctDlt=5` |
+
+La carga objetivo es **la API local** en `localhost:8081`, no el broker. En modo MIXTO, los porcentajes son probabilidades y no proporciones exactas garantizadas en muestras pequeñas.
 
 **Opción B · solo Docker (sin instalar Java/JMeter en Windows):** en `labs\kafka-compras-webapp`, con el stack iniciado, ejecutar:
 
@@ -61,7 +80,7 @@ Para revisar el entorno en ejecución, desde esta carpeta, usar ` .\\scripts\\pr
 docker compose --env-file ..\kafka-resilience-game-day\.env.game-day -f compose.yaml -f ..\kafka-resilience-game-day\compose.game-day.yaml --profile app --profile pipeline --profile load run --build --rm jmeter-runner -t /tests/carga-compras.jmx -Jhost=compras-api -Jport=8080 -Jthreads=5 -Jloops=5 -JclientePrefix=LAB-OK- -l /results/baseline.jtl
 ```
 
-El reporte CSV queda en `results\baseline.jtl`. En cada corrida cambiar el nombre de salida (`normal.jtl`, `retry.jtl`, `dlt.jtl`) para no mezclar resultados. La compilación de este contenedor opcional descarga JMeter del archivo oficial Apache.
+El reporte CSV queda en `..\kafka-resilience-game-day\results\baseline.jtl` (carpeta `results` del laboratorio Game Day). En cada corrida cambiar el nombre de salida (`normal.jtl`, `retry.jtl`, `dlt.jtl`) para no mezclar resultados. La compilación de este contenedor opcional descarga JMeter del archivo oficial Apache.
 
 ## Pruebas de error de contrato
 
