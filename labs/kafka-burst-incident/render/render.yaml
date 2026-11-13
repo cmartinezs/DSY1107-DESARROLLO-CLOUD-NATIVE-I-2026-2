@@ -1,0 +1,84 @@
+# Plan para revision; NO aplicar sin aprobacion explicita de costos.
+# Solo staging DSY, sin servicios productivos compartidos ni auto-deploy.
+services:
+  - type: pserv
+    name: dsy1107-kafka-lab-staging
+    runtime: docker
+    region: virginia
+    plan: 1c-2g
+    autoDeployTrigger: off
+    dockerContext: labs/kafka-burst-incident/render/kafka
+    dockerfilePath: labs/kafka-burst-incident/render/kafka/Dockerfile
+    envVars:
+      - key: PORT
+        value: "9094"
+      - key: KAFKA_RENDER_HOST
+        fromService:
+          type: pserv
+          name: dsy1107-kafka-lab-staging
+          property: host
+      - key: KAFKA_CLUSTER_ID
+        value: 4L6g3nShT-eMCtK--X86sw
+      - key: KAFKA_HEAP_OPTS
+        value: "-Xms256m -Xmx768m"
+    disk:
+      name: kafka-lab-data
+      mountPath: /var/lib/kafka/data
+      sizeGB: 1
+
+  - type: web
+    name: dsy1107-compras-lab-staging
+    runtime: docker
+    region: virginia
+    plan: 0.5c-512mb
+    autoDeployTrigger: off
+    dockerContext: labs/kafka-compras-webapp/webapp/compras-api
+    dockerfilePath: labs/kafka-compras-webapp/webapp/compras-api/Dockerfile
+    healthCheckPath: /api/compras/salud
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: SERVER_PORT
+        value: "10000"
+      - key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+        fromService:
+          type: pserv
+          name: dsy1107-kafka-lab-staging
+          property: hostport
+      - key: APP_KAFKA_TOPIC
+        value: compras
+      - key: JAVA_TOOL_OPTIONS
+        value: "-XX:MaxRAMPercentage=65 -XX:InitialRAMPercentage=20"
+
+  - type: worker
+    name: dsy1107-procesador-lab-staging
+    runtime: docker
+    region: virginia
+    plan: 0.5c-512mb
+    autoDeployTrigger: off
+    dockerContext: labs/kafka-compras-webapp/webapp/procesador-api
+    dockerfilePath: labs/kafka-compras-webapp/webapp/procesador-api/Dockerfile
+    envVars:
+      - key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+        fromService:
+          type: pserv
+          name: dsy1107-kafka-lab-staging
+          property: hostport
+      - key: SPRING_KAFKA_CONSUMER_GROUP_ID
+        value: procesador-s13
+      - key: APP_KAFKA_INPUT_TOPIC
+        value: compras
+      - key: APP_KAFKA_OUTPUT_TOPIC
+        value: compras-validas
+      - key: APP_KAFKA_REJECTED_TOPIC
+        value: compras-rechazadas
+      - key: APP_KAFKA_DLT_TOPIC
+        value: compras-dlt
+      - key: APP_CHAOS_ENABLED
+        value: "false"
+      - key: APP_INCIDENT_DEPENDENCY_LATENCY_MS
+        value: "450"
+      - key: SPRING_KAFKA_LISTENER_CONCURRENCY
+        value: "1"
+      - key: JAVA_TOOL_OPTIONS
+        value: "-XX:MaxRAMPercentage=65 -XX:InitialRAMPercentage=20"
