@@ -54,7 +54,7 @@ En Kafka UI observar durante la corrida el grupo `procesador-s13` y el avance de
 docker logs --tail 100 dsy1107-kafka-s12
 ```
 
-El comando anterior muestra **el broker**, no el procesador. Para el procesador, consultar su servicio con el Compose de esta variante (ver guía docente o `scripts/iniciar.ps1`), o usar Kafka UI.
+El comando anterior muestra **el broker**, no el procesador. Para consultar los logs del procesador, usa el servicio `procesador-api` con el Compose de esta variante o inspecciona el grupo `procesador-s13` en Kafka UI.
 
 Cuando termine JMeter (aproximadamente cinco minutos), obtener el reporte:
 
