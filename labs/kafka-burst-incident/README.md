@@ -5,7 +5,6 @@
 ## Comienza aquí
 
 - [Guía del estudiante](./GUIA-ESTUDIANTE.md): investigación en equipos, hipótesis y comparación antes/después.
-- [Guía docente](./GUIA-DOCENTE.md): explicación del cuello de botella y gates para el profesor. **No entregar antes del desafío**.
 - [Plan JMeter: oleada de 300 segundos](./load/oleada-300s.jmx).
 - [Compose adicional](./compose.incident.yaml): no reemplaza el Compose base.
 - Scripts PowerShell en `scripts/`: iniciar, ejecutar JMeter, monitorear lag y detener.
