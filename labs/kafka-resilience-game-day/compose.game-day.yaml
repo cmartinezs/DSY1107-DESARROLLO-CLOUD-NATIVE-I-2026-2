@@ -1,0 +1,36 @@
+# Extiende el Compose de labs/kafka-compras-webapp sin duplicar los servicios.
+# Usar junto al compose.yaml original y .env.game-day; NO arrancar ambos labs Kafka.
+services:
+  topics-init:
+    image: apache/kafka:4.1.2
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - |
+        set -e
+        for topic in compras compras-validas compras-rechazadas compras-dlt; do
+          /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9094 --create --if-not-exists --topic "$$topic" --partitions 3 --replication-factor 1
+        done
+        /opt/kafka/bin/kafka-configs.sh --bootstrap-server kafka:9094 --entity-type topics --entity-name compras-dlt --alter --add-config retention.ms=86400000,cleanup.policy=delete
+        echo "GAME DAY: topics creados y retencion DLT=24h"
+    restart: "no"
+
+  compras-api:
+    depends_on:
+      topics-init:
+        condition: service_completed_successfully
+
+  resumen-api:
+    depends_on:
+      topics-init:
+        condition: service_completed_successfully
+
+  procesador-api:
+    environment:
+      APP_CHAOS_ENABLED: "true"
+      APP_KAFKA_DLT_TOPIC: compras-dlt
+    depends_on:
+      topics-init:
+        condition: service_completed_successfully
