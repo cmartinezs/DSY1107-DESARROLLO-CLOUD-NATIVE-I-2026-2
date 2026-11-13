@@ -20,6 +20,11 @@ public class KafkaPipelineListener {
     private final String outputTopic;
     private final String rejectedTopic;
 
+    // Solo la variante de diagnostico: simula un servicio externo con capacidad limitada.
+    // No modifica el procesamiento normal (ausente = 0 ms). No es un fallo Kafka.
+    @Value("${APP_INCIDENT_DEPENDENCY_LATENCY_MS:0}")
+    private long dependencyLatencyMs;
+
     public KafkaPipelineListener(
             ObjectMapper mapper,
             CompraProcessor processor,
@@ -52,7 +57,12 @@ public class KafkaPipelineListener {
 
         try {
             var salida = processor.procesar(evento, Instant.now());
-            faultSimulator.verificar(record, evento); // Nunca activo fuera del Game Day.
+            faultSimulator.verificar(record, evento); // Desactivado en la variante de carga.
+            if (dependencyLatencyMs > 0) {
+                // Espera bloqueante deliberada: simula una llamada externa lenta.
+                // El listener consume secuencialmente y acumula lag ante una avalancha.
+                Thread.sleep(dependencyLatencyMs);
+            }
             publicar(outputTopic, record.key(), mapper.writeValueAsString(salida));
             System.out.printf("PROCESADO id=%s key=%s entrada=%s-%d@%d salida=%s%n",
                     evento.id(), record.key(), record.topic(),
