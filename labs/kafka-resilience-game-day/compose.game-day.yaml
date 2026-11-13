@@ -1,5 +1,5 @@
-# Extiende el Compose de labs/kafka-compras-webapp sin duplicar los servicios.
-# Usar junto al compose.yaml original y .env.game-day; NO arrancar ambos labs Kafka.
+# Extiende el Compose de labs/kafka-compras-webapp sin duplicar servicios.
+# Solo pruebas en el equipo local; NO usar sobre sistemas publicos.
 services:
   topics-init:
     image: apache/kafka:4.1.2
@@ -34,3 +34,17 @@ services:
     depends_on:
       topics-init:
         condition: service_completed_successfully
+
+  jmeter-runner:
+    profiles: ["load"]
+    build:
+      context: ../kafka-resilience-game-day
+      dockerfile: Dockerfile.jmeter
+    volumes:
+      - ../kafka-resilience-game-day/load:/tests:ro
+      - ../kafka-resilience-game-day/results:/results
+    entrypoint: ["/opt/jmeter/bin/jmeter", "-n"]
+    command: ["-t", "/tests/carga-compras.jmx", "-Jhost=compras-api", "-Jport=8080", "-Jthreads=5", "-Jloops=5", "-JclientePrefix=LAB-OK-", "-l", "/results/baseline.jtl"]
+    depends_on:
+      compras-api:
+        condition: service_started

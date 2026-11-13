@@ -1,0 +1,13 @@
+# Fallback autocontenido: evita instalar JDK/JMeter en Windows.
+# Descarga un release de Apache JMeter desde el archivo oficial de Apache.
+FROM eclipse-temurin:17-jre
+ARG JMETER_VERSION=5.6.3
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+    && curl --fail --location --silent --show-error \
+       "https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz" -o /tmp/apache-jmeter.tgz \
+    && mkdir -p /opt/jmeter \
+    && tar -xzf /tmp/apache-jmeter.tgz -C /opt/jmeter --strip-components=1 \
+    && rm /tmp/apache-jmeter.tgz \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /tests
+ENTRYPOINT ["/opt/jmeter/bin/jmeter", "-n"]
