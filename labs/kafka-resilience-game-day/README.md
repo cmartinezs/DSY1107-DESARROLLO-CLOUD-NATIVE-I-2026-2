@@ -3,7 +3,6 @@
 **Actividad integradora local:** Kafka, Spring Boot, Docker Compose y Apache JMeter. Los estudiantes investigan fallos transitorios, fallos permanentes, retry, DLT, offsets y consumo bajo carga.
 
 - [Guía de estudiantes](./GUIA-ESTUDIANTE.md)
-- [Guía docente, claves y contingencia](./GUIA-DOCENTE.md)
 - [Plan JMeter listo para importar](./load/carga-compras.jmx)
 - [Compose adicional](./compose.game-day.yaml)
 - [Preflight del entorno](./scripts/preflight.ps1)
