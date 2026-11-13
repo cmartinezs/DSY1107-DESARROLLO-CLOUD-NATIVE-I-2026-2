@@ -47,6 +47,7 @@ Además del pipeline de extensión, existe un **[guion de construcción en vivo 
 - [Laboratorio Kafka A](../../labs/kafka-fundamentos/)
 - [Laboratorio Kafka B](../../labs/kafka-compras-webapp/)
 - [Laboratorio Semana 13 · Pipeline (entrada canónica)](../../labs/kafka-pipeline-s13/)
+- [**Operación Black Friday · Kafka Game Day con JMeter**](../../labs/kafka-resilience-game-day/) — Extensión local de resiliencia, con carga controlada y DLT, separada del flujo normal.
 - [Ejemplos Semana 13](../../examples/semana-13/)
 - [Ejercicios Semana 13](../../ejercicios/semana-13/)
 - [RegistrApp · checkpoint semana 13](../../proyecto-formativo/semana-13/README.md)

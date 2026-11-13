@@ -6,6 +6,7 @@
 - [Guía docente, claves y contingencia](./GUIA-DOCENTE.md)
 - [Plan JMeter listo para importar](./load/carga-compras.jmx)
 - [Compose adicional](./compose.game-day.yaml)
+- [Preflight del entorno](./scripts/preflight.ps1)
 
 ## Contrato y origen
 
@@ -36,7 +37,7 @@ Alternativa sin script, desde `labs\kafka-compras-webapp`:
 docker compose --env-file ..\kafka-resilience-game-day\.env.game-day -f compose.yaml -f ..\kafka-resilience-game-day\compose.game-day.yaml --profile app --profile pipeline up -d --build
 ```
 
-**Puntos de control:** `http://localhost:8081/api/compras/salud`, web `http://localhost:5173`, Kafka UI `http://localhost:8083`. En Kafka UI revisar `compras`, `compras-validas`, `compras-rechazadas` y `compras-dlt` (3 particiones cada uno). Si algo falla, NO ejecutar carga todavía: revisar `docker compose ... ps` y logs.
+Para revisar el entorno en ejecución, desde esta carpeta, usar ` .\\scripts\\preflight.ps1 ` (sin espacios exteriores). **Puntos de control:** `http://localhost:8081/api/compras/salud`, web `http://localhost:5173`, Kafka UI `http://localhost:8083`. En Kafka UI revisar `compras`, `compras-validas`, `compras-rechazadas` y `compras-dlt` (3 particiones cada uno). Si algo falla, NO ejecutar carga todavía: revisar `docker compose ... ps` y logs.
 
 ## JMeter: dos formas de ejecutar el mismo plan
 
