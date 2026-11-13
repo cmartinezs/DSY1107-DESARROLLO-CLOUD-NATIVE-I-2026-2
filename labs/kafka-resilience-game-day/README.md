@@ -56,7 +56,7 @@ Alternativa sin script, desde `labs\kafka-compras-webapp`:
 docker compose --env-file ..\kafka-resilience-game-day\.env.game-day -f compose.yaml -f ..\kafka-resilience-game-day\compose.game-day.yaml --profile app --profile pipeline up -d --build
 ```
 
-Para revisar el entorno en ejecución, desde esta carpeta, ejecutar ` .\\scripts\\preflight.ps1 `. **Puntos de control:** `http://localhost:8081/api/compras/salud`, web `http://localhost:5173`, Kafka UI `http://localhost:8083`. En Kafka UI revisar `compras`, `compras-validas`, `compras-rechazadas` y `compras-dlt` (3 particiones cada uno). Si algo falla, NO ejecutar carga todavía: revisar `docker compose ... ps` y logs.
+El comando `.\scripts\preflight.ps1` verifica configuración, servicios, API y topics. **Puntos de control:** `http://localhost:8081/api/compras/salud`, web `http://localhost:5173`, Kafka UI `http://localhost:8083`. En Kafka UI revisar `compras`, `compras-validas`, `compras-rechazadas` y `compras-dlt` (3 particiones cada uno). Si algo falla, NO ejecutar carga todavía: revisar `docker compose ... ps` y logs.
 
 ## JMeter: dos formas de ejecutar el mismo plan
 
