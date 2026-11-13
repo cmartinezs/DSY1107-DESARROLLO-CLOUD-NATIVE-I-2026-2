@@ -22,6 +22,17 @@ Este laboratorio **reutiliza** `../kafka-compras-webapp/compose.yaml`, su API de
 
 La API HTTP devuelve **201 al publicar el evento**, no al terminar su procesamiento. El `resumen-api` es **otro grupo de consumidores** y procesa eventos de `compras` independientemente del `procesador-api`; no usar el tablero React como prueba de éxito del procesamiento de resiliencia.
 
+## Obtener el laboratorio mientras el PR siga en revisión
+
+Esta práctica aún vive en una **rama de trabajo**, no en `master`. Para clonar una copia nueva:
+
+```powershell
+git clone --branch lab/kafka-resilience-jmeter-game-day --single-branch https://github.com/cmartinezs/DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2.git
+cd DSY1107-DESARROLLO-CLOUD-NATIVE-I-2026-2\labs\kafka-resilience-game-day
+```
+
+Si ya tienes el repositorio, desde su raíz ejecutar `git fetch origin` y luego `git switch --track origin/lab/kafka-resilience-jmeter-game-day` (solo si la rama local aún no existe). Esta rama se mantiene en PR borrador hasta contar con evidencia de ejecución.
+
 ## Inicio rápido en Windows / PowerShell
 
 **Prerequisitos:** Docker Desktop operativo, Docker Compose V2, conectividad a internet durante la primera compilación y terminal PowerShell. Dejar libres `8081`, `8082`, `8083`, `5173` y `9092`. Detener antes el laboratorio Kafka A: comparte los puertos.
