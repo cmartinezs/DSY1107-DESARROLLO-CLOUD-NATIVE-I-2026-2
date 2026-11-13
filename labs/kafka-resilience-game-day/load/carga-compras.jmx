@@ -7,7 +7,33 @@
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Variables" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="USUARIOS" elementType="Argument">
+            <stringProp name="Argument.name">USUARIOS</stringProp>
+            <stringProp name="Argument.value">${__P(threads,5)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="VUELTAS" elementType="Argument">
+            <stringProp name="Argument.name">VUELTAS</stringProp>
+            <stringProp name="Argument.value">${__P(loops,5)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="RAMPA" elementType="Argument">
+            <stringProp name="Argument.name">RAMPA</stringProp>
+            <stringProp name="Argument.value">${__P(rampSec,10)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="PAUSA_MS" elementType="Argument">
+            <stringProp name="Argument.name">PAUSA_MS</stringProp>
+            <stringProp name="Argument.value">${__P(delayMs,250)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="PREFIJO" elementType="Argument">
+            <stringProp name="Argument.name">PREFIJO</stringProp>
+            <stringProp name="Argument.value">${__P(clientePrefix,LAB-OK-)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
@@ -16,10 +42,10 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Repeticiones" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">${__P(loops,5)}</stringProp>
+          <stringProp name="LoopController.loops">${VUELTAS}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(threads,5)}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(rampSec,10)}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${USUARIOS}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${RAMPA}</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -32,7 +58,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{"cliente":"${__P(clientePrefix,LAB-OK-)}${__threadNum}-${__counter(FALSE,)}","monto":${__Random(10,2500,)}}</stringProp>
+                <stringProp name="Argument.value">{"cliente":"${PREFIJO}${__threadNum}-${__counter(FALSE,)}","monto":${__Random(10,2500,)}}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -59,7 +85,7 @@
         </HeaderManager>
         <hashTree/>
         <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Pausa controlada (ms)" enabled="true">
-          <stringProp name="ConstantTimer.delay">${__P(delayMs,250)}</stringProp>
+          <stringProp name="ConstantTimer.delay">${PAUSA_MS}</stringProp>
         </ConstantTimer>
         <hashTree/>
         <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="HTTP esperado: 201" enabled="true">

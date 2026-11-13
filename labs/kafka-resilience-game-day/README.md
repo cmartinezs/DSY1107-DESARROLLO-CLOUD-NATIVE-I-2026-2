@@ -41,7 +41,7 @@ Para revisar el entorno en ejecución, desde esta carpeta, usar ` .\\scripts\\pr
 
 ## JMeter: dos formas de ejecutar el mismo plan
 
-**Opción A · GUI instalada:** descargar [Apache JMeter 5.6.3](https://jmeter.apache.org/download_jmeter.cgi), instalar Java 17 o superior y abrir `bin\jmeter.bat`. Importar `load\carga-compras.jmx`. El plan usa por defecto cinco usuarios, cinco repeticiones, ramp-up de 10 segundos y 250 ms de pausa por usuario. La carga objetivo es **la API local** en `localhost:8081`, no el broker. Para personalizar desde CLI usar `-Jthreads`, `-Jloops`, `-JrampSec`, `-JdelayMs` y `-JclientePrefix`.
+**Opción A · GUI instalada:** descargar [Apache JMeter 5.6.3](https://jmeter.apache.org/download_jmeter.cgi), instalar Java 17 o superior y abrir `bin\jmeter.bat`. Importar `load\carga-compras.jmx` y ajustar **Test Plan → Variables** (USUARIOS, VUELTAS, RAMPA, PAUSA_MS, PREFIJO). El plan usa por defecto cinco usuarios, cinco repeticiones, ramp-up de 10 segundos y 250 ms de pausa por usuario. La carga objetivo es **la API local** en `localhost:8081`, no el broker. Para personalizar desde CLI usar `-Jthreads`, `-Jloops`, `-JrampSec`, `-JdelayMs` y `-JclientePrefix`.
 
 **Opción B · solo Docker (sin instalar Java/JMeter en Windows):** en `labs\kafka-compras-webapp`, con el stack iniciado, ejecutar:
 

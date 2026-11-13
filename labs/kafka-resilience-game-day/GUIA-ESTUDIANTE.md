@@ -54,7 +54,7 @@ Si el equipo no tiene Java o permisos de instalación, usar la ejecución Docker
 
 **Qué contiene el plan:** un grupo de usuarios, peticiones POST con JSON, cabecera `Content-Type: application/json`, una pausa configurable, una aserción de HTTP 201 y un reporte de resumen.
 
-Parámetros del plan (mediante propiedades `-J` o reemplazando la expresión en la interfaz):
+Parámetros del plan: en la GUI, seleccionar **Test Plan → Variables** y modificar los valores `USUARIOS`, `VUELTAS`, `RAMPA`, `PAUSA_MS` y `PREFIJO`. Cada variable viene inicializada con una expresión `__P(...)` que acepta las opciones CLI `-J` (si usas la GUI, sustituye el valor por un literal como `SIM-RETRY-`, `2` o `10`).
 
 | Parámetro | Valor inicial | Significado |
 | --- | --- | --- |
@@ -76,7 +76,7 @@ Ejecutar el plan con `clientePrefix=LAB-OK-`. Desde Kafka UI observar `compras` 
 
 ## 6. Checkpoint 3 · Falla transitoria con retry (20 min)
 
-Cambiar el prefijo del cliente a `SIM-RETRY-`, manteniendo cinco usuarios o menos y bajando inicialmente a dos loops. El procesador simula dos fallos por evento, separados por reintentos de 1 segundo, y procesa el tercer intento. **El código de simulación está desactivado fuera de este Game Day.**
+Cambiar **PREFIJO** a `SIM-RETRY-`, manteniendo cinco usuarios o menos y bajando inicialmente a dos loops. El procesador simula dos fallos por evento, separados por reintentos de 1 segundo, y procesa el tercer intento. **El código de simulación está desactivado fuera de este Game Day.**
 
 Para ver logs (desde `labs\kafka-compras-webapp`):
 
@@ -92,7 +92,7 @@ Buscar `SIMULACION FALLO TRANSITORIO` y `SIMULACION RECUPERADA`. Revisar lag del
 
 ## 7. Checkpoint 4 · Falla permanente y DLT (20 min)
 
-Repetir una carga pequeña con `clientePrefix=SIM-DLT-`, máximo **2 threads x 2 loops** para el primer ensayo. Cada evento fallará en sus tres intentos. El recuperador copiará el evento ORIGINAL a `compras-dlt`, con headers que indican de dónde vino.
+Repetir una carga pequeña cambiando **PREFIJO** a `SIM-DLT-`, máximo **2 threads x 2 loops** para el primer ensayo. Cada evento fallará en sus tres intentos. El recuperador copiará el evento ORIGINAL a `compras-dlt`, con headers que indican de dónde vino.
 
 En Kafka UI abrir `compras-dlt`, inspeccionar el payload y los headers `x-original-topic`, `x-original-partition`, `x-original-offset` y `x-error-type`. Observar si el grupo termina poniéndose al día. **No es reingesta ni reintento automático de la DLT.**
 
