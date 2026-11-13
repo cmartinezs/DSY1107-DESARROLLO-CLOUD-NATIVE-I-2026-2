@@ -51,6 +51,7 @@ Los ejercicios institucionales publicados en AVA siguen siendo material oficial 
 - [`kafka-compras-webapp/`](kafka-compras-webapp/) — Semana 12 · Laboratorio B: código base React + 2 MS Spring Boot + broker Kafka y configuración guiada con checkpoints.
 - [`kafka-pipeline-s13/`](kafka-pipeline-s13/) — Semana 13 · Pipeline incremental con procesador de referencia, transformación, validación y reintentos didácticos.
 - [`kafka-resilience-game-day/`](kafka-resilience-game-day/) — Semana 13 · Game Day de resiliencia: Compose adicional, JMeter, fallas simuladas, reintentos, Dead Letter Topic y análisis de consumer lag.
+- [`kafka-burst-incident/`](kafka-burst-incident/) — Variante alternativa de investigación: oleada JMeter de 300 s, cuello de botella del consumidor, observabilidad del lag y solución propuesta por estudiantes.
 - [`rabbitmq-spring-amqp/`](rabbitmq-spring-amqp/) — Semana 8: RabbitMQ contenerizado, Producer/Consumer con Spring AMQP, DirectExchange, bindings, routing keys y Management UI.
 
 ### Provider-backed

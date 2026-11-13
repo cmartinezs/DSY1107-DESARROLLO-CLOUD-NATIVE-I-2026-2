@@ -3,8 +3,10 @@
 param([string]$RunId = "antes", [string]$LoadScale = "1")
 $ErrorActionPreference = "Stop"
 if ($RunId -notmatch '^[a-zA-Z0-9_-]+$') { throw "RunId invalido (solo letras, numeros, - y _)." }
-$scale = 0.0
-if (-not [double]::TryParse($LoadScale, [ref]$scale) -or $scale -le 0 -or $scale -gt 1) { throw "LoadScale debe estar en (0,1]." }
+try {
+    $scale = [double]::Parse($LoadScale, [System.Globalization.CultureInfo]::InvariantCulture)
+} catch { throw "LoadScale invalido: usa punto decimal, por ejemplo 0.5." }
+if ($scale -le 0 -or $scale -gt 1) { throw "LoadScale debe estar en (0,1]." }
 $lab = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $base = (Resolve-Path (Join-Path $lab "..\kafka-compras-webapp")).Path
 $results = Join-Path $lab "results"
