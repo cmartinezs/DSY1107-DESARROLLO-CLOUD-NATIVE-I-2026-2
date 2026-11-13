@@ -33,6 +33,16 @@
             <stringProp name="Argument.value">${__P(clientePrefix,LAB-OK-)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="PCT_RETRY" elementType="Argument">
+            <stringProp name="Argument.name">PCT_RETRY</stringProp>
+            <stringProp name="Argument.value">${__P(pctRetry,10)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="PCT_DLT" elementType="Argument">
+            <stringProp name="Argument.name">PCT_DLT</stringProp>
+            <stringProp name="Argument.value">${__P(pctDlt,5)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
@@ -58,7 +68,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{"cliente":"${PREFIJO}${__threadNum}-${__counter(FALSE,)}","monto":${__Random(10,2500,)}}</stringProp>
+                <stringProp name="Argument.value">{"cliente":"${PREFIJO_EFECTIVO}${__threadNum}-${__counter(FALSE,)}","monto":${__Random(10,2500,)}}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -74,7 +84,26 @@
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
         </HTTPSamplerProxy>
-        <hashTree/>
+        <hashTree>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Mezclar fallos con porcentajes" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">def tipo = vars.get('PREFIJO') ?: 'LAB-OK-'
+if (tipo == 'MIXTO') {
+    int pctDlt = Integer.parseInt(vars.get('PCT_DLT'))
+    int pctRetry = Integer.parseInt(vars.get('PCT_RETRY'))
+    if (pctDlt &lt; 0 || pctRetry &lt; 0 || pctDlt + pctRetry &gt; 100) {
+        throw new IllegalArgumentException('PCT_DLT y PCT_RETRY deben estar entre 0 y 100, suma maxima 100')
+    }
+    int n = java.util.concurrent.ThreadLocalRandom.current().nextInt(100)
+    tipo = n &lt; pctDlt ? 'SIM-DLT-' : (n &lt; pctDlt + pctRetry ? 'SIM-RETRY-' : 'LAB-OK-')
+}
+vars.put('PREFIJO_EFECTIVO', tipo)</stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+        </hashTree>
         <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Content-Type JSON" enabled="true">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">

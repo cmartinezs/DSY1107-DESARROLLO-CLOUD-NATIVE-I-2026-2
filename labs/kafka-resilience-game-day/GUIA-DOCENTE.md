@@ -33,7 +33,9 @@
 | Baseline | 5 | 5 | LAB-OK | 25 |
 | Escenario transitorio | 2 | 2 | SIM-RETRY | 4 |
 | Escenario DLT | 2 | 2 | SIM-DLT | 4 |
-| Carga de recuperación (opcional) | 10 | 20 | LAB-OK | 200 |
+| Carga mixta (opcional) | 10 | 20 | MIXTO: 85 % OK, 10 % retry, 5 % DLT | 200 |
+
+En MIXTO los porcentajes son probabilidades por solicitud (selección aleatoria en JMeter), no proporciones exactas garantizadas. Verificar `PCT_RETRY + PCT_DLT <= 100`.
 
 Los números son **intentos configurados**, no resultados garantizados. Para 200 requests usa el reporte JMeter; no saturar deliberadamente una máquina del aula más allá de la capacidad local. Si el procesador recibe continuamente eventos DLT, dos segundos de retry por evento pueden aumentar lag: esa es la observación, no un fallo del laboratorio.
 

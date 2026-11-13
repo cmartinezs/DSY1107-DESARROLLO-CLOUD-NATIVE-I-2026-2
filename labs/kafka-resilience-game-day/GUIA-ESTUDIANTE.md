@@ -54,7 +54,7 @@ Si el equipo no tiene Java o permisos de instalación, usar la ejecución Docker
 
 **Qué contiene el plan:** un grupo de usuarios, peticiones POST con JSON, cabecera `Content-Type: application/json`, una pausa configurable, una aserción de HTTP 201 y un reporte de resumen.
 
-Parámetros del plan: en la GUI, seleccionar **Test Plan → Variables** y modificar los valores `USUARIOS`, `VUELTAS`, `RAMPA`, `PAUSA_MS` y `PREFIJO`. Cada variable viene inicializada con una expresión `__P(...)` que acepta las opciones CLI `-J` (si usas la GUI, sustituye el valor por un literal como `SIM-RETRY-`, `2` o `10`).
+Parámetros del plan: en la GUI, seleccionar **Test Plan → Variables** y modificar los valores `USUARIOS`, `VUELTAS`, `RAMPA`, `PAUSA_MS`, `PREFIJO`, `PCT_RETRY` y `PCT_DLT`. Cada variable viene inicializada con una expresión `__P(...)` que acepta las opciones CLI `-J` (si usas la GUI, sustituye el valor por un literal como `SIM-RETRY-`, `2` o `10`).
 
 | Parámetro | Valor inicial | Significado |
 | --- | --- | --- |
@@ -62,7 +62,8 @@ Parámetros del plan: en la GUI, seleccionar **Test Plan → Variables** y modif
 | `loops` | 5 | Compras por cliente |
 | `rampSec` | 10 | Segundos para iniciar clientes |
 | `delayMs` | 250 | Pausa por usuario y petición |
-| `clientePrefix` | `LAB-OK-` | Selecciona escenario |
+| `clientePrefix` | `LAB-OK-` | Selecciona escenario o `MIXTO` |
+| `pctRetry` / `pctDlt` | 10 / 5 | Porcentajes aproximados en modo `MIXTO` |
 
 **Predicción P1:** con la configuración inicial, ¿cuántas peticiones se intentarán? ¿Esperas el mismo número de eventos exitosos instantáneamente?
 
@@ -111,6 +112,14 @@ Desde `labs\kafka-resilience-game-day` ejecutar:
 En Kafka UI localizar dos rechazos en `compras-rechazadas`: monto negativo y JSON malformado. También verificar una compra válida posterior en `compras-validas`.
 
 **Evidencia E4:** dos rechazos distintos y continuidad del procesamiento. **Q4:** ¿por qué la prueba se hace directo en Kafka y no a través del formulario o HTTP?
+
+## 8B. Desafío opcional · Mezcla de fallos y tasa de error (10–15 min)
+
+Cambiar **PREFIJO = MIXTO**, **PCT_RETRY = 10** y **PCT_DLT = 5** en las variables de JMeter. Usar 10 usuarios x 20 loops = 200 solicitudes como máximo inicial del escenario mixto. Cada request selecciona su tipo aleatoriamente: probabilidad aproximada de 85 % normales, 10 % transitorios y 5 % permanentes. **Los porcentajes observados no tienen por qué coincidir exactamente en muestras pequeñas.**
+
+En CLI, agregar `-JclientePrefix=MIXTO -JpctRetry=10 -JpctDlt=5`. Anotar solicitudes HTTP 201, mensajes de salida, DLT y lag **después de esperar a que el consumidor termine**. Proponer una métrica `fallos_permanentes / eventos_recibidos * 100` y compararla con `errores_HTTP / requests_HTTP * 100`. No mezclar ejecuciones previas sin separar offsets de inicio y fin.
+
+**Pregunta Q5:** ¿por qué puede haber un 0 % de error HTTP y al mismo tiempo mensajes en DLT? ¿Qué señales operativas dispararían una alerta?
 
 ## 9. Cierre: política y decisión operativa (15 min)
 

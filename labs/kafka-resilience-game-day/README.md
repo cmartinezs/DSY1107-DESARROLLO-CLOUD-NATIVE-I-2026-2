@@ -17,6 +17,7 @@ Este laboratorio **reutiliza** `../kafka-compras-webapp/compose.yaml`, su API de
 | `LAB-OK-*` | Produce en `compras-validas` |
 | `SIM-RETRY-*` | Fallos en intentos 1 y 2; éxito en el tercero |
 | `SIM-DLT-*` | Fallo en tres intentos; payload original a `compras-dlt`, con headers de origen |
+| `MIXTO` en JMeter | Selección aleatoria por request: default 85 % OK, 10 % retry, 5 % DLT; porcentajes configurables |
 | JSON malformado o regla de negocio inválida | Rechazo explícito a `compras-rechazadas` sin reintentar errores permanentes de contrato |
 
 La API HTTP devuelve **201 al publicar el evento**, no al terminar su procesamiento. El `resumen-api` es **otro grupo de consumidores** y procesa eventos de `compras` independientemente del `procesador-api`; no usar el tablero React como prueba de éxito del procesamiento de resiliencia.
@@ -41,7 +42,7 @@ Para revisar el entorno en ejecución, desde esta carpeta, usar ` .\\scripts\\pr
 
 ## JMeter: dos formas de ejecutar el mismo plan
 
-**Opción A · GUI instalada:** descargar [Apache JMeter 5.6.3](https://jmeter.apache.org/download_jmeter.cgi), instalar Java 17 o superior y abrir `bin\jmeter.bat`. Importar `load\carga-compras.jmx` y ajustar **Test Plan → Variables** (USUARIOS, VUELTAS, RAMPA, PAUSA_MS, PREFIJO). El plan usa por defecto cinco usuarios, cinco repeticiones, ramp-up de 10 segundos y 250 ms de pausa por usuario. La carga objetivo es **la API local** en `localhost:8081`, no el broker. Para personalizar desde CLI usar `-Jthreads`, `-Jloops`, `-JrampSec`, `-JdelayMs` y `-JclientePrefix`.
+**Opción A · GUI instalada:** descargar [Apache JMeter 5.6.3](https://jmeter.apache.org/download_jmeter.cgi), instalar Java 17 o superior y abrir `bin\jmeter.bat`. Importar `load\carga-compras.jmx` y ajustar **Test Plan → Variables** (USUARIOS, VUELTAS, RAMPA, PAUSA_MS, PREFIJO, PCT_RETRY, PCT_DLT). El plan usa por defecto cinco usuarios, cinco repeticiones, ramp-up de 10 segundos y 250 ms de pausa por usuario. La carga objetivo es **la API local** en `localhost:8081`, no el broker. Para personalizar desde CLI usar `-Jthreads`, `-Jloops`, `-JrampSec`, `-JdelayMs`, `-JclientePrefix=MIXTO`, `-JpctRetry=10` y `-JpctDlt=5`. En modo MIXTO no asumir porcentajes exactos para pocas muestras.
 
 **Opción B · solo Docker (sin instalar Java/JMeter en Windows):** en `labs\kafka-compras-webapp`, con el stack iniciado, ejecutar:
 
