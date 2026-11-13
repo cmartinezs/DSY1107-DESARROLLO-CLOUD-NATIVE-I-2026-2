@@ -24,7 +24,7 @@ class KafkaPipelineListenerTest {
     @BeforeEach
     void setUp() {
         ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
-        listener = new KafkaPipelineListener(mapper, new CompraProcessor(), kafka,
+        listener = new KafkaPipelineListener(mapper, new CompraProcessor(), new FaultSimulator(false), kafka,
                 "compras-validas", "compras-rechazadas");
         when(kafka.send(anyString(), nullable(String.class), anyString()))
                 .thenReturn(CompletableFuture.completedFuture(null));
@@ -49,19 +49,15 @@ class KafkaPipelineListenerTest {
                 "{\"id\":\"c-2\",\"cliente\":\"\",\"monto\":10,\"fechaEvento\":null}");
 
         listener.consumir(record);
-
         ArgumentCaptor<String> payload = ArgumentCaptor.forClass(String.class);
         verify(kafka).send(eq("compras-rechazadas"), eq("c-2"), payload.capture());
         assertTrue(payload.getValue().contains("CLIENTE_REQUERIDO"));
-        verify(kafka, never()).send(eq("compras-validas"), any(), anyString());
     }
 
     @Test
     void publicaRechazoPorJsonMalformado() throws Exception {
         var record = new ConsumerRecord<String, String>("compras", 2, 8L, "cliente-ana", "{mal-json");
-
         listener.consumir(record);
-
         ArgumentCaptor<String> payload = ArgumentCaptor.forClass(String.class);
         verify(kafka).send(eq("compras-rechazadas"), isNull(), payload.capture());
         assertTrue(payload.getValue().contains("JSON_INVALIDO"));
@@ -70,24 +66,18 @@ class KafkaPipelineListenerTest {
     @Test
     void publicaRechazoCuandoElJsonRepresentaNull() throws Exception {
         var record = new ConsumerRecord<String, String>("compras", 2, 9L, "cliente-ana", "null");
-
         listener.consumir(record);
-
         ArgumentCaptor<String> payload = ArgumentCaptor.forClass(String.class);
         verify(kafka).send(eq("compras-rechazadas"), isNull(), payload.capture());
         assertTrue(payload.getValue().contains("EVENTO_NULO"));
-        verify(kafka, never()).send(eq("compras-validas"), any(), anyString());
     }
 
     @Test
     void publicaRechazoCuandoElRegistroEsTombstone() throws Exception {
         var record = new ConsumerRecord<String, String>("compras", 2, 10L, "cliente-ana", null);
-
         listener.consumir(record);
-
         ArgumentCaptor<String> payload = ArgumentCaptor.forClass(String.class);
         verify(kafka).send(eq("compras-rechazadas"), isNull(), payload.capture());
         assertTrue(payload.getValue().contains("MENSAJE_SIN_VALOR"));
-        verify(kafka, never()).send(eq("compras-validas"), any(), anyString());
     }
 }

@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class KafkaPipelineListener {
     private final ObjectMapper mapper;
     private final CompraProcessor processor;
+    private final FaultSimulator faultSimulator;
     private final KafkaTemplate<String, String> kafka;
     private final String outputTopic;
     private final String rejectedTopic;
@@ -22,11 +23,13 @@ public class KafkaPipelineListener {
     public KafkaPipelineListener(
             ObjectMapper mapper,
             CompraProcessor processor,
+            FaultSimulator faultSimulator,
             KafkaTemplate<String, String> kafka,
             @Value("${app.kafka.output-topic}") String outputTopic,
             @Value("${app.kafka.rejected-topic}") String rejectedTopic) {
         this.mapper = mapper;
         this.processor = processor;
+        this.faultSimulator = faultSimulator;
         this.kafka = kafka;
         this.outputTopic = outputTopic;
         this.rejectedTopic = rejectedTopic;
@@ -49,6 +52,7 @@ public class KafkaPipelineListener {
 
         try {
             var salida = processor.procesar(evento, Instant.now());
+            faultSimulator.verificar(record, evento); // Nunca activo fuera del Game Day.
             publicar(outputTopic, record.key(), mapper.writeValueAsString(salida));
             System.out.printf("PROCESADO id=%s key=%s entrada=%s-%d@%d salida=%s%n",
                     evento.id(), record.key(), record.topic(),
